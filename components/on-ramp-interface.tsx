@@ -115,7 +115,7 @@ export function OnRampInterface({
               </Button>
             </div>
 
-            <div className="flex-1 px-4">
+            <div className="flex-1 space-y-3.5 px-4">
               <div className={`dark:bg-gray-800 bg-[#C2C0EB]  rounded-3xl p-6 border shadow-sm`}>
                 {/* Off-Ramp Label
                 <div className="mb-0">
@@ -184,6 +184,11 @@ export function OnRampInterface({
 
 
               </div>
+
+              {/* Action Button */}
+              <Button className="w-full h-12 rounded-2xl text-base font-semibold" size="lg" disabled={!fromAmount}>
+                {!fromAmount ? "Enter amount" : "Buy SOL"}
+              </Button>
             </div>
 
 
@@ -192,7 +197,7 @@ export function OnRampInterface({
         </Card>
 
         {/* Exchange Rate Footer */}
-        <div className="px-4 pb-4 flex items-center justify-between text-sm text-muted-foreground h-[48px] mt-4 sm:text-sm max-w-md">
+        <div className="px-6 pb-4 flex items-center justify-between text-sm text-muted-foreground h-[48px] mt-2 sm:text-sm max-w-md">
           <span>1 SOL = {ngnToSolRate.toLocaleString()} NGN</span>
           <span>$0.00</span>
         </div>

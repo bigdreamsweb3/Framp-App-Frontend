@@ -1,9 +1,8 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
-// import Link from 'next/link';
-// import Image from 'next/image';
+import { useEffect, useState } from "react"
+import { usePathname } from "next/navigation"
+import { Home, Activity, User } from "lucide-react" // lucide icons
 
 interface NavbarProps {
   activeView: string
@@ -11,41 +10,47 @@ interface NavbarProps {
 }
 
 const navItems = [
-  { icon: "/img/home.svg", icon2: "/img/homeact.svg", label: 'Home', view: 'onramp' },
-  { icon: "/img/act.svg", icon2: "/img/actact.svg", label: 'Activity', view: 'activity' },
-  // { icon: "/img/hist.svg", icon2: "/img/histact.svg", label: 'History', view: 'history' },
-  { icon: "/img/prof.svg", icon2: "/img/profact.svg", label: 'Profile', view: 'profile' }
+  { icon: Home, label: "Home", view: "onramp" },
+  { icon: Activity, label: "Activity", view: "activity" },
+  { icon: User, label: "Profile", view: "profile" },
 ]
 
 const BottomNavbar = ({ activeView, onChangeView }: NavbarProps) => {
-  const pathname = usePathname();
-  const [hasMounted, setHasMounted] = useState(false);
+  const pathname = usePathname()
+  const [hasMounted, setHasMounted] = useState(false)
 
   useEffect(() => {
-    setHasMounted(true);
-  }, []);
+    setHasMounted(true)
+  }, [])
 
-  if (!hasMounted) return null; // Prevent hydration mismatch
+  if (!hasMounted) return null // prevent hydration mismatch
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 w-full bg-white dark:bg-card/80 border-t border-gray-200 dark:border-gray-900 px-0 py-3 transition-colors z-50">
-      <div className="flex justify-between items-center">
+    <nav className="fixed bottom-0 left-0 right-0 w-full bg-white/90 dark:bg-background/80 backdrop-blur-md border-t border-border px-0 py-2 transition-colors z-50">
+      <div className="flex justify-around items-center">
         {navItems.map((item) => {
           const active = activeView === item.view
+          const Icon = item.icon
           return (
             <button
               key={item.label}
               onClick={() => onChangeView(item.view)}
-              className="flex flex-col items-center gap-1 transition-colors focus:outline-none w-full"
               aria-pressed={active}
+              className={`flex flex-col items-center justify-center gap-1 w-full py-1 transition-all 
+                ${active ? "text-primary" : "text-muted-foreground hover:text-foreground/80"}`}
             >
-              <img
-                src={active ? item.icon2 : item.icon}
-                alt={item.label}
-                width={29}
-                height={29}
-                className="h-[29px] w-auto"
+              <Icon
+                className={`h-6 w-6 transition-colors 
+                  ${active ? "text-primary" : "text-muted-foreground"}`}
+                strokeWidth={active ? 2.5 : 2}
               />
+              <span
+                className={`text-xs font-medium transition-colors ${
+                  active ? "text-primary" : "text-muted-foreground"
+                }`}
+              >
+                {item.label}
+              </span>
             </button>
           )
         })}

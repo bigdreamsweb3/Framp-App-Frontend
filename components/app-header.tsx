@@ -31,7 +31,7 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full border-b dark:border-gray-900 border-white/10 bg-gradient-to-r from-background/60 via-background/40 to-background/60 backdrop-blur-xl supports-[backdrop-filter]:backdrop-saturate-150 transition-shadow duration-300
+      className={`sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-900 bg-gradient-to-r from-background/60 via-background/40 to-background/60 backdrop-blur-xl supports-[backdrop-filter]:backdrop-saturate-150 transition-shadow duration-300
         ${scrolled ? "shadow-[0_2px_10px_rgba(0,0,0,0.12)]" : "shadow-none"}`}
       data-tour="security"
     >
@@ -49,26 +49,25 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
         {/* Main Content */}
         <div className="container mx-auto px-[max(1rem,2vw)] h-[max(1.5rem,7vh)] flex items-center justify-between ml-3 pl-0">
           {/* AI Toggle */}
-          <motion.div
+          <div
             className="flex items-center gap-[max(0.75rem,1vw)]"
-            whileTap={{ scale: 0.97 }}
-            onClick={toggleLogoText}
-            role="button"
             tabIndex={0}
             aria-label="Toggle logo display"
-            onKeyDown={(e) => e.key === "Enter" && toggleLogoText()}
           >
-            {showLogoText && (
-              <motion.span
-                initial={{ opacity: 0, x: -6 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -6 }}
-                transition={{ duration: 0.4 }}
-                className="hidden md:inline-flex text-lg font-bold bg-gradient-to-r from-primary to-primary-foreground bg-clip-text text-transparent"
-              >
-                {App_Name}
-              </motion.span>
-            )}
+            <motion.span
+              initial={{ opacity: 0, x: -6 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -6 }}
+              transition={{ duration: 0.4 }}
+              className="hidden md:inline-flex text-lg font-bold bg-gradient-to-r from-primary to-primary-foreground bg-clip-text text-transparent"
+            >
+              {App_Name}
+            </motion.span>
+
+            {/* Beta Badge – always visible */}
+            <span className="ml-2 text-[0.65rem] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+              BETA
+            </span>
 
             {/* AI Button */}
             <Button
@@ -82,7 +81,7 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
               <Bot className="h-5 w-5 text-primary" />
               <span className="ml-1 text-[0.7rem] font-medium">AI</span>
             </Button>
-          </motion.div>
+          </div>
 
           {/* Right Actions */}
           <div className="flex items-center gap-[max(0.75rem,1.5vw)]">
