@@ -29,7 +29,7 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
       <div className="container mx-auto px-[max(1rem,2vw)] h-[max(3.5rem,7vh)] flex items-center justify-between">
         {/* Logo Section */}
         <motion.div
-          className="flex items-center gap-[max(1.5rem,1vw)] "
+          className="flex items-center gap-[max(0.5rem,1vw)] "
           whileTap={{ scale: 0.98 }}
           onClick={toggleLogoText}
           role="button"
@@ -40,8 +40,7 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
           <div >
             <Image src={app_logo} alt="App Logo" className="w-[max(2rem,4.5vh)] h-[max(2rem,4vh)] md:h-9 bg-primary rounded-lg flex items-center justify-center" />
           </div>
-          <div className="ml-[max(0.5rem,1vw)] flex items-center gap-2 bg-muted/40 rounded-xl hover:bg-muted/60 transition-colors duration-300">
-            <ThemeToggle />
+          <div className="ml-[max(0.5rem,1vw)] flex items-center gap-2 bg-muted/100 rounded-xl hover:bg-muted/60 transition-colors duration-300">
             <Button
               variant={chatActive ? "default" : "ghost"}
               size="sm"
@@ -57,12 +56,13 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
 
         {/* Actions */}
         <div className="flex items-center gap-[max(0.75rem,1.5vw)]">
+          <ThemeToggle />
           <button
             onClick={onAuthClick}
-            className="inline-flex items-center justify-center h-[max(2rem,4vh)] md:h-9 px-[max(0.75rem,1.5vw)] md:px-4 py-[max(0.5rem,1vh)] md:py-2 bg-primary text-primary-foreground rounded-xl font-semibold text-[max(0.85rem,1.6vw)] md:text-sm hover:bg-primary/90 focus-visible:ring-[max(0.15rem,0.3vw)] md:focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring outline-none transition-all disabled:opacity-50 disabled:pointer-events-none shadow-sm"
+            className="inline-flex items-center justify-center h-[max(2rem,4vh)] md:h-9 px-[max(0.75rem,1.5vw)] md:px-4 py-[max(0.5rem,1vh)] md:py-2 bg-muted/100 text-primary-foreground rounded-xl font-semibold text-[max(0.85rem,1.6vw)] md:text-sm hover:bg-primary/90 focus-visible:ring-[max(0.15rem,0.3vw)] md:focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring outline-none transition-all disabled:opacity-50 disabled:pointer-events-none shadow-sm"
             aria-label="Log in or sign up"
           >
-            Log in or Sign up
+            Sign in
           </button>
         </div>
       </div>

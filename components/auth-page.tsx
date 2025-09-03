@@ -109,16 +109,6 @@ export function AuthPage({ onBack }: AuthPageProps) {
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">First Name</Label>
-                      <Input id="firstName" placeholder="John" required className="rounded-xl" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input id="lastName" placeholder="Doe" required className="rounded-xl" />
-                    </div>
-                  </div> */}
                   <div className="space-y-2">
                     <Label htmlFor="signupEmail">Email</Label>
                     <Input

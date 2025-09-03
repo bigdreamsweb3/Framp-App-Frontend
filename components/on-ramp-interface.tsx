@@ -70,11 +70,11 @@ export function OnRampInterface({ fromAmount, toAmount, onFromAmountChange, ngnT
     <>
       <div className="flex flex-col gap-4 mb-16">
         <Card
-          className="bg-card/50 backdrop-blur-sm border-border/50 w-full py-0"
+          className="bg-transparent backdrop-blur-sm w-full py-0 border-0"
           data-tour="onramp-card"
         >
           <CardContent className="p-0 flex-1">
-            <div className="flex items-center justify-between p-4 border-b border-border/50">
+            <div className="flex items-center justify-between p-4 ">
               <h2 className="text-lg font-semibold">On Ramp</h2>
               <Button
                 variant="ghost"
@@ -87,10 +87,10 @@ export function OnRampInterface({ fromAmount, toAmount, onFromAmountChange, ngnT
             </div>
 
             <div className="p-4 space-y-4">
-              {/* You send */}
+              {/* You Pay */}
               <div className="space-y-2">
-                <div className="text-sm text-muted-foreground font-medium">You send</div>
-                <div className="bg-muted/30 rounded-2xl p-4 border border-border/50">
+                <div className="bg-card rounded-2xl p-4 border border-border/50 flex flex-col gap-3.5 shadow-sm">
+                  <div className="text-sm text-muted-foreground font-medium bg-muted/50 rounded-xl w-fit px-2 py-1">You Pay</div>
                   <div className="flex items-center justify-between gap-2">
                     <Input
                       type="number"
@@ -117,10 +117,11 @@ export function OnRampInterface({ fromAmount, toAmount, onFromAmountChange, ngnT
                 </div>
               </div>
 
-              {/* You get */}
+              {/* You Receive */}
               <div className="space-y-2">
-                <div className="text-sm text-muted-foreground font-medium">You get</div>
-                <div className="bg-muted/30 rounded-2xl p-4 border border-border/50">
+
+                <div className="bg-card rounded-2xl p-4 border border-border/50 flex flex-col gap-3.5 shadow-sm">
+                  <div className="text-sm text-muted-foreground font-medium bg-muted/50 rounded-xl w-fit px-2 py-1">You Receive</div>
                   <div className="flex items-center justify-between gap-2">
                     <Input
                       type="number"
