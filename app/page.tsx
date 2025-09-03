@@ -13,7 +13,8 @@ import { OnboardingTour } from "@/components/onboarding-tour"
 import { Sidebar, SidebarContent, SidebarGroup, SidebarMenu, SidebarMenuButton, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import Navbar from "@/components/Navbar"
+
+import BottomNavbar from "@/components/bottom-nav"
 
 
 
@@ -25,6 +26,7 @@ export default function FrampOnRamp() {
   const [showAuth, setShowAuth] = useState(false)
   const [showOnboarding, setShowOnboarding] = useState(false)
   const [showChat, setShowChat] = useState(false)
+  const [currency, setCurrency] = useState("NGN") // or your default currency
 
   const ngnToSolRate = 850
 
@@ -81,6 +83,9 @@ export default function FrampOnRamp() {
             toAmount={toAmount}
             onFromAmountChange={handleFromAmountChange}
             ngnToSolRate={ngnToSolRate}
+            currency={currency}
+            onCurrencyChange={setCurrency}
+            receiving={toAmount ? Number(toAmount) : 0}
           />
         )
       case "activity":
@@ -96,6 +101,9 @@ export default function FrampOnRamp() {
             toAmount={toAmount}
             onFromAmountChange={handleFromAmountChange}
             ngnToSolRate={ngnToSolRate}
+            currency={currency}
+            onCurrencyChange={setCurrency}
+            receiving={toAmount ? Number(toAmount) : 0}
           />
         )
     }
@@ -189,7 +197,7 @@ export default function FrampOnRamp() {
           {/* Mobile Layout */}
           <div className="lg:hidden">
             <div className="container mx-auto px-4 py-6 max-w-md pb-20">{renderCurrentView()}</div>
-            <Navbar activeView={activeView} onChangeView={setActiveView} />
+            <BottomNavbar activeView={activeView} onChangeView={setActiveView} />
             {/* <div className="fixed bottom-0 left-0 right-0 bg-card/80 backdrop-blur-sm border-t border-border/50 px-4 py-3">
               <div className="flex items-center justify-around max-w-md mx-auto">
                 <Button
@@ -221,52 +229,52 @@ export default function FrampOnRamp() {
 
           </div>
         </div> */}
-    </div>
+          </div>
         </>
       )
-}
+      }
 
-{/* Chat overlay, always on top */ }
-{
-  showChat && (
-    <div className="fixed inset-0 z-[100] flex justify-end items-end bg-black/70">
-      <motion.div
-        className="bg-card/95 backdrop-blur-md w-full h-full p-4 shadow-xl
+      {/* Chat overlay, always on top */}
+      {
+        showChat && (
+          <div className="fixed inset-0 z-[100] flex justify-end items-end bg-black/70">
+            <motion.div
+              className="bg-card/95 backdrop-blur-md w-full h-full p-4 shadow-xl
         lg:w-[min(90vw,28rem)] lg:h-full"
-        initial={{ x: "100%" }}
-        animate={{ x: 0 }}
-        exit={{ x: "100%" }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-      >
-        <Button
-          variant="ghost"
-          size="icon"
-          className="absolute top-2 right-2"
-          onClick={() => setShowChat(false)}
-          aria-label="Close AI Assistant"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </Button>
-        <AIChat onQuickAction={handleChatQuickAction} />
-      </motion.div>
-    </div>
-  )
-}
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            >
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute top-2 right-2"
+                onClick={() => setShowChat(false)}
+                aria-label="Close AI Assistant"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </Button>
+              <AIChat onQuickAction={handleChatQuickAction} />
+            </motion.div>
+          </div>
+        )
+      }
 
-{ showOnboarding && <OnboardingTour onComplete={handleOnboardingComplete} onSkip={handleOnboardingSkip} /> }
+      {showOnboarding && <OnboardingTour onComplete={handleOnboardingComplete} onSkip={handleOnboardingSkip} />}
     </div >
   )
 }

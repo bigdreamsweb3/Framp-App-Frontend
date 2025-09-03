@@ -17,18 +17,18 @@ const navItems = [
   { icon: "/img/prof.svg", icon2: "/img/profact.svg", label: 'Profile', view: 'profile' }
 ]
 
-const Navbar = ({ activeView, onChangeView }: NavbarProps) => {
+const BottomNavbar = ({ activeView, onChangeView }: NavbarProps) => {
   const pathname = usePathname();
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
     setHasMounted(true);
-  }, []); 
+  }, []);
 
   if (!hasMounted) return null; // Prevent hydration mismatch
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 w-full bg-white dark:bg-[#1F1F1F] border-t border-gray-200 dark:border-gray-700 px-0 py-3 transition-colors z-50">
+    <nav className="fixed bottom-0 left-0 right-0 w-full bg-white dark:bg-card/80 border-t border-gray-200 dark:border-gray-900 px-0 py-3 transition-colors z-50">
       <div className="flex justify-between items-center">
         {navItems.map((item) => {
           const active = activeView === item.view
@@ -54,4 +54,4 @@ const Navbar = ({ activeView, onChangeView }: NavbarProps) => {
   )
 }
 
-export default Navbar
+export default BottomNavbar

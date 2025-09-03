@@ -1,34 +1,19 @@
 "use client"
-import Image from "next/image"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { ArrowDown, Settings } from "lucide-react"
 import { OnrampSettings } from "@/components/onramp-settings"
-import { logoNGN } from "@/asssets/image"
 
 interface OnRampInterfaceProps {
   fromAmount: string
   toAmount: string
   onFromAmountChange: (value: string) => void
-  currency: string
-  onCurrencyChange: (currency: string) => void
-  receiving: number
   ngnToSolRate: number
-  balance?: number
 }
 
-export function OnRampInterface({
-  fromAmount,
-  toAmount,
-  onFromAmountChange,
-  currency,
-  onCurrencyChange,
-  receiving,
-  ngnToSolRate,
-  balance = 0,
-}: OnRampInterfaceProps) {
+export function OnRampInterface({ fromAmount, toAmount, onFromAmountChange, ngnToSolRate }: OnRampInterfaceProps) {
   const [showSettings, setShowSettings] = useState(false)
 
   // Debug logging for component mount and updates
@@ -81,20 +66,6 @@ export function OnRampInterface({
     return () => clearTimeout(timer)
   }, [])
 
-  // Define cardClasses for custom styling (adjust as needed)
-  const cardClasses = "";
-
-  // Detect dark mode using window.matchMedia
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    const match = window.matchMedia('(prefers-color-scheme: dark)');
-    setIsDarkMode(match.matches);
-    const handler = (e: MediaQueryListEvent) => setIsDarkMode(e.matches);
-    match.addEventListener('change', handler);
-    return () => match.removeEventListener('change', handler);
-  }, []);
-
   return (
     <>
       <div className="flex flex-col gap-4 mb-16">
@@ -115,77 +86,65 @@ export function OnRampInterface({
               </Button>
             </div>
 
-            <div className="flex-1 px-4">
-              <div className={`dark:bg-gray-800 bg-[#C2C0EB]  rounded-3xl p-6 border shadow-sm`}>
-                {/* Off-Ramp Label
-                <div className="mb-0">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[purple-100] dark:bg-purple-900/30 rounded-full">
-                    <span className={`dark:text-white text-black text-sm font-medium`}>On-Ramp</span>
-                  </div>
-                </div> */}
-
-
-                {/* You Pay Section */}
-                <div className={`mb-[-15px] dark:bg-gray-900 bg-[#E3E2F5] rounded-lg px-4 py-2`}>
-                  <div className={`text-sm dark:text-gray-400' : text-gray-500  mb-2`}>You Pay</div>
-                  <div className="flex items-center justify-between">
-                    <input
+            <div className="p-4 space-y-4">
+              {/* You Pay */}
+              <div className="space-y-2">
+                <div className="bg-card rounded-2xl p-4 border border-border/50 flex flex-col gap-3.5 shadow-sm">
+                  <div className="text-sm text-muted-foreground font-medium bg-muted/50 rounded-xl w-fit px-2 py-1">You Pay</div>
+                  <div className="flex items-center justify-between gap-2">
+                    <Input
                       type="number"
-                      step="0.01"
-                      min="0.01"
-                      max={balance || 0}
+                      placeholder="0"
                       value={fromAmount}
                       onChange={(e) => onFromAmountChange(e.target.value)}
-                      className="text-3xl font-bold bg-transparent border-none outline-none w-full"
-                      placeholder="0.00"
+                      onWheel={e => (e.target as HTMLInputElement).blur()}
+                      className="border-0 bg-transparent text-2xl md:text-2xl lg:text-2xl font-bold p-0 h-auto focus-visible:ring-0 placeholder:text-muted-foreground/50 shadow-none"
                     />
-                    <div className="flex items-center gap-0">
-                      <div className="w-6 h-6  flex items-center justify-center">
-                        <Image
-                          src={logoNGN}
-                          alt="Framp"
-                          width={14}
-                          height={14}
-                          className="h-[10px] w-auto"
-                        />
+                    <div className="bg-muted/50 rounded-xl px-3 py-1 h-auto">
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">🇳🇬</span>
+                        <span className="font-semibold">NGN</span>
                       </div>
-                      <span className="text-sm font-medium">NGN</span>
                     </div>
                   </div>
                 </div>
-
-                {/* Arrow Down */}
-                <div className="flex justify-center mb-[-15px]">
-                  <div className={`w-10 h-10 dark:bg-gray-700 bg-gray-100 border-[#C2C0EB] border-[4px] rounded-full flex items-center justify-center`}>
-                    <ArrowDown className="w-5 h-5" />
-                  </div>
-                </div>
-
-                {/* You Receive Section */}
-                <div className={`mb-2 dark:bg-gray-900 bg-[#E3E2F5] rounded-lg px-4 py-2 `}>
-                  <div className={`text-sm  dark:text-gray-400' : text-gray-500  mb-2`}>You Recieve</div>
-                  <div className="flex items-center justify-between">
-                    <div className="text-3xl font-bold">
-                      {receiving > 0 ? receiving.toLocaleString('en-US', { maximumFractionDigits: 5 }) : '0.00'}
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <select
-                        value={currency}
-                        onChange={(e) => onCurrencyChange(e.target.value)}
-                        className="bg-transparent border-none outline-none text-sm font-medium"
-                      >
-                        <option className="text-white" value="USD">USDT</option>
-                        <option className="text-white" value="EUR">USDC</option>
-                        <option className="text-white" value="GBP">USD*</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-
               </div>
-            </div>
 
+              {/* Arrow */}
+              <div className="flex justify-center">
+                <div className="rounded-full p-2 bg-muted/50 border border-border/50">
+                  <ArrowDown className="w-4 h-4" />
+                </div>
+              </div>
+
+              {/* You Receive */}
+              <div className="space-y-2">
+
+                <div className="bg-card rounded-2xl p-4 border border-border/50 flex flex-col gap-3.5 shadow-sm">
+                  <div className="text-sm text-muted-foreground font-medium bg-muted/50 rounded-xl w-fit px-2 py-1">You Receive</div>
+                  <div className="flex items-center justify-between gap-2">
+                    <Input
+                      type="number"
+                      placeholder="0"
+                      value={toAmount}
+                      readOnly
+                      className="border-0 bg-transparent text-2xl md:text-2xl lg:text-2xl font-bold p-0 h-auto focus-visible:ring-0 placeholder:text-muted-foreground/50 text-muted-foreground shadow-none"
+                    />
+                    <div className="bg-muted/50 rounded-xl px-3 py-1 h-auto">
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">◎</span>
+                        <span className="font-semibold">SOL</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Button */}
+              <Button className="w-full h-12 rounded-2xl text-base font-semibold" size="lg" disabled={!fromAmount}>
+                {!fromAmount ? "Enter amount" : "Buy SOL"}
+              </Button>
+            </div>
 
 
           </CardContent>
