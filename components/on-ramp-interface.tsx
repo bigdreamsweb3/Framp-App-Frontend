@@ -4,9 +4,15 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { ArrowDown, Settings } from "lucide-react"
+import { ArrowDown, Settings, ChevronDown } from "lucide-react"
 import { OnrampSettings } from "@/components/onramp-settings"
 import { logoNGN } from "@/asssets/image"
+
+const TOKENS = [
+  { symbol: "USDT", label: "Tether USDT", icon: "/images/usdt.svg" },
+  { symbol: "USDC", label: "USD Coin", icon: "/images/usdc.svg" },
+  { symbol: "SOL", label: "Solana", icon: "/images/sol.svg" },
+]
 
 interface OnRampInterfaceProps {
   fromAmount: string
@@ -30,6 +36,7 @@ export function OnRampInterface({
   balance = 0,
 }: OnRampInterfaceProps) {
   const [showSettings, setShowSettings] = useState(false)
+  const [tokenListOpen, setTokenListOpen] = useState(false);
 
   // Debug logging for component mount and updates
   useEffect(() => {
@@ -169,24 +176,47 @@ export function OnRampInterface({
                       {receiving > 0 ? receiving.toLocaleString('en-US', { maximumFractionDigits: 5 }) : '0.00'}
                     </div>
                     <div className="flex items-center gap-2">
-                      <select
-                        value={currency}
-                        onChange={(e) => onCurrencyChange(e.target.value)}
-                        className="bg-transparent border-none outline-none text-sm font-medium"
-                      >
-                        <option className="text-white" value="USD">USDT</option>
-                        <option className="text-white" value="EUR">USDC</option>
-                        <option className="text-white" value="GBP">USD*</option>
-                      </select>
+                      <div className="flex items-center gap-2 relative">
+                        <button
+                          type="button"
+                          className="flex items-center gap-2 px-2 py-1 rounded-lg bg-muted/40 hover:bg-muted/70 transition-colors border border-muted-foreground/10"
+                          onClick={() => setTokenListOpen((open) => !open)}
+                        >
+                          <img
+                            src={TOKENS.find(t => t.symbol === currency)?.icon}
+                            alt={currency}
+                            className="w-5 h-5"
+                          />
+                          <span className="font-medium text-sm">{currency}</span>
+                          <ChevronDown className="w-4 h-4 ml-1" />
+                        </button>
+                        {tokenListOpen && (
+                          <div className="absolute right-0 top-10 z-20 min-w-[8rem] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg py-2">
+                            {TOKENS.map(token => (
+                              <button
+                                key={token.symbol}
+                                className={`flex items-center w-full px-4 py-2 gap-2 hover:bg-muted/30 transition-colors ${
+                                  currency === token.symbol ? "bg-muted/20" : ""
+                                }`}
+                                onClick={() => {
+                                  onCurrencyChange(token.symbol)
+                                  setTokenListOpen(false)
+                                }}
+                              >
+                                <img src={token.icon} alt={token.symbol} className="w-5 h-5" />
+                                <span className="font-medium text-sm">{token.label}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
-
-
               </div>
 
               {/* Action Button */}
-              <Button className="w-full h-12 rounded-2xl text-base font-semibold" size="lg" disabled={!fromAmount}>
+              <Button className="w-5/6 h-12 rounded-2xl text-base font-semibold" size="lg" disabled={!fromAmount}>
                 {!fromAmount ? "Enter amount" : "Buy SOL"}
               </Button>
             </div>

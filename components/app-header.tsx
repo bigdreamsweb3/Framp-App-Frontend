@@ -8,6 +8,7 @@ import { Bot } from "lucide-react"
 import Image from "next/image"
 import { app_logo } from "@/asssets/image"
 import { App_Name } from "@/app/appConfig"
+import { DynamicWidget } from "@dynamic-labs/sdk-react-core"
 
 interface AppHeaderProps {
   onAuthClick?: () => void
@@ -16,14 +17,11 @@ interface AppHeaderProps {
 }
 
 export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderProps) {
-  const [showLogoText, setShowLogoText] = useState(true)
   const [scrolled, setScrolled] = useState(false)
-
-  const toggleLogoText = () => setShowLogoText(!showLogoText)
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10) // trigger shadow when scrolled past 10px
+      setScrolled(window.scrollY > 10)
     }
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
@@ -31,70 +29,79 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-900 bg-gradient-to-r from-background/60 via-background/40 to-background/60 backdrop-blur-xl supports-[backdrop-filter]:backdrop-saturate-150 transition-shadow duration-300
-        ${scrolled ? "shadow-[0_2px_10px_rgba(0,0,0,0.12)]" : "shadow-none"}`}
+      className={`sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-xl transition-all duration-300 ease-out
+        ${scrolled ? "shadow-lg py-0 h-14" : "shadow-sm py-1 h-14"}`}
       data-tour="security"
     >
-      <div className="flex items-center">
-        {/* Logo */}
-        <div className="relative group">
-          <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-primary/30 to-primary/5 blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
-          <Image
-            src={app_logo}
-            alt="App Logo"
-            className="relative w-[max(2.5rem,5vh)] h-full md:h-10 object-contain rounded-r-2xl"
-          />
+      <div className="container mx-auto h-full px-4 pl-0 flex items-center justify-between">
+        {/* Logo Section */}
+        <div className="flex items-center gap-3">
+          <div className="relative flex items-center">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-primary/30 to-primary/5 blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
+            <Image
+              src={app_logo}
+              alt="App Logo"
+              className="relative w-[max(2.5rem,5vh)] h-auto object-contain rounded-r-2xl"
+            />
+          </div>
+          <motion.span
+            initial={{ opacity: 0, x: -6 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -6 }}
+            transition={{ duration: 0.4 }}
+            className="hidden md:inline-flex text-lg font-bold bg-gradient-to-r from-primary to-primary-foreground bg-clip-text text-transparent"
+          >
+            {App_Name}
+          </motion.span>
+
+          {/* Vertical Beta Badge - positioned beside logo */}
+          <span className="text-[0.55rem] font-bold px-1 py-2 ext-muted-foreground transform -rotate-0 origin-center  ml-0">
+            BETA
+          </span>
         </div>
 
-        {/* Main Content */}
-        <div className="container mx-auto px-[max(1rem,2vw)] h-[max(1.5rem,7vh)] flex items-center justify-between ml-3 pl-0">
-          {/* AI Toggle */}
-          <div
-            className="flex items-center gap-[max(0.75rem,1vw)]"
-            tabIndex={0}
-            aria-label="Toggle logo display"
+
+        {/* Navigation and Actions */}
+        <div className="flex items-center gap-4">
+          {/* AI Toggle Button */}
+          <Button
+            variant={chatActive ? "default" : "outline"}
+            size="sm"
+            onClick={onChatToggle}
+            className="flex items-center gap-1.5 h-9 rounded-xl transition-all duration-200 hover:shadow-md"
+            data-tour="chat-button"
+            aria-pressed={chatActive}
           >
-            <motion.span
-              initial={{ opacity: 0, x: -6 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -6 }}
-              transition={{ duration: 0.4 }}
-              className="hidden md:inline-flex text-lg font-bold bg-gradient-to-r from-primary to-primary-foreground bg-clip-text text-transparent"
-            >
-              {App_Name}
-            </motion.span>
+            <Bot className="h-4 w-4" />
+            <span className="text-xs font-medium">AI</span>
+          </Button>
 
-            {/* Beta Badge – always visible */}
-            <span className="ml-2 text-[0.65rem] font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
-              BETA
-            </span>
+          {/* Theme Toggle */}
+          <ThemeToggle />
 
-            {/* AI Button */}
-            <Button
-              variant={chatActive ? "default" : "ghost"}
-              size="sm"
-              onClick={onChatToggle}
-              className="flex items-center justify-center h-9 w-14 rounded-xl p-0 shadow-inner hover:shadow-lg hover:scale-105 transition-all bg-white/10 backdrop-blur-md"
-              data-tour="chat-button"
-              aria-pressed={chatActive}
-            >
-              <Bot className="h-5 w-5 text-primary" />
-              <span className="ml-1 text-[0.7rem] font-medium">AI</span>
-            </Button>
-          </div>
 
-          {/* Right Actions */}
-          <div className="flex items-center gap-[max(0.75rem,1.5vw)]">
-            <ThemeToggle />
-
-            <button
+          <DynamicWidget
+            innerButtonComponent={<> <Button
               onClick={onAuthClick}
-              className="inline-flex items-center justify-center h-[max(2rem,4vh)] md:h-9 px-[max(0.75rem,1.5vw)] md:px-4 py-[max(0.5rem,1vh)] md:py-2 bg-muted text-primary dark:text-primary-foreground rounded-xl font-semibold text-[max(0.85rem,1.6vw)] md:text-sm hover:bg-primary/90 focus-visible:ring-[max(0.15rem,0.3vw)] md:focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring outline-none transition-all disabled:opacity-50 disabled:pointer-events-none"
+              variant="default"
+              size="sm"
+              className="h-9 px-4 rounded-xl font-medium text-sm bg-primary hover:bg-primary/90 transition-colors"
               aria-label="Log in or sign up"
             >
               Sign in
-            </button>
-          </div>
+            </Button></>}
+          />
+           
+          {/* Sign In Button */}
+          <Button
+            onClick={onAuthClick}
+            variant="default"
+            size="sm"
+            className="h-9 px-4 rounded-xl font-medium text-sm bg-primary hover:bg-primary/90 transition-colors"
+            aria-label="Log in or sign up"
+          >
+            Sign in
+          </Button>
         </div>
       </div>
     </header>

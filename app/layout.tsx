@@ -6,6 +6,11 @@ import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Suspense } from "react"
 import "./globals.css"
+import {
+  DynamicContextProvider,
+  DynamicWidget,
+} from "@dynamic-labs/sdk-react-core";
+import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 
 export const metadata: Metadata = {
   title: "FRAMP - Fiat to Crypto Ramp",
@@ -23,7 +28,15 @@ export default function RootLayout({
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
         <Suspense fallback={null}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            {children}
+            <DynamicContextProvider
+              settings={{
+                environmentId: "94779e7d-5bac-4634-bed1-fdec1ba6da64",
+                walletConnectors: [SolanaWalletConnectors],
+              }}
+            >
+              {children}
+              <DynamicWidget />
+            </DynamicContextProvider>
           </ThemeProvider>
         </Suspense>
         <Analytics />
