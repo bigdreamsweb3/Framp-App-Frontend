@@ -195,9 +195,8 @@ export function OnRampInterface({
                             {TOKENS.map(token => (
                               <button
                                 key={token.symbol}
-                                className={`flex items-center w-full px-4 py-2 gap-2 hover:bg-muted/30 transition-colors ${
-                                  currency === token.symbol ? "bg-muted/20" : ""
-                                }`}
+                                className={`flex items-center w-full px-4 py-2 gap-2 hover:bg-muted/30 transition-colors ${currency === token.symbol ? "bg-muted/20" : ""
+                                  }`}
                                 onClick={() => {
                                   onCurrencyChange(token.symbol)
                                   setTokenListOpen(false)
@@ -216,9 +215,11 @@ export function OnRampInterface({
               </div>
 
               {/* Action Button */}
-              <Button className="w-5/6 h-12 rounded-2xl text-base font-semibold" size="lg" disabled={!fromAmount}>
-                {!fromAmount ? "Enter amount" : "Buy SOL"}
-              </Button>
+              <div className="px-2">
+                <Button className="w-full h-12 rounded-2xl text-base font-semibold" size="lg" disabled={!fromAmount}>
+                  {!fromAmount ? "Enter amount" : "Buy SOL"}
+                </Button>
+              </div>
             </div>
 
 
