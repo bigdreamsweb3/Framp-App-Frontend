@@ -35,7 +35,7 @@ export default function RootLayout({
               }}
             >
               {children}
-              <DynamicWidget />
+              {/* <DynamicWidget /> */}
             </DynamicContextProvider>
           </ThemeProvider>
         </Suspense>

@@ -89,7 +89,7 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
           >
             Sign in
           </Button>}</DynamicConnectButton>
-
+{/* 
           <DynamicWidget
             innerButtonComponent={<> <Button
               // onClick={onAuthClick}
@@ -100,7 +100,7 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
             >
               Sign in
             </Button></>}
-          />
+          /> */}
 
           {/* Sign In Button */}
           {/* <Button
