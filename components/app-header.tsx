@@ -8,7 +8,7 @@ import { Bot } from "lucide-react"
 import Image from "next/image"
 import { app_logo } from "@/asssets/image"
 import { App_Name } from "@/app/appConfig"
-import { DynamicWidget } from "@dynamic-labs/sdk-react-core"
+import { DynamicConnectButton, DynamicWidget } from "@dynamic-labs/sdk-react-core"
 
 interface AppHeaderProps {
   onAuthClick?: () => void
@@ -80,9 +80,19 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
           <ThemeToggle />
 
 
+          <DynamicConnectButton>{<Button
+            // onClick={onAuthClick}
+            variant="default"
+            size="sm"
+            className="h-9 px-4 rounded-xl font-medium text-sm bg-primary hover:bg-primary/90 transition-colors"
+            aria-label="Log in or sign up"
+          >
+            Sign in
+          </Button>}</DynamicConnectButton>
+
           <DynamicWidget
             innerButtonComponent={<> <Button
-              onClick={onAuthClick}
+              // onClick={onAuthClick}
               variant="default"
               size="sm"
               className="h-9 px-4 rounded-xl font-medium text-sm bg-primary hover:bg-primary/90 transition-colors"
@@ -91,9 +101,9 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
               Sign in
             </Button></>}
           />
-           
+
           {/* Sign In Button */}
-          <Button
+          {/* <Button
             onClick={onAuthClick}
             variant="default"
             size="sm"
@@ -101,7 +111,7 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
             aria-label="Log in or sign up"
           >
             Sign in
-          </Button>
+          </Button> */}
         </div>
       </div>
     </header>
