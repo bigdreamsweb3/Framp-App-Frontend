@@ -143,7 +143,7 @@ export function OnRampInterface({
                       max={balance || 0}
                       value={fromAmount}
                       onChange={(e) => onFromAmountChange(e.target.value)}
-                      className="text-3xl font-bold bg-transparent border-none outline-none w-full"
+                      className="text-xl md:text-2xl lg:text-3xl font-bold bg-transparent border-none outline-none w-full"
                       placeholder="0.00"
                     />
                     <div className="flex items-center gap-0">
@@ -172,7 +172,7 @@ export function OnRampInterface({
                 <div className={`mb-2 dark:bg-gray-900 bg-[#E3E2F5] rounded-lg px-4 py-2 `}>
                   <div className={`text-sm  dark:text-gray-400' : text-gray-500  mb-2`}>You Recieve</div>
                   <div className="flex items-center justify-between">
-                    <div className="text-3xl font-bold">
+                    <div className="text-xl md:text-2xl lg:text-3xl font-bold">
                       {receiving > 0 ? receiving.toLocaleString('en-US', { maximumFractionDigits: 5 }) : '0.00'}
                     </div>
                     <div className="flex items-center gap-2">

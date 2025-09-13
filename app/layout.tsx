@@ -15,7 +15,7 @@ import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 export const metadata: Metadata = {
   title: "FRAMP - Fiat to Crypto Ramp",
   description: "Fast & secure fiat to crypto conversion on Solana",
-  generator: "v0.app",
+  generator: "github.com/bigdreamsweb3",
 }
 
 export default function RootLayout({
