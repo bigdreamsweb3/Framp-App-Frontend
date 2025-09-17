@@ -1,4 +1,6 @@
 // File: lib/api/payments/onramp.ts
+// const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "https://framp-backend.vercel.app";
 
@@ -11,8 +13,10 @@ export async function createOnramp({
   tokenSymbol,
   tokenMint,
   walletAddress,
-  paymentMethods = ["ACCOUNT_TRANSFER", "CARD", "USSD", "PHONE_NUMBER"],
-}: {
+
+  paymentMethods = ["ACCOUNT_TRANSFER"],
+}: //   paymentMethods = ["ACCOUNT_TRANSFER", "CARD", "USSD", "PHONE_NUMBER"],
+{
   amount: number;
   currency?: string;
   tokenSymbol: string;
