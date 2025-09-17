@@ -30,15 +30,18 @@ export default function RootLayout({
         <AuthProvider>
           <Suspense fallback={null}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-              <DynamicContextProvider
+
+              {children}
+
+              {/* <DynamicContextProvider
                 settings={{
                   environmentId: "94779e7d-5bac-4634-bed1-fdec1ba6da64",
                   walletConnectors: [SolanaWalletConnectors],
                 }}
               >
                 {children}
-                {/* <DynamicWidget /> */}
-              </DynamicContextProvider>
+                <DynamicWidget />
+              </DynamicContextProvider> */}
             </ThemeProvider>
           </Suspense>
           <Analytics />
