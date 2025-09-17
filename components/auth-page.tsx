@@ -1,29 +1,50 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Eye, EyeOff, ArrowLeft } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 interface AuthPageProps {
-  onBack: () => void
+  onBack: () => void;
 }
 
 export function AuthPage({ onBack }: AuthPageProps) {
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const { login, signup } = useAuth();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsLoading(false)
+  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+    try {
+      if (mode === "login") {
+        await login(email, password);
+      } else {
+        await signup(email, password);
+      }
+      onBack(); // close modal after success
+    } catch (err: any) {
+      setError(err.message || "Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -50,12 +71,13 @@ export function AuthPage({ onBack }: AuthPageProps) {
         </div>
 
         {/* Auth Tabs */}
-        <Tabs defaultValue="login" className="w-full">
+        <Tabs defaultValue="login" onValueChange={(val) => setMode(val as "login" | "signup")} className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="login">Log In</TabsTrigger>
             <TabsTrigger value="signup">Sign Up</TabsTrigger>
           </TabsList>
 
+          {/* Login */}
           <TabsContent value="login" className="space-y-4">
             <Card className="border-border/50">
               <CardHeader className="space-y-1">
@@ -66,7 +88,15 @@ export function AuthPage({ onBack }: AuthPageProps) {
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" type="email" placeholder="Enter your email" required className="rounded-xl" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="rounded-xl"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
@@ -75,6 +105,8 @@ export function AuthPage({ onBack }: AuthPageProps) {
                         id="password"
                         type={showPassword ? "text" : "password"}
                         placeholder="Enter your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         required
                         className="rounded-xl pr-10"
                       />
@@ -93,6 +125,7 @@ export function AuthPage({ onBack }: AuthPageProps) {
                       </Button>
                     </div>
                   </div>
+                  {error && <p className="text-red-500 text-sm">{error}</p>}
                   <Button type="submit" className="w-full rounded-xl font-semibold" disabled={isLoading}>
                     {isLoading ? "Logging in..." : "Log In"}
                   </Button>
@@ -101,6 +134,7 @@ export function AuthPage({ onBack }: AuthPageProps) {
             </Card>
           </TabsContent>
 
+          {/* Signup */}
           <TabsContent value="signup" className="space-y-4">
             <Card className="border-border/50">
               <CardHeader className="space-y-1">
@@ -115,6 +149,8 @@ export function AuthPage({ onBack }: AuthPageProps) {
                       id="signupEmail"
                       type="email"
                       placeholder="Enter your email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       required
                       className="rounded-xl"
                     />
@@ -126,6 +162,8 @@ export function AuthPage({ onBack }: AuthPageProps) {
                         id="signupPassword"
                         type={showPassword ? "text" : "password"}
                         placeholder="Create a password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         required
                         className="rounded-xl pr-10"
                       />
@@ -144,6 +182,7 @@ export function AuthPage({ onBack }: AuthPageProps) {
                       </Button>
                     </div>
                   </div>
+                  {error && <p className="text-red-500 text-sm">{error}</p>}
                   <Button type="submit" className="w-full rounded-xl font-semibold" disabled={isLoading}>
                     {isLoading ? "Creating account..." : "Create Account"}
                   </Button>
@@ -154,7 +193,7 @@ export function AuthPage({ onBack }: AuthPageProps) {
         </Tabs>
 
         {/* Terms */}
-        <p className="text-xs text-muted-foreground text-center">
+        {/* <p className="text-xs text-muted-foreground text-center">
           By continuing, you agree to FRAMP's{" "}
           <a href="#" className="text-primary hover:underline">
             Terms of Service
@@ -163,8 +202,8 @@ export function AuthPage({ onBack }: AuthPageProps) {
           <a href="#" className="text-primary hover:underline">
             Privacy Policy
           </a>
-        </p>
+        </p> */}
       </div>
     </div>
-  )
+  );
 }

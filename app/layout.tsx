@@ -11,6 +11,7 @@ import {
   DynamicWidget,
 } from "@dynamic-labs/sdk-react-core";
 import { SolanaWalletConnectors } from "@dynamic-labs/solana";
+import { AuthProvider } from "@/context/AuthContext"
 
 export const metadata: Metadata = {
   title: "FRAMP - Fiat to Crypto Ramp",
@@ -26,20 +27,22 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
-        <Suspense fallback={null}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <DynamicContextProvider
-              settings={{
-                environmentId: "94779e7d-5bac-4634-bed1-fdec1ba6da64",
-                walletConnectors: [SolanaWalletConnectors],
-              }}
-            >
-              {children}
-              {/* <DynamicWidget /> */}
-            </DynamicContextProvider>
-          </ThemeProvider>
-        </Suspense>
-        <Analytics />
+        <AuthProvider>
+          <Suspense fallback={null}>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              <DynamicContextProvider
+                settings={{
+                  environmentId: "94779e7d-5bac-4634-bed1-fdec1ba6da64",
+                  walletConnectors: [SolanaWalletConnectors],
+                }}
+              >
+                {children}
+                {/* <DynamicWidget /> */}
+              </DynamicContextProvider>
+            </ThemeProvider>
+          </Suspense>
+          <Analytics />
+        </AuthProvider>
       </body>
     </html>
   )

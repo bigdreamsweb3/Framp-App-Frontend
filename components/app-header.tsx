@@ -8,7 +8,8 @@ import { Bot } from "lucide-react"
 import Image from "next/image"
 import { app_logo } from "@/asssets/image"
 import { App_Name } from "@/app/appConfig"
-import { DynamicConnectButton, DynamicWidget } from "@dynamic-labs/sdk-react-core"
+import { useAuth } from "@/context/AuthContext"
+// import { DynamicConnectButton, DynamicWidget } from "@dynamic-labs/sdk-react-core"
 
 interface AppHeaderProps {
   onAuthClick?: () => void
@@ -18,6 +19,9 @@ interface AppHeaderProps {
 
 export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderProps) {
   const [scrolled, setScrolled] = useState(false)
+
+  const { user, logout } = useAuth();
+  const [showAuth, setShowAuth] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -80,7 +84,33 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
           <ThemeToggle />
 
 
-          <DynamicConnectButton>{<Button
+
+          {!user ? (
+            <>
+              <Button
+                onClick={onAuthClick}
+                variant="default"
+                size="sm"
+                className="h-9 px-4 rounded-xl font-medium text-sm bg-primary hover:bg-primary/90 transition-colors"
+                aria-label="Log in or sign up"
+              >
+                Sign in
+              </Button>
+            </>
+          ) : (
+            <>
+              <p className="mb-4">Welcome back, {user.email}!</p>
+              <button
+                onClick={logout}
+                className="bg-red-600 text-white px-4 py-2 rounded-lg"
+              >
+                Logout
+              </button>
+            </>
+          )}
+
+
+          {/* <DynamicConnectButton>{<Button
             // onClick={onAuthClick}
             variant="default"
             size="sm"
@@ -88,8 +118,8 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
             aria-label="Log in or sign up"
           >
             Sign in
-          </Button>}</DynamicConnectButton>
-{/* 
+          </Button>}</DynamicConnectButton> */}
+          {/* 
           <DynamicWidget
             innerButtonComponent={<> <Button
               // onClick={onAuthClick}
