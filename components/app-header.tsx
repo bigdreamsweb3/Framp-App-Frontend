@@ -103,7 +103,7 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
               <Button
                 onClick={logout}
                 size="sm"
-                className="h-9 px-4 rounded-xl font-medium text-sm bg- hover:bg-primary/90 transition-colors"
+                className="h-9 px-4 rounded-xl font-medium text-sm bg-muted-foreground hover:bg-primary/90 transition-colors"
               >
                 Logout
               </Button>
