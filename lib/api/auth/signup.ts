@@ -1,5 +1,13 @@
-export async function signup(email: string, password: string, name?: string, wallet_address?: string) {
-  const res = await fetch("/api/auth/signup", {
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL || "https://framp-backend.vercel.app";
+
+export async function signup(
+  email: string,
+  password: string,
+  name?: string,
+  wallet_address?: string
+) {
+  const res = await fetch(`${API_BASE}/api/auth/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
