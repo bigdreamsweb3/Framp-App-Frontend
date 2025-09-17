@@ -99,13 +99,14 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle }: AppHeaderPr
             </>
           ) : (
             <>
-              <p className="mb-4">Welcome back, {user.email}!</p>
-              <button
+              {/* <p className="mb-4">Welcome back, {user.email}!</p> */}
+              <Button
                 onClick={logout}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg"
+                size="sm"
+                className="h-9 px-4 rounded-xl font-medium text-sm bg- hover:bg-primary/90 transition-colors"
               >
                 Logout
-              </button>
+              </Button>
             </>
           )}
 
