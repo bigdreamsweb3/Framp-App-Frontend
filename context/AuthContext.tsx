@@ -28,17 +28,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchUser = async () => {
+    try {
+      setLoading(true);
+      const res = await getCurrentUser(); // should call /api/auth/me
+      console.log("🔍 Current user from API:", res); // 👈 Log API response
+      setUser(res);
+    } catch (err) {
+      console.error("AuthContext: no valid session", err);
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await getCurrentUser();
-        setUser(res.user);
-      } catch {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    })();
+    fetchUser();
   }, []);
 
   async function handleLogin(email: string, password: string) {

@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { User, Edit, Camera, Mail, Phone, MapPin } from "lucide-react"
+import { useAuth } from "@/context/AuthContext"
 
 interface ProfileViewProps {
   isLoggedIn: boolean
@@ -14,14 +15,18 @@ interface ProfileViewProps {
 
 export function ProfileView({ isLoggedIn, onLogin }: ProfileViewProps) {
   const [isEditingProfile, setIsEditingProfile] = useState(false)
+
+  const { user } = useAuth();
+
   const [userProfile, setUserProfile] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
+    name: user?.name,
+    email: user?.email,
     phone: "+234 801 234 5678",
     location: "Lagos, Nigeria",
     joinDate: "January 2024",
   })
 
+  // console.log(user)
   return (
     <Card className="bg-card/50 backdrop-blur-sm border-border/50">
       <CardContent className="p-6">
@@ -30,7 +35,7 @@ export function ProfileView({ isLoggedIn, onLogin }: ProfileViewProps) {
             <User className="h-5 w-5" />
             <h3 className="text-lg font-semibold">Profile</h3>
           </div>
-          {isLoggedIn && (
+          {user && (
             <Button
               variant="ghost"
               size="sm"
@@ -42,7 +47,7 @@ export function ProfileView({ isLoggedIn, onLogin }: ProfileViewProps) {
           )}
         </div>
 
-        {!isLoggedIn ? (
+        {!user ? (
           <div className="text-center py-8">
             <div className="w-20 h-20 bg-muted rounded-full mx-auto mb-4 flex items-center justify-center">
               <User className="h-8 w-8 text-muted-foreground" />

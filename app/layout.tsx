@@ -6,11 +6,11 @@ import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Suspense } from "react"
 import "./globals.css"
-import {
-  DynamicContextProvider,
-  DynamicWidget,
-} from "@dynamic-labs/sdk-react-core";
-import { SolanaWalletConnectors } from "@dynamic-labs/solana";
+// import {
+//   DynamicContextProvider,
+//   DynamicWidget,
+// } from "@dynamic-labs/sdk-react-core";
+// import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 import { AuthProvider } from "@/context/AuthContext"
 
 export const metadata: Metadata = {
