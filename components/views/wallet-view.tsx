@@ -14,6 +14,7 @@ interface WalletViewProps {
   onLogin: () => void
   onWalletSelect?: (wallet: PaymentMethod) => void
   selectedWallet?: PaymentMethod | null
+  onClose?: () => void
 }
 
 interface PaymentMethod {
@@ -28,7 +29,7 @@ interface PaymentMethod {
   accountNumber?: string
 }
 
-export function WalletView({ isLoggedIn, onLogin, onWalletSelect, selectedWallet }: WalletViewProps) {
+export function WalletView({ isLoggedIn, onLogin, onWalletSelect, selectedWallet, onClose }: WalletViewProps) {
   const { user } = useAuth()
   const [showAddPayment, setShowAddPayment] = useState(false)
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([])
@@ -143,6 +144,10 @@ export function WalletView({ isLoggedIn, onLogin, onWalletSelect, selectedWallet
   const handleWalletSelect = (wallet: PaymentMethod) => {
     if (onWalletSelect) {
       onWalletSelect(wallet)
+    }
+    // Close the wallet view after selection
+    if (onClose) {
+      onClose()
     }
   }
 

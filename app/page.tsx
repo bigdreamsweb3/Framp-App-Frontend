@@ -111,6 +111,7 @@ export default function FrampOnRamp() {
             onLogin={handleShowAuth}
             onWalletSelect={setSelectedWallet}
             selectedWallet={selectedWallet}
+            onClose={() => setActiveView("onramp")}
           />
         );
       default:
