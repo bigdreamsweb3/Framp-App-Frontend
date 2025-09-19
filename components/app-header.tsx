@@ -47,7 +47,7 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle, onProfileClic
         ${scrolled ? "shadow-lg py-0 h-14" : "shadow-sm py-1 h-14"}`}
       data-tour="security"
     >
-      <div className="w-full h-full px-4 flex items-center justify-between">
+      <div className="w-full h-full pl-0 pr-4 flex items-center justify-between">
         {/* Logo Section */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-0">
@@ -120,9 +120,9 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle, onProfileClic
                     aria-label="User menu"
                   >
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src="" alt={user.name || user.email} />
+                      <AvatarImage src="" alt={(user as any)?.user.user?.name || (user as any)?.email || "User"} />
                       <AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">
-                        {user.name ? user.name.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
+                        {(user as any)?.user?.name ? (user as any).user.name.charAt(0).toUpperCase() : (user as any)?.user?.email?.charAt(0).toUpperCase() || "U"}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -130,9 +130,9 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle, onProfileClic
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{user.name || "User"}</p>
+                      <p className="text-sm font-medium leading-none">{(user as any)?.user?.name || (user as any)?.name || "User"}</p>
                       <p className="text-xs leading-none text-muted-foreground">
-                        {user.email}
+                        {(user as any)?.user?.email || (user as any)?.email || "No email"}
                       </p>
                     </div>
                   </DropdownMenuLabel>
