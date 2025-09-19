@@ -13,7 +13,7 @@ export async function createOnramp({
   tokenSymbol,
   tokenMint,
   walletAddress,
-
+  walletInfo,
   paymentMethods = ["ACCOUNT_TRANSFER"],
 }: //   paymentMethods = ["ACCOUNT_TRANSFER", "CARD", "USSD", "PHONE_NUMBER"],
 {
@@ -22,6 +22,17 @@ export async function createOnramp({
   tokenSymbol: string;
   tokenMint: string;
   walletAddress: string;
+  walletInfo?: {
+    id: string;
+    type: "bank" | "wallet";
+    name: string;
+    details: string;
+    accountName: string;
+    isDefault: boolean;
+    walletAddress?: string;
+    bankCode?: string;
+    accountNumber?: string;
+  } | null;
   paymentMethods?: string[];
 }) {
   const res = await fetch(`${API_BASE}/api/payments/onramp`, {
@@ -39,6 +50,17 @@ export async function createOnramp({
       token: tokenSymbol,
       tokenMint,
       walletAddress,
+      walletInfo: walletInfo ? {
+        id: walletInfo.id,
+        type: walletInfo.type,
+        name: walletInfo.name,
+        details: walletInfo.details,
+        accountName: walletInfo.accountName,
+        isDefault: walletInfo.isDefault,
+        walletAddress: walletInfo.walletAddress,
+        bankCode: walletInfo.bankCode,
+        accountNumber: walletInfo.accountNumber,
+      } : null,
       paymentMethods,
     }),
   });

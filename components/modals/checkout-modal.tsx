@@ -35,7 +35,7 @@ export function CheckoutModal({ url, onClose }: CheckoutModalProps) {
                 <iframe
                     src={url}
                     // Hide scrollbars & fill container
-                    className="w-fit lg:w-1/2 h-full border-0 rounded-2xl overflow-hidden"
+                    className="w-full lg:w-1/2 h-full border-0 rounded-2xl overflow-hidden"
                     scrolling="no"
                     allow="payment; clipboard-write; autoplay"
                     style={{ scrollbarWidth: "none" }} // Firefox

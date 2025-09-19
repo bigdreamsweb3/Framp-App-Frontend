@@ -3,7 +3,13 @@
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowDown, Settings, ChevronDown } from "lucide-react";
+import {
+  ArrowDown,
+  Settings,
+  ChevronDown,
+  Wallet,
+  Building2,
+} from "lucide-react";
 import { OnrampSettings } from "@/components/onramp-settings";
 import { logoNGN } from "@/asssets/image";
 import { createOnramp } from "@/lib/api/payments/onramp";
@@ -57,6 +63,18 @@ interface OnRampInterfaceProps {
   receiving: number;
   ngnToSolRate: number;
   balance?: number;
+  selectedWallet?: {
+    id: string;
+    type: "bank" | "wallet";
+    name: string;
+    details: string;
+    accountName: string;
+    isDefault: boolean;
+    walletAddress?: string;
+    bankCode?: string;
+    accountNumber?: string;
+  } | null;
+  onWalletSelect?: () => void;
 }
 
 export function OnRampInterface({
@@ -68,6 +86,8 @@ export function OnRampInterface({
   receiving,
   ngnToSolRate,
   balance = 0,
+  selectedWallet,
+  onWalletSelect,
 }: OnRampInterfaceProps) {
   const [showSettings, setShowSettings] = useState(false);
   const [tokenListOpen, setTokenListOpen] = useState(false);
@@ -105,11 +125,18 @@ export function OnRampInterface({
   async function handleConfirm() {
     setLoading(true);
     try {
+      // Use selected wallet address if available, otherwise fall back to user's wallet
+      const walletAddress =
+        selectedWallet?.walletAddress ||
+        user?.wallet_address ||
+        "YOUR_WALLET_ADDRESS";
+
       const res = await createOnramp({
         amount: Number(fromAmount),
         tokenSymbol: currency,
         tokenMint: "So11111111111111111111111111111111111111112",
-        walletAddress: user?.wallet_address || "YOUR_WALLET_ADDRESS",
+        walletAddress: walletAddress,
+        walletInfo: selectedWallet,
       });
 
       if (res?.data?.checkout_url) {
@@ -137,7 +164,14 @@ export function OnRampInterface({
           >
             <CardContent className="p-0 flex-1">
               <div className="flex items-center justify-between p-4 ">
-                <h2 className="text-lg font-semibold">On Ramp</h2>
+                <div>
+                  <h2 className="text-lg font-semibold">On Ramp</h2>
+                  {selectedWallet && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      To: {selectedWallet.name} ({selectedWallet.details})
+                    </p>
+                  )}
+                </div>
                 <Button
                   variant="ghost"
                   size="sm"
@@ -210,6 +244,52 @@ export function OnRampInterface({
                         </Button>
                       </div>
                     </div>
+                     {/* Wallet Selection - Only show when amount is entered */}
+                     {fromAmount && Number(fromAmount) > 0 && (
+                       <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                         <div className="flex items-center justify-between">
+                           <div className="flex items-center gap-2">
+                             <div className="text-xs text-gray-500">To:</div>
+                             {selectedWallet ? (
+                               <div className="flex items-center gap-2">
+                                 <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center">
+                                   {selectedWallet.type === "wallet" ? (
+                                     <Wallet className="h-2.5 w-2.5 text-primary" />
+                                   ) : (
+                                     <Building2 className="h-2.5 w-2.5 text-primary" />
+                                   )}
+                                 </div>
+                                 <div>
+                                   <div className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                                     {selectedWallet.name}
+                                   </div>
+                                   <div className="text-xs text-gray-500">
+                                     {selectedWallet.details}
+                                   </div>
+                                 </div>
+                               </div>
+                             ) : (
+                               <div className="flex items-center gap-2">
+                                 <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
+                                   <Wallet className="h-2.5 w-2.5 text-orange-500" />
+                                 </div>
+                                 <div className="text-xs text-orange-600 font-medium">
+                                   Select wallet
+                                 </div>
+                               </div>
+                             )}
+                           </div>
+                           <Button
+                             variant="ghost"
+                             size="sm"
+                             className="text-xs px-2 py-1 h-6 text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                             onClick={onWalletSelect}
+                           >
+                             {selectedWallet ? "Change" : "Select"}
+                           </Button>
+                         </div>
+                       </div>
+                     )}
                   </div>
                 </div>
 
@@ -266,6 +346,7 @@ export function OnRampInterface({
           receiveAmount={receiving} // 🪙 amount of crypto they get
           receiveToken={currency} // 🪙 token symbol (SOL, USDT etc.)
           paymentMethod="Bank Transfer" // or your actual method
+          selectedWallet={selectedWallet} // 🏦 selected wallet information
           onConfirm={handleConfirm}
           onCancel={() => setShowConfirm(false)}
         />

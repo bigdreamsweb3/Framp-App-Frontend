@@ -3,11 +3,22 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 
 interface ConfirmOnRampModalProps {
-  payAmount: string;       // User’s fiat amount (e.g. NGN)
+  payAmount: string;       // User's fiat amount (e.g. NGN)
   payCurrency: string;     // Fiat currency code
   receiveAmount: number;   // Estimated crypto amount
   receiveToken: string;    // Crypto token name
   paymentMethod: string;   // Payment method (Card, Bank etc.)
+  selectedWallet?: {
+    id: string;
+    type: "bank" | "wallet";
+    name: string;
+    details: string;
+    accountName: string;
+    isDefault: boolean;
+    walletAddress?: string;
+    bankCode?: string;
+    accountNumber?: string;
+  } | null;
   onConfirm: () => Promise<void> | void; // ✅ Supports async or sync
   onCancel: () => void;
 }
@@ -18,6 +29,7 @@ export function ConfirmOnRampModal({
   receiveAmount,
   receiveToken,
   paymentMethod,
+  selectedWallet,
   onConfirm,
   onCancel,
 }: ConfirmOnRampModalProps) {
@@ -70,6 +82,22 @@ export function ConfirmOnRampModal({
           <InfoRow label="Token" value={receiveToken} />
           <InfoRow label={`Estimated ${receiveToken}`} value={receiveAmount.toString()} />
           <InfoRow label="Payment Method" value={paymentMethod} />
+          {selectedWallet && (
+            <div className="py-2 border-b border-border">
+              <div className="flex justify-between items-start">
+                <span className="font-medium text-muted-foreground">Send to:</span>
+                <div className="text-right">
+                  <div className="font-semibold">{selectedWallet.name}</div>
+                  <div className="text-sm text-muted-foreground">{selectedWallet.details}</div>
+                  {selectedWallet.walletAddress && (
+                    <div className="text-xs text-muted-foreground font-mono mt-1">
+                      {selectedWallet.walletAddress.slice(0, 8)}...{selectedWallet.walletAddress.slice(-8)}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Actions */}

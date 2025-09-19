@@ -12,18 +12,32 @@ import { AuthPage } from "@/components/auth-page";
 import { OnboardingTour } from "@/components/onboarding-tour";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 
 import BottomNavbar from "@/components/bottom-nav";
 
+interface PaymentMethod {
+  id: string;
+  type: "bank" | "wallet";
+  name: string;
+  details: string;
+  accountName: string;
+  isDefault: boolean;
+  walletAddress?: string;
+  bankCode?: string;
+  accountNumber?: string;
+}
+
 export default function FrampOnRamp() {
+  const { user } = useAuth();
   const [fromAmount, setFromAmount] = useState("");
   const [toAmount, setToAmount] = useState("");
   const [activeView, setActiveView] = useState("onramp");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [currency, setCurrency] = useState("NGN"); // or your default currency
+  const [selectedWallet, setSelectedWallet] = useState<PaymentMethod | null>(null);
 
   const ngnToSolRate = 850;
 
@@ -35,6 +49,7 @@ export default function FrampOnRamp() {
       setShowOnboarding(true);
     }
   }, []);
+
 
   const handleFromAmountChange = (value: string) => {
     setFromAmount(value);
@@ -58,10 +73,6 @@ export default function FrampOnRamp() {
 
   const handleShowAuth = () => setShowAuth(true);
   const handleHideAuth = () => setShowAuth(false);
-  const handleLogin = () => {
-    setIsLoggedIn(true);
-    setShowAuth(false);
-  };
 
   const handleOnboardingComplete = () => {
     localStorage.setItem("framp-onboarding-completed", "true");
@@ -85,14 +96,23 @@ export default function FrampOnRamp() {
             currency={currency}
             onCurrencyChange={setCurrency}
             receiving={toAmount ? Number(toAmount) : 0}
+            selectedWallet={selectedWallet}
+            onWalletSelect={() => setActiveView("wallet")}
           />
         );
       case "activity":
         return <ActivityView />;
       case "profile":
-        return <ProfileView isLoggedIn={isLoggedIn} onLogin={handleShowAuth} />;
+        return <ProfileView isLoggedIn={!!user} onLogin={handleShowAuth} />;
       case "wallet":
-        return <WalletView isLoggedIn={isLoggedIn} onLogin={handleShowAuth} />;
+        return (
+          <WalletView 
+            isLoggedIn={!!user} 
+            onLogin={handleShowAuth}
+            onWalletSelect={setSelectedWallet}
+            selectedWallet={selectedWallet}
+          />
+        );
       default:
         return (
           <OnRampInterface
@@ -103,6 +123,8 @@ export default function FrampOnRamp() {
             currency={currency}
             onCurrencyChange={setCurrency}
             receiving={toAmount ? Number(toAmount) : 0}
+            selectedWallet={selectedWallet}
+            onWalletSelect={() => setActiveView("wallet")}
           />
         );
     }
