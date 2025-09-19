@@ -30,7 +30,7 @@ export function OnrampSettings({ onClose }: OnrampSettingsProps) {
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Auto-Save Settings */}
-          <div className="space-y-4">
+          {/* <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Percent className="h-4 w-4 text-primary" />
@@ -59,10 +59,10 @@ export function OnrampSettings({ onClose }: OnrampSettingsProps) {
                 </p>
               </div>
             )}
-          </div>
+          </div> */}
 
           {/* Fast Mode */}
-          <div className="flex items-center justify-between">
+          {/* <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Zap className="h-4 w-4 text-primary" />
               <div>
@@ -73,26 +73,22 @@ export function OnrampSettings({ onClose }: OnrampSettingsProps) {
               </div>
             </div>
             <Switch id="fast-mode" checked={fastMode} onCheckedChange={setFastMode} />
-          </div>
+          </div> */}
 
-          {/* Preferred Bank */}
+          {/* Preferred Wallet */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Shield className="h-4 w-4 text-primary" />
-              <Label className="font-medium">Preferred Bank</Label>
+              <Label className="font-medium">Preferred Wallet</Label>
             </div>
             <Select value={preferredBank} onValueChange={setPreferredBank}>
               <SelectTrigger className="rounded-xl">
                 <SelectValue placeholder="Select your preferred bank" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="gtbank">GTBank</SelectItem>
-                <SelectItem value="access">Access Bank</SelectItem>
-                <SelectItem value="zenith">Zenith Bank</SelectItem>
-                <SelectItem value="uba">UBA</SelectItem>
-                <SelectItem value="firstbank">First Bank</SelectItem>
-                <SelectItem value="fidelity">Fidelity Bank</SelectItem>
-                <SelectItem value="sterling">Sterling Bank</SelectItem>
+                <SelectItem value="0x6746">0x6746....9876</SelectItem>
+                <SelectItem value="0x6746">0x6746....9876</SelectItem>
+                <SelectItem value="0x6746">0x6746....9876</SelectItem>
               </SelectContent>
             </Select>
           </div>

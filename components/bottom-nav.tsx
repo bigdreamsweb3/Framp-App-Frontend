@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
-import { Home, Activity, User } from "lucide-react" // lucide icons
+import { Home, Activity, Wallet } from "lucide-react" // lucide icons
 
 interface NavbarProps {
   activeView: string
@@ -12,7 +12,7 @@ interface NavbarProps {
 const navItems = [
   { icon: Home, label: "Home", view: "onramp" },
   { icon: Activity, label: "Activity", view: "activity" },
-  { icon: User, label: "Profile", view: "profile" },
+  { icon: Wallet, label: "Wallet", view: "wallet" },
 ]
 
 const BottomNavbar = ({ activeView, onChangeView }: NavbarProps) => {
@@ -26,7 +26,7 @@ const BottomNavbar = ({ activeView, onChangeView }: NavbarProps) => {
   if (!hasMounted) return null // prevent hydration mismatch
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 w-full bg-white/90 dark:bg-background/80 backdrop-blur-md border-t border-border px-0 py-2 transition-colors z-50">
+    <nav className="fixed bottom-0 left-0 right-0 w-full bg-background border-t border-border px-0 py-2 transition-colors z-50">
       <div className="flex justify-around items-center">
         {navItems.map((item) => {
           const active = activeView === item.view
@@ -45,9 +45,8 @@ const BottomNavbar = ({ activeView, onChangeView }: NavbarProps) => {
                 strokeWidth={active ? 2.5 : 2}
               />
               <span
-                className={`text-xs font-medium transition-colors ${
-                  active ? "text-primary" : "text-muted-foreground"
-                }`}
+                className={`text-xs font-medium transition-colors ${active ? "text-primary" : "text-muted-foreground"
+                  }`}
               >
                 {item.label}
               </span>

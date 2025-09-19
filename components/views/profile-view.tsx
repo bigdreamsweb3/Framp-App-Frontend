@@ -5,15 +5,16 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { User, Edit, Camera, Mail, Phone, MapPin } from "lucide-react"
+import { User, Edit, Camera, Mail, Phone, MapPin, X } from "lucide-react"
 import { useAuth } from "@/context/AuthContext"
 
 interface ProfileViewProps {
   isLoggedIn: boolean
   onLogin: () => void
+  onClose?: () => void
 }
 
-export function ProfileView({ isLoggedIn, onLogin }: ProfileViewProps) {
+export function ProfileView({ isLoggedIn, onLogin, onClose }: ProfileViewProps) {
   const [isEditingProfile, setIsEditingProfile] = useState(false)
 
   const { user } = useAuth();
@@ -35,16 +36,28 @@ export function ProfileView({ isLoggedIn, onLogin }: ProfileViewProps) {
             <User className="h-5 w-5" />
             <h3 className="text-lg font-semibold">Profile</h3>
           </div>
-          {user && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsEditingProfile(!isEditingProfile)}
-              className="h-8 w-8 p-0 rounded-full"
-            >
-              <Edit className="h-4 w-4" />
-            </Button>
-          )}
+          <div className="flex items-center gap-2">
+            {user && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setIsEditingProfile(!isEditingProfile)}
+                className="h-8 w-8 p-0 rounded-full"
+              >
+                <Edit className="h-4 w-4" />
+              </Button>
+            )}
+            {onClose && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={onClose}
+                className="h-8 w-8 p-0 rounded-full"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
         </div>
 
         {!user ? (
