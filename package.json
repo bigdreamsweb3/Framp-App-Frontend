@@ -81,5 +81,16 @@
     "tailwindcss": "^4.1.9",
     "tw-animate-css": "1.3.3",
     "typescript": "^5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bigdreamsweb3/Framp-App-Frontend.git"
+  },
+  "author": "Agbaka Daniel Ungonna (AKA BigDreams Web3)",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/bigdreamsweb3/Framp-App-Frontend/issues"
+  },
+  "homepage": "https://github.com/bigdreamsweb3/Framp-App-Frontend#readme"
 }
