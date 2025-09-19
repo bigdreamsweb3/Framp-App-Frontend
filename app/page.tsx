@@ -147,14 +147,14 @@ export default function FrampOnRamp() {
                   <Activity className="h-4 w-4" />
                   Activity
                 </Button>
-                <Button
+                {/* <Button
                   variant={activeView === "profile" ? "default" : "ghost"}
                   onClick={() => setActiveView("profile")}
                   className="w-full justify-start gap-2 rounded-xl"
                 >
                   <User className="h-4 w-4" />
                   Profile
-                </Button>
+                </Button> */}
                 <Button
                   variant={activeView === "wallet" ? "default" : "ghost"}
                   onClick={() => setActiveView("wallet")}
@@ -167,7 +167,7 @@ export default function FrampOnRamp() {
             </div>
 
             {/* Floating AI Chat Button */}
-            <motion.button
+            {/* <motion.button
               className="fixed bottom-[max(1rem,2vh)] right-[max(1rem,2vw)] bg-primary text-primary-foreground rounded-full h-[max(2.5rem,5vh)] w-[max(2.5rem,5vh)] flex items-center justify-center shadow-lg hover:bg-primary/90 focus-visible:ring-[max(0.15rem,0.3vw)] focus-visible:ring-ring/50 focus-visible:border-ring outline-none transition-all"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
@@ -178,7 +178,7 @@ export default function FrampOnRamp() {
               data-tour="chat-button6"
             >
               <MessageCircle className="h-[max(1rem,2vw)] w-[max(1rem,2vw)]" />
-            </motion.button>
+            </motion.button> */}
           </div>
 
           {/* Mobile Layout */}

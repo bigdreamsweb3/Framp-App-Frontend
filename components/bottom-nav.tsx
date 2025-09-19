@@ -26,7 +26,7 @@ const BottomNavbar = ({ activeView, onChangeView }: NavbarProps) => {
   if (!hasMounted) return null // prevent hydration mismatch
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 w-full bg-background border-t border-border px-0 py-2 transition-colors z-50">
+    <nav className="fixed bottom-0 left-0 right-0 w-full bg-sidebar border-t border-border px-0 py-2 transition-colors z-50">
       <div className="flex justify-around items-center">
         {navItems.map((item) => {
           const active = activeView === item.view

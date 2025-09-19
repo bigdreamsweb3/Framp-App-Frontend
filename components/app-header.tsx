@@ -43,11 +43,11 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle, onProfileClic
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full border-b border-border/40 bg-white/90 dark:bg-background/80 backdrop-blur-md transition-all duration-300 ease-out
+      className={`sticky top-0 z-50 w-full border-b border-border/40 bg-background/90 backdrop-blur-md transition-all duration-300 ease-out
         ${scrolled ? "shadow-lg py-0 h-14" : "shadow-sm py-1 h-14"}`}
       data-tour="security"
     >
-      <div className="container mx-auto h-full px-4 pl-0 flex items-center justify-between">
+      <div className="w-full h-full px-4 flex items-center justify-between">
         {/* Logo Section */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-0">

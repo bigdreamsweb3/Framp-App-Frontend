@@ -238,19 +238,22 @@ export function ActivityView() {
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="all" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
+            {/* All */}
+            <TabsContent value="all" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6 grid w-full xl:grid-cols-2 gap-3 sm:gap-4">
               {paginatedActivities.map((activity) => (
                 <TransactionCard key={activity.id} activity={activity} />
               ))}
             </TabsContent>
 
-            <TabsContent value="onramp" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
+            {/* Onramp */}
+            <TabsContent value="onramp" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6 grid w-full xl:grid-cols-2 gap-3 sm:gap-4">
               {onrampActivities.slice(startIndex, endIndex).map((activity) => (
                 <TransactionCard key={activity.id} activity={activity} />
               ))}
             </TabsContent>
 
-            <TabsContent value="offramp" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
+            {/* Offramp */}
+            <TabsContent value="offramp" className="space-y-3 sm:space-y-4 mt-4 sm:mt-6 grid w-full xl:grid-cols-2 gap-3 sm:gap-4">
               {offrampActivities.slice(startIndex, endIndex).map((activity) => (
                 <TransactionCard key={activity.id} activity={activity} />
               ))}
@@ -374,7 +377,7 @@ function TransactionCard({ activity }: { activity: ActivityTransaction }) {
   }
 
   return (
-    <Card className="border-border bg-card hover:bg-card/80 hover:shadow-sm transition-all duration-200">
+    <Card className="border-border bg-card hover:bg-card/80 hover:shadow-sm transition-all duration-200 py-0">
       <CardContent className="p-3 sm:p-4 lg:p-6">
         <div className="flex items-center justify-between gap-3 sm:gap-4">
           <div className="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
