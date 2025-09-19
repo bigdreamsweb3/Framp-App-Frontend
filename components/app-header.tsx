@@ -120,7 +120,7 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle, onProfileClic
                     aria-label="User menu"
                   >
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src="" alt={(user as any)?.user.user?.name || (user as any)?.email || "User"} />
+                      <AvatarImage src="" alt={(user as any)?.user?.name || (user as any).user?.name || "User"} />
                       <AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">
                         {(user as any)?.user?.name ? (user as any).user.name.charAt(0).toUpperCase() : (user as any)?.user?.email?.charAt(0).toUpperCase() || "U"}
                       </AvatarFallback>
@@ -130,9 +130,9 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle, onProfileClic
                 <DropdownMenuContent className="w-56" align="end" forceMount>
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{(user as any)?.user?.name || (user as any)?.name || "User"}</p>
+                      <p className="text-sm font-medium leading-none">{(user as any)?.user?.name || (user as any).user?.name || "User"}</p>
                       <p className="text-xs leading-none text-muted-foreground">
-                        {(user as any)?.user?.email || (user as any)?.email || "No email"}
+                        {(user as any)?.user?.email || (user as any).user?.email || "No email"}
                       </p>
                     </div>
                   </DropdownMenuLabel>
