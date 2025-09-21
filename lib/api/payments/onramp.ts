@@ -14,7 +14,7 @@ export async function createOnramp({
   tokenMint,
   walletAddress,
   walletInfo,
-  paymentMethods = ["ACCOUNT_TRANSFER"],
+  paymentMethods = ["CARD"],
 }: //   paymentMethods = ["ACCOUNT_TRANSFER", "CARD", "USSD", "PHONE_NUMBER"],
 {
   amount: number;

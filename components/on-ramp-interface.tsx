@@ -23,6 +23,7 @@ import {
   trackTokenPurchase,
 } from "@/lib/userBehavior/tokenTracker";
 import { ConfirmOnRampModal } from "./modals/confirm-onramp-modal";
+import { PaymentMethodSelector } from "./payment-method-selector";
 
 type TokenStats = {
   selections: number;
@@ -97,6 +98,9 @@ export function OnRampInterface({
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [isTokenModalOpen, setTokenModalOpen] = useState(false);
   const [selectedToken, setSelectedToken] = useState<Token | null>(null);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
+    string | null
+  >(null);
 
   const { user } = useAuth();
 
@@ -118,6 +122,10 @@ export function OnRampInterface({
       alert("Enter a valid amount");
       return;
     }
+    if (!selectedPaymentMethod) {
+      alert("Please select a payment method");
+      return;
+    }
     setShowConfirm(true);
   }
 
@@ -137,6 +145,9 @@ export function OnRampInterface({
         tokenMint: "So11111111111111111111111111111111111111112",
         walletAddress: walletAddress,
         walletInfo: selectedWallet,
+        paymentMethods: selectedPaymentMethod
+          ? [selectedPaymentMethod]
+          : ["CARD"],
       });
 
       if (res?.data?.checkout_url) {
@@ -244,67 +255,98 @@ export function OnRampInterface({
                         </Button>
                       </div>
                     </div>
-                     {/* Wallet Selection - Only show when amount is entered */}
-                     {fromAmount && Number(fromAmount) > 0 && (
-                       <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                         <div className="flex items-center justify-between">
-                           <div className="flex items-center gap-2">
-                             <div className="text-xs text-gray-500">To:</div>
-                             {selectedWallet ? (
-                               <div className="flex items-center gap-2">
-                                 <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center">
-                                   {selectedWallet.type === "wallet" ? (
-                                     <Wallet className="h-2.5 w-2.5 text-primary" />
-                                   ) : (
-                                     <Building2 className="h-2.5 w-2.5 text-primary" />
-                                   )}
-                                 </div>
-                                 <div>
-                                   <div className="text-xs font-medium text-gray-700 dark:text-gray-300">
-                                     {selectedWallet.name}
-                                   </div>
-                                   <div className="text-xs text-gray-500">
-                                     {selectedWallet.details}
-                                   </div>
-                                 </div>
-                               </div>
-                             ) : (
-                               <div className="flex items-center gap-2">
-                                 <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
-                                   <Wallet className="h-2.5 w-2.5 text-orange-500" />
-                                 </div>
-                                 <div className="text-xs text-orange-600 font-medium">
-                                   Select wallet
-                                 </div>
-                               </div>
-                             )}
-                           </div>
-                           <Button
-                             variant="ghost"
-                             size="sm"
-                             className="text-xs px-2 py-1 h-6 text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-                             onClick={onWalletSelect}
-                           >
-                             {selectedWallet ? "Change" : "Select"}
-                           </Button>
-                         </div>
-                       </div>
-                     )}
+                    {/* Wallet Selection - Only show when amount is entered */}
+                    {fromAmount && Number(fromAmount) > 0 && (
+                      <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="text-xs text-gray-500">To:</div>
+                            {selectedWallet ? (
+                              <div className="flex items-center gap-2">
+                                <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center">
+                                  {selectedWallet.type === "wallet" ? (
+                                    <Wallet className="h-2.5 w-2.5 text-primary" />
+                                  ) : (
+                                    <Building2 className="h-2.5 w-2.5 text-primary" />
+                                  )}
+                                </div>
+                                <div>
+                                  <div className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                                    {selectedWallet.name}
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    {selectedWallet.details}
+                                  </div>
+                                </div>
+                              </div>
+                            ) : (
+                              <div className="flex items-center gap-2">
+                                <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
+                                  <Wallet className="h-2.5 w-2.5 text-orange-500" />
+                                </div>
+                                <div className="text-xs text-orange-600 font-medium">
+                                  Select wallet
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-xs px-2 py-1 h-6 text-gray-600 hover:text-gray-800 hover:bg-gray-100"
+                            onClick={onWalletSelect}
+                          >
+                            {selectedWallet ? "Change" : "Select"}
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
+
+                {/* Payment Method Selection - Only show when amount is entered */}
+                {fromAmount && Number(fromAmount) > 0 && (
+                  <div className="mt-3">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <div className="text-xs text-gray-500 font-medium">
+                          Payment Method
+                        </div>
+                        {!selectedPaymentMethod && (
+                          <div className="text-xs text-orange-600 bg-orange-100 px-2 py-1 rounded-full">
+                            Required
+                          </div>
+                        )}
+                      </div>
+                      <PaymentMethodSelector
+                        selectedMethod={selectedPaymentMethod}
+                        onMethodSelect={setSelectedPaymentMethod}
+                        disabled={loading}
+                      />
+                      {!selectedPaymentMethod && (
+                        <div className="text-xs text-muted-foreground text-center py-2">
+                          💡 Choose your preferred payment method to continue
+                          with your purchase
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
 
                 {/* Action Button */}
                 <div className="px-2">
                   <Button
                     className="w-full h-12 rounded-2xl text-base font-semibold"
                     size="lg"
-                    disabled={!fromAmount || loading}
+                    disabled={!fromAmount || !selectedPaymentMethod || loading}
                     onClick={openConfirm}
                   >
                     {loading
                       ? "Processing..."
                       : !fromAmount
                       ? "Enter amount"
+                      : !selectedPaymentMethod
+                      ? "Select payment method"
                       : `Buy ${currency}`}
                   </Button>
                 </div>
@@ -345,7 +387,7 @@ export function OnRampInterface({
           payCurrency="NGN" // 💱 always NGN for the fiat side
           receiveAmount={receiving} // 🪙 amount of crypto they get
           receiveToken={currency} // 🪙 token symbol (SOL, USDT etc.)
-          paymentMethod="Bank Transfer" // or your actual method
+          paymentMethod={selectedPaymentMethod || "Card"} // 💳 selected payment method
           selectedWallet={selectedWallet} // 🏦 selected wallet information
           onConfirm={handleConfirm}
           onCancel={() => setShowConfirm(false)}

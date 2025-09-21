@@ -81,7 +81,10 @@ export function ConfirmOnRampModal({
           <InfoRow label={`Amount (${payCurrency})`} value={payAmount} />
           <InfoRow label="Token" value={receiveToken} />
           <InfoRow label={`Estimated ${receiveToken}`} value={receiveAmount.toString()} />
-          <InfoRow label="Payment Method" value={paymentMethod} />
+          <InfoRow 
+            label="Payment Method" 
+            value={getPaymentMethodDisplayName(paymentMethod)} 
+          />
           {selectedWallet && (
             <div className="py-2 border-b border-border">
               <div className="flex justify-between items-start">
@@ -120,6 +123,16 @@ export function ConfirmOnRampModal({
       </div>
     </div>
   );
+}
+
+function getPaymentMethodDisplayName(methodId: string): string {
+  const methodMap: Record<string, string> = {
+    'CARD': 'Credit/Debit Card',
+    'ACCOUNT_TRANSFER': 'Bank Transfer',
+    'USSD': 'USSD',
+    'PHONE_NUMBER': 'Phone Number'
+  };
+  return methodMap[methodId] || methodId;
 }
 
 function InfoRow({ label, value }: { label: string; value: string }) {
