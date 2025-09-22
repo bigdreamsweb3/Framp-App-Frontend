@@ -2,7 +2,13 @@
 
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import {
   ArrowUpCircle,
   Settings,
@@ -30,6 +36,10 @@ import { PaymentMethodSelector } from "../payment-method-selector";
 import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate";
 import { ExchangeRateStatus } from "../ui/exchange-rate-status";
 import { ExchangeRateSkeleton } from "../ui/exchange-rate-skeleton";
+import {
+  formatNairaInput,
+  parseNairaAmount,
+} from "@/lib/utils/naira-formatter";
 
 type TokenStats = {
   selections: number;
@@ -106,6 +116,7 @@ export function OnRampInterface({
   const [showConfirm, setShowConfirm] = useState(false);
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [selectedToken, setSelectedToken] = useState<Token | null>(null);
+  const [formattedAmount, setFormattedAmount] = useState("");
 
   const { user } = useAuth();
 
@@ -126,6 +137,30 @@ export function OnRampInterface({
       onCurrencyChange(personalized);
     }
   }, [tokenSymbol, onCurrencyChange, user]);
+
+  // Sync formatted amount with fromAmount prop
+  useEffect(() => {
+    if (fromAmount) {
+      setFormattedAmount(formatNairaInput(fromAmount));
+    } else {
+      setFormattedAmount("");
+    }
+  }, [fromAmount]);
+
+  // Handle input change with formatting
+  const handleAmountChange = (value: string) => {
+    const formatted = formatNairaInput(value);
+    setFormattedAmount(formatted);
+
+    // Parse the formatted value back to numeric for the parent component
+    const numericValue = parseNairaAmount(formatted);
+    onFromAmountChange(numericValue.toString());
+  };
+
+  // Handle wheel event to prevent scroll increment/decrement
+  const handleWheel = (e: React.WheelEvent<HTMLInputElement>) => {
+    e.currentTarget.blur();
+  };
 
   // Open confirmation modal
   function openConfirm() {
@@ -189,7 +224,10 @@ export function OnRampInterface({
   return (
     <div className="flex-1 mx-auto max-w-md">
       <div className="flex flex-col gap-4">
-        <Card className="bg-card/50 backdrop-blur-sm border-border/50" data-tour="onramp-card">
+        <Card
+          className="bg-card/50 backdrop-blur-sm border-border/50"
+          data-tour="onramp-card"
+        >
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -216,16 +254,18 @@ export function OnRampInterface({
             <div className="px-4 space-y-4">
               {/* You Pay */}
               <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
-                <div className="text-xs text-muted-foreground mb-2">You Pay</div>
+                <div className="text-xs text-muted-foreground mb-2">
+                  You Pay
+                </div>
                 <div className="flex items-center justify-between">
                   <input
-                    type="number"
-                    step="0.01"
-                    min="0.01"
-                    value={fromAmount}
-                    onChange={(e) => onFromAmountChange(e.target.value)}
+                    type="text"
+                    inputMode="decimal"
+                    value={formattedAmount}
+                    onChange={(e) => handleAmountChange(e.target.value)}
+                    onWheel={handleWheel}
                     className="text-2xl font-bold bg-transparent border-none outline-none w-full"
-                    placeholder="0.00"
+                    placeholder="0"
                     aria-label="Amount to pay in NGN"
                   />
                   {/* <div className="flex items-center gap-1">
@@ -239,10 +279,7 @@ export function OnRampInterface({
                     // onClick={() => setTokenModalOpen(true)}
                     aria-label="Select cryptocurrency"
                   >
-                    <img
-                      src={logoNGN} alt="NGN"
-                      className="w-5 h-5"
-                    />
+                    <img src={logoNGN} alt="NGN" className="w-5 h-5" />
                     <span className="font-medium text-sm">NGN</span>
                     {/* <ChevronDown className="w-4 h-4 ml-1" /> */}
                   </Button>
@@ -255,7 +292,9 @@ export function OnRampInterface({
                   <ExchangeRateSkeleton />
                 ) : (
                   <div className="flex items-center gap-2 text-sm text-primary">
-                    <span>1 {tokenSymbol} = {effectiveRate.toLocaleString()} NGN</span>
+                    <span>
+                      1 {tokenSymbol} = {effectiveRate.toLocaleString()} NGN
+                    </span>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -277,11 +316,15 @@ export function OnRampInterface({
 
               {/* You Receive */}
               <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
-                <div className="text-xs text-muted-foreground mb-2">You Receive</div>
+                <div className="text-xs text-muted-foreground mb-2">
+                  You Receive
+                </div>
                 <div className="flex items-center justify-between">
                   <div className="text-2xl font-bold">
                     {receiving > 0
-                      ? receiving.toLocaleString("en-US", { maximumFractionDigits: 5 })
+                      ? receiving.toLocaleString("en-US", {
+                          maximumFractionDigits: 5,
+                        })
                       : "0.00"}
                   </div>
                   <Button
@@ -291,11 +334,16 @@ export function OnRampInterface({
                     aria-label="Select cryptocurrency"
                   >
                     <img
-                      src={CRYPTO_TOKENS.find((t) => t.symbol === tokenSymbol)?.icon}
+                      src={
+                        CRYPTO_TOKENS.find((t) => t.symbol === tokenSymbol)
+                          ?.icon
+                      }
                       alt={tokenSymbol}
                       className="w-5 h-5"
                     />
-                    <span className="font-medium text-sm text-">{tokenSymbol}</span>
+                    <span className="font-medium text-sm text-">
+                      {tokenSymbol}
+                    </span>
                     <ChevronDown className="w-4 h-4 ml-1" />
                   </Button>
                 </div>
@@ -330,8 +378,9 @@ export function OnRampInterface({
                           <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
                             <Wallet className="h-3 w-3 text-orange-500" />
                           </div>
-                          <div className="text-xs text-orange-600 font-medium">
-                            Select wallet
+                          <div className="flex items-center gap-2 text-xs text-orange-600 font-medium">
+                            <span>Select wallet</span>
+                            <AlertCircle className="h-4 w-4 text-orange-600" />
                           </div>
                         </div>
                       )}
@@ -341,7 +390,9 @@ export function OnRampInterface({
                       size="sm"
                       className="h-7 px-3 text-xs font-medium text-foreground bg-transparent hover:bg-primary/10 rounded-xl"
                       onClick={onWalletSelect}
-                      aria-label={selectedWallet ? "Change wallet" : "Select wallet"}
+                      aria-label={
+                        selectedWallet ? "Change wallet" : "Select wallet"
+                      }
                     >
                       {selectedWallet ? "Change" : "Select"}
                     </Button>
@@ -362,14 +413,16 @@ export function OnRampInterface({
                     }
                   `}</style>
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="text-xs text-muted-foreground">Payment Method</div>
+                    <div className="text-xs text-muted-foreground">
+                      Payment Method
+                    </div>
                     {!selectedPaymentMethod && (
                       <AlertCircle className="h-4 w-4 text-orange-600" />
                     )}
                   </div>
                   <PaymentMethodSelector
                     selectedMethod={selectedPaymentMethod || null}
-                    onMethodSelect={onPaymentMethodSelect || (() => { })}
+                    onMethodSelect={onPaymentMethodSelect || (() => {})}
                     disabled={loading}
                   />
                 </div>
@@ -379,19 +432,24 @@ export function OnRampInterface({
               <Button
                 className="w-full h-12 rounded-xl text-base font-semibold bg-primary hover:bg-primary/90"
                 size="lg"
-                disabled={!fromAmount || !selectedWallet || !selectedPaymentMethod || loading}
+                disabled={
+                  !fromAmount ||
+                  !selectedWallet ||
+                  !selectedPaymentMethod ||
+                  loading
+                }
                 onClick={openConfirm}
                 aria-label={`Buy ${tokenSymbol}`}
               >
                 {loading
                   ? "Processing..."
                   : !fromAmount
-                    ? "Enter amount"
-                    : !selectedWallet
-                      ? "Select wallet"
-                      : !selectedPaymentMethod
-                        ? "Select payment method"
-                        : `Buy ${tokenSymbol}`}
+                  ? "Enter amount"
+                  : !selectedWallet
+                  ? "Select wallet"
+                  : !selectedPaymentMethod
+                  ? "Select payment method"
+                  : `Buy ${tokenSymbol}`}
               </Button>
             </div>
           </CardContent>
@@ -401,7 +459,8 @@ export function OnRampInterface({
         <div className="p-4 bg-muted/20 rounded-xl border border-border/30">
           <h5 className="font-medium text-sm mb-2">Security Notice</h5>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Your transactions are encrypted and secure. We prioritize your privacy and never store sensitive payment details.
+            Your transactions are encrypted and secure. We prioritize your
+            privacy and never store sensitive payment details.
           </p>
         </div>
       </div>
