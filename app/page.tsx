@@ -13,6 +13,7 @@ import { OnboardingTour } from "@/components/onboarding-tour";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
+import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate";
 
 import BottomNavbar from "@/components/bottom-nav";
 
@@ -36,10 +37,18 @@ export default function FrampOnRamp() {
   const [showAuth, setShowAuth] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [currency, setCurrency] = useState("NGN"); // or your default currency
-  const [selectedWallet, setSelectedWallet] = useState<PaymentMethod | null>(null);
+  const [tokenSymbol, setTokenSymbol] = useState("SOL"); // Start with SOL instead of NGN
+  const [fiatCurrency, setFiatCurrency] = useState("NGN"); // Start with NGN
+  const [selectedWallet, setSelectedWallet] = useState<PaymentMethod | null>(
+    null
+  );
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
+    string | null
+  >(null);
 
-  const ngnToSolRate = 850;
+  // Get exchange rate for the selected token
+  const { effectiveRate, convertNGNToToken: convertNGNToTokenAmount } =
+    useExchangeRateWithFallback(tokenSymbol, 850);
 
   useEffect(() => {
     const hasCompletedOnboarding = localStorage.getItem(
@@ -50,16 +59,25 @@ export default function FrampOnRamp() {
     }
   }, []);
 
-
   const handleFromAmountChange = (value: string) => {
     setFromAmount(value);
     if (value) {
-      const convertedAmount = Number.parseFloat(value) / ngnToSolRate;
+      const convertedAmount = convertNGNToTokenAmount(Number.parseFloat(value));
       setToAmount(convertedAmount.toFixed(6));
     } else {
       setToAmount("");
     }
   };
+
+  // Recalculate conversion when token changes
+  useEffect(() => {
+    if (fromAmount && Number(fromAmount) > 0) {
+      const convertedAmount = convertNGNToTokenAmount(
+        Number.parseFloat(fromAmount)
+      );
+      setToAmount(convertedAmount.toFixed(6));
+    }
+  }, [tokenSymbol, convertNGNToTokenAmount, fromAmount]);
 
   const handleChatQuickAction = (action: string) => {
     if (action.includes("buy") || action.includes("purchase")) {
@@ -92,12 +110,14 @@ export default function FrampOnRamp() {
             fromAmount={fromAmount}
             toAmount={toAmount}
             onFromAmountChange={handleFromAmountChange}
-            ngnToSolRate={ngnToSolRate}
-            currency={currency}
-            onCurrencyChange={setCurrency}
+            tokenSymbol={tokenSymbol}
+            fiatCurrency={fiatCurrency}
+            onCurrencyChange={setTokenSymbol}
             receiving={toAmount ? Number(toAmount) : 0}
             selectedWallet={selectedWallet}
             onWalletSelect={() => setActiveView("wallet")}
+            selectedPaymentMethod={selectedPaymentMethod}
+            onPaymentMethodSelect={setSelectedPaymentMethod}
           />
         );
       case "activity":
@@ -106,8 +126,8 @@ export default function FrampOnRamp() {
         return <ProfileView isLoggedIn={!!user} onLogin={handleShowAuth} />;
       case "wallet":
         return (
-          <WalletView 
-            isLoggedIn={!!user} 
+          <WalletView
+            isLoggedIn={!!user}
             onLogin={handleShowAuth}
             onWalletSelect={setSelectedWallet}
             selectedWallet={selectedWallet}
@@ -120,12 +140,14 @@ export default function FrampOnRamp() {
             fromAmount={fromAmount}
             toAmount={toAmount}
             onFromAmountChange={handleFromAmountChange}
-            ngnToSolRate={ngnToSolRate}
-            currency={currency}
-            onCurrencyChange={setCurrency}
+            tokenSymbol={tokenSymbol}
+            fiatCurrency={fiatCurrency}
+            onCurrencyChange={setTokenSymbol}
             receiving={toAmount ? Number(toAmount) : 0}
             selectedWallet={selectedWallet}
             onWalletSelect={() => setActiveView("wallet")}
+            selectedPaymentMethod={selectedPaymentMethod}
+            onPaymentMethodSelect={setSelectedPaymentMethod}
           />
         );
     }

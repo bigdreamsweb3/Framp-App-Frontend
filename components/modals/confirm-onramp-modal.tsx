@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 
 interface ConfirmOnRampModalProps {
-  payAmount: string;       // User's fiat amount (e.g. NGN)
-  payCurrency: string;     // Fiat currency code
+  fiatAmount: string;       // User's fiat amount (e.g. NGN)
+  fiatCurrency: string;     // Fiat currency code
   receiveAmount: number;   // Estimated crypto amount
   receiveToken: string;    // Crypto token name
   paymentMethod: string;   // Payment method (Card, Bank etc.)
@@ -24,8 +24,8 @@ interface ConfirmOnRampModalProps {
 }
 
 export function ConfirmOnRampModal({
-  payAmount,
-  payCurrency,
+  fiatAmount,
+  fiatCurrency,
   receiveAmount,
   receiveToken,
   paymentMethod,
@@ -78,7 +78,7 @@ export function ConfirmOnRampModal({
 
         {/* Details */}
         <div className="space-y-4 text-foreground">
-          <InfoRow label={`Amount (${payCurrency})`} value={payAmount} />
+          <InfoRow label={`Amount (${fiatCurrency})`} value={fiatAmount} />
           <InfoRow label="Token" value={receiveToken} />
           <InfoRow label={`Estimated ${receiveToken}`} value={receiveAmount.toString()} />
           <InfoRow 

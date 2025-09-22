@@ -9,6 +9,8 @@ import {
   ChevronDown,
   Wallet,
   Building2,
+  RefreshCw,
+  AlertCircle,
 } from "lucide-react";
 import { OnrampSettings } from "@/components/onramp-settings";
 import { logoNGN } from "@/asssets/image";
@@ -24,6 +26,9 @@ import {
 } from "@/lib/userBehavior/tokenTracker";
 import { ConfirmOnRampModal } from "./modals/confirm-onramp-modal";
 import { PaymentMethodSelector } from "./payment-method-selector";
+import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate";
+import { ExchangeRateStatus } from "./ui/exchange-rate-status";
+import { ExchangeRateSkeleton } from "./ui/exchange-rate-skeleton";
 
 type TokenStats = {
   selections: number;
@@ -59,10 +64,10 @@ interface OnRampInterfaceProps {
   fromAmount: string;
   toAmount: string;
   onFromAmountChange: (value: string) => void;
-  currency: string;
+  tokenSymbol: string;
+  fiatCurrency: string;
   onCurrencyChange: (currency: string) => void;
   receiving: number;
-  ngnToSolRate: number;
   balance?: number;
   selectedWallet?: {
     id: string;
@@ -76,19 +81,23 @@ interface OnRampInterfaceProps {
     accountNumber?: string;
   } | null;
   onWalletSelect?: () => void;
+  selectedPaymentMethod?: string | null;
+  onPaymentMethodSelect?: (method: string) => void;
 }
 
 export function OnRampInterface({
   fromAmount,
   toAmount,
   onFromAmountChange,
-  currency,
+  tokenSymbol,
+  fiatCurrency,
   onCurrencyChange,
   receiving,
-  ngnToSolRate,
   balance = 0,
   selectedWallet,
   onWalletSelect,
+  selectedPaymentMethod,
+  onPaymentMethodSelect,
 }: OnRampInterfaceProps) {
   const [showSettings, setShowSettings] = useState(false);
   const [tokenListOpen, setTokenListOpen] = useState(false);
@@ -98,19 +107,26 @@ export function OnRampInterface({
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null);
   const [isTokenModalOpen, setTokenModalOpen] = useState(false);
   const [selectedToken, setSelectedToken] = useState<Token | null>(null);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
-    string | null
-  >(null);
 
   const { user } = useAuth();
 
+  // Get exchange rate for the selected token
+  const {
+    exchangeRate,
+    loading: rateLoading,
+    error: rateError,
+    refreshRate,
+    effectiveRate,
+    convertNGNToToken: convertNGNToTokenAmount,
+  } = useExchangeRateWithFallback(tokenSymbol, 850);
+
   useEffect(() => {
-    const isValid = CRYPTO_TOKENS.some((t) => t.symbol === currency);
-    if (!isValid || currency === "NGN") {
+    const isValid = CRYPTO_TOKENS.some((t) => t.symbol === tokenSymbol);
+    if (!isValid || tokenSymbol === "NGN") {
       const personalized = getPersonalizedDefaultToken(user?.id, CRYPTO_TOKENS);
       onCurrencyChange(personalized);
     }
-  }, [currency, onCurrencyChange, user]);
+  }, [tokenSymbol, onCurrencyChange, user]);
 
   // ✅ Step 1: open confirmation modal
   function openConfirm() {
@@ -120,6 +136,10 @@ export function OnRampInterface({
     }
     if (!fromAmount || Number(fromAmount) <= 0) {
       alert("Enter a valid amount");
+      return;
+    }
+    if (!selectedWallet) {
+      alert("Please select a wallet");
       return;
     }
     if (!selectedPaymentMethod) {
@@ -140,8 +160,11 @@ export function OnRampInterface({
         "YOUR_WALLET_ADDRESS";
 
       const res = await createOnramp({
-        amount: Number(fromAmount),
-        tokenSymbol: currency,
+        fiatAmount: Number(fromAmount),
+        fiatCurrency: fiatCurrency,
+        tokenSymbol: tokenSymbol,
+        tokenAmount: toAmount,
+        exchangeRate: exchangeRate?.rate,
         tokenMint: "So11111111111111111111111111111111111111112",
         walletAddress: walletAddress,
         walletInfo: selectedWallet,
@@ -151,7 +174,7 @@ export function OnRampInterface({
       });
 
       if (res?.data?.checkout_url) {
-        trackTokenPurchase(user?.id, currency);
+        trackTokenPurchase(user?.id, tokenSymbol);
         setCheckoutUrl(res.data.checkout_url); // show iframe modal
       } else {
         alert("Failed to initialize payment");
@@ -242,14 +265,15 @@ export function OnRampInterface({
                         >
                           <img
                             src={
-                              CRYPTO_TOKENS.find((t) => t.symbol === currency)
-                                ?.icon
+                              CRYPTO_TOKENS.find(
+                                (t) => t.symbol === tokenSymbol
+                              )?.icon
                             }
-                            alt={currency}
+                            alt={tokenSymbol}
                             className="w-5 h-5"
                           />
                           <span className="font-medium text-sm text-accent-foreground">
-                            {currency}
+                            {tokenSymbol}
                           </span>
                           <ChevronDown className="w-4 h-4 ml-1" />
                         </Button>
@@ -304,8 +328,17 @@ export function OnRampInterface({
                   </div>
                 </div>
 
-                {/* Payment Method Selection - Only show when amount is entered */}
-                {fromAmount && Number(fromAmount) > 0 && (
+                {/* Payment Method Selection - Only show when amount is entered AND wallet is selected */}
+                {fromAmount && Number(fromAmount) > 0 && !selectedWallet && (
+                  <div className="mt-3">
+                    <div className="text-xs text-muted-foreground text-center py-2 bg-blue-50 dark:bg-blue-950/20 rounded-lg px-3">
+                      💡 Please select a wallet first to choose your payment
+                      method
+                    </div>
+                  </div>
+                )}
+
+                {fromAmount && Number(fromAmount) > 0 && selectedWallet && (
                   <div className="mt-3">
                     <div className="space-y-3">
                       <div className="flex items-center gap-2">
@@ -319,8 +352,8 @@ export function OnRampInterface({
                         )}
                       </div>
                       <PaymentMethodSelector
-                        selectedMethod={selectedPaymentMethod}
-                        onMethodSelect={setSelectedPaymentMethod}
+                        selectedMethod={selectedPaymentMethod || null}
+                        onMethodSelect={onPaymentMethodSelect || (() => {})}
                         disabled={loading}
                       />
                       {!selectedPaymentMethod && (
@@ -338,16 +371,23 @@ export function OnRampInterface({
                   <Button
                     className="w-full h-12 rounded-2xl text-base font-semibold"
                     size="lg"
-                    disabled={!fromAmount || !selectedPaymentMethod || loading}
+                    disabled={
+                      !fromAmount ||
+                      !selectedWallet ||
+                      !selectedPaymentMethod ||
+                      loading
+                    }
                     onClick={openConfirm}
                   >
                     {loading
                       ? "Processing..."
                       : !fromAmount
                       ? "Enter amount"
+                      : !selectedWallet
+                      ? "Select wallet"
                       : !selectedPaymentMethod
                       ? "Select payment method"
-                      : `Buy ${currency}`}
+                      : `Buy ${tokenSymbol}`}
                   </Button>
                 </div>
               </div>
@@ -356,8 +396,26 @@ export function OnRampInterface({
 
           {/* Exchange Rate Footer */}
           <div className="px-6 pb-4 flex items-center justify-between text-sm text-muted-foreground h-[48px] mt-2">
-            <span>1 SOL = {ngnToSolRate.toLocaleString()} NGN</span>
-            <span>$0.00</span>
+            <div className="flex items-center gap-2">
+              {rateLoading && !exchangeRate ? (
+                <ExchangeRateSkeleton />
+              ) : (
+                <>
+                  <span>
+                    1 {tokenSymbol} = {effectiveRate.toLocaleString()} NGN
+                  </span>
+                  <ExchangeRateStatus
+                    loading={rateLoading}
+                    error={rateError}
+                    lastUpdated={exchangeRate?.lastUpdated}
+                    onRefresh={refreshRate}
+                  />
+                </>
+              )}
+            </div>
+            <div className="flex items-center gap-2">
+              <span>$0.00</span>
+            </div>
           </div>
         </div>
       </div>
@@ -369,7 +427,7 @@ export function OnRampInterface({
       {/* Token List Modal */}
       <TokenListModal
         tokens={CRYPTO_TOKENS}
-        selected={currency}
+        selected={tokenSymbol}
         isOpen={isTokenModalOpen}
         onClose={() => setTokenModalOpen(false)}
         onSelect={(token) => {
@@ -383,10 +441,10 @@ export function OnRampInterface({
       {/* ✅ Confirmation Modal */}
       {showConfirm && (
         <ConfirmOnRampModal
-          payAmount={fromAmount} // 💵 amount user pays
-          payCurrency="NGN" // 💱 always NGN for the fiat side
+          fiatAmount={fromAmount} // 💵 amount user pays
+          fiatCurrency="NGN" // 💱 always NGN for the fiat side
           receiveAmount={receiving} // 🪙 amount of crypto they get
-          receiveToken={currency} // 🪙 token symbol (SOL, USDT etc.)
+          receiveToken={tokenSymbol} // 🪙 token symbol (SOL, USDT etc.)
           paymentMethod={selectedPaymentMethod || "Card"} // 💳 selected payment method
           selectedWallet={selectedWallet} // 🏦 selected wallet information
           onConfirm={handleConfirm}

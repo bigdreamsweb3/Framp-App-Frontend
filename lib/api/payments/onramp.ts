@@ -8,19 +8,24 @@ const API_BASE =
 // lib/api/payments/onramp.ts
 
 export async function createOnramp({
-  amount,
-  currency = "NGN",
+  fiatAmount,
+  fiatCurrency,
   tokenSymbol,
-  tokenMint,
+  tokenMint = "",
+  tokenAmount = "",
+  exchangeRate = 0,
   walletAddress,
   walletInfo,
   paymentMethods = ["CARD"],
 }: //   paymentMethods = ["ACCOUNT_TRANSFER", "CARD", "USSD", "PHONE_NUMBER"],
 {
-  amount: number;
+  fiatAmount: number;
+  fiatCurrency: string;
   currency?: string;
   tokenSymbol: string;
-  tokenMint: string;
+  tokenMint?: string;
+  tokenAmount?: string;
+  exchangeRate?: number;
   walletAddress: string;
   walletInfo?: {
     id: string;
@@ -45,10 +50,12 @@ export async function createOnramp({
     credentials: "include", // cookies sent automatically
 
     body: JSON.stringify({
-      amount,
-      currency,
+      fiatAmount,
+      fiatCurrency,
       token: tokenSymbol,
-      tokenMint,
+      tokenMint: tokenMint || "",
+      tokenAmount: tokenAmount || "",
+      exchangeRate: exchangeRate || 0,
       walletAddress,
       walletInfo: walletInfo ? {
         id: walletInfo.id,
@@ -66,6 +73,7 @@ export async function createOnramp({
   });
 
   const data = await res.json();
+  console.log("🚀 ~ createOnramp ~ data:", data.amount)
   if (!res.ok) throw new Error(data.error || "Failed to create onramp request");
   return data;
 }
