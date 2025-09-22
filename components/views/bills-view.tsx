@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 export function BillsView() {
   return (
     <div className="flex flex-col gap-4">
-      <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+      <Card className="w-full max-w-4xl mx-auto bg-card/50 backdrop-blur-sm border-border/50">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <QrCode className="w-5 h-5 text-primary" />
@@ -34,12 +34,12 @@ export function BillsView() {
       </Card>
 
       {/* Security Notice */}
-      <div className="mt-6 p-4 bg-muted/20 rounded-xl border border-border/30">
+      {/* <div className="mt-6 p-4 bg-muted/20 rounded-xl border border-border/30">
         <h5 className="font-medium text-sm mb-2">What's Next?</h5>
         <p className="text-xs text-muted-foreground leading-relaxed">
           Our upcoming bills payment feature will support secure, fast transactions for everyday expenses, integrated with your fiat and crypto wallets.
         </p>
-      </div>
+      </div> */}
     </div>
   );
 }

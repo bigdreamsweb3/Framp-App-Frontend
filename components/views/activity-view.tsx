@@ -107,7 +107,7 @@ export function ActivityView() {
   // Show loading state
   if (authLoading || loading) {
     return (
-      <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+      <Card className="w-full max-w-4xl mx-auto bg-card/50 backdrop-blur-sm border-border/50">
         <CardHeader>
           <CardTitle className="text-lg flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
@@ -155,7 +155,7 @@ export function ActivityView() {
   // Show login prompt
   if (!user) {
     return (
-      <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+      <Card className="w-full max-w-4xl mx-auto bg-card/50 backdrop-blur-sm border-border/50">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <Activity className="w-5 h-5 text-primary" />
@@ -180,7 +180,7 @@ export function ActivityView() {
 
   if (error) {
     return (
-      <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+      <Card className="w-full max-w-4xl mx-auto bg-card/50 backdrop-blur-sm border-border/50">
         <CardHeader>
           <CardTitle className="text-lg flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
@@ -225,7 +225,7 @@ export function ActivityView() {
   }
 
   return (
-    <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+    <Card className="w-full max-w-4xl mx-auto bg-card/50 backdrop-blur-sm border-border/50">
       <CardHeader>
         <CardTitle className="text-lg flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">

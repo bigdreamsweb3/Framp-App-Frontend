@@ -431,12 +431,12 @@ export function ProfileView({ isLoggedIn, onLogin, onClose }: ProfileViewProps) 
             </section>
 
             {/* Security Notice */}
-            <div className="p-4 bg-muted/20 rounded-xl border border-border/30 mt-4">
+            {/* <div className="p-4 bg-muted/20 rounded-xl border border-border/30 mt-4">
               <h5 className="font-medium text-sm mb-2">Security Notice</h5>
               <p className="text-xs text-muted-foreground leading-relaxed">
                 Your profile data is encrypted and secure. We prioritize your privacy and never share personal information.
               </p>
-            </div>
+            </div> */}
           </div>
         )}
       </CardContent>

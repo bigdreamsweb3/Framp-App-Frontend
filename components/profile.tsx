@@ -117,163 +117,244 @@ export function Profile({ onQuickAction }: ProfileProps) {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6">
-        <Card className="w-full max-w-md border-border/50">
-          <CardContent className="p-6 text-center text-sm text-muted-foreground">
-            <div className="animate-pulse">Loading your portfolio...</div>
-          </CardContent>
-        </Card>
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+          <div className="max-w-4xl mx-auto">
+            <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-sm">
+              <CardContent className="p-8 sm:p-12 text-center">
+                <div className="animate-pulse space-y-4">
+                  <div className="h-8 w-48 bg-muted/30 rounded-lg mx-auto"></div>
+                  <div className="h-4 w-64 bg-muted/30 rounded-lg mx-auto"></div>
+                  <div className="h-32 w-full bg-muted/30 rounded-xl mt-8"></div>
+                </div>
+                <p className="text-sm text-muted-foreground mt-6">Loading your profile...</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6">
-        <Card className="w-full max-w-md bg-card/50 backdrop-blur-sm border-border/50">
-          <CardContent className="p-4 sm:p-6 text-center">
-            <p className="text-sm text-destructive">{error}</p>
-            {user ? (
-              <Button
-                variant="outline"
-                className="mt-4 rounded-xl bg-primary/10 hover:bg-primary/20"
-                onClick={() => logout?.()}
-                aria-label="Log out"
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                Log Out
-              </Button>
-            ) : null}
-          </CardContent>
-        </Card>
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+          <div className="max-w-4xl mx-auto">
+            <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-sm">
+              <CardContent className="p-8 sm:p-12 text-center">
+                <div className="space-y-4">
+                  <div className="w-16 h-16 bg-destructive/10 rounded-full flex items-center justify-center mx-auto">
+                    <LogOut className="h-8 w-8 text-destructive" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-foreground">Error Loading Profile</h3>
+                  <p className="text-sm text-destructive max-w-md mx-auto">{error}</p>
+                  {user ? (
+                    <Button
+                      variant="outline"
+                      className="mt-6 rounded-xl bg-primary/10 hover:bg-primary/20"
+                      onClick={() => logout?.()}
+                      aria-label="Log out"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Log Out
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="default"
+                      className="mt-6 rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
+                      onClick={() => window.location.reload()}
+                    >
+                      Try Again
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 sm:p-6">
-      <div className="max-w-4xl mx-auto space-y-6">
-        <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
-          <CardHeader className="pb-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-foreground">
-                Account Information
-              </h2>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsEditing(!isEditing)}
-                className="h-8 px-3 rounded-lg border-border/50"
-                aria-label={
-                  isEditing ? "Cancel editing profile" : "Edit profile"
-                }
-              >
-                <Edit className="h-4 w-4" />
-              </Button>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label
-                  htmlFor="name"
-                  className="text-sm font-medium text-foreground"
-                >
-                  Full Name
-                </Label>
-                <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg border border-border/50">
-                  <UserIcon className="h-4 w-4 text-muted-foreground" />
-                  {isEditing ? (
-                    <Input
-                      id="name"
-                      value={userProfile.name}
-                      onChange={(e) =>
-                        setUserProfile({ ...userProfile, name: e.target.value })
-                      }
-                      className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0"
-                      aria-label="Edit full name"
-                    />
-                  ) : (
-                    <span className="text-sm font-medium text-foreground">
-                      {userProfile.name}
-                    </span>
-                  )}
-                </div>
-              </div>
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-12">
+        <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
+          {/* Header Section */}
+          <div className="text-center sm:text-left">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2">
+              Profile Settings
+            </h1>
+            <p className="text-sm sm:text-base text-muted-foreground">
+              Manage your account information and preferences
+            </p>
+          </div>
 
-              <div className="space-y-2">
-                <Label
-                  htmlFor="email"
-                  className="text-sm font-medium text-foreground"
-                >
-                  Email Address
-                </Label>
-                <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-lg border border-border/50">
-                  <UserIcon className="h-4 w-4 text-muted-foreground" />
-                  {isEditing ? (
-                    <Input
-                      id="email"
-                      type="email"
-                      value={userProfile.email}
-                      onChange={(e) =>
-                        setUserProfile({
-                          ...userProfile,
-                          email: e.target.value,
-                        })
-                      }
-                      className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0"
-                      aria-label="Edit email address"
-                    />
-                  ) : (
-                    <span className="text-sm text-foreground">
-                      {userProfile.email}
-                    </span>
-                  )}
+          {/* Main Profile Card */}
+          <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-sm">
+            <CardHeader className="pb-4 sm:pb-6">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h2 className="text-lg sm:text-xl font-semibold text-foreground">
+                    Account Information
+                  </h2>
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                    Update your personal details
+                  </p>
                 </div>
-              </div>
-            </div>
-
-            {isEditing && (
-              <div className="flex gap-3 pt-4 border-t border-border/50">
-                <Button
-                  onClick={handleSave}
-                  className="flex-1 rounded-lg bg-primary hover:bg-primary/90"
-                  aria-label="Save profile changes"
-                >
-                  Save Changes
-                </Button>
                 <Button
                   variant="outline"
-                  onClick={() => setIsEditing(false)}
-                  className="flex-1 rounded-lg border-border/50"
-                  aria-label="Cancel editing profile"
+                  size="sm"
+                  onClick={() => setIsEditing(!isEditing)}
+                  className="h-9 px-4 rounded-xl border-border/50 hover:bg-primary/5 self-start sm:self-auto"
+                  aria-label={
+                    isEditing ? "Cancel editing profile" : "Edit profile"
+                  }
                 >
-                  Cancel
+                  <Edit className="h-4 w-4 mr-2" />
+                  {isEditing ? "Cancel" : "Edit"}
                 </Button>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </CardHeader>
+            <CardContent className="space-y-6 sm:space-y-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                {/* Full Name Field */}
+                <div className="space-y-3">
+                  <Label
+                    htmlFor="name"
+                    className="text-sm font-medium text-foreground"
+                  >
+                    Full Name
+                  </Label>
+                  <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-xl border border-border/50 hover:border-border/70 transition-colors">
+                    <UserIcon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                    {isEditing ? (
+                      <Input
+                        id="name"
+                        value={userProfile.name}
+                        onChange={(e) =>
+                          setUserProfile({ ...userProfile, name: e.target.value })
+                        }
+                        className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0 text-sm sm:text-base"
+                        aria-label="Edit full name"
+                        placeholder="Enter your full name"
+                      />
+                    ) : (
+                      <span className="text-sm sm:text-base font-medium text-foreground truncate">
+                        {userProfile.name}
+                      </span>
+                    )}
+                  </div>
+                </div>
 
-        <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
-          <CardContent className="p-4">
-            {user ? (
-              <Button
-                variant="outline"
-                className="w-full rounded-lg border-destructive/20 text-destructive hover:bg-destructive/10 bg-transparent"
-                onClick={() => logout?.()}
-                aria-label="Log out"
-              >
-                <LogOut className="h-4 w-4 mr-2" />
-                Sign Out
-              </Button>
-            ) : (
-              <div className="w-full p-4 rounded-lg border border-border/50 bg-muted/20 text-sm text-muted-foreground text-center">
-                You are not signed in. Use the header to sign in.
+                {/* Email Field */}
+                <div className="space-y-3">
+                  <Label
+                    htmlFor="email"
+                    className="text-sm font-medium text-foreground"
+                  >
+                    Email Address
+                  </Label>
+                  <div className="flex items-center gap-3 p-4 bg-muted/30 rounded-xl border border-border/50 hover:border-border/70 transition-colors">
+                    <UserIcon className="h-5 w-5 text-muted-foreground flex-shrink-0" />
+                    {isEditing ? (
+                      <Input
+                        id="email"
+                        type="email"
+                        value={userProfile.email}
+                        onChange={(e) =>
+                          setUserProfile({
+                            ...userProfile,
+                            email: e.target.value,
+                          })
+                        }
+                        className="border-0 bg-transparent p-0 h-auto focus-visible:ring-0 text-sm sm:text-base"
+                        aria-label="Edit email address"
+                        placeholder="Enter your email address"
+                      />
+                    ) : (
+                      <span className="text-sm sm:text-base text-foreground truncate">
+                        {userProfile.email}
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
-            )}
-          </CardContent>
-        </Card>
+
+              {/* Action Buttons */}
+              {isEditing && (
+                <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-border/50">
+                  <Button
+                    onClick={handleSave}
+                    className="flex-1 h-11 rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-sm font-medium"
+                    aria-label="Save profile changes"
+                  >
+                    Save Changes
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setIsEditing(false)}
+                    className="flex-1 h-11 rounded-xl border-border/50 hover:bg-muted/50 text-sm font-medium"
+                    aria-label="Cancel editing profile"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Account Actions Card */}
+          <Card className="border-border/50 bg-card/50 backdrop-blur-sm shadow-sm">
+            <CardContent className="p-4 sm:p-6">
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
+                    Account Actions
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Manage your account and security settings
+                  </p>
+                </div>
+                
+                {user ? (
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Button
+                      variant="outline"
+                      className="flex-1 h-11 rounded-xl border-destructive/20 text-destructive hover:bg-destructive/10 bg-transparent text-sm font-medium"
+                      onClick={() => logout?.()}
+                      aria-label="Log out"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </Button>
+                    {/* <Button
+                      variant="outline"
+                      className="flex-1 h-11 rounded-xl border-border/50 hover:bg-muted/50 text-sm font-medium"
+                      aria-label="Change password"
+                    >
+                      Change Password
+                    </Button> */}
+                  </div>
+                ) : (
+                  <div className="w-full p-6 rounded-xl border border-border/50 bg-muted/20 text-center">
+                    <p className="text-sm text-muted-foreground mb-4">
+                      You are not signed in. Use the header to sign in.
+                    </p>
+                    <Button
+                      variant="default"
+                      className="rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
+                      onClick={() => window.location.reload()}
+                    >
+                      Refresh Page
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

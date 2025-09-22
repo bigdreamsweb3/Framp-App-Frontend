@@ -194,7 +194,7 @@ export function OnRampInterface({
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Send className="w-5 h-5 text-primary" />
-                <h2 className="text-lg font-semibold">On Ramp</h2>
+                <h2 className="text-lg font-semibold">Buy</h2>
               </div>
               <Button
                 variant="ghost"
