@@ -116,7 +116,9 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle, profileActive
               <Avatar className="h-8 w-8">
                 <AvatarImage src="" alt={user?.name || user?.name || "User"} />
                 <AvatarFallback className="bg-primary text-primary-foreground text-sm font-medium">
-                  {user?.name?.charAt(0).toUpperCase() || user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || "U"}
+                  {(user?.name?.[0]?.toUpperCase?.())
+                    ?? (user?.email?.[0]?.toUpperCase?.())
+                    ?? "U"}
                 </AvatarFallback>
               </Avatar>
             </Button>

@@ -218,6 +218,8 @@ export function Profile({ onQuickAction }: ProfileProps) {
                 <Image
                   src={app_logo}
                   alt={`${App_Name} Logo`}
+                  width={64}
+                  height={64}
                   className="relative w-full h-full object-contain rounded-xl"
                 />
               </div>
