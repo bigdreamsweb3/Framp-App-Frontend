@@ -11,9 +11,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Eye, EyeOff, ArrowLeft } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs1";
+import { Eye, EyeOff, ArrowLeft, Wallet } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { app_logo } from "@/asssets/image";
+import { App_Name } from "@/app/appConfig";
 
 interface AuthPageProps {
   onBack: () => void;
@@ -28,6 +32,7 @@ export function AuthPage({ onBack }: AuthPageProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -39,7 +44,11 @@ export function AuthPage({ onBack }: AuthPageProps) {
       } else {
         await signup(email, password);
       }
-      onBack(); // close modal after success
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+        onBack();
+      }, 2000);
     } catch (err: any) {
       setError(err.message || "Something went wrong");
     } finally {
@@ -48,46 +57,110 @@ export function AuthPage({ onBack }: AuthPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 sm:p-6">
       <div className="w-full max-w-md space-y-6">
+        {/* Success Toast */}
+        <AnimatePresence>
+          {success && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-primary/90 text-primary-foreground text-sm px-4 py-2 rounded-xl shadow-lg"
+              role="alert"
+              aria-live="polite"
+            >
+              {mode === "login" ? "Logged in successfully!" : "Account created successfully!"}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Back Button */}
         <Button
-          variant="ghost"
+          variant="outline"
           size="sm"
           onClick={onBack}
-          className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
+          className="flex items-center gap-2 text-foreground bg-primary/10 hover:bg-primary/20 rounded-xl"
+          aria-label="Back to app"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to app
+          Back to {App_Name}
         </Button>
 
         {/* Logo */}
-        <div className="text-center space-y-2">
-          <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto">
-            <span className="text-primary-foreground font-bold text-2xl">F</span>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className="text-center space-y-2"
+        >
+          <div className="relative w-16 h-16 mx-auto">
+            <div className="absolute inset-0 rounded-xl bg-gradient-to-tr from-primary/30 to-primary/10 blur-md opacity-50" />
+            <Image
+              src={app_logo}
+              alt={`${App_Name} Logo`}
+              className="relative w-full h-full object-contain rounded-xl"
+            />
           </div>
-          <h1 className="text-2xl font-bold text-foreground">Welcome to FRAMP</h1>
-          <p className="text-muted-foreground">Your gateway to crypto on-ramping</p>
-        </div>
+          <h1 className="text-2xl font-bold text-foreground">{App_Name}</h1>
+          <p className="text-xs text-muted-foreground">Your gateway to crypto on-ramping</p>
+        </motion.div>
 
         {/* Auth Tabs */}
-        <Tabs defaultValue="login" onValueChange={(val) => setMode(val as "login" | "signup")} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Log In</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+        <Tabs
+          defaultValue="login"
+          onValueChange={(val) => setMode(val as "login" | "signup")}
+          className="w-full"
+        >
+          <TabsList className="grid w-full grid-cols-2 bg-muted/30 rounded-xl p-1">
+            <TabsTrigger
+              value="login"
+              className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:text-primary"
+              aria-label="Switch to login"
+            >
+              Log In
+            </TabsTrigger>
+            <TabsTrigger
+              value="signup"
+              className="rounded-xl data-[state=active]:bg-primary/10 data-[state=active]:text-primary"
+              aria-label="Switch to sign up"
+            >
+              Sign Up
+            </TabsTrigger>
           </TabsList>
 
           {/* Login */}
-          <TabsContent value="login" className="space-y-4">
-            <Card className="border-border/50">
+          <TabsContent value="login" className="space-y-4 mt-4">
+            <Card className="bg-card/50 backdrop-blur-sm border-border/50">
               <CardHeader className="space-y-1">
                 <CardTitle className="text-xl">Log in to your account</CardTitle>
-                <CardDescription>Enter your credentials to access your FRAMP account</CardDescription>
+                <CardDescription>
+                  Connect with your wallet or use your email to access {App_Name}
+                </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
+                <Button
+                  variant="outline"
+                  className="w-full rounded-xl font-semibold flex items-center gap-2"
+                  disabled
+                  aria-label="Wallet connect unavailable"
+                >
+                  <Wallet className="h-4 w-4" />
+                  Wallet connect unavailable
+                </Button>
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-border/50" />
+                  </div>
+                  <div className="relative flex justify-center text-xs">
+                    <span className="bg-card/50 px-2 text-muted-foreground">or continue with email</span>
+                  </div>
+                </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email" className="text-xs font-medium">
+                      Email
+                    </Label>
                     <Input
                       id="email"
                       type="email"
@@ -95,11 +168,14 @@ export function AuthPage({ onBack }: AuthPageProps) {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="rounded-xl"
+                      className="rounded-xl bg-muted/30 border-border/50"
+                      aria-label="Email address"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                    <Label htmlFor="password" className="text-xs font-medium">
+                      Password
+                    </Label>
                     <div className="relative">
                       <Input
                         id="password"
@@ -108,7 +184,8 @@ export function AuthPage({ onBack }: AuthPageProps) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className="rounded-xl pr-10"
+                        className="rounded-xl bg-muted/30 border-border/50 pr-10"
+                        aria-label="Password"
                       />
                       <Button
                         type="button"
@@ -116,6 +193,7 @@ export function AuthPage({ onBack }: AuthPageProps) {
                         size="sm"
                         className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                         onClick={() => setShowPassword(!showPassword)}
+                        aria-label={showPassword ? "Hide password" : "Show password"}
                       >
                         {showPassword ? (
                           <EyeOff className="h-4 w-4 text-muted-foreground" />
@@ -125,8 +203,17 @@ export function AuthPage({ onBack }: AuthPageProps) {
                       </Button>
                     </div>
                   </div>
-                  {error && <p className="text-red-500 text-sm">{error}</p>}
-                  <Button type="submit" className="w-full rounded-xl font-semibold" disabled={isLoading}>
+                  {error && (
+                    <div className="text-sm text-destructive bg-destructive/10 p-2 rounded-xl" role="alert">
+                      {error}
+                    </div>
+                  )}
+                  <Button
+                    type="submit"
+                    className="w-full rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 font-semibold"
+                    disabled={isLoading}
+                    aria-label="Log in with email"
+                  >
                     {isLoading ? "Logging in..." : "Log In"}
                   </Button>
                 </form>
@@ -135,16 +222,37 @@ export function AuthPage({ onBack }: AuthPageProps) {
           </TabsContent>
 
           {/* Signup */}
-          <TabsContent value="signup" className="space-y-4">
-            <Card className="border-border/50">
+          <TabsContent value="signup" className="space-y-4 mt-4">
+            <Card className="bg-card/50 backdrop-blur-sm border-border/50">
               <CardHeader className="space-y-1">
                 <CardTitle className="text-xl">Create your account</CardTitle>
-                <CardDescription>Join FRAMP and start your crypto journey today</CardDescription>
+                <CardDescription>
+                  Join {App_Name} with your wallet or email to start your crypto journey
+                </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
+                <Button
+                  variant="outline"
+                  className="w-full rounded-xl font-semibold flex items-center gap-2"
+                  disabled
+                  aria-label="Wallet connect unavailable"
+                >
+                  <Wallet className="h-4 w-4" />
+                  Wallet connect unavailable
+                </Button>
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-border/50" />
+                  </div>
+                  <div className="relative flex justify-center text-xs">
+                    <span className="bg-card/50 px-2 text-muted-foreground">or continue with email</span>
+                  </div>
+                </div>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signupEmail">Email</Label>
+                    <Label htmlFor="signupEmail" className="text-xs font-medium">
+                      Email
+                    </Label>
                     <Input
                       id="signupEmail"
                       type="email"
@@ -152,11 +260,14 @@ export function AuthPage({ onBack }: AuthPageProps) {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="rounded-xl"
+                      className="rounded-xl bg-muted/30 border-border/50"
+                      aria-label="Email address for sign up"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signupPassword">Password</Label>
+                    <Label htmlFor="signupPassword" className="text-xs font-medium">
+                      Password
+                    </Label>
                     <div className="relative">
                       <Input
                         id="signupPassword"
@@ -165,7 +276,8 @@ export function AuthPage({ onBack }: AuthPageProps) {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className="rounded-xl pr-10"
+                        className="rounded-xl bg-muted/30 border-border/50 pr-10"
+                        aria-label="Password for sign up"
                       />
                       <Button
                         type="button"
@@ -173,6 +285,7 @@ export function AuthPage({ onBack }: AuthPageProps) {
                         size="sm"
                         className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                         onClick={() => setShowPassword(!showPassword)}
+                        aria-label={showPassword ? "Hide password" : "Show password"}
                       >
                         {showPassword ? (
                           <EyeOff className="h-4 w-4 text-muted-foreground" />
@@ -182,8 +295,17 @@ export function AuthPage({ onBack }: AuthPageProps) {
                       </Button>
                     </div>
                   </div>
-                  {error && <p className="text-red-500 text-sm">{error}</p>}
-                  <Button type="submit" className="w-full rounded-xl font-semibold" disabled={isLoading}>
+                  {error && (
+                    <div className="text-sm text-destructive bg-destructive/10 p-2 rounded-xl" role="alert">
+                      {error}
+                    </div>
+                  )}
+                  <Button
+                    type="submit"
+                    className="w-full rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 font-semibold"
+                    disabled={isLoading}
+                    aria-label="Create account with email"
+                  >
                     {isLoading ? "Creating account..." : "Create Account"}
                   </Button>
                 </form>
@@ -193,16 +315,23 @@ export function AuthPage({ onBack }: AuthPageProps) {
         </Tabs>
 
         {/* Terms */}
-        {/* <p className="text-xs text-muted-foreground text-center">
-          By continuing, you agree to FRAMP's{" "}
-          <a href="#" className="text-primary hover:underline">
+        <p className="text-xs text-muted-foreground text-center">
+          By continuing, you agree to {App_Name}'s{" "}
+          <a href="/terms" className="text-primary hover:underline">
             Terms of Service
           </a>{" "}
           and{" "}
-          <a href="#" className="text-primary hover:underline">
+          <a href="/privacy" className="text-primary hover:underline">
             Privacy Policy
           </a>
-        </p> */}
+        </p>
+
+        {/* Security Notice */}
+        <div className="p-4 bg-muted/20 rounded-xl border border-border/30 text-center">
+          <p className="text-xs text-muted-foreground">
+            Your credentials and wallet connections are encrypted and secure.
+          </p>
+        </div>
       </div>
     </div>
   );

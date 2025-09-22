@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Activity, Home, User, Wallet, MessageCircle, ArrowUpCircle, Settings } from "lucide-react";
+import { Activity, Home, User, Wallet, MessageCircle } from "lucide-react";
 import { AppHeader } from "@/components/app-header";
 import { AIChat } from "@/components/ai-chat";
-import { OnRampInterface } from "@/components/views/on-ramp-interface";
+import { OnRampInterface } from "@/components/on-ramp-interface";
 import { ActivityView } from "@/components/views/activity-view";
 import { ProfileView } from "@/components/views/profile-view";
 import { WalletView } from "@/components/views/wallet-view";
@@ -12,16 +12,10 @@ import { AuthPage } from "@/components/auth-page";
 import { OnboardingTour } from "@/components/onboarding-tour";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ArrowRight, Shield, Bell, History, QrCode, Users } from "lucide-react"
-
 import { useAuth } from "@/context/AuthContext";
 import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate";
 
 import BottomNavbar from "@/components/bottom-nav";
-import { BillsView } from "@/components/views/bills-view";
-import { Profile } from "@/components/profile";
 
 interface PaymentMethod {
   id: string;
@@ -36,7 +30,6 @@ interface PaymentMethod {
 }
 
 export default function FrampOnRamp() {
-  const [activeTab, setActiveTab] = useState("send")
   const { user } = useAuth();
   const [fromAmount, setFromAmount] = useState("");
   const [toAmount, setToAmount] = useState("");
@@ -44,7 +37,6 @@ export default function FrampOnRamp() {
   const [showAuth, setShowAuth] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
   const [tokenSymbol, setTokenSymbol] = useState("SOL"); // Start with SOL instead of NGN
   const [fiatCurrency, setFiatCurrency] = useState("NGN"); // Start with NGN
   const [selectedWallet, setSelectedWallet] = useState<PaymentMethod | null>(
@@ -128,8 +120,6 @@ export default function FrampOnRamp() {
             onPaymentMethodSelect={setSelectedPaymentMethod}
           />
         );
-      case "bills":
-        return <BillsView />;
       case "activity":
         return <ActivityView />;
       case "profile":
@@ -173,8 +163,7 @@ export default function FrampOnRamp() {
         onAuthClick={handleShowAuth}
         chatActive={showChat}
         onChatToggle={() => setShowChat((prev) => !prev)}
-        profileActive={showProfile}
-        onProfileToggle={() => setShowProfile((prev) => !prev)}
+        onProfileClick={() => setActiveView("profile")} // ✅ enable Profile from header
       />
 
       {/* Optionally, hide main content when chat is active */}
@@ -191,138 +180,67 @@ export default function FrampOnRamp() {
                   variant={activeView === "onramp" ? "default" : "ghost"}
                   onClick={() => setActiveView("onramp")}
                   className="w-full justify-start gap-2 rounded-xl"
-                  aria-label="Go to Gate (On-Ramp)"
                 >
-                  <ArrowUpCircle className="h-4 w-4" />
-                  Gate
-                </Button>
-                <Button
-                  variant={activeView === "bills" ? "default" : "ghost"}
-                  onClick={() => setActiveView("bills")}
-                  className="w-full justify-start gap-2 rounded-xl"
-                  aria-label="Go to Bills"
-                >
-                  <QrCode className="h-4 w-4" />
-                  Bills
+                  <Home className="h-4 w-4" />
+                  Home
                 </Button>
                 <Button
                   variant={activeView === "activity" ? "default" : "ghost"}
                   onClick={() => setActiveView("activity")}
                   className="w-full justify-start gap-2 rounded-xl"
-                  aria-label="Go to Activity"
                 >
                   <Activity className="h-4 w-4" />
                   Activity
-                </Button>
-                <Button
-                  variant={activeView === "wallet" ? "default" : "ghost"}
-                  onClick={() => setActiveView("wallet")}
-                  className="w-full justify-start gap-2 rounded-xl"
-                  aria-label="Go to Wallets & Banks"
-                >
-                  <Wallet className="h-4 w-4" />
-                  Wallets
                 </Button>
                 {/* <Button
                   variant={activeView === "profile" ? "default" : "ghost"}
                   onClick={() => setActiveView("profile")}
                   className="w-full justify-start gap-2 rounded-xl"
-                  aria-label="Go to Profile"
                 >
-                  <Settings className="h-4 w-4" />
-                  Settings
+                  <User className="h-4 w-4" />
+                  Profile
                 </Button> */}
+                <Button
+                  variant={activeView === "wallet" ? "default" : "ghost"}
+                  onClick={() => setActiveView("wallet")}
+                  className="w-full justify-start gap-2 rounded-xl"
+                >
+                  <Wallet className="h-4 w-4" />
+                  Wallets & Banks
+                </Button>
               </div>
             </div>
+
+            {/* Floating AI Chat Button */}
+            {/* <motion.button
+              className="fixed bottom-[max(1rem,2vh)] right-[max(1rem,2vw)] bg-primary text-primary-foreground rounded-full h-[max(2.5rem,5vh)] w-[max(2.5rem,5vh)] flex items-center justify-center shadow-lg hover:bg-primary/90 focus-visible:ring-[max(0.15rem,0.3vw)] focus-visible:ring-ring/50 focus-visible:border-ring outline-none transition-all"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+              onClick={() => setShowChat(!showChat)}
+              aria-label="Open AI Assistant"
+              data-tour="chat-button6"
+            >
+              <MessageCircle className="h-[max(1rem,2vw)] w-[max(1rem,2vw)]" />
+            </motion.button> */}
           </div>
 
           {/* Mobile Layout */}
           <div className="lg:hidden">
-            {/* Main Content */}
-            <main className="container mx-auto px-4 py-6 max-w-md">
-              <Tabs value={activeView} onValueChange={setActiveView} className="w-full">
-                <TabsList className="grid w-full grid-cols-4 mb-6">
-                  <TabsTrigger value="onramp" className="text-xs" aria-label="Go to Gate (Home)">
-                    <ArrowUpCircle className="h-4 w-4" />
-                    Gate
-                  </TabsTrigger>
-                  <TabsTrigger value="bills" className="text-xs" aria-label="Go to Bills">
-                    <QrCode className="w-4 h-4 mr-1" />
-                    Bills
-                  </TabsTrigger>
-                  <TabsTrigger value="activity" className="text-xs" aria-label="Go to Activity">
-                    <Activity className="w-4 h-4 mr-1" />
-                    Activity
-                  </TabsTrigger>
-                  <TabsTrigger value="wallet" className="text-xs" aria-label="Go to Wallets & Banks">
-                    <Wallet className="w-4 h-4 mr-1" />
-                    Wallet
-                  </TabsTrigger>
-                </TabsList>
-
-                <div className="container mx-auto max-w-md pb-20">
-                  <TabsContent value="onramp" className="space-y-6">
-                    {renderCurrentView()}
-                  </TabsContent>
-
-                  <TabsContent value="bills" className="space-y-6">
-                    {renderCurrentView()}
-                  </TabsContent>
-
-                  <TabsContent value="activity" className="space-y-4">
-                    {renderCurrentView()}
-                  </TabsContent>
-
-                  <TabsContent value="wallet" className="space-y-4">
-                    {renderCurrentView()}
-                  </TabsContent>
-                </div>
-              </Tabs>
-            </main>
+            <div className="container mx-auto px-4 py-6 max-w-md pb-20">
+              {renderCurrentView()}
+            </div>
+            <BottomNavbar
+              activeView={activeView}
+              onChangeView={setActiveView}
+            />
           </div>
         </>
       )}
 
-
-      {showProfile && (
-        <div className="fixed inset-0 z-[100] flex justify-end items-end bg-black/70">
-          <motion.div
-            className="bg-background backdrop-blur-md w-full h-full p-4 shadow-xl
-        lg:w-[min(90vw,28rem)] lg:h-full"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-          >
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute top-2 right-2"
-              onClick={() => setShowProfile(false)}
-              aria-label="Close AI Assistant"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </Button>
-            <Profile />
-          </motion.div>
-        </div>
-      )}
-
       {/* Chat overlay, always on top */}
-      {/* {showChat && (
+      {showChat && (
         <div className="fixed inset-0 z-[100] flex justify-end items-end bg-black/70">
           <motion.div
             className="bg-card/95 backdrop-blur-md w-full h-full p-4 shadow-xl
@@ -357,7 +275,7 @@ export default function FrampOnRamp() {
             <AIChat onQuickAction={handleChatQuickAction} />
           </motion.div>
         </div>
-      )} */}
+      )}
 
       {showOnboarding && (
         <OnboardingTour

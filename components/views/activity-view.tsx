@@ -1,20 +1,19 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Activity,
-  ArrowUpRight,
-  ArrowDownLeft,
+  ArrowUpCircle,
+  ArrowDownCircle,
   Clock,
   CheckCircle,
   XCircle,
   AlertCircle,
   Search,
   RefreshCw,
-  TrendingUp,
-  TrendingDown,
   ChevronLeft,
   ChevronRight,
+  History,
 } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import {
@@ -33,7 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -53,7 +52,7 @@ export function ActivityView() {
       setLoading(false);
       return;
     }
-    
+
     try {
       setLoading(true);
       const response = await fetchAllUserActivities();
@@ -105,307 +104,303 @@ export function ActivityView() {
     await loadActivities();
   };
 
-  // Show loading state while checking authentication
+  // Show loading state
   if (authLoading || loading) {
     return (
-      <div className="w-full max-w-7xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8 p-3 sm:p-4 lg:p-6 lg:pt-0">
-        <div className="flex flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Activity className="h-6 w-6" />
-            <h1 className="text-2xl font-bold">Activities</h1>
-          </div>
-        </div>
-
-        <div className="space-y-3 sm:space-y-4 lg:space-y-6">
-          {[...Array(5)].map((_, i) => (
-            <Card key={i} className="border-border bg-card">
-              <CardContent className="p-3 sm:p-4 lg:p-6">
-                <div className="flex items-center space-x-3 sm:space-x-4">
-                  <Skeleton className="h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 rounded-xl sm:rounded-2xl" />
-                  <div className="space-y-2 sm:space-y-3 flex-1">
-                    <Skeleton className="h-4 sm:h-5 w-[200px] sm:w-[250px]" />
-                    <Skeleton className="h-3 sm:h-4 w-[150px] sm:w-[180px]" />
+      <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Activity className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-semibold">Activities</h2>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRefresh}
+              className="rounded-xl h-8 w-8 p-0 sm:h-9 sm:w-auto sm:px-3"
+              aria-label="Refresh activities"
+            >
+              <RefreshCw className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Refresh</span>
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="p-4 space-y-4">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={i}
+                className="p-4 bg-muted/30 rounded-xl border border-border/50"
+              >
+                <div className="flex items-center space-x-3">
+                  <Skeleton className="h-10 w-10 rounded-xl" />
+                  <div className="space-y-2 flex-1">
+                    <Skeleton className="h-4 w-[200px]" />
+                    <Skeleton className="h-3 w-[150px]" />
                   </div>
-                  <div className="space-y-1 sm:space-y-2">
-                    <Skeleton className="h-5 sm:h-6 w-[100px] sm:w-[120px]" />
-                    <Skeleton className="h-4 sm:h-5 w-[60px] sm:w-[80px]" />
+                  <div className="space-y-1">
+                    <Skeleton className="h-5 w-[100px]" />
+                    <Skeleton className="h-4 w-[60px]" />
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
-  // Show login prompt when user is not authenticated
+  // Show login prompt
   if (!user) {
     return (
-      <div className="w-full max-w-7xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8 p-3 sm:p-4 lg:p-6 lg:pt-0">
-        <div className="flex flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Activity className="h-6 w-6" />
-            <h1 className="text-2xl font-bold">Activities</h1>
-          </div>
-        </div>
-
-        <Card className="border-border bg-card">
-          <CardContent className="p-8 sm:p-10 lg:p-12 text-center">
-            <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-muted/50 w-fit mx-auto mb-4 sm:mb-6">
-              <Activity className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-muted-foreground" />
-            </div>
-            <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-foreground">
+      <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Activity className="w-5 h-5 text-primary" />
+            <h2 className="text-lg font-semibold">Activities</h2>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="p-4 text-center">
+            <Activity className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2 text-foreground">
               Please log in to view your activities
             </h3>
-            <p className="text-sm sm:text-base text-muted-foreground max-w-md mx-auto">
-              You need to be logged in to see your transaction history and activities.
+            <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
+              You need to be logged in to see your transaction history and
+              activities.
             </p>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   if (error) {
     return (
-      <div className="w-full max-w-7xl mx-auto p-3 sm:p-4 lg:p-6 lg:pt-0">
-        <div className="flex flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Activity className="h-6 w-6" />
-            <h1 className="text-2xl font-bold">Activities</h1>
-          </div>
-          <Button onClick={handleRefresh} variant="outline" size="sm">
-            <RefreshCw className="h-4 w-4 md:mr-2" />
-            <span className="hidden md:inline">Refresh</span>
-          </Button>
-        </div>
-
-        <Card className="border-destructive/20 bg-destructive/5">
-          <CardContent className="p-6 sm:p-8 lg:p-12 text-center">
-            <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-destructive/10 w-fit mx-auto mb-4 sm:mb-6">
-              <XCircle className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-destructive" />
+      <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Activity className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-semibold">Activities</h2>
             </div>
-            <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-foreground">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRefresh}
+              className="rounded-xl h-8 w-8 p-0 sm:h-9 sm:w-auto sm:px-3"
+              aria-label="Refresh activities"
+            >
+              <RefreshCw className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Refresh</span>
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="p-4 text-center">
+            <XCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2 text-foreground">
               Error Loading Activities
             </h3>
-            <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 max-w-md mx-auto">
+            <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
               {error}
             </p>
             <Button
-              onClick={handleRefresh}
               variant="outline"
               size="sm"
-              className="sm:size-default bg-transparent"
+              onClick={handleRefresh}
+              className="rounded-xl bg-transparent sm:h-9 sm:px-3"
+              aria-label="Try again to load activities"
             >
-              <RefreshCw className="h-4 w-4 md:mr-2" />
-              <span className="hidden md:inline">Try Again</span>
+              <RefreshCw className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Try Again</span>
             </Button>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto space-y-4 sm:space-y-6 lg:space-y-8 p-3 sm:p-4 lg:p-6 lg:pt-0">
-      <div className="flex flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <Activity className="h-6 w-6" />
-          <h1 className="text-2xl font-bold">Activities</h1>
-        </div>
-        <Button onClick={handleRefresh} variant="outline" size="sm">
-          <RefreshCw className="h-4 w-4 md:mr-2" />
-          <span className="hidden md:inline">Refresh</span>
-        </Button>
-      </div>
-
-      <div className="py-3">
-        <div className="flex flex-col gap-3 sm:gap-4 w-full justify-end">
-          {/* <div className="relative">
-              <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+    <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+      <CardHeader>
+        <CardTitle className="text-lg flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Activity className="w-5 h-5 text-primary" />
+            <h2 className="text-lg font-semibold">Activities</h2>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRefresh}
+            className="rounded-xl h-8 w-8 p-0 sm:h-9 sm:w-auto sm:px-3"
+            aria-label="Refresh activities"
+          >
+            <RefreshCw className="h-4 w-4 sm:mr-2" />
+            <span className="hidden sm:inline">Refresh</span>
+          </Button>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div className="p-4 space-y-4">
+          <div className="flex flex-col gap-3">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Search transactions..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9 sm:pl-12 text-sm sm:text-base"
+                className="pl-9 rounded-xl text-sm"
+                aria-label="Search transactions"
               />
-            </div> */}
-          <div className="flex flex-row gap-3 sm:gap-4 w-full justify-end">
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-full sm:w-[180px] lg:w-[200px]">
-                <SelectValue placeholder="Filter by status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="completed">Completed</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="processing">Processing</SelectItem>
-                <SelectItem value="failed">Failed</SelectItem>
-                <SelectItem value="cancelled">Cancelled</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={typeFilter} onValueChange={setTypeFilter}>
-              <SelectTrigger className="w-full sm:w-[180px] lg:w-[200px]">
-                <SelectValue placeholder="Filter by type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="onramp">Onramp</SelectItem>
-                <SelectItem value="offramp">Offramp</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-      </div>
-
-      {filteredActivities.length === 0 ? (
-        <Card className="border-border bg-card">
-          <CardContent className="p-8 sm:p-10 lg:p-12 text-center">
-            <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-muted/50 w-fit mx-auto mb-4 sm:mb-6">
-              <Activity className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 text-muted-foreground" />
             </div>
-            <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-foreground">
-              No transactions found
-            </h3>
-            <p className="text-sm sm:text-base text-muted-foreground max-w-md mx-auto">
-              {activities.length === 0
-                ? "You haven't made any transactions yet."
-                : "No transactions match your current filters."}
-            </p>
-          </CardContent>
-        </Card>
-      ) : (
-        <>
-          <Tabs defaultValue="all" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 bg-muted border border-border h-auto">
-              <TabsTrigger
-                value="all"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm py-2 sm:py-2.5"
-              >
-                <span className="hidden sm:inline">All </span>(
-                {filteredActivities.length})
-              </TabsTrigger>
-              <TabsTrigger
-                value="onramp"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm py-2 sm:py-2.5"
-              >
-                <span className="hidden sm:inline">Onramp </span>(
-                {onrampActivities.length})
-              </TabsTrigger>
-              <TabsTrigger
-                value="offramp"
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs sm:text-sm py-2 sm:py-2.5"
-              >
-                <span className="hidden sm:inline">Offramp </span>(
-                {offrampActivities.length})
-              </TabsTrigger>
-            </TabsList>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-full sm:w-[180px] rounded-xl">
+                  <SelectValue placeholder="Filter by status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="completed">Completed</SelectItem>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="processing">Processing</SelectItem>
+                  <SelectItem value="failed">Failed</SelectItem>
+                  <SelectItem value="cancelled">Cancelled</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={typeFilter} onValueChange={setTypeFilter}>
+                <SelectTrigger className="w-full sm:w-[180px] rounded-xl">
+                  <SelectValue placeholder="Filter by type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Types</SelectItem>
+                  <SelectItem value="onramp">Onramp</SelectItem>
+                  <SelectItem value="offramp">Offramp</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
 
-            {/* All */}
-            <TabsContent
-              value="all"
-              className="space-y-3 sm:space-y-4 mt-4 sm:mt-6 grid w-full xl:grid-cols-2 gap-3 sm:gap-4"
-            >
-              {paginatedActivities.map((activity) => (
-                <TransactionCard key={activity.id} activity={activity} />
-              ))}
-            </TabsContent>
-
-            {/* Onramp */}
-            <TabsContent
-              value="onramp"
-              className="space-y-3 sm:space-y-4 mt-4 sm:mt-6 grid w-full xl:grid-cols-2 gap-3 sm:gap-4"
-            >
-              {onrampActivities.slice(startIndex, endIndex).map((activity) => (
-                <TransactionCard key={activity.id} activity={activity} />
-              ))}
-            </TabsContent>
-
-            {/* Offramp */}
-            <TabsContent
-              value="offramp"
-              className="space-y-3 sm:space-y-4 mt-4 sm:mt-6 grid w-full xl:grid-cols-2 gap-3 sm:gap-4"
-            >
-              {offrampActivities.slice(startIndex, endIndex).map((activity) => (
-                <TransactionCard key={activity.id} activity={activity} />
-              ))}
-            </TabsContent>
-          </Tabs>
-
-          {totalPages > 1 && (
-            <Card className="border-border bg-card">
-              <CardContent className="">
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                  <p className="text-xs sm:text-sm text-muted-foreground">
-                    Showing {startIndex + 1} to{" "}
-                    {Math.min(endIndex, filteredActivities.length)} of{" "}
-                    {filteredActivities.length} transactions
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() =>
-                        setCurrentPage((prev) => Math.max(prev - 1, 1))
-                      }
-                      disabled={currentPage === 1}
-                      className="h-8 w-8 p-0 sm:h-9 sm:w-9"
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
-
-                    <div className="flex items-center gap-1 sm:gap-2">
-                      {Array.from(
-                        { length: Math.min(5, totalPages) },
-                        (_, i) => {
-                          let pageNum;
-                          if (totalPages <= 5) {
-                            pageNum = i + 1;
-                          } else if (currentPage <= 3) {
-                            pageNum = i + 1;
-                          } else if (currentPage >= totalPages - 2) {
-                            pageNum = totalPages - 4 + i;
-                          } else {
-                            pageNum = currentPage - 2 + i;
-                          }
-
-                          return (
-                            <Button
-                              key={pageNum}
-                              variant={
-                                currentPage === pageNum ? "default" : "outline"
-                              }
-                              size="sm"
-                              onClick={() => setCurrentPage(pageNum)}
-                              className="h-8 w-8 p-0 sm:h-9 sm:w-9 text-xs sm:text-sm"
-                            >
-                              {pageNum}
-                            </Button>
-                          );
-                        }
-                      )}
-                    </div>
-
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() =>
-                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                      }
-                      disabled={currentPage === totalPages}
-                      className="h-8 w-8 p-0 sm:h-9 sm:w-9"
-                    >
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
+          {filteredActivities.length === 0 ? (
+            <div className="p-4 text-center bg-muted/30 rounded-xl border border-border/50">
+              <Activity className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2 text-foreground">
+                No transactions found
+              </h3>
+              <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                {activities.length === 0
+                  ? "You haven't made any transactions yet."
+                  : "No transactions match your current filters."}
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="w-full">
+                <div className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm border-border/50 rounded-xl h-auto">
+                  <div
+                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs py-2"
+                    aria-label="Show all transactions"
+                  >
+                    <span className="sm:inline">All </span>(
+                    {filteredActivities.length})
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+
+                <div className="space-y-4 mt-4">
+                  {paginatedActivities.map((activity) => (
+                    <TransactionCard key={activity.id} activity={activity} />
+                  ))}
+                </div>
+              </div>
+
+              {totalPages > 1 && (
+                <div className="p-4 bg-muted/30 rounded-xl border border-border/50">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <p className="text-xs text-muted-foreground">
+                      Showing {startIndex + 1} to{" "}
+                      {Math.min(endIndex, filteredActivities.length)} of{" "}
+                      {filteredActivities.length} transactions
+                    </p>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setCurrentPage((prev) => Math.max(prev - 1, 1))
+                        }
+                        disabled={currentPage === 1}
+                        className="rounded-xl h-8 w-8 p-0"
+                        aria-label="Previous page"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </Button>
+                      <div className="flex items-center gap-1">
+                        {Array.from(
+                          { length: Math.min(5, totalPages) },
+                          (_, i) => {
+                            let pageNum;
+                            if (totalPages <= 5) {
+                              pageNum = i + 1;
+                            } else if (currentPage <= 3) {
+                              pageNum = i + 1;
+                            } else if (currentPage >= totalPages - 2) {
+                              pageNum = totalPages - 4 + i;
+                            } else {
+                              pageNum = currentPage - 2 + i;
+                            }
+                            return (
+                              <Button
+                                key={pageNum}
+                                variant={
+                                  currentPage === pageNum
+                                    ? "default"
+                                    : "outline"
+                                }
+                                size="sm"
+                                onClick={() => setCurrentPage(pageNum)}
+                                className="rounded-xl h-8 w-8 p-0 text-xs"
+                                aria-label={`Go to page ${pageNum}`}
+                              >
+                                {pageNum}
+                              </Button>
+                            );
+                          }
+                        )}
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setCurrentPage((prev) =>
+                            Math.min(prev + 1, totalPages)
+                          )
+                        }
+                        disabled={currentPage === totalPages}
+                        className="rounded-xl h-8 w-8 p-0"
+                        aria-label="Next page"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </>
           )}
-        </>
-      )}
-    </div>
+          {/* Security Notice */}
+          <div className="mt-4 p-4 bg-muted/20 rounded-xl border border-border/30">
+            <h5 className="font-medium text-sm mb-2">Security Notice</h5>
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              Your transaction history is securely stored and encrypted. We
+              prioritize your privacy and data protection.
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -413,17 +408,15 @@ function TransactionCard({ activity }: { activity: ActivityTransaction }) {
   const getStatusIcon = (status: string) => {
     switch (status.toLowerCase()) {
       case "completed":
-        return <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-green-600" />;
+        return <CheckCircle className="h-4 w-4 text-green-600" />;
       case "failed":
       case "cancelled":
-        return <XCircle className="h-3 w-3 sm:h-4 sm:w-4 text-destructive" />;
+        return <XCircle className="h-4 w-4 text-destructive" />;
       case "pending":
       case "processing":
-        return <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-yellow-600" />;
+        return <Clock className="h-4 w-4 text-yellow-600" />;
       default:
-        return (
-          <AlertCircle className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
-        );
+        return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
     }
   };
 
@@ -462,72 +455,66 @@ function TransactionCard({ activity }: { activity: ActivityTransaction }) {
   };
 
   return (
-    <Card className="border-border bg-card hover:bg-card/80 hover:shadow-sm transition-all duration-200 py-0">
-      <CardContent className="p-3 sm:p-4 lg:p-6">
-        <div className="flex items-center justify-between gap-3 sm:gap-4">
-          <div className="flex items-center space-x-3 sm:space-x-4 flex-1 min-w-0">
-            <div className="flex-shrink-0">
-              <div
-                className={`h-10 w-10 sm:h-12 sm:w-12 lg:h-14 lg:w-14 rounded-xl sm:rounded-2xl flex items-center justify-center transition-colors ${
-                  activity.type === "onramp"
-                    ? "bg-green-50 hover:bg-green-100"
-                    : "bg-blue-50 hover:bg-blue-100"
-                }`}
-              >
-                {activity.type === "onramp" ? (
-                  <ArrowDownLeft className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-green-600" />
-                ) : (
-                  <ArrowUpRight className="h-5 w-5 sm:h-6 sm:w-6 lg:h-7 lg:w-7 text-blue-600" />
-                )}
-              </div>
-            </div>
-
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2">
-                <h3 className="text-sm sm:text-base lg:text-lg font-semibold text-foreground truncate">
-                  {activity.type === "onramp" ? "Onramp" : "Offramp"}
-                  {activity.tokenSymbol && (
-                    <span className="text-muted-foreground font-normal">
-                      {" "}
-                      ({activity.tokenSymbol})
-                    </span>
-                  )}
-                </h3>
-                {getStatusIcon(activity.status)}
-              </div>
-              <p className="text-xs sm:text-sm text-muted-foreground mb-1">
-                {formatDate(activity.createdAt)}
-                {activity.paymentMethod && (
-                  <span className="text-primary">
-                    {" "}
-                    • {activity.paymentMethod}
-                  </span>
-                )}
-              </p>
-              {activity.walletAddress && (
-                <p className="text-xs text-muted-foreground font-mono bg-muted/30 px-2 py-1 rounded-md w-fit">
-                  {activity.walletAddress.slice(0, 6)}...
-                  {activity.walletAddress.slice(-4)}
-                </p>
+    <div className="p-4 bg-muted/30 rounded-xl border border-border/50 hover:bg-muted/50 transition-all">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center space-x-3 flex-1 min-w-0">
+          <div className="flex-shrink-0">
+            <div
+              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
+                activity.type === "onramp"
+                  ? "bg-green-50 hover:bg-green-100"
+                  : "bg-blue-50 hover:bg-blue-100"
+              }`}
+            >
+              {activity.type === "onramp" ? (
+                <ArrowUpCircle className="h-5 w-5 text-green-600" />
+              ) : (
+                <ArrowDownCircle className="h-5 w-5 text-blue-600" />
               )}
             </div>
           </div>
-
-          <div className="flex flex-col items-end space-y-2 sm:space-y-3 flex-shrink-0">
-            <p className="text-sm sm:text-base lg:text-xl font-bold text-foreground">
-              {formatAmount(activity.amount, activity.currency)}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <h3 className="text-sm font-semibold text-foreground truncate">
+                {activity.type === "onramp" ? "Onramp" : "Offramp"}
+                {activity.tokenSymbol && (
+                  <span className="text-muted-foreground font-normal">
+                    {" "}
+                    ({activity.tokenSymbol})
+                  </span>
+                )}
+              </h3>
+              {getStatusIcon(activity.status)}
+            </div>
+            <p className="text-xs text-muted-foreground mb-1">
+              {formatDate(activity.createdAt)}
+              {activity.paymentMethod && (
+                <span className="text-primary">
+                  {" "}
+                  • {activity.paymentMethod}
+                </span>
+              )}
             </p>
-            <Badge
-              variant="outline"
-              className={`text-xs font-medium ${getStatusColor(
-                activity.status
-              )}`}
-            >
-              {activity.status}
-            </Badge>
+            {activity.walletAddress && (
+              <p className="text-xs text-muted-foreground font-mono bg-muted/50 px-2 py-1 rounded-md w-fit">
+                {activity.walletAddress.slice(0, 6)}...
+                {activity.walletAddress.slice(-4)}
+              </p>
+            )}
           </div>
         </div>
-      </CardContent>
-    </Card>
+        <div className="flex flex-col items-end space-y-1 flex-shrink-0">
+          <p className="text-sm font-bold text-foreground">
+            {formatAmount(activity.amount, activity.currency)}
+          </p>
+          <Badge
+            variant="outline"
+            className={`text-xs font-medium ${getStatusColor(activity.status)}`}
+          >
+            {activity.status}
+          </Badge>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Search, X, Star, TrendingUp } from "lucide-react"
+import { useMultipleExchangeRates } from "@/lib/hooks/useExchangeRate"
 
 export interface Token {
     symbol: string
@@ -30,6 +31,11 @@ interface TokenListModalProps {
 export function TokenListModal({ tokens, selected, onSelect, onClose, isOpen }: TokenListModalProps) {
     const [searchQuery, setSearchQuery] = useState("")
     const [activeTab, setActiveTab] = useState<"all" | "popular" | "favorites">("all")
+
+    // Fetch live NGN rates for all visible tokens
+    const tokenSymbols = useMemo(() => tokens.map(t => t.symbol.toUpperCase()), [tokens])
+    const { exchangeRates, loading: ratesLoading } = useMultipleExchangeRates(tokenSymbols)
+    const getRate = useCallback((symbol: string) => exchangeRates.get(symbol.toUpperCase())?.rate ?? null, [exchangeRates])
 
     const filteredTokens = useMemo(() => {
         let filtered = tokens
@@ -112,7 +118,12 @@ export function TokenListModal({ tokens, selected, onSelect, onClose, isOpen }: 
 
                 {/* All Token */}
                 <div className="px-6">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-3">All</h3>
+                    <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-sm font-medium text-muted-foreground">All</h3>
+                        {ratesLoading && (
+                            <span className="text-[10px] text-muted-foreground">Fetching prices…</span>
+                        )}
+                    </div>
                 </div>
                 {/* Token List */}
                 <ScrollArea className="h-80 px-6">
@@ -158,9 +169,10 @@ export function TokenListModal({ tokens, selected, onSelect, onClose, isOpen }: 
 
                                             {/* Price & Balance */}
                                             <div className="text-right">
-                                                {token.balance && <p className="text-sm font-medium text-card-foreground">{token.balance}</p>}
                                                 <div className="flex items-center gap-1">
-                                                    {token.price && <span className="text-xs text-muted-foreground">${token.price}</span>}
+                                                    {getRate(token.symbol) !== null && (
+                                                        <span className="text-xs text-muted-foreground">₦{getRate(token.symbol)!.toLocaleString("en-NG", { maximumFractionDigits: 2 })}</span>
+                                                    )}
                                                     {token.change24h !== undefined && (
                                                         <span className={`text-xs ${token.change24h >= 0 ? "text-green-500" : "text-red-500"}`}>
                                                             {token.change24h >= 0 ? "+" : ""}

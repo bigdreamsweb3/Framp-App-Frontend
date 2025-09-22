@@ -94,7 +94,7 @@ export function OnrampSettings({ onClose }: OnrampSettingsProps) {
           </div>
 
           {/* Transaction Limits */}
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <Label className="font-medium">Daily Limit</Label>
             <div className="bg-muted/30 rounded-xl p-3 border border-border/50">
               <div className="flex items-center justify-between">
@@ -106,7 +106,7 @@ export function OnrampSettings({ onClose }: OnrampSettingsProps) {
                 <span className="text-sm">₦0</span>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Save Button */}
           <Button className="w-full rounded-xl font-semibold" onClick={onClose}>
