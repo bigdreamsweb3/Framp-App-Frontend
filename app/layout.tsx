@@ -14,10 +14,11 @@ import "./globals.css"
 import { AuthProvider } from "@/context/AuthContext"
 
 export const metadata: Metadata = {
-  title: "FRAMP - Fiat to Crypto Ramp",
-  description: "Fast & secure fiat to crypto conversion on Solana",
+  title: "FRAMP - Your Gateway to Crypto Ramping",
+  description: "FRAMP lets you easily on-ramp to crypto, spend it on everyday bills, and explore the Solana ecosystem—all in one seamless experience.",
   generator: "github.com/bigdreamsweb3",
 }
+
 
 export default function RootLayout({
   children,

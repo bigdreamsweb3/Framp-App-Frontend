@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "../ui/button";
@@ -20,7 +20,6 @@ interface AppHeaderProps {
   onChatToggle?: () => void;
   profileActive?: boolean;
   onProfileToggle?: () => void;
-  // onProfileClick?: () => void
 }
 
 export function AppHeader({
@@ -32,6 +31,7 @@ export function AppHeader({
 }: AppHeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
 
   const { user, logout } = useAuth();
 
@@ -43,8 +43,47 @@ export function AppHeader({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (mobileOpen && headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setMobileOpen(false);
+      }
+    };
+
+    // Add event listener when mobile menu is open
+    if (mobileOpen) {
+      document.addEventListener("mousedown", handleClickOutside as EventListener);
+      document.addEventListener("touchstart", handleClickOutside as EventListener);
+    }
+
+    // Cleanup function
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside as EventListener);
+      document.removeEventListener("touchstart", handleClickOutside as EventListener);
+    };
+  }, [mobileOpen]);
+
+  // Close mobile menu when pressing Escape key
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && mobileOpen) {
+        setMobileOpen(false);
+      }
+    };
+
+    if (mobileOpen) {
+      document.addEventListener('keydown', handleEscapeKey);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscapeKey);
+    };
+  }, [mobileOpen]);
+
   return (
     <header
+      ref={headerRef}
       className={`sticky top-0 z-50 w-full border-b border-border/20 bg-gradient-to-b from-background/95 to-background/80 backdrop-blur-lg transition-all duration-500 ease-out h-14
         ${scrolled ? "shadow-md" : "shadow-sm"}`}
       data-tour="security"
@@ -66,49 +105,21 @@ export function AppHeader({
               BETA
             </span>
           </div>
-          {/* <motion.span
-            initial={{ opacity: 0, x: -6 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -6 }}
-            transition={{ duration: 0.4 }}
-            className="hidden md:inline-flex text-lg font-bold bg-gradient-to-r from-primary to-primary-foreground bg-clip-text text-transparent"
-          >
-            {App_Name}
-          </motion.span> */}
 
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileOpen((p) => !p)}
             className="md:hidden p-2 rounded-lg hover:bg-primary/10 transition"
             aria-label="Toggle navigation"
+            aria-expanded={mobileOpen}
           >
             {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
 
-
         <div className="flex items-center gap-4">
           {/* Desktop Navigation and Actions */}
           <nav className="hidden md:flex items-center gap-6">
-            {/* <Link
-              href="/features"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200"
-            >
-              Features
-            </Link> */}
-            {/* <Link
-              href="/pricing"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200"
-            >
-              Pricing
-            </Link> */}
-            {/* <Link
-              href="/about"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200"
-            >
-              About
-            </Link> */}
-
             <Link
               href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
               target="_blank"
@@ -117,7 +128,8 @@ export function AppHeader({
             >
               <span className="flex items-center gap-0.5">
                 <HelpCircle size={18} />
-                Help</span>
+                Help
+              </span>
             </Link>
           </nav>
 
@@ -172,8 +184,6 @@ export function AppHeader({
               )}
             </Button>
           )}
-
-
         </div>
       </div>
 

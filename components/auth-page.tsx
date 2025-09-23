@@ -103,7 +103,7 @@ export function AuthPage({ onBack }: AuthPageProps) {
             />
           </div>
           <h1 className="text-2xl font-bold text-foreground">{App_Name}</h1>
-          <p className="text-xs text-muted-foreground">Your gateway to crypto on-ramping</p>
+          <p className="text-xs text-muted-foreground">Your gateway to crypto ramping and beyond</p>
         </motion.div>
 
         {/* Auth Tabs */}
