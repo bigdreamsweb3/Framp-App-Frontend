@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Activity, Home, User, Wallet, MessageCircle, ArrowUpCircle, QrCode, History, X } from "lucide-react";
-import { AppHeader } from "@/components/app-header";
+import { AppHeader } from "@/components/app_layout/app-header";
 import { AIChat } from "@/components/ai-chat";
 import { OnRampInterface } from "@/components/views/on-ramp-interface";
 import { ActivityView } from "@/components/views/activity-view";

@@ -45,15 +45,15 @@ const onboardingSteps: OnboardingStep[] = [
       mobile: "onramp-card",
     },
   },
-  {
-    title: "AI Assistant",
-    description: "Need help? Our AI assistant is here 24/7 to guide you through the process and answer any questions.",
-    icon: <MessageCircle className="w-12 h-12 p-3 bg-orange-500 text-white rounded-2xl mx-auto" />,
-    highlight: {
-      desktop: "chat-sidebar",
-      mobile: "chat-button",
-    },
-  },
+  // {
+  //   title: "AI Assistant",
+  //   description: "Need help? Our AI assistant is here 24/7 to guide you through the process and answer any questions.",
+  //   icon: <MessageCircle className="w-12 h-12 p-3 bg-orange-500 text-white rounded-2xl mx-auto" />,
+  //   highlight: {
+  //     desktop: "chat-sidebar",
+  //     mobile: "chat-button",
+  //   },
+  // },
 ]
 
 export function OnboardingTour({ onComplete, onSkip }: OnboardingTourProps) {

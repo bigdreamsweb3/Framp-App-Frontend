@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Activity, Home, User, Wallet, MessageCircle } from "lucide-react";
-import { AppHeader } from "@/components/app-header";
+import { AppHeader } from "@/components/app_layout/app-header";
 import { AIChat } from "@/components/ai-chat";
 import { OnRampInterface } from "@/components/on-ramp-interface";
 import { ActivityView } from "@/components/views/activity-view";
@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate";
 
-import BottomNavbar from "@/components/bottom-nav";
+import BottomNavbar from "@/components/app_layout/bottom-nav";
 
 interface PaymentMethod {
   id: string;
