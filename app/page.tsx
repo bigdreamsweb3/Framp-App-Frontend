@@ -22,18 +22,9 @@ import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate";
 import BottomNavbar from "@/components/app_layout/bottom-nav";
 import { BillsView } from "@/components/views/bills-view";
 import { Profile } from "@/components/modals/profile";
+import { WalletMethod } from "@/types/wallet";
 
-interface PaymentMethod {
-  id: string;
-  type: "bank" | "wallet";
-  name: string;
-  details: string;
-  accountName: string;
-  isDefault: boolean;
-  walletAddress?: string;
-  bankCode?: string;
-  accountNumber?: string;
-}
+
 
 export default function FrampOnRamp() {
   const [activeTab, setActiveTab] = useState("send")
@@ -47,7 +38,7 @@ export default function FrampOnRamp() {
   const [showProfile, setShowProfile] = useState(false);
   const [tokenSymbol, setTokenSymbol] = useState("SOL"); // Start with SOL instead of NGN
   const [fiatCurrency, setFiatCurrency] = useState("NGN"); // Start with NGN
-  const [selectedWallet, setSelectedWallet] = useState<PaymentMethod | null>(
+  const [selectedWallet, setSelectedWallet] = useState<WalletMethod | null>(
     null
   );
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<
@@ -145,23 +136,10 @@ export default function FrampOnRamp() {
           />
         );
       default:
-        return (
-          <OnRampInterface
-            fromAmount={fromAmount}
-            toAmount={toAmount}
-            onFromAmountChange={handleFromAmountChange}
-            tokenSymbol={tokenSymbol}
-            fiatCurrency={fiatCurrency}
-            onCurrencyChange={setTokenSymbol}
-            receiving={toAmount ? Number(toAmount) : 0}
-            selectedWallet={selectedWallet}
-            onWalletSelect={() => setActiveView("wallet")}
-            selectedPaymentMethod={selectedPaymentMethod}
-            onPaymentMethodSelect={setSelectedPaymentMethod}
-          />
-        );
+        return null;
     }
   };
+
 
   if (showAuth) {
     return <AuthPage onBack={handleHideAuth} />;

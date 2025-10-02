@@ -54,7 +54,8 @@ const CRYPTO_TOKENS = [
     name: "Solana",
     label: "Solana",
     icon: "/icons/sol.svg",
-    isFavorite: true,
+    // isFavorite: true,
+    isPopular: false,
   },
 
   {
@@ -88,7 +89,7 @@ interface OnRampInterfaceProps {
     id: string;
     type: "bank" | "wallet";
     name: string;
-    details: string;
+    details?: string;
     accountName: string;
     isDefault: boolean;
     walletAddress?: string;

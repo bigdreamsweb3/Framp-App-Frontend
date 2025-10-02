@@ -10,16 +10,7 @@ import { useAuth } from "@/context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { WalletAPI } from "@/lib/api/wallets";
 
-interface WalletMethod {
-  id: string;
-  type: "wallet";
-  name: string;
-  details: string;
-  accountName: string;
-  isDefault: boolean;
-  walletAddress: string;
-  network?: string;
-}
+import type { WalletMethod } from "@/types/wallet";
 
 interface WalletViewProps {
   isLoggedIn: boolean;
