@@ -50,25 +50,29 @@ type TokenStats = {
 
 const CRYPTO_TOKENS = [
   {
-    symbol: "USDT",
-    name: "Tether USD",
-    label: "Tether USD",
-    icon: "/icons/usdt.svg",
-    balance: "150.5",
-    price: "1.00",
-    change24h: 0.12,
-    isPopular: true,
-  },
-  {
     symbol: "SOL",
     name: "Solana",
     label: "Solana",
     icon: "/icons/sol.svg",
-    balance: "3.2",
-    price: "19.80",
-    change24h: -1.24,
     isFavorite: true,
   },
+
+  {
+    symbol: "USDC",
+    name: "USD Coin",
+    label: "Circle USD",
+    icon: "/icons/usdc.svg",
+    isPopular: true,
+  },
+
+  {
+    symbol: "USDT",
+    name: "Tether USD",
+    label: "Tether USD",
+    icon: "/icons/usdt.svg",
+    isPopular: true,
+  },
+
 ];
 
 interface OnRampInterfaceProps {
@@ -323,8 +327,8 @@ export function OnRampInterface({
                   <div className="text-2xl font-bold">
                     {receiving > 0
                       ? receiving.toLocaleString("en-US", {
-                          maximumFractionDigits: 5,
-                        })
+                        maximumFractionDigits: 5,
+                      })
                       : "0.00"}
                   </div>
                   <Button
@@ -422,7 +426,7 @@ export function OnRampInterface({
                   </div>
                   <PaymentMethodSelector
                     selectedMethod={selectedPaymentMethod || null}
-                    onMethodSelect={onPaymentMethodSelect || (() => {})}
+                    onMethodSelect={onPaymentMethodSelect || (() => { })}
                     disabled={loading}
                   />
                 </div>
@@ -444,12 +448,12 @@ export function OnRampInterface({
                 {loading
                   ? "Processing..."
                   : !fromAmount
-                  ? "Enter amount"
-                  : !selectedWallet
-                  ? "Select wallet"
-                  : !selectedPaymentMethod
-                  ? "Select payment method"
-                  : `Buy ${tokenSymbol}`}
+                    ? "Enter amount"
+                    : !selectedWallet
+                      ? "Select wallet"
+                      : !selectedPaymentMethod
+                        ? "Select payment method"
+                        : `Buy ${tokenSymbol}`}
               </Button>
             </div>
           </CardContent>

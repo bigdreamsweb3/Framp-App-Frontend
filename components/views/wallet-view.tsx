@@ -205,9 +205,12 @@ export function WalletView({
         {!isLoggedIn ? (
           <div className="text-center py-8">
             <Wallet className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-sm text-muted-foreground mb-4">
+            <h3 className="text-lg font-semibold mb-2 text-foreground">
               Please log in to manage wallets
-            </p>
+            </h3>
+            {/* <p className="text-sm text-muted-foreground mb-4">
+             
+            </p> */}
             <Button onClick={onLogin} className="rounded-xl bg-primary">
               Log In or Sign Up
             </Button>
@@ -325,7 +328,7 @@ export function WalletView({
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      {!wallet.isDefault && (
+                      {/* {!wallet.isDefault && (
                         <Button
                           variant="outline"
                           size="sm"
@@ -337,7 +340,7 @@ export function WalletView({
                         >
                           Set Default
                         </Button>
-                      )}
+                      )} */}
                       <Button
                         variant="ghost"
                         size="sm"

@@ -143,9 +143,9 @@ export function TokenListModal({ tokens, selected, onSelect, onClose, isOpen }: 
                                     {/* Token Icon */}
                                     <div className="relative">
                                         <img src={token.icon || "/placeholder.svg"} alt={token.symbol} className="w-10 h-10 rounded-full" />
-                                        {token.isFavorite && (
+                                        {/* {token.isFavorite && (
                                             <Star className="absolute -top-1 -right-1 h-3 w-3 text-yellow-500 fill-current" />
-                                        )}
+                                        )} */}
                                     </div>
 
                                     {/* Token Info */}
@@ -154,7 +154,7 @@ export function TokenListModal({ tokens, selected, onSelect, onClose, isOpen }: 
                                             <div>
                                                 <div className="flex items-center gap-2">
                                                     <span className="font-semibold text-card-foreground">{token.symbol}</span>
-                                                    {token.isPopular && (
+                                                    {/* {token.isPopular && (
                                                         <Badge
                                                             variant="secondary"
                                                             className="h-5 px-1.5 text-xs bg-primary/10 text-primary border-primary/20"
@@ -162,7 +162,7 @@ export function TokenListModal({ tokens, selected, onSelect, onClose, isOpen }: 
                                                             <TrendingUp className="h-3 w-3 mr-1" />
                                                             Popular
                                                         </Badge>
-                                                    )}
+                                                    )} */}
                                                 </div>
                                                 <p className="text-sm text-muted-foreground truncate">{token.name}</p>
                                             </div>
@@ -173,12 +173,12 @@ export function TokenListModal({ tokens, selected, onSelect, onClose, isOpen }: 
                                                     {getRate(token.symbol) !== null && (
                                                         <span className="text-xs text-muted-foreground">₦{getRate(token.symbol)!.toLocaleString("en-NG", { maximumFractionDigits: 2 })}</span>
                                                     )}
-                                                    {token.change24h !== undefined && (
+                                                    {/* {token.change24h !== undefined && (
                                                         <span className={`text-xs ${token.change24h >= 0 ? "text-green-500" : "text-red-500"}`}>
                                                             {token.change24h >= 0 ? "+" : ""}
                                                             {token.change24h.toFixed(2)}%
                                                         </span>
-                                                    )}
+                                                    )} */}
                                                 </div>
                                             </div>
                                         </div>
