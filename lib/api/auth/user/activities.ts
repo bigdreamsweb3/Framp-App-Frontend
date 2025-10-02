@@ -46,6 +46,7 @@ export interface ActivityTransaction {
   type: "onramp" | "offramp";
   amount: string;
   currency: string;
+  tokenAmount: string;
   tokenSymbol?: string;
   status: string;
   createdAt: string;
@@ -94,10 +95,10 @@ export async function fetchAllUserActivities() {
 
     const data = await response.json();
     const userInfo = data.user;
-    
+
     // Combine and format onramp and offramp transactions
     const activities: ActivityTransaction[] = [];
-    
+
     // Add onramp transactions
     if (userInfo.recent_onramps) {
       userInfo.recent_onramps.forEach((tx: OnRampTransaction) => {
@@ -106,6 +107,7 @@ export async function fetchAllUserActivities() {
           type: "onramp",
           amount: tx.fiat_amount || tx.amount,
           currency: tx.fiat_currency || tx.currency,
+          tokenAmount: tx.token_amount,
           tokenSymbol: tx.token_symbol,
           status: tx.status,
           createdAt: tx.created_at,
@@ -115,7 +117,7 @@ export async function fetchAllUserActivities() {
         });
       });
     }
-    
+
     // Add offramp transactions
     if (userInfo.recent_offramps) {
       userInfo.recent_offramps.forEach((tx: OffRampTransaction) => {
@@ -124,16 +126,20 @@ export async function fetchAllUserActivities() {
           type: "offramp",
           amount: tx.amount,
           currency: tx.currency,
+          tokenAmount: "",
           status: tx.status,
           createdAt: tx.created_at,
           completedAt: tx.updated_at,
         });
       });
     }
-    
+
     // Sort by creation date (newest first)
-    activities.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    
+    activities.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+
     return activities;
   } catch (error) {
     console.error("Error fetching user activities:", error);
@@ -141,100 +147,108 @@ export async function fetchAllUserActivities() {
   }
 }
 
-export async function fetchUserActivities(params: PaginationParams = {}) {
-  try {
-    const { page = 1, limit = 20 } = params;
-    const offset = (page - 1) * limit;
+// export async function fetchUserActivities(params: PaginationParams = {}) {
+//   try {
+//     const { page = 1, limit = 20 } = params;
+//     const offset = (page - 1) * limit;
 
-    const response = await fetch(`${API_BASE}/api/auth/me?page=${page}&limit=${limit}&offset=${offset}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
-      },
-      credentials: "include", // cookies sent automatically
-    });
+//     const response = await fetch(
+//       `${API_BASE}/api/auth/me?page=${page}&limit=${limit}&offset=${offset}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           "Content-Type": "application/json",
+//           "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
+//         },
+//         credentials: "include", // cookies sent automatically
+//       }
+//     );
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch user activities");
-    }
+//     if (!response.ok) {
+//       throw new Error("Failed to fetch user activities");
+//     }
 
-    const data = await response.json();
-    const userInfo = data.user;
-    
-    // Combine and format onramp and offramp transactions
-    const activities: ActivityTransaction[] = [];
-    
-    // Add onramp transactions
-    if (userInfo.recent_onramps) {
-      userInfo.recent_onramps.forEach((tx: OnRampTransaction) => {
-        activities.push({
-          id: tx.id,
-          type: "onramp",
-          amount: tx.fiat_amount || tx.amount,
-          currency: tx.fiat_currency || tx.currency,
-          tokenSymbol: tx.token_symbol,
-          status: tx.status,
-          createdAt: tx.created_at,
-          completedAt: tx.completed_at,
-          paymentMethod: tx.payment_method,
-          walletAddress: tx.wallet_address,
-        });
-      });
-    }
-    
-    // Add offramp transactions
-    if (userInfo.recent_offramps) {
-      userInfo.recent_offramps.forEach((tx: OffRampTransaction) => {
-        activities.push({
-          id: tx.id,
-          type: "offramp",
-          amount: tx.amount,
-          currency: tx.currency,
-          status: tx.status,
-          createdAt: tx.created_at,
-          completedAt: tx.updated_at,
-        });
-      });
-    }
-    
-    // Sort by creation date (newest first)
-    activities.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    
-    // Calculate pagination info
-    const total = activities.length;
-    const totalPages = Math.ceil(total / limit);
-    const paginatedData = activities.slice(offset, offset + limit);
-    
-    return {
-      data: paginatedData,
-      pagination: {
-        page,
-        limit,
-        total,
-        totalPages,
-        hasNext: page < totalPages,
-        hasPrev: page > 1,
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching user activities:", error);
-    return {
-      data: [],
-      pagination: {
-        page: 1,
-        limit: 20,
-        total: 0,
-        totalPages: 0,
-        hasNext: false,
-        hasPrev: false,
-      },
-    };
-  }
-}
+//     const data = await response.json();
+//     const userInfo = data.user;
+
+//     // Combine and format onramp and offramp transactions
+//     const activities: ActivityTransaction[] = [];
+
+//     // Add onramp transactions
+//     if (userInfo.recent_onramps) {
+//       userInfo.recent_onramps.forEach((tx: OnRampTransaction) => {
+//         activities.push({
+//           id: tx.id,
+//           type: "onramp",
+//           amount: tx.fiat_amount || tx.amount,
+//           currency: tx.fiat_currency || tx.currency,
+//           tokenSymbol: tx.token_symbol,
+//           status: tx.status,
+//           createdAt: tx.created_at,
+//           completedAt: tx.completed_at,
+//           paymentMethod: tx.payment_method,
+//           walletAddress: tx.wallet_address,
+//         });
+//       });
+//     }
+
+//     // Add offramp transactions
+//     if (userInfo.recent_offramps) {
+//       userInfo.recent_offramps.forEach((tx: OffRampTransaction) => {
+//         activities.push({
+//           id: tx.id,
+//           type: "offramp",
+//           amount: tx.amount,
+//           currency: tx.currency,
+//           status: tx.status,
+//           createdAt: tx.created_at,
+//           completedAt: tx.updated_at,
+//         });
+//       });
+//     }
+
+//     // Sort by creation date (newest first)
+//     activities.sort(
+//       (a, b) =>
+//         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+//     );
+
+//     // Calculate pagination info
+//     const total = activities.length;
+//     const totalPages = Math.ceil(total / limit);
+//     const paginatedData = activities.slice(offset, offset + limit);
+
+//     return {
+//       data: paginatedData,
+//       pagination: {
+//         page,
+//         limit,
+//         total,
+//         totalPages,
+//         hasNext: page < totalPages,
+//         hasPrev: page > 1,
+//       },
+//     };
+//   } catch (error) {
+//     console.error("Error fetching user activities:", error);
+//     return {
+//       data: [],
+//       pagination: {
+//         page: 1,
+//         limit: 20,
+//         total: 0,
+//         totalPages: 0,
+//         hasNext: false,
+//         hasPrev: false,
+//       },
+//     };
+//   }
+// }
 
 // Legacy function for backward compatibility
-export async function fetchUserOnRampTxHistory() {
-  const response = await fetchUserActivities();
-  return response.data.filter((activity: ActivityTransaction) => activity.type === "onramp");
-}
+// export async function fetchUserOnRampTxHistory() {
+//   const response = await fetchUserActivities();
+//   return response.data.filter(
+//     (activity: ActivityTransaction) => activity.type === "onramp"
+//   );
+// }

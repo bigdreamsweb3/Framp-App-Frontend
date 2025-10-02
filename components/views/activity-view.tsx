@@ -37,8 +37,9 @@ import {
 const ITEMS_PER_PAGE = 10;
 
 export function ActivityView() {
-  const { user, loading: authLoading } = useAuth();
-  const [activities, setActivities] = useState<ActivityTransaction[]>([]);
+  const { user, loading: authLoading } = useAuth()
+  const [activities, setActivities] = useState<ActivityTransaction[]>([])
+  const [selectedActivity, setSelectedActivity] = useState<ActivityTransaction | null>(null)
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -225,53 +226,54 @@ export function ActivityView() {
   }
 
   return (
-    <Card className="w-full max-w-4xl mx-auto bg-card/50 backdrop-blur-sm border-border/50">
-      <CardHeader>
-        <CardTitle className="text-lg flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <Activity className="w-5 h-5 text-primary" />
-            <h2 className="text-lg font-semibold">Activities</h2>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleRefresh}
-            className="rounded-xl h-8 w-8 p-0 sm:h-9 sm:w-auto sm:px-3"
-            aria-label="Refresh activities"
-          >
-            <RefreshCw className="h-4 w-4 sm:mr-2" />
-            <span className="hidden sm:inline">Refresh</span>
-          </Button>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-0">
-        <div className="p-4 space-y-4">
-          <div className="flex flex-col gap-3">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search transactions..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9 rounded-xl text-sm"
-                aria-label="Search transactions"
-              />
+    <>
+      <Card className="w-full max-w-4xl mx-auto bg-card/50 backdrop-blur-sm border-border/50">
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Activity className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-semibold">Activities</h2>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full sm:w-[180px] rounded-xl">
-                  <SelectValue placeholder="Filter by status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Status</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="processing">Processing</SelectItem>
-                  <SelectItem value="failed">Failed</SelectItem>
-                  <SelectItem value="cancelled">Cancelled</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={typeFilter} onValueChange={setTypeFilter}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleRefresh}
+              className="rounded-xl h-8 w-8 p-0 sm:h-9 sm:w-auto sm:px-3"
+              aria-label="Refresh activities"
+            >
+              <RefreshCw className="h-4 w-4 sm:mr-2" />
+              <span className="hidden sm:inline">Refresh</span>
+            </Button>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="p-4 space-y-4">
+            <div className="flex flex-col gap-3">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search transactions..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-9 rounded-xl text-sm"
+                  aria-label="Search transactions"
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-full sm:w-[180px] rounded-xl">
+                    <SelectValue placeholder="Filter by status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="completed">Completed</SelectItem>
+                    <SelectItem value="pending">Pending</SelectItem>
+                    <SelectItem value="processing">Processing</SelectItem>
+                    <SelectItem value="failed">Failed</SelectItem>
+                    <SelectItem value="cancelled">Cancelled</SelectItem>
+                  </SelectContent>
+                </Select>
+                {/* <Select value={typeFilter} onValueChange={setTypeFilter}>
                 <SelectTrigger className="w-full sm:w-[180px] rounded-xl">
                   <SelectValue placeholder="Filter by type" />
                 </SelectTrigger>
@@ -280,131 +282,151 @@ export function ActivityView() {
                   <SelectItem value="onramp">Onramp</SelectItem>
                   <SelectItem value="offramp">Offramp</SelectItem>
                 </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          {filteredActivities.length === 0 ? (
-            <div className="p-4 text-center bg-muted/30 rounded-xl border border-border/50">
-              <Activity className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2 text-foreground">
-                No transactions found
-              </h3>
-              <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                {activities.length === 0
-                  ? "You haven't made any transactions yet."
-                  : "No transactions match your current filters."}
-              </p>
-            </div>
-          ) : (
-            <>
-              <div className="w-full">
-                <div className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm border-border/50 rounded-xl h-auto">
-                  <div
-                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs py-2"
-                    aria-label="Show all transactions"
-                  >
-                    <span className="sm:inline">All </span>(
-                    {filteredActivities.length})
-                  </div>
-                </div>
-
-                <div className="space-y-4 mt-4">
-                  {paginatedActivities.map((activity) => (
-                    <TransactionCard key={activity.id} activity={activity} />
-                  ))}
-                </div>
+              </Select> */}
               </div>
+            </div>
 
-              {totalPages > 1 && (
-                <div className="p-4 bg-muted/30 rounded-xl border border-border/50">
-                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <p className="text-xs text-muted-foreground">
-                      Showing {startIndex + 1} to{" "}
-                      {Math.min(endIndex, filteredActivities.length)} of{" "}
-                      {filteredActivities.length} transactions
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                          setCurrentPage((prev) => Math.max(prev - 1, 1))
-                        }
-                        disabled={currentPage === 1}
-                        className="rounded-xl h-8 w-8 p-0"
-                        aria-label="Previous page"
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                      </Button>
-                      <div className="flex items-center gap-1">
-                        {Array.from(
-                          { length: Math.min(5, totalPages) },
-                          (_, i) => {
-                            let pageNum;
-                            if (totalPages <= 5) {
-                              pageNum = i + 1;
-                            } else if (currentPage <= 3) {
-                              pageNum = i + 1;
-                            } else if (currentPage >= totalPages - 2) {
-                              pageNum = totalPages - 4 + i;
-                            } else {
-                              pageNum = currentPage - 2 + i;
-                            }
-                            return (
-                              <Button
-                                key={pageNum}
-                                variant={
-                                  currentPage === pageNum
-                                    ? "default"
-                                    : "outline"
-                                }
-                                size="sm"
-                                onClick={() => setCurrentPage(pageNum)}
-                                className="rounded-xl h-8 w-8 p-0 text-xs"
-                                aria-label={`Go to page ${pageNum}`}
-                              >
-                                {pageNum}
-                              </Button>
-                            );
-                          }
-                        )}
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() =>
-                          setCurrentPage((prev) =>
-                            Math.min(prev + 1, totalPages)
-                          )
-                        }
-                        disabled={currentPage === totalPages}
-                        className="rounded-xl h-8 w-8 p-0"
-                        aria-label="Next page"
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </Button>
+            {filteredActivities.length === 0 ? (
+              <div className="p-4 text-center bg-muted/30 rounded-xl border border-border/50">
+                <Activity className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-semibold mb-2 text-foreground">
+                  No transactions found
+                </h3>
+                <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                  {activities.length === 0
+                    ? "You haven't made any transactions yet."
+                    : "No transactions match your current filters."}
+                </p>
+              </div>
+            ) : (
+              <>
+                <div className="w-full">
+                  <div className="grid w-full grid-cols-3 bg-card/50 backdrop-blur-sm border-border/50 rounded-xl h-auto">
+                    <div
+                      className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground text-xs py-2"
+                      aria-label="Show all transactions"
+                    >
+                      <span className="sm:inline">All </span>(
+                      {filteredActivities.length})
                     </div>
                   </div>
+
+                  <div className="space-y-4 mt-4">
+                    {paginatedActivities.map((activity) => (
+                      <TransactionCard
+                        key={activity.id}
+                        activity={activity}
+                        onClick={setSelectedActivity}
+                      />
+                    ))}
+                  </div>
                 </div>
-              )}
-            </>
-          )}
-          {/* Security Notice */}
-          <div className="mt-4 p-4 bg-muted/20 rounded-xl border border-border/30">
-            <h5 className="font-medium text-sm mb-2">Security Notice</h5>
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              Your transaction history is securely stored and encrypted. We
-              prioritize your privacy and data protection.
-            </p>
+
+                {totalPages > 1 && (
+                  <div className="p-4 bg-muted/30 rounded-xl border border-border/50">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                      <p className="text-xs text-muted-foreground">
+                        Showing {startIndex + 1} to{" "}
+                        {Math.min(endIndex, filteredActivities.length)} of{" "}
+                        {filteredActivities.length} transactions
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            setCurrentPage((prev) => Math.max(prev - 1, 1))
+                          }
+                          disabled={currentPage === 1}
+                          className="rounded-xl h-8 w-8 p-0"
+                          aria-label="Previous page"
+                        >
+                          <ChevronLeft className="h-4 w-4" />
+                        </Button>
+                        <div className="flex items-center gap-1">
+                          {Array.from(
+                            { length: Math.min(5, totalPages) },
+                            (_, i) => {
+                              let pageNum;
+                              if (totalPages <= 5) {
+                                pageNum = i + 1;
+                              } else if (currentPage <= 3) {
+                                pageNum = i + 1;
+                              } else if (currentPage >= totalPages - 2) {
+                                pageNum = totalPages - 4 + i;
+                              } else {
+                                pageNum = currentPage - 2 + i;
+                              }
+                              return (
+                                <Button
+                                  key={pageNum}
+                                  variant={
+                                    currentPage === pageNum
+                                      ? "default"
+                                      : "outline"
+                                  }
+                                  size="sm"
+                                  onClick={() => setCurrentPage(pageNum)}
+                                  className="rounded-xl h-8 w-8 p-0 text-xs"
+                                  aria-label={`Go to page ${pageNum}`}
+                                >
+                                  {pageNum}
+                                </Button>
+                              );
+                            }
+                          )}
+                        </div>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            setCurrentPage((prev) =>
+                              Math.min(prev + 1, totalPages)
+                            )
+                          }
+                          disabled={currentPage === totalPages}
+                          className="rounded-xl h-8 w-8 p-0"
+                          aria-label="Next page"
+                        >
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+        {selectedActivity && (
+          <TransactionDetails
+            activity={selectedActivity}
+            onClose={() => setSelectedActivity(null)}
+          />
+        )}
+      </Card>
+
+      {/* Security Notice */}
+      <div className="mt-4 p-4 bg-muted/20 rounded-xl border border-border/30">
+        <h5 className="font-medium text-sm mb-2">Security Notice</h5>
+        <p className="text-xs text-muted-foreground leading-relaxed">
+          Your transaction history is securely stored and encrypted. We
+          prioritize your privacy and data protection.
+        </p>
+      </div>
+
+    </>
   );
 }
 
-function TransactionCard({ activity }: { activity: ActivityTransaction }) {
+function TransactionCard({
+  activity,
+  onClick,
+}: {
+  activity: ActivityTransaction
+  onClick: (activity: ActivityTransaction) => void
+}) {
   const getStatusIcon = (status: string) => {
     switch (status.toLowerCase()) {
       case "completed":
@@ -455,16 +477,18 @@ function TransactionCard({ activity }: { activity: ActivityTransaction }) {
   };
 
   return (
-    <div className="p-4 bg-muted/30 rounded-xl border border-border/50 hover:bg-muted/50 transition-all">
+    <div
+      className="p-4 bg-muted/30 rounded-xl border border-border/50 hover:bg-muted/50 transition-all cursor-pointer"
+      onClick={() => onClick(activity)}
+    >
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center space-x-3 flex-1 min-w-0">
           <div className="flex-shrink-0">
             <div
-              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
-                activity.type === "onramp"
-                  ? "bg-green-50 hover:bg-green-100"
-                  : "bg-blue-50 hover:bg-blue-100"
-              }`}
+              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${activity.type === "onramp"
+                ? "bg-green-50 hover:bg-green-100"
+                : "bg-blue-50 hover:bg-blue-100"
+                }`}
             >
               {activity.type === "onramp" ? (
                 <ArrowUpCircle className="h-5 w-5 text-green-600" />
@@ -488,19 +512,8 @@ function TransactionCard({ activity }: { activity: ActivityTransaction }) {
             </div>
             <p className="text-xs text-muted-foreground mb-1">
               {formatDate(activity.createdAt)}
-              {activity.paymentMethod && (
-                <span className="text-primary">
-                  {" "}
-                  • {activity.paymentMethod}
-                </span>
-              )}
+
             </p>
-            {activity.walletAddress && (
-              <p className="text-xs text-muted-foreground font-mono bg-muted/50 px-2 py-1 rounded-md w-fit">
-                {activity.walletAddress.slice(0, 6)}...
-                {activity.walletAddress.slice(-4)}
-              </p>
-            )}
           </div>
         </div>
         <div className="flex flex-col items-end space-y-1 flex-shrink-0">
@@ -518,3 +531,119 @@ function TransactionCard({ activity }: { activity: ActivityTransaction }) {
     </div>
   );
 }
+
+
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"
+
+
+function TransactionDetails({
+  activity,
+  onClose,
+}: {
+  activity: ActivityTransaction
+  onClose: () => void
+}) {
+  if (!activity) return null
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    })
+  }
+
+  // Example: compute hours difference (createdAt -> confirmedAt)
+  const getProcessingTime = () => {
+    if (!activity.completedAt) return "Pending"
+    const created = new Date(activity.createdAt).getTime()
+    const confirmed = new Date(activity.completedAt).getTime()
+    const diffHours = (confirmed - created) / (1000 * 60 * 60)
+    return `${diffHours.toFixed(2)} hours`
+  }
+
+  return (
+    <Dialog open={!!activity} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-lg rounded-xl">
+        <DialogHeader>
+          <DialogTitle className="text-lg font-semibold">
+            Transaction Details
+          </DialogTitle>
+          <DialogDescription>
+            Full breakdown of this transaction
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-3 text-sm">
+          <div className="flex justify-between py-2">
+            <span className="font-medium">Receipt ID</span>
+            <span className="text-gray-500 text-xs">
+              #{activity.id?.slice(0, 8) || "XXXXXX"}
+            </span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="font-medium">Type:</span>
+            <span>{activity.type === "onramp" ? "Onramp" : "Offramp"}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-medium">Amount:</span>
+            <span>
+              {activity.amount} {activity.currency}
+            </span>
+          </div>
+          {activity.tokenSymbol && (
+            <div className="flex justify-between">
+              <span className="font-medium">Token:</span>
+              <span>{activity.tokenAmount} {activity.tokenSymbol}</span>
+            </div>
+          )}
+          <div className="flex justify-between">
+            <span className="font-medium">Wallet Address:</span>
+            <span className="truncate max-w-[200px]">
+              {activity.walletAddress || "N/A"}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-medium">Created At:</span>
+            <span>{formatDate(activity.createdAt)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-medium">Confirmed At:</span>
+            <span>
+              {activity.completedAt ? formatDate(activity.completedAt) : "Pending"}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-medium">Processing Time:</span>
+            <span>{getProcessingTime()}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-medium">Status:</span>
+            <span className="capitalize">{activity.status}</span>
+          </div>
+
+
+        </div>
+
+        <DialogFooter>
+          <Button onClick={onClose} className="rounded-xl">
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
