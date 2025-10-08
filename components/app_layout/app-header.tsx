@@ -138,7 +138,7 @@ export function AppHeader({
 
           {/* User Actions */}
           {loading ? (
-            <div className="h-8 w-16 bg-muted animate-pulse rounded-xl" />
+            <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
           ) : !user ? (
             <Button
               onClick={onAuthClick}
