@@ -54,6 +54,7 @@ const CRYPTO_TOKENS = [
     name: "Solana",
     label: "Solana",
     icon: "/icons/sol.svg",
+    tokenAddress: "So11111111111111111111111111111111111111112",
     // isFavorite: true,
     isPopular: false,
   },
@@ -63,6 +64,7 @@ const CRYPTO_TOKENS = [
     name: "USD Coin",
     label: "Circle USD",
     icon: "/icons/usdc.svg",
+    tokenAddress: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
     isPopular: true,
   },
 
@@ -71,9 +73,9 @@ const CRYPTO_TOKENS = [
     name: "Tether USD",
     label: "Tether USD",
     icon: "/icons/usdt.svg",
+    tokenAddress: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB",
     isPopular: true,
   },
-
 ];
 
 interface OnRampInterfaceProps {
@@ -89,7 +91,7 @@ interface OnRampInterfaceProps {
     id: string;
     type: "bank" | "wallet";
     name: string;
-    details?: string;
+    details: string;
     accountName: string;
     isDefault: boolean;
     walletAddress?: string;
@@ -203,7 +205,9 @@ export function OnRampInterface({
         tokenSymbol: tokenSymbol,
         tokenAmount: toAmount,
         exchangeRate: exchangeRate?.rate,
-        tokenMint: "So11111111111111111111111111111111111111112",
+        tokenMint:
+          CRYPTO_TOKENS.find((t) => t.symbol === tokenSymbol)?.tokenAddress ||
+          "",
         walletAddress: walletAddress,
         walletInfo: selectedWallet,
         paymentMethods: selectedPaymentMethod
@@ -328,8 +332,8 @@ export function OnRampInterface({
                   <div className="text-2xl font-bold">
                     {receiving > 0
                       ? receiving.toLocaleString("en-US", {
-                        maximumFractionDigits: 5,
-                      })
+                          maximumFractionDigits: 5,
+                        })
                       : "0.00"}
                   </div>
                   <Button
@@ -427,7 +431,7 @@ export function OnRampInterface({
                   </div>
                   <PaymentMethodSelector
                     selectedMethod={selectedPaymentMethod || null}
-                    onMethodSelect={onPaymentMethodSelect || (() => { })}
+                    onMethodSelect={onPaymentMethodSelect || (() => {})}
                     disabled={loading}
                   />
                 </div>
@@ -449,12 +453,12 @@ export function OnRampInterface({
                 {loading
                   ? "Processing..."
                   : !fromAmount
-                    ? "Enter amount"
-                    : !selectedWallet
-                      ? "Select wallet"
-                      : !selectedPaymentMethod
-                        ? "Select payment method"
-                        : `Buy ${tokenSymbol}`}
+                  ? "Enter amount"
+                  : !selectedWallet
+                  ? "Select wallet"
+                  : !selectedPaymentMethod
+                  ? "Select payment method"
+                  : `Buy ${tokenSymbol}`}
               </Button>
             </div>
           </CardContent>
