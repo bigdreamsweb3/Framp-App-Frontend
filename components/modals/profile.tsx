@@ -31,20 +31,19 @@ export function Profile({ onQuickAction }: ProfileProps) {
 
   useEffect(() => {
     if (user) {
-      const u = user as any;
       setUserProfile({
-        name: u?.user?.name || "User",
-        email: u?.user?.email || "Not set",
-        wallet: u?.user?.wallet || "Not connected",
-        accountNumber: u?.user?.accountNumber || "****1234",
-        tier: u?.user?.tier || "Standard",
-        joinDate: u?.user?.created_at
-          ? new Date(u.user.created_at).toLocaleDateString("en-US", {
+        name: user.name || "User",
+        email: user.email || "Not set",
+        wallet: user.wallet_address || "Not connected",
+        accountNumber: user.accountNumber || "****1234",
+        tier: user.tier || "Standard",
+        joinDate: user.created_at
+          ? new Date(user.created_at).toLocaleDateString("en-US", {
             month: "long",
             year: "numeric",
           })
           : "Unknown",
-        stats: u?.user?.stats || {
+        stats: user.stats || {
           total_transactions: 0,
           total_volume_usd: 0,
           portfolio_value: 0,

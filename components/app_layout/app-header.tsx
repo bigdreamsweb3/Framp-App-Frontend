@@ -33,7 +33,7 @@ export function AppHeader({
   const [mobileOpen, setMobileOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
 
-  const { user, logout } = useAuth();
+  const { user, loading, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -137,7 +137,9 @@ export function AppHeader({
           <ThemeToggle />
 
           {/* User Actions */}
-          {!user ? (
+          {loading ? (
+            <div className="h-8 w-16 bg-muted animate-pulse rounded-xl" />
+          ) : !user ? (
             <Button
               onClick={onAuthClick}
               variant="default"
@@ -206,7 +208,7 @@ export function AppHeader({
               <HelpCircle size={18} />
               Help
             </Link>
-            {!user && (
+            {!loading && !user && (
               <Button
                 onClick={() => {
                   setMobileOpen(false);

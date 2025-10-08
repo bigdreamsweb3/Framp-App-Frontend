@@ -12,6 +12,14 @@ type User = {
   email: string;
   name?: string;
   wallet_address?: string;
+  accountNumber?: string;
+  tier?: string;
+  created_at?: string;
+  stats?: {
+    total_transactions: number;
+    total_volume_usd: number;
+    portfolio_value: number;
+  };
 };
 
 type AuthContextType = {
@@ -51,13 +59,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function handleLogin(email: string, password: string) {
-    const res = await login(email, password);
-    setUser(res.user);
+    try {
+      setLoading(true);
+      const res = await login(email, password);
+      if (res.user) {
+        setUser(res.user);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleSignup(email: string, password: string, name?: string, wallet?: string) {
-    const res = await signup(email, password, name, wallet);
-    if (res.user) setUser(res.user);
+    try {
+      setLoading(true);
+      const res = await signup(email, password, name, wallet);
+      if (res.user) {
+        setUser(res.user);
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleLogout() {
