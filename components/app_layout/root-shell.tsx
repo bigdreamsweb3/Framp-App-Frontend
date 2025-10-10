@@ -268,7 +268,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             </div >
 
             {/* Floating AI Chat Button */}
-            <motion.button
+            {/* <motion.button
                 className="fixed bottom-4 right-4 bg-primary text-primary-foreground rounded-full h-10 w-10 flex items-center justify-center shadow-lg hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:border-ring outline-none transition-all lg:bottom-6 lg:right-6"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
@@ -279,7 +279,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                 data-tour="chat-button"
             >
                 <MessageCircle className="h-5 w-5" />
-            </motion.button>
+            </motion.button> */}
 
             {/* Chat overlay */}
             {showChat && (

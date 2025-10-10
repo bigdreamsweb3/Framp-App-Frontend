@@ -15,10 +15,10 @@ export default function WalletPage() {
 
 	return (
 		<div className="space-y-4">
-			<div className="px-2">
+			{/* <div className="px-2">
 				<h1 className="text-lg font-semibold">Wallets</h1>
 				<p className="text-sm text-muted-foreground">Manage connected wallets and payment methods here.</p>
-			</div>
+			</div> */}
 			<WalletView
 				onWalletSelect={setSelectedWallet}
 				selectedWallet={selectedWallet}
