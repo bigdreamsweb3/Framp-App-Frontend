@@ -15,6 +15,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { HelpCircle, Menu, User, X, Activity as ActivityIcon } from "lucide-react";
 
+import {
+  ArrowUpCircle,
+  QrCode,
+  PiggyBank,
+  Wallet as WalletIcon,
+} from "lucide-react"
+
 interface AppHeaderProps {
   onAuthClick?: () => void;
   chatActive?: boolean;
@@ -215,16 +222,73 @@ export function AppHeader({
             exit={{ height: 0, opacity: 0 }}
             className="md:hidden bg-background border-t border-border/20 px-4 py-3 flex flex-col gap-3"
           >
-            <Link
-              href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
-              onClick={() => setMobileOpen(false)}
-            >
-              <HelpCircle size={18} />
-              Help
-            </Link>
+            <div>
+              <Link
+                href="/"
+                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+                onClick={() => setMobileOpen(false)}
+              >
+                <ArrowUpCircle size={18} />
+                Gate
+              </Link>
+            </div>
+            <div>
+              <Link
+                href="/bills"
+                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+                onClick={() => setMobileOpen(false)}
+              >
+                <QrCode size={18} />
+                Bills
+              </Link>
+            </div>
+            <div>
+              <Link
+                href="/save"
+                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+                onClick={() => setMobileOpen(false)}
+              >
+                <PiggyBank size={18} />
+                Save
+              </Link>
+            </div>
+
+
+            <div>
+              <Link
+                href="/wallets"
+                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+                onClick={() => setMobileOpen(false)}
+              >
+                <User size={18} />
+                Wallets
+              </Link>
+            </div>
+
+
+            <div>
+              <Link
+                href="/activity"
+                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+                onClick={() => setMobileOpen(false)}
+              >
+                <ActivityIcon size={18} />
+                Activity
+              </Link>
+            </div>
+
+            <div>
+              <Link
+                href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+                onClick={() => setMobileOpen(false)}
+              >
+                <HelpCircle size={18} />
+                Help
+              </Link>
+            </div>
             {!loading && !user && (
               <Button
                 onClick={() => {
