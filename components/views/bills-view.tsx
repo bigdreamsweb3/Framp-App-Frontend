@@ -8,12 +8,12 @@ export function BillsView() {
   return (
     <div className="flex flex-col gap-4">
       <Card className="w-full max-w-4xl mx-auto bg-card/50 backdrop-blur-sm border-border/50">
-        <CardHeader>
+        {/* <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <QrCode className="w-5 h-5 text-primary" />
             <h2 className="text-lg font-semibold">Bills</h2>
           </CardTitle>
-        </CardHeader>
+        </CardHeader> */}
         <CardContent className="p-0 flex-1">
           <div className="text-center py-8">
             <QrCode className="h-12 w-12 text-muted-foreground mx-auto mb-4" />

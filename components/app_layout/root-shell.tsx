@@ -139,7 +139,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                             className="w-full justify-start gap-2 rounded-xl"
                                             variant={pathname === "/save" ? "default" : "ghost"}
                                         >
-                                            <PiggyBank className="h-4 w-4 text-emerald-500" />
+                                            <PiggyBank className="h-4 w-4" />
                                             Save
                                         </Button>
                                     </Link>
@@ -224,7 +224,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                     value="save"
                                     className={activeView === "save" ? "text-primary" : "text-muted-foreground text-xs"}
                                 >
-                                    <PiggyBank className="h-4 w-4 text-emerald-500" />
+                                    <PiggyBank className="h-4 w-4" />
                                     Save
                                 </TabsTrigger>
 

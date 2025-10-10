@@ -152,7 +152,7 @@ export function AppHeader({
 
 
           {/* User Actions */}
-          <div className="md:hidden">
+          <div className="">
             {loading ? (
               <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
             ) : !user ? (
