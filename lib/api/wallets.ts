@@ -46,7 +46,17 @@ export class WalletAPI {
     });
 
     if (!response.ok) {
-      throw new Error("Failed to fetch wallets");
+      const status = response.status;
+      let message = "Failed to fetch wallets";
+      try {
+        const body = await response.json();
+        if (body?.error) message = body.error;
+      } catch (e) {
+        // ignore parse errors
+      }
+      const err: any = new Error(message);
+      err.status = status;
+      throw err;
     }
 
     return response.json();

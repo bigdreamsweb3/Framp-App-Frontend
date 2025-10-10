@@ -7,27 +7,29 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Wallet, Plus, Trash2, Copy, Check } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { useUI } from "@/context/UIContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { WalletAPI } from "@/lib/api/wallets";
 
 import type { WalletMethod } from "@/types/wallet";
 
 interface WalletViewProps {
-  isLoggedIn: boolean;
-  onLogin: () => void;
+  // isLoggedIn: boolean;
+  // onLogin: () => void;
+  onLogin?: () => void;
   onWalletSelect?: (wallet: WalletMethod) => void;
   selectedWallet?: WalletMethod | null;
   onClose?: () => void;
 }
 
 export function WalletView({
-  isLoggedIn,
-  onLogin,
   onWalletSelect,
   selectedWallet,
   onClose,
+  onLogin,
 }: WalletViewProps) {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
+  const ui = useUI();
   const [showAddWallet, setShowAddWallet] = useState(false);
   const [wallets, setWallets] = useState<WalletMethod[]>([]);
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -37,9 +39,20 @@ export function WalletView({
 
   // Fetch wallets from backend API when user is ready
   useEffect(() => {
-    if (!user || !isLoggedIn) {
+    // Wait for auth check to complete before making requests. This avoids
+    // calling protected endpoints while the auth state is still being determined
+    // (which can cause 401s and noisy console errors during initial load).
+    if (authLoading) {
+      // keep the wallets loading indicator until auth resolved
+      setIsLoading(true);
+      return;
+    }
+
+    // If no authenticated user, skip calling protected API and show prompt
+    if (!user) {
       setIsLoading(false);
       setWallets([]);
+      setError(null);
       return;
     }
 
@@ -49,9 +62,16 @@ export function WalletView({
         setError(null);
         const data = await WalletAPI.getWallets();
         setWallets(data);
-      } catch (err) {
+      } catch (err: any) {
         console.error("Failed to fetch wallets:", err);
-        setError("Failed to load wallets. Please try again.");
+        // If the backend returned 401/unauthorized, show a friendly message.
+        if (err?.status === 401) {
+          setError("You must sign in to view wallets.");
+        } else if (err?.message?.toLowerCase?.().includes("unauthorized")) {
+          setError("You must sign in to view wallets.");
+        } else {
+          setError("Failed to load wallets. Please try again.");
+        }
         setWallets([]);
       } finally {
         setIsLoading(false);
@@ -59,7 +79,7 @@ export function WalletView({
     };
 
     fetchWallets();
-  }, [user, isLoggedIn]);
+  }, [user]);
 
   // Add new wallet function - FIXED
   const handleAddWallet = async () => {
@@ -173,7 +193,7 @@ export function WalletView({
             <Wallet className="w-5 h-5 text-primary" />
             <h2 className="text-lg font-semibold">Wallets</h2>
           </div>
-          {isLoggedIn && (
+          {user && (
             <Button
               variant="outline"
               size="sm"
@@ -193,18 +213,18 @@ export function WalletView({
           </div>
         )}
 
-        {!isLoggedIn ? (
+        {!user ? (
           <div className="text-center py-8">
             <Wallet className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2 text-foreground">
-              Please log in to manage wallets
+              Please sign in to manage wallets
             </h3>
-            {/* <p className="text-sm text-muted-foreground mb-4">
-             
-            </p> */}
-            <Button onClick={onLogin} className="rounded-xl bg-primary">
-              Log In or Sign Up
-            </Button>
+            <p className="text-sm text-muted-foreground mb-4">Sign in to view and manage your saved wallets and payment methods.</p>
+            <div className="flex items-center justify-center gap-2">
+              <Button onClick={() => { onLogin?.(); ui.openAuth?.(); }} className="rounded-xl bg-primary">
+                Sign in
+              </Button>
+            </div>
           </div>
         ) : showAddWallet ? (
           <div className="space-y-3">

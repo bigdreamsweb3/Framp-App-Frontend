@@ -12,7 +12,8 @@ import { useAuth } from "@/context/AuthContext";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 import Link from "next/link";
-import { HelpCircle, Menu, User, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { HelpCircle, Menu, User, X, Activity as ActivityIcon } from "lucide-react";
 
 interface AppHeaderProps {
   onAuthClick?: () => void;
@@ -29,6 +30,7 @@ export function AppHeader({
   profileActive,
   onProfileToggle,
 }: AppHeaderProps) {
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -84,13 +86,13 @@ export function AppHeader({
   return (
     <header
       ref={headerRef}
-      className={`sticky top-0 z-50 w-full border-b border-border/20 bg-gradient-to-b from-background/95 to-background/80 backdrop-blur-lg transition-all duration-500 ease-out h-14
-        ${scrolled ? "shadow-md" : "shadow-sm"}`}
+      className={`sticky top-0 z-50 w-full bg-gradient-to-b from-background/95 to-background/80 backdrop-blur-lg transition-all duration-500 ease-out h-14
+        ${scrolled ? "shadow-md" : "shadow-none"}`}
       data-tour="security"
     >
-      <div className="w-full h-full pl-0 pr-4 flex items-center justify-between">
+      <div className="w-full h-full pl-0 pr-4 flex items-center justify-between md:justify-end">
         {/* Logo Section */}
-        <div className="flex items-center gap-0">
+        <div className="flex items-center gap-0 md:hidden">
           <div className="flex items-center gap-0">
             <div className="relative flex items-center">
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-primary/30 to-primary/5 blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
@@ -118,74 +120,89 @@ export function AppHeader({
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Activity quick access */}
+          {/* <button
+            onClick={() => router.push('/activity')}
+            aria-label="Open Activity"
+            className="hidden md:inline-flex p-2 rounded-lg hover:bg-primary/10 transition"
+          >
+            <ActivityIcon size={18} />
+          </button> */}
           {/* Desktop Navigation and Actions */}
-          <nav className="hidden md:flex items-center gap-6">
-            <Link
-              href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200"
-            >
-              <span className="flex items-center gap-0.5">
-                <HelpCircle size={18} />
-                Help
-              </span>
-            </Link>
-          </nav>
+          <div className="md:pl-3">
+            <nav className="hidden md:flex items-center gap-6">
+              <Link
+                href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200"
+              >
+                <span className="flex items-center gap-0.5">
+                  <HelpCircle size={18} />
+                  Help
+                </span>
+              </Link>
+            </nav>
+          </div>
 
           {/* Theme Toggle */}
-          <ThemeToggle />
+          <div className="md:hidden">
+            <ThemeToggle />
+          </div>
+
 
           {/* User Actions */}
-          {loading ? (
-            <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
-          ) : !user ? (
-            <Button
-              onClick={onAuthClick}
-              variant="default"
-              size="sm"
-              className="h-8 px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-200"
-              aria-label="Sign in or sign up"
-            >
-              Sign in
-            </Button>
-          ) : (
-            <Button
-              variant="ghost"
-              aria-pressed={profileActive}
-              aria-label={profileActive ? "Hide Profile" : "Show Profile"}
-              onClick={onProfileToggle}
-              className={`relative inline-flex items-center justify-center w-8 h-8 md:w-10 md:h-10 overflow-hidden rounded-full transition-all duration-300 ease-out transform hover:scale-105 active:scale-95 ${profileActive
-                ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
-                : "bg-gradient-to-br from-primary/20 to-primary/10 hover:from-primary/30 hover:to-primary/20 hover:shadow-md border border-primary/20 hover:border-primary/40"
-                }`}
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300" />
-              <svg
-                className={`relative w-6 h-6 md:w-8 md:h-8 transition-colors duration-300 ${profileActive
-                  ? "text-white"
-                  : "text-primary hover:text-primary/80"
-                  }`}
-                fill="currentColor"
-                viewBox="0 0 20 20"
-                xmlns="http://www.w3.org/2000/svg"
+          <div className="md:hidden">
+            {loading ? (
+              <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
+            ) : !user ? (
+              <Button
+                onClick={onAuthClick}
+                variant="default"
+                size="sm"
+                className="h-8 px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-200"
+                aria-label="Sign in or sign up"
               >
-                <path
-                  fillRule="evenodd"
-                  d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              {profileActive && (
-                <motion.div
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0, opacity: 0 }}
-                  className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background"
-                />
-              )}
-            </Button>
-          )}
+                Sign in
+              </Button>
+            ) : (
+              <Button
+                variant="ghost"
+                aria-pressed={profileActive}
+                aria-label={profileActive ? "Hide Profile" : "Show Profile"}
+                onClick={onProfileToggle}
+                className={`relative inline-flex items-center justify-center w-8 h-8 md:w-10 md:h-10 overflow-hidden rounded-full transition-all duration-300 ease-out transform hover:scale-105 active:scale-95 ${profileActive
+                  ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
+                  : "bg-gradient-to-br from-primary/20 to-primary/10 hover:from-primary/30 hover:to-primary/20 hover:shadow-md border border-primary/20 hover:border-primary/40"
+                  }`}
+              >
+                <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300" />
+                <svg
+                  className={`relative w-6 h-6 md:w-8 md:h-8 transition-colors duration-300 ${profileActive
+                    ? "text-white"
+                    : "text-primary hover:text-primary/80"
+                    }`}
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                {profileActive && (
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background"
+                  />
+                )}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 

@@ -234,16 +234,16 @@ export function OnRampInterface({
     <div className="flex-1 mx-auto max-w-md">
       <div className="flex flex-col gap-4">
         <Card
-          className="bg-card/50 backdrop-blur-sm border-border/50"
+          className="bg-card/50 backdrop-blur-sm"
           data-tour="onramp-card"
         >
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Send className="w-5 h-5 text-primary" />
-                <h2 className="text-lg font-semibold">Buy</h2>
+                <h2 className="text-lg font-semibold">On-Ramp (Buy)</h2>
               </div>
-              <Button
+              {/* <Button
                 variant="ghost"
                 size="sm"
                 className="h-8 w-8 p-0 rounded-full"
@@ -251,7 +251,7 @@ export function OnRampInterface({
                 aria-label="Open settings"
               >
                 <Settings className="h-4 w-4" />
-              </Button>
+              </Button> */}
             </CardTitle>
             <CardDescription className="text-xs text-muted-foreground">
               {selectedWallet
@@ -332,8 +332,8 @@ export function OnRampInterface({
                   <div className="text-2xl font-bold">
                     {receiving > 0
                       ? receiving.toLocaleString("en-US", {
-                          maximumFractionDigits: 5,
-                        })
+                        maximumFractionDigits: 5,
+                      })
                       : "0.00"}
                   </div>
                   <Button
@@ -431,7 +431,7 @@ export function OnRampInterface({
                   </div>
                   <PaymentMethodSelector
                     selectedMethod={selectedPaymentMethod || null}
-                    onMethodSelect={onPaymentMethodSelect || (() => {})}
+                    onMethodSelect={onPaymentMethodSelect || (() => { })}
                     disabled={loading}
                   />
                 </div>
@@ -453,12 +453,12 @@ export function OnRampInterface({
                 {loading
                   ? "Processing..."
                   : !fromAmount
-                  ? "Enter amount"
-                  : !selectedWallet
-                  ? "Select wallet"
-                  : !selectedPaymentMethod
-                  ? "Select payment method"
-                  : `Buy ${tokenSymbol}`}
+                    ? "Enter amount"
+                    : !selectedWallet
+                      ? "Select wallet"
+                      : !selectedPaymentMethod
+                        ? "Select payment method"
+                        : `Buy ${tokenSymbol}`}
               </Button>
             </div>
           </CardContent>
