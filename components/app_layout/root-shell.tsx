@@ -33,7 +33,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
         else if (pathname === "/bills") setActiveView("bills")
         else if (pathname === "/save") setActiveView("save")
         else if (pathname === "/activity") setActiveView("activity")
-        else if (pathname.startsWith("/wallet")) setActiveView("wallet")
+        else if (pathname.startsWith("/wallets")) setActiveView("wallets")
     }, [pathname])
 
     const handleTabChange = (value: string) => {
@@ -51,8 +51,8 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             case "activity":
                 router.push("/activity")
                 break
-            case "wallet":
-                router.push("/wallet")
+            case "wallets":
+                router.push("/wallets")
                 break
             default:
                 router.push("/")
@@ -102,7 +102,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                             variant={pathname === "/" ? "default" : "ghost"}
                                         >
                                             <ArrowUpCircle className="h-4 w-4" />
-                                            Ramp
+                                            Gate
                                         </Button>
                                     </Link>
                                 </div>
@@ -114,7 +114,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                             variant={pathname === "/bills" ? "default" : "ghost"}
                                         >
                                             <QrCode className="h-4 w-4" />
-                                            Pay
+                                            Bills
                                         </Button>
                                     </Link>
                                 </div>
@@ -131,7 +131,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                 </div>
 
                                 <div>
-                                    <Link href="/wallet">
+                                    <Link href="/wallets">
                                         <Button
                                             className="w-full justify-start gap-2 rounded-xl"
                                             variant={pathname?.startsWith("/wallet") ? "default" : "ghost"}
@@ -196,14 +196,14 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                     className={activeView === "onramp" ? "text-primary" : "text-muted-foreground text-xs"}
                                 >
                                     <ArrowUpCircle className="h-4 w-4" />
-                                    Ramp
+                                    Gate
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="bills"
                                     className={activeView === "bills" ? "text-primary" : "text-muted-foreground text-xs"}
                                 >
                                     <QrCode className="h-4 w-4" />
-                                    Pay
+                                    Bills
                                 </TabsTrigger>
                                 <TabsTrigger
                                     value="save"
@@ -214,11 +214,11 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                 </TabsTrigger>
 
                                 <TabsTrigger
-                                    value="wallet"
-                                    className={activeView === "wallet" ? "text-primary" : "text-muted-foreground text-xs"}
+                                    value="wallets"
+                                    className={activeView === "wallets" ? "text-primary" : "text-muted-foreground text-xs"}
                                 >
                                     <WalletIcon className="h-4 w-4" />
-                                    Wallet
+                                    Wallets
                                 </TabsTrigger>
                             </TabsList>
 

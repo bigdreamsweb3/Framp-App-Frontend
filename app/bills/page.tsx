@@ -8,7 +8,7 @@ export default function BillsPage() {
     <div className="space-y-4">
 
       <div className="px-2">
-        <h1 className="text-lg font-semibold">Pay (Bills)</h1>
+        <h1 className="text-lg font-semibold">Pay Bills</h1>
         <p className="text-sm text-muted-foreground">Bills payment features coming soon.</p>
       </div>
 
