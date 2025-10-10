@@ -240,7 +240,7 @@ export function OnRampInterface({
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Send className="w-5 h-5 text-primary" />
+                <ArrowUpCircle className="w-5 h-5 text-primary" />
                 <h2 className="text-lg font-semibold">On-Ramp (Buy)</h2>
               </div>
               {/* <Button
@@ -465,13 +465,13 @@ export function OnRampInterface({
         </Card>
 
         {/* Security Notice */}
-        <div className="p-4 bg-muted/20 rounded-xl border border-border/30">
+        {/* <div className="p-4 bg-muted/20 rounded-xl border border-border/30">
           <h5 className="font-medium text-sm mb-2">Security Notice</h5>
           <p className="text-xs text-muted-foreground leading-relaxed">
             Your transactions are encrypted and secure. We prioritize your
             privacy and never store sensitive payment details.
           </p>
-        </div>
+        </div> */}
       </div>
 
       {showSettings && (

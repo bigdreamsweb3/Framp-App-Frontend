@@ -408,13 +408,13 @@ export function ActivityView() {
       </Card>
 
       {/* Security Notice */}
-      <div className="mt-4 p-4 bg-muted/20 rounded-xl border border-border/30">
+      {/* <div className="mt-4 p-4 bg-muted/20 rounded-xl border border-border/30">
         <h5 className="font-medium text-sm mb-2">Security Notice</h5>
         <p className="text-xs text-muted-foreground leading-relaxed">
           Your transaction history is securely stored and encrypted. We
           prioritize your privacy and data protection.
         </p>
-      </div>
+      </div> */}
 
     </>
   );
