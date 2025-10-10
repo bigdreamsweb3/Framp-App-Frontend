@@ -13,6 +13,9 @@ import {
     Activity as ActivityIcon,
 } from "lucide-react"
 import { AppHeader } from "./app-header"
+import { motion } from "framer-motion"
+import { MessageCircle, X } from "lucide-react"
+import { AIChat } from "@/components/ai-chat"
 import { AuthPage } from "@/components/auth-page"
 import { Profile } from "@/components/modals/profile"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -61,6 +64,18 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
     const handleShowAuth = () => setShowAuth(true)
     const handleHideAuth = () => setShowAuth(false)
+    const handleChatQuickAction = (action: string) => {
+        // close chat and navigate based on intent if obvious
+        setShowChat(false)
+        const a = action?.toLowerCase?.() || ""
+        if (a.includes("wallet") || a.includes("bank") || a.includes("payment")) {
+            router.push("/wallet")
+        } else if (a.includes("activity") || a.includes("history")) {
+            router.push("/activity")
+        } else if (a.includes("buy") || a.includes("ramp") || a.includes("purchase")) {
+            router.push("/")
+        }
+    }
 
     // Register the openAuth handler with the UI context so other components can trigger the global auth modal
     const { setOpenAuth } = useUI();
@@ -252,7 +267,45 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
             </div >
 
-            {/* Auth Modal */}
+            {/* Floating AI Chat Button */}
+            <motion.button
+                className="fixed bottom-4 right-4 bg-primary text-primary-foreground rounded-full h-10 w-10 flex items-center justify-center shadow-lg hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:border-ring outline-none transition-all lg:bottom-6 lg:right-6"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+                onClick={() => setShowChat((s) => !s)}
+                aria-label="Toggle AI Assistant"
+                data-tour="chat-button"
+            >
+                <MessageCircle className="h-5 w-5" />
+            </motion.button>
+
+            {/* Chat overlay */}
+            {showChat && (
+                <div className="fixed inset-0 z-[100] flex justify-end items-end bg-black/70">
+                    <motion.div
+                        className="bg-card/95 backdrop-blur-md w-full h-full p-4 shadow-xl lg:w-[min(90vw,28rem)] lg:h-full"
+                        initial={{ x: "100%" }}
+                        animate={{ x: 0 }}
+                        exit={{ x: "100%" }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                    >
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="absolute top-2 right-2"
+                            onClick={() => setShowChat(false)}
+                            aria-label="Close AI Assistant"
+                        >
+                            <X className="h-5 w-5" />
+                        </Button>
+                        <AIChat onQuickAction={handleChatQuickAction} />
+                    </motion.div>
+                </div>
+            )}
+
+                        {/* Auth Modal */}
             {
                 showAuth && (
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
