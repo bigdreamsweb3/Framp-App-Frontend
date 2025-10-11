@@ -91,7 +91,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             {/* Desktop Layout */}
             <div className="hidden md:flex h-screen overflow-hidden bg-muted backdrop-blur-sm">
                 {/* Sidebar */}
-                <div className="flex flex-col justify-between h-full w-80 border-r bg-muted backdrop-blur-md">
+                <div className="flex flex-col justify-between h-full w-80 border-r bg-card backdrop-blur-md">
                     <div>
                         <SideHeader
                             onAuthClick={handleShowAuth}
