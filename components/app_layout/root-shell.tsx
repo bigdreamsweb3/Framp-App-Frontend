@@ -200,7 +200,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
                 <main className="container mx-auto px-4 py-6 max-w-md pb-24">
                     <div className="flex flex-row items-center gap-2 h-fit mb-6">
-                        <Tabs
+                       {/*   <Tabs
                             value={activeView}
                             onValueChange={handleTabChange}
                             className="w-full flex flex-row"
