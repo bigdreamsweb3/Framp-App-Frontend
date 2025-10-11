@@ -57,8 +57,10 @@
   --secondary-foreground: oklch(0.98 0 0);
   /* Muted colors for dark theme: keep a faint purple direction but make text neutral for legibility */
   /* Dark muted: subtle purple tint (not ash), keep text neutral for contrast */
-  --muted: oklch(15.387% 0.01704 284.216);
-  --muted-foreground: oklch(0.78 0 0);
+  /* --muted: oklch(15.387% 0.01704 284.216);
+  --muted-foreground: oklch(0.78 0 0); */
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
   --accent: oklch(0.2 0.02 280);
   --accent-foreground: oklch(0.98 0 0);
   --destructive: oklch(0.396 0.141 25.723);
