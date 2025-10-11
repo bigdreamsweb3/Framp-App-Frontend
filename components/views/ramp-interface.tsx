@@ -269,11 +269,11 @@ export function RampInterface({
               <div>
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    {rampMode === "onramp" ? (
+                    {/* {rampMode === "onramp" ? (
                       <ArrowUpCircle className="w-5 h-5 text-primary" />
                     ) : (
                       <ArrowDownCircle className="w-5 h-5 text-primary" />
-                    )}
+                    )} */}
                     {/* <h2 className="text-lg font-semibold flex items-center gap-1">
                       {rampMode === "onramp" ? (
                         <>
