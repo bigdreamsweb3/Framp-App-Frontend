@@ -136,7 +136,7 @@ export function AppHeader({
             <ActivityIcon size={18} />
           </button> */}
           {/* Desktop Navigation and Actions */}
-          <div className="md:pl-3 mr-5">
+          <div className="md:pl-3 mr-2">
             <nav className="hidden md:flex items-center gap-6">
               <Link
                 href="/docs"
@@ -171,7 +171,7 @@ export function AppHeader({
 
 
           {/* User Actions */}
-          <div className="">
+          {/* <div className="">
             {loading ? (
               <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
             ) : !user ? (
@@ -221,7 +221,7 @@ export function AppHeader({
                 )}
               </Button>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
 

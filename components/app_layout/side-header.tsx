@@ -138,7 +138,7 @@ export function SideHeader({
                     <ThemeToggle />
 
                     {/* User Actions */}
-                    {/* {loading ? (
+                    {loading ? (
                         <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
                     ) : !user ? (
                         <Button
@@ -186,7 +186,7 @@ export function SideHeader({
                                 />
                             )}
                         </Button>
-                    )} */}
+                    )}
 
                 </div>
             </div>
