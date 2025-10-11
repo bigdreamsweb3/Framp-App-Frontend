@@ -136,7 +136,7 @@ export function AppHeader({
             <ActivityIcon size={18} />
           </button> */}
           {/* Desktop Navigation and Actions */}
-          <div className="md:pl-3 mr-9">
+          <div className="md:pl-3 mr-5">
             <nav className="hidden md:flex items-center gap-6">
               <Link
                 href="/docs"

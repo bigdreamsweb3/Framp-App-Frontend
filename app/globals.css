@@ -15,9 +15,10 @@
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.85 0.02 280);
   --secondary-foreground: oklch(0.3 0 0);
-  /* Muted colors adjusted to use primary hue (280) so they blend with the theme */
-  --muted: oklch(0.95 0.02 280);
-  --muted-foreground: oklch(0.45 0.02 280);
+  /* Muted colors (light theme): neutral and high-contrast for legibility */
+  /* Muted: subtle purple direction with slight chroma to avoid 'ashy' look */
+  --muted: oklch(0.975 0.005 280);
+  --muted-foreground: oklch(0.46 0.005 280);
   --accent: oklch(0.85 0.02 280);
   --accent-foreground: oklch(0.3 0 0);
   --destructive: oklch(0.577 0.245 27.325);
@@ -54,9 +55,10 @@
   --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.2 0.02 280);
   --secondary-foreground: oklch(0.98 0 0);
-  /* Muted colors adjusted to use primary hue (280) so they blend with the theme */
-  --muted: oklch(0.18 0.02 280);
-  --muted-foreground: oklch(0.72 0.02 280);
+  /* Muted colors for dark theme: keep a faint purple direction but make text neutral for legibility */
+  /* Dark muted: subtle purple tint (not ash), keep text neutral for contrast */
+  --muted: oklch(15.387% 0.01704 284.216);
+  --muted-foreground: oklch(0.78 0 0);
   --accent: oklch(0.2 0.02 280);
   --accent-foreground: oklch(0.98 0 0);
   --destructive: oklch(0.396 0.141 25.723);
