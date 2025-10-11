@@ -1,4 +1,4 @@
-// File: components/on-ramp-interface.tsx
+// File: components/ramp-interface.tsx
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -62,7 +62,7 @@ const CRYPTO_TOKENS = [
   },
 ];
 
-interface OnRampInterfaceProps {
+interface RampInterfaceProps {
   fromAmount: string;
   toAmount: string;
   onFromAmountChange: (value: string) => void;
@@ -87,7 +87,7 @@ interface OnRampInterfaceProps {
   onPaymentMethodSelect?: (method: string) => void;
 }
 
-export function OnRampInterface({
+export function RampInterface({
   fromAmount,
   toAmount,
   onFromAmountChange,
@@ -100,7 +100,7 @@ export function OnRampInterface({
   onWalletSelect,
   selectedPaymentMethod,
   onPaymentMethodSelect,
-}: OnRampInterfaceProps) {
+}: RampInterfaceProps) {
   const [showSettings, setShowSettings] = useState(false);
   const [tokenListOpen, setTokenListOpen] = useState(false);
 

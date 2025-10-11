@@ -12,7 +12,7 @@ import { useAuth } from "@/context/AuthContext";
 
 
 import Link from "next/link";
-import { HelpCircle, Menu, User, X } from "lucide-react";
+import { HelpCircle, Menu, User, X, BookOpen } from "lucide-react";
 
 interface SideHeaderProps {
     onAuthClick?: () => void;
@@ -107,7 +107,20 @@ export function SideHeader({
                 </div>
 
                 <div className="flex items-center justify-between gap-4">
+                    {/* Desktop navigation */}
                     {/* <nav className="hidden md:flex items-center gap-6">
+                        <Link
+                            href="/docs"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200"
+                        >
+                            <span className="flex items-center gap-0.5">
+                                <BookOpen size={18} />
+                                Docs
+                            </span>
+                        </Link>
+
                         <Link
                             href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
                             target="_blank"

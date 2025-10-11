@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Activity, Home, User, Wallet, MessageCircle, ArrowUpCircle, QrCode, History, X } from "lucide-react";
 import { AppHeader } from "@/components/app_layout/app-header";
 import { AIChat } from "@/components/ai-chat";
-import { OnRampInterface } from "@/components/views/on-ramp-interface";
+import { RampInterface } from "@/components/views/ramp-interface";
 import { ActivityView } from "@/components/views/activity-view";
 import { ProfileView } from "@/components/views/profile-view";
 import { WalletView } from "@/components/views/wallet-view";
@@ -119,7 +119,7 @@ export default function FrampOnRamp() {
     switch (activeView) {
       case "onramp":
         return (
-          <OnRampInterface
+          <RampInterface
             fromAmount={fromAmount}
             toAmount={toAmount}
             onFromAmountChange={handleFromAmountChange}

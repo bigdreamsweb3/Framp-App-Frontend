@@ -12,9 +12,9 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://framp-backend.verce
 /**
  * Get exchange rate for a single token from backend API
  */
-export async function getExchangeRate(tokenSymbol: string): Promise<ExchangeRate | null> {
+export async function getExchangeRate(tokenSymbol: string, mode: 'buy' | 'sell' = 'buy'): Promise<ExchangeRate | null> {
   try {
-    const response = await fetch(`${API_BASE}/api/exchange-rates?token=${tokenSymbol}`, {
+    const response = await fetch(`${API_BASE}/api/exchange-rates?token=${tokenSymbol}&mode=${mode}`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',

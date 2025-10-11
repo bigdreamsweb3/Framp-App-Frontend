@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { GeistSans } from "geist/font/sans"
+import { Inter } from 'next/font/google'
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -31,6 +31,8 @@ export const metadata: Metadata = {
 }
 
 
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
+      <body className={`font-sans ${inter.variable} ${GeistMono.variable} antialiased`}>
         <UIProvider>
           <AuthProvider>
           <Suspense fallback={null}>

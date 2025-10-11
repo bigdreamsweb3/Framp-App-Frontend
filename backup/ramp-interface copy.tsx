@@ -23,7 +23,7 @@ import { OnrampSettings } from "@/components/onramp-settings";
 import { logoNGN } from "@/asssets/image";
 import { createOnramp } from "@/lib/api/payments/onramp";
 import { useAuth } from "@/context/AuthContext";
-import { Button } from "../ui/button";
+import { Button } from "../components/ui/button";
 import { CheckoutModal } from "@/components/modals/checkout-modal";
 import { TokenListModal, Token } from "@/components/modals/token-list-modal";
 import {
@@ -31,11 +31,11 @@ import {
   trackTokenSelection,
   trackTokenPurchase,
 } from "@/lib/userBehavior/tokenTracker";
-import { ConfirmOnRampModal } from "../modals/confirm-onramp-modal";
-import { PaymentMethodSelector } from "../payment-method-selector";
+import { ConfirmOnRampModal } from "../components/modals/confirm-onramp-modal";
+import { PaymentMethodSelector } from "../components/payment-method-selector";
 import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate";
-import { ExchangeRateStatus } from "../ui/exchange-rate-status";
-import { ExchangeRateSkeleton } from "../ui/exchange-rate-skeleton";
+import { ExchangeRateStatus } from "../components/ui/exchange-rate-status";
+import { ExchangeRateSkeleton } from "../components/ui/exchange-rate-skeleton";
 import {
   formatNairaInput,
   parseNairaAmount,
@@ -78,7 +78,7 @@ const CRYPTO_TOKENS = [
   },
 ];
 
-interface OnRampInterfaceProps {
+interface RampInterfaceProps {
   fromAmount: string;
   toAmount: string;
   onFromAmountChange: (value: string) => void;
@@ -103,7 +103,7 @@ interface OnRampInterfaceProps {
   onPaymentMethodSelect?: (method: string) => void;
 }
 
-export function OnRampInterface({
+export function RampInterface({
   fromAmount,
   toAmount,
   onFromAmountChange,
@@ -116,7 +116,7 @@ export function OnRampInterface({
   onWalletSelect,
   selectedPaymentMethod,
   onPaymentMethodSelect,
-}: OnRampInterfaceProps) {
+}: RampInterfaceProps) {
   const [showSettings, setShowSettings] = useState(false);
   const [isTokenModalOpen, setTokenModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);

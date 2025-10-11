@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { HelpCircle, Menu, User, X, Activity as ActivityIcon } from "lucide-react";
+import { HelpCircle, Menu, User, X, Activity as ActivityIcon, BookOpen } from "lucide-react";
 
 import {
   ArrowUpCircle,
@@ -136,8 +136,20 @@ export function AppHeader({
             <ActivityIcon size={18} />
           </button> */}
           {/* Desktop Navigation and Actions */}
-          <div className="md:pl-3">
+          <div className="md:pl-3 mr-9">
             <nav className="hidden md:flex items-center gap-6">
+              <Link
+                href="/docs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200"
+              >
+                <span className="flex items-center gap-0.5">
+                  <BookOpen size={18} />
+                  Docs
+                </span>
+              </Link>
+
               <Link
                 href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
                 target="_blank"
@@ -178,7 +190,7 @@ export function AppHeader({
                 aria-pressed={profileActive}
                 aria-label={profileActive ? "Hide Profile" : "Show Profile"}
                 onClick={onProfileToggle}
-                className={`relative inline-flex items-center justify-center w-8 h-8 md:w-10 md:h-10 overflow-hidden rounded-full transition-all duration-300 ease-out transform hover:scale-105 active:scale-95 ${profileActive
+                className={`relative inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 overflow-hidden rounded-full transition-all duration-300 ease-out transform hover:scale-105 active:scale-95 ${profileActive
                   ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
                   : "bg-gradient-to-br from-primary/20 to-primary/10 hover:from-primary/30 hover:to-primary/20 hover:shadow-md border border-primary/20 hover:border-primary/40"
                   }`}
@@ -220,7 +232,7 @@ export function AppHeader({
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="md:hidden bg-background border-t border-border/20 px-4 py-3 flex flex-col gap-3"
+            className="md:hidden bg-background border-t border-border/20 px-4 py-3 flex flex-col gap-3 space-y-3"
           >
             <div>
               <Link
@@ -277,6 +289,18 @@ export function AppHeader({
               </Link>
             </div>
 
+            <div>
+              <Link
+                href="/docs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+                onClick={() => setMobileOpen(false)}
+              >
+                <BookOpen size={18} />
+                Docs
+              </Link>
+            </div>
             <div>
               <Link
                 href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"

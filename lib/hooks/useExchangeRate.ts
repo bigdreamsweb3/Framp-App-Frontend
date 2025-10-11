@@ -29,7 +29,7 @@ interface UseMultipleExchangeRatesReturn {
 /**
  * Hook for managing exchange rate for a single token
  */
-export function useExchangeRate(tokenSymbol: string): UseExchangeRateReturn {
+export function useExchangeRate(tokenSymbol: string, mode: 'buy' | 'sell' = 'buy'): UseExchangeRateReturn {
   const [exchangeRate, setExchangeRate] = useState<ExchangeRate | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -41,7 +41,7 @@ export function useExchangeRate(tokenSymbol: string): UseExchangeRateReturn {
     setError(null);
     
     try {
-      const rate = await getExchangeRate(tokenSymbol);
+      const rate = await getExchangeRate(tokenSymbol, mode);
       setExchangeRate(rate);
       if (!rate) {
         setError(`Failed to fetch exchange rate for ${tokenSymbol}`);
@@ -53,7 +53,7 @@ export function useExchangeRate(tokenSymbol: string): UseExchangeRateReturn {
     } finally {
       setLoading(false);
     }
-  }, [tokenSymbol]);
+  }, [tokenSymbol, mode]);
 
   // Fetch rate on mount and when token changes
   useEffect(() => {
@@ -89,7 +89,7 @@ export function useExchangeRate(tokenSymbol: string): UseExchangeRateReturn {
 /**
  * Hook for managing exchange rates for multiple tokens
  */
-export function useMultipleExchangeRates(tokenSymbols: string[]): UseMultipleExchangeRatesReturn {
+export function useMultipleExchangeRates(tokenSymbols: string[], mode: 'buy' | 'sell' = 'buy'): UseMultipleExchangeRatesReturn {
   const [exchangeRates, setExchangeRates] = useState<Map<string, ExchangeRate>>(new Map());
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -101,7 +101,9 @@ export function useMultipleExchangeRates(tokenSymbols: string[]): UseMultipleExc
     setError(null);
     
     try {
-      const rates = await getExchangeRates(tokenSymbols);
+      // fetch each token with provided mode
+      const promises = tokenSymbols.map((s) => getExchangeRate(s, mode));
+      const rates = (await Promise.all(promises)).filter((r): r is ExchangeRate => r !== null);
       const ratesMap = new Map<string, ExchangeRate>();
       
       rates.forEach(rate => {
@@ -120,7 +122,7 @@ export function useMultipleExchangeRates(tokenSymbols: string[]): UseMultipleExc
     } finally {
       setLoading(false);
     }
-  }, [tokenSymbols]);
+  }, [tokenSymbols, mode]);
 
   // Fetch rates on mount and when tokens change
   useEffect(() => {
@@ -153,9 +155,10 @@ export function useMultipleExchangeRates(tokenSymbols: string[]): UseMultipleExc
  */
 export function useExchangeRateWithFallback(
   tokenSymbol: string, 
-  fallbackRate: number = 850
+  fallbackRate: number = 850,
+  mode: 'buy' | 'sell' = 'buy'
 ): UseExchangeRateReturn & { effectiveRate: number } {
-  const exchangeRateHook = useExchangeRate(tokenSymbol);
+  const exchangeRateHook = useExchangeRate(tokenSymbol, mode);
   
   const effectiveRate = exchangeRateHook.exchangeRate?.rate || fallbackRate;
   
