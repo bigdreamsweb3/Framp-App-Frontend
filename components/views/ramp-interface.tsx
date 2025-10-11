@@ -277,11 +277,11 @@ export function RampInterface({
                     <h2 className="text-lg font-semibold flex items-center gap-1">
                       {rampMode === "onramp" ? (
                         <>
-                          On-Ramp <span className="text-xs text-muted-foreground">(Buy)</span>
+                          Buy <span className="text-xs text-muted-foreground">(On-Ramp)</span>
                         </>
                       ) : (
                         <>
-                          Off-Ramp <span className="text-xs text-muted-foreground">(Sell)</span>
+                          Sell <span className="text-xs text-muted-foreground">(Off-Ramp)</span>
                         </>
                       )}
                     </h2>
