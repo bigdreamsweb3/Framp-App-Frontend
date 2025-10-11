@@ -198,7 +198,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                     onProfileToggle={() => setShowProfile((p) => !p)}
                 />
 
-                <main className="container mx-auto px-4 py-6 max-w-md pb-24">
+                <main className="container mx-auto px-4 py-6 max-w-md pb-28">
                     <div className="flex flex-row items-center gap-2 h-fit mb-6">
                        {/*   <Tabs
                             value={activeView}
@@ -266,6 +266,58 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
 
             </div >
+
+            {/* Mobile Bottom Navigation */}
+            <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden">
+                <div className="mx-auto max-w-md px-4 pb-safe bg-background/80 backdrop-blur-sm">
+                    <div className="rounded-t-xl border-t bg-card/95 shadow-lg py-2 flex items-center justify-between gap-2">
+                        <button
+                            onClick={() => handleTabChange('onramp')}
+                            aria-label="Gate"
+                            className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg ${activeView === 'onramp' ? 'text-primary' : 'text-muted-foreground'}`}
+                        >
+                            <ArrowUpCircle className="h-5 w-5" />
+                            <span className="text-[10px] mt-1">Gate</span>
+                        </button>
+
+                        <button
+                            onClick={() => handleTabChange('bills')}
+                            aria-label="Bills"
+                            className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg ${activeView === 'bills' ? 'text-primary' : 'text-muted-foreground'}`}
+                        >
+                            <QrCode className="h-5 w-5" />
+                            <span className="text-[10px] mt-1">Bills</span>
+                        </button>
+
+                        <button
+                            onClick={() => handleTabChange('save')}
+                            aria-label="Save"
+                            className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg ${activeView === 'save' ? 'text-primary' : 'text-muted-foreground'}`}
+                        >
+                            <PiggyBank className="h-5 w-5" />
+                            <span className="text-[10px] mt-1">Save</span>
+                        </button>
+
+                        <button
+                            onClick={() => handleTabChange('wallets')}
+                            aria-label="Wallets"
+                            className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg ${activeView === 'wallets' ? 'text-primary' : 'text-muted-foreground'}`}
+                        >
+                            <WalletIcon className="h-5 w-5" />
+                            <span className="text-[10px] mt-1">Wallets</span>
+                        </button>
+
+                        <button
+                            onClick={() => handleTabChange('activity')}
+                            aria-label="Activity"
+                            className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg ${activeView === 'activity' ? 'text-primary' : 'text-muted-foreground'}`}
+                        >
+                            <ActivityIcon className="h-5 w-5" />
+                            <span className="text-[10px] mt-1">Activity</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
 
             {/* Floating AI Chat Button */}
             {/* <motion.button
