@@ -171,7 +171,7 @@ export function AppHeader({
 
 
           {/* User Actions */}
-          {/* <div className="">
+          <div className="md:hidden">
             {loading ? (
               <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
             ) : !user ? (
@@ -221,7 +221,7 @@ export function AppHeader({
                 )}
               </Button>
             )}
-          </div> */}
+          </div>
         </div>
       </div>
 
