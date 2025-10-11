@@ -274,7 +274,7 @@ export function RampInterface({
                     ) : (
                       <ArrowDownCircle className="w-5 h-5 text-primary" />
                     )}
-                    <h2 className="text-lg font-semibold flex items-center gap-1">
+                    {/* <h2 className="text-lg font-semibold flex items-center gap-1">
                       {rampMode === "onramp" ? (
                         <>
                           Buy <span className="text-xs text-muted-foreground">(On-Ramp)</span>
@@ -284,7 +284,35 @@ export function RampInterface({
                           Sell <span className="text-xs text-muted-foreground">(Off-Ramp)</span>
                         </>
                       )}
-                    </h2>
+                    </h2> */}
+
+                    {/* Mode Switcher */}
+                    <div className="inline-flex items-center gap-1 rounded-lg bg-muted/50 p-1 w-fit">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "onramp"
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+                          }`}
+                        onClick={() => handleRampModeChange("onramp")}
+                        aria-label="Switch to on-ramp mode"
+                      >
+                        Buy
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "offramp"
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+                          }`}
+                        onClick={() => handleRampModeChange("offramp")}
+                        aria-label="Switch to off-ramp mode"
+                      >
+                        Sell
+                      </Button>
+                    </div>
                   </div>
                 </CardTitle>
 
@@ -300,33 +328,7 @@ export function RampInterface({
                 </CardDescription> */}
               </div>
 
-              {/* Mode Switcher */}
-              <div className="inline-flex items-center gap-1 rounded-lg bg-muted/50 p-1 w-fit">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "onramp"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-transparent"
-                    }`}
-                  onClick={() => handleRampModeChange("onramp")}
-                  aria-label="Switch to on-ramp mode"
-                >
-                  Buy
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "offramp"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-transparent"
-                    }`}
-                  onClick={() => handleRampModeChange("offramp")}
-                  aria-label="Switch to off-ramp mode"
-                >
-                  Sell
-                </Button>
-              </div>
+
             </div>
 
           </CardHeader>
