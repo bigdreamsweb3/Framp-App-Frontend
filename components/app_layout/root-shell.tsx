@@ -17,7 +17,7 @@ import { motion } from "framer-motion"
 import { MessageCircle, X } from "lucide-react"
 import { AIChat } from "@/components/ai-chat"
 import { AuthPage } from "@/components/auth-page"
-import { Profile } from "@/components/modals/profile"
+import { Profile } from "@/components/modals/profile-modal"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useUI } from "@/context/UIContext"
 
@@ -38,6 +38,11 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
         else if (pathname === "/activity") setActiveView("activity")
         else if (pathname.startsWith("/wallets")) setActiveView("wallets")
     }, [pathname])
+
+    // Close profile modal on route change
+    useEffect(() => {
+        setShowProfile(false);
+    }, [pathname]);
 
     const handleTabChange = (value: string) => {
         setActiveView(value)
@@ -86,12 +91,27 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
         return () => setOpenAuth?.(() => { });
     }, [setOpenAuth]);
 
+    // Listen for cross-component requests to close the profile modal
+    useEffect(() => {
+        const onClose = () => setShowProfile(false);
+        try {
+            window.addEventListener('framp:closeProfile', onClose as any);
+        } catch (e) {
+            // ignore in non-browser
+        }
+        return () => {
+            try {
+                window.removeEventListener('framp:closeProfile', onClose as any);
+            } catch (e) {}
+        };
+    }, []);
+
     return (
-        <div className="min-h-screen bg-background text-foreground">
+        <div className="min-h-screen bg-transparent text-foreground">
             {/* Desktop Layout */}
-            <div className="hidden md:flex h-screen overflow-hidden bg-muted backdrop-blur-sm">
+            <div className="hidden md:flex h-screen overflow-hidden">
                 {/* Sidebar */}
-                <div className="flex flex-col justify-between h-full w-80 border-r bg-muted dark:bg-card backdrop-blur-md">
+                <div className="flex flex-col justify-between h-full w-80 border-r bg-background">
                     <div>
                         <SideHeader
                             onAuthClick={handleShowAuth}
@@ -174,7 +194,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 overflow-y-auto bg-background">
+                <div className="flex-1 overflow-y-auto bg-transparent">
                     <AppHeader
                         onAuthClick={handleShowAuth}
                         chatActive={showChat}
@@ -269,51 +289,51 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
             {/* Mobile Bottom Navigation */}
             <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden">
-                <div className="mx-auto max-w-md px-4 pb-safe bg-background/80 backdrop-blur-sm">
+                <div className="mx-auto max-w-md px-4 pb-safe bg-transparent">
                     <div className="rounded-t-xl border-t bg-card/95 shadow-lg py-2 flex items-center justify-between gap-2">
                         <button
                             onClick={() => handleTabChange('onramp')}
                             aria-label="Gate"
-                            className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg ${activeView === 'onramp' ? 'text-primary' : 'text-muted-foreground'}`}
+                            className={`flex-1 flex flex-col items-center justify-center py-0 rounded-lg ${activeView === 'onramp' ? 'text-primary' : 'text-muted-foreground'}`}
                         >
-                            <ArrowUpCircle className="h-5 w-5" />
-                            <span className="text-[10px] mt-1">Gate</span>
+                            <ArrowUpCircle className="h-6 w-6" />
+                            <span className="text-[12px] font-medium mt-1">Gate</span>
                         </button>
 
                         <button
                             onClick={() => handleTabChange('bills')}
                             aria-label="Bills"
-                            className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg ${activeView === 'bills' ? 'text-primary' : 'text-muted-foreground'}`}
+                            className={`flex-1 flex flex-col items-center justify-center py-0 rounded-lg ${activeView === 'bills' ? 'text-primary' : 'text-muted-foreground'}`}
                         >
-                            <QrCode className="h-5 w-5" />
-                            <span className="text-[10px] mt-1">Bills</span>
+                            <QrCode className="h-6 w-6" />
+                            <span className="text-[12px] font-medium mt-1">Bills</span>
                         </button>
 
                         <button
                             onClick={() => handleTabChange('save')}
                             aria-label="Save"
-                            className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg ${activeView === 'save' ? 'text-primary' : 'text-muted-foreground'}`}
+                            className={`flex-1 flex flex-col items-center justify-center py-0 rounded-lg ${activeView === 'save' ? 'text-primary' : 'text-muted-foreground'}`}
                         >
-                            <PiggyBank className="h-5 w-5" />
-                            <span className="text-[10px] mt-1">Save</span>
+                            <PiggyBank className="h-6 w-6" />
+                            <span className="text-[12px] font-medium mt-1">Save</span>
                         </button>
 
                         <button
                             onClick={() => handleTabChange('wallets')}
                             aria-label="Wallets"
-                            className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg ${activeView === 'wallets' ? 'text-primary' : 'text-muted-foreground'}`}
+                            className={`flex-1 flex flex-col items-center justify-center py-0 rounded-lg ${activeView === 'wallets' ? 'text-primary' : 'text-muted-foreground'}`}
                         >
-                            <WalletIcon className="h-5 w-5" />
-                            <span className="text-[10px] mt-1">Wallets</span>
+                            <WalletIcon className="h-6 w-6" />
+                            <span className="text-[12px] font-medium mt-1">Wallets</span>
                         </button>
 
                         <button
                             onClick={() => handleTabChange('activity')}
                             aria-label="Activity"
-                            className={`flex-1 flex flex-col items-center justify-center py-2 rounded-lg ${activeView === 'activity' ? 'text-primary' : 'text-muted-foreground'}`}
+                            className={`flex-1 flex flex-col items-center justify-center py-0 rounded-lg ${activeView === 'activity' ? 'text-primary' : 'text-muted-foreground'}`}
                         >
-                            <ActivityIcon className="h-5 w-5" />
-                            <span className="text-[10px] mt-1">Activity</span>
+                            <ActivityIcon className="h-6 w-6" />
+                            <span className="text-[12px] font-medium mt-1">Activity</span>
                         </button>
                     </div>
                 </div>
@@ -376,13 +396,13 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             {/* Profile Modal */}
             {
                 showProfile && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center md:justify-end">
                         <div
                             className="absolute inset-0 bg-black/40"
                             onClick={() => setShowProfile(false)}
                             aria-hidden
                         />
-                        <div className="relative z-10 w-full max-w-2xl p-4">
+                        <div className="relative z-10 w-full">
                             <Profile onQuickAction={() => setShowProfile(false)} />
                         </div>
                     </div>

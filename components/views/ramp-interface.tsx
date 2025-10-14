@@ -261,20 +261,19 @@ export function RampInterface({
   }
 
   return (
-    <div className="flex-1 mx-auto max-w-md">
-      <div className="flex flex-col gap-4">
-        <Card className="bg-card/50 backdrop-blur-sm" data-tour="onramp-card">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    {/* {rampMode === "onramp" ? (
+    <>
+      <Card className="w-full mx-auto max-w-md bg-card dark:bg-card/50 backdrop-blur-sm" data-tour="onramp-card">
+        <CardHeader>
+
+
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              {/* {rampMode === "onramp" ? (
                       <ArrowUpCircle className="w-5 h-5 text-primary" />
                     ) : (
                       <ArrowDownCircle className="w-5 h-5 text-primary" />
                     )} */}
-                    {/* <h2 className="text-lg font-semibold flex items-center gap-1">
+              {/* <h2 className="text-lg font-semibold flex items-center gap-1">
                       {rampMode === "onramp" ? (
                         <>
                           Buy <span className="text-xs text-muted-foreground">(On-Ramp)</span>
@@ -286,38 +285,38 @@ export function RampInterface({
                       )}
                     </h2> */}
 
-                    {/* Mode Switcher */}
-                    <div className="inline-flex items-center gap-1 rounded-lg bg-muted/50 p-1 w-fit">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "onramp"
-                          ? "bg-background text-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground hover:bg-transparent"
-                          }`}
-                        onClick={() => handleRampModeChange("onramp")}
-                        aria-label="Switch to on-ramp mode"
-                      >
-                        Buy
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "offramp"
-                          ? "bg-background text-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground hover:bg-transparent"
-                          }`}
-                        onClick={() => handleRampModeChange("offramp")}
-                        aria-label="Switch to off-ramp mode"
-                      >
-                        Sell
-                      </Button>
-                    </div>
-                  </div>
-                </CardTitle>
+              {/* Mode Switcher */}
+              <div className="inline-flex items-center gap-1 rounded-lg bg-muted/50 p-1 w-fit">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "onramp"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+                    }`}
+                  onClick={() => handleRampModeChange("onramp")}
+                  aria-label="Switch to on-ramp mode"
+                >
+                  Buy
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "offramp"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+                    }`}
+                  onClick={() => handleRampModeChange("offramp")}
+                  aria-label="Switch to off-ramp mode"
+                >
+                  Sell
+                </Button>
+              </div>
+            </div>
+          </CardTitle>
 
 
-                {/* <CardDescription className="text-xs text-muted-foreground mt-2">
+          {/* <CardDescription className="text-xs text-muted-foreground mt-2">
                   {rampMode === "onramp"
                     ? selectedWallet
                       ? `Convert NGN to ${tokenSymbol} and deposit to: ${selectedWallet.name} (${selectedWallet.details})`
@@ -326,257 +325,257 @@ export function RampInterface({
                       ? `Convert ${tokenSymbol} to NGN and withdraw to: ${selectedWallet.name} (${selectedWallet.details})`
                       : "Convert crypto to NGN and withdraw to your chosen account"}
                 </CardDescription> */}
-              </div>
 
 
-            </div>
 
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="px-4 space-y-4">
-              {rampMode === "onramp" ? (
-                <>
-                  <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
-                    <div className="text-xs text-muted-foreground mb-2">You Pay</div>
-                    <div className="flex items-center justify-between">
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        value={formattedAmount}
-                        onChange={(e) => handleAmountChange(e.target.value)}
-                        onWheel={handleWheel}
-                        className="text-2xl font-bold bg-transparent border-none outline-none w-full"
-                        placeholder="0"
-                        aria-label="Amount to pay in NGN"
-                      />
 
-                      <Button
-                        variant="outline"
-                        className="flex items-center gap-2 px-2 py-1 rounded-lg bg-muted/50 hover:bg-muted/70 border border-border/50 text-foreground"
-                        aria-label="Fiat currency"
-                      >
-                        <img src={logoNGN || "/placeholder.svg"} alt="NGN" className="w-5 h-5" />
-                        <span className="font-medium text-sm">NGN</span>
-                      </Button>
-                    </div>
-                  </div>
 
-                  {/* <div className="flex items-center justify-between bg-primary/10 rounded-xl px-3 py-2">
-                    {rateLoading && !exchangeRate ? (
-                      <ExchangeRateSkeleton />
-                    ) : (
-                      <div className="flex items-center gap-2 text-sm text-primary">
-                        <span>
-                          1 {tokenSymbol} = {effectiveRate.toLocaleString()} NGN
-                        </span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 w-6 p-0"
-                          onClick={refreshRate}
-                          aria-label="Refresh exchange rate"
-                        >
-                          <RefreshCw className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    )}
-                    {rateError && (
-                      <div className="flex items-center gap-1 text-xs text-destructive">
-                        <AlertCircle className="h-4 w-4" />
-                        <span>Error loading rate</span>
-                      </div>
-                    )}
-                  </div> */}
-
-                  <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
-                    <div className="text-xs text-muted-foreground mb-2">You Receive</div>
-                    <div className="flex items-center justify-between">
-                      <div className="text-2xl font-bold">
-                        {computedReceiving > 0
-                          ? computedReceiving.toLocaleString("en-US", {
-                            maximumFractionDigits: 5,
-                          })
-                          : "0.00"}
-                      </div>
-                      <Button
-                        variant="outline"
-                        className="flex items-center gap-2 px-2 py-1 rounded-lg bg-muted/50 hover:bg-muted/70 border border-border/50 text-foreground"
-                        onClick={() => setTokenModalOpen(true)}
-                        aria-label="Select cryptocurrency"
-                      >
-                        <img
-                          src={CRYPTO_TOKENS.find((t) => t.symbol === tokenSymbol)?.icon || "/placeholder.svg"}
-                          alt={tokenSymbol}
-                          className="w-5 h-5"
-                        />
-                        <span className="font-medium text-sm">{tokenSymbol}</span>
-                        <ChevronDown className="w-4 h-4 ml-1" />
-                      </Button>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
-                    <div className="text-xs text-muted-foreground mb-2">You Pay</div>
-                    <div className="flex items-center justify-between">
-                      <input
-                        type="text"
-                        inputMode="decimal"
-                        value={formattedAmount}
-                        onChange={(e) => handleAmountChange(e.target.value)}
-                        onWheel={handleWheel}
-                        className="text-2xl font-bold bg-transparent border-none outline-none w-full"
-                        placeholder="0"
-                        aria-label="Amount to pay in crypto"
-                      />
-
-                      <Button
-                        variant="outline"
-                        className="flex items-center gap-2 px-2 py-1 rounded-lg bg-muted/50 hover:bg-muted/70 border border-border/50 text-foreground"
-                        onClick={() => setTokenModalOpen(true)}
-                        aria-label="Select cryptocurrency"
-                      >
-                        <img
-                          src={CRYPTO_TOKENS.find((t) => t.symbol === tokenSymbol)?.icon || "/placeholder.svg"}
-                          alt={tokenSymbol}
-                          className="w-5 h-5"
-                        />
-                        <span className="font-medium text-sm">{tokenSymbol}</span>
-                        <ChevronDown className="w-4 h-4 ml-1" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* <div className="flex items-center justify-between bg-primary/10 rounded-xl px-3 py-2">
-                    {rateLoading && !exchangeRate ? (
-                      <ExchangeRateSkeleton />
-                    ) : (
-                      <div className="flex items-center gap-2 text-sm text-primary">
-                        <span>
-                          1 {tokenSymbol} = {effectiveRate.toLocaleString()} NGN
-                        </span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 w-6 p-0"
-                          onClick={refreshRate}
-                          aria-label="Refresh exchange rate"
-                        >
-                          <RefreshCw className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    )}
-                    {rateError && (
-                      <div className="flex items-center gap-1 text-xs text-destructive">
-                        <AlertCircle className="h-4 w-4" />
-                        <span>Error loading rate</span>
-                      </div>
-                    )}
-                  </div> */}
-
-                  <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
-                    <div className="text-xs text-muted-foreground mb-2">You Receive</div>
-                    <div className="flex items-center justify-between">
-                      <div className="text-2xl font-bold">
-                        {computedReceiving > 0
-                          ? computedReceiving.toLocaleString("en-US", {
-                            maximumFractionDigits: 2,
-                          })
-                          : "0.00"}
-                      </div>
-                      <Button
-                        variant="outline"
-                        className="flex items-center gap-2 px-2 py-1 rounded-lg bg-muted/50 hover:bg-muted/70 border border-border/50 text-foreground"
-                        aria-label="Fiat currency"
-                      >
-                        <img src={logoNGN || "/placeholder.svg"} alt="NGN" className="w-5 h-5" />
-                        <span className="font-medium text-sm">NGN</span>
-                      </Button>
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {/*  */}
-              <div className="flex items-center justify-between px-3 py-2">
-                {rateLoading && !exchangeRate ? (
-                  <div className="text-xs text-muted-foreground">Loading rate...</div>
-                ) : (
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>
-                      1 {tokenSymbol} ≈ ₦{effectiveRate.toLocaleString()}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-5 w-5 p-0 hover:bg-muted/60 rounded-full"
-                      onClick={refreshRate}
-                      aria-label="Refresh exchange rate"
-                    >
-                      <RefreshCw className="h-3 w-3" />
-                    </Button>
-                  </div>
-                )}
-                {rateError && (
-                  <div className="flex items-center gap-1 text-xs text-destructive">
-                    <AlertCircle className="h-4 w-4" />
-                    <span>Error loading rate</span>
-                  </div>
-                )}
-              </div>
-
-              {fromAmount && Number(fromAmount) > 0 && (
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="px-4 space-y-4">
+            {rampMode === "onramp" ? (
+              <>
                 <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+                  <div className="text-xs text-muted-foreground mb-2">You Pay</div>
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="text-xs text-muted-foreground">{rampMode === "onramp" ? "To:" : "To:"}</div>
-                      {selectedWallet ? (
-                        <div className="flex items-center gap-2">
-                          <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center">
-                            {selectedWallet.type === "wallet" ? (
-                              <Wallet className="h-3 w-3 text-primary" />
-                            ) : (
-                              <Building2 className="h-3 w-3 text-primary" />
-                            )}
-                          </div>
-                          <div>
-                            <div className="text-xs font-medium text-foreground">{selectedWallet.name}</div>
-                            <div className="text-xs text-muted-foreground">{selectedWallet.details}</div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2">
-                          <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
-                            {rampMode === "onramp" ? (
-                              <Wallet className="h-3 w-3 text-orange-500" />
-                            ) : (
-                              <Building2 className="h-3 w-3 text-orange-500" />
-                            )}
-                          </div>
-                          <div className="flex items-center gap-2 text-xs text-orange-600 font-medium">
-                            <span>{rampMode === "onramp" ? "Select wallet" : "Select account"}</span>
-                            <AlertCircle className="h-4 w-4 text-orange-600" />
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={formattedAmount}
+                      onChange={(e) => handleAmountChange(e.target.value)}
+                      onWheel={handleWheel}
+                      className="text-2xl font-bold bg-transparent border-none outline-none w-full"
+                      placeholder="0"
+                      aria-label="Amount to pay in NGN"
+                    />
+
                     <Button
                       variant="outline"
-                      size="sm"
-                      className="h-7 px-3 text-xs font-medium text-foreground bg-transparent hover:bg-primary/10 rounded-xl"
-                      onClick={handleWalletSelect}
-                      aria-label={selectedWallet ? "Change wallet" : "Select wallet"}
+                      className="flex items-center gap-2 px-2 py-1 rounded-lg bg-muted/50 hover:bg-muted/70 border border-border/50 text-foreground"
+                      aria-label="Fiat currency"
                     >
-                      {selectedWallet ? "Change" : "Select"}
+                      <img src={logoNGN || "/placeholder.svg"} alt="NGN" className="w-5 h-5" />
+                      <span className="font-medium text-sm">NGN</span>
                     </Button>
                   </div>
                 </div>
-              )}
 
-              {rampMode === "onramp" && fromAmount && Number(fromAmount) > 0 && selectedWallet && (
-                <div className="bg-muted/30 rounded-xl p-4 border border-border/50 no-scrollbar">
-                  <style jsx>{`
+                {/* <div className="flex items-center justify-between bg-primary/10 rounded-xl px-3 py-2">
+                    {rateLoading && !exchangeRate ? (
+                      <ExchangeRateSkeleton />
+                    ) : (
+                      <div className="flex items-center gap-2 text-sm text-primary">
+                        <span>
+                          1 {tokenSymbol} = {effectiveRate.toLocaleString()} NGN
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0"
+                          onClick={refreshRate}
+                          aria-label="Refresh exchange rate"
+                        >
+                          <RefreshCw className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    )}
+                    {rateError && (
+                      <div className="flex items-center gap-1 text-xs text-destructive">
+                        <AlertCircle className="h-4 w-4" />
+                        <span>Error loading rate</span>
+                      </div>
+                    )}
+                  </div> */}
+
+                <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+                  <div className="text-xs text-muted-foreground mb-2">You Receive</div>
+                  <div className="flex items-center justify-between">
+                    <div className="text-2xl font-bold">
+                      {computedReceiving > 0
+                        ? computedReceiving.toLocaleString("en-US", {
+                          maximumFractionDigits: 5,
+                        })
+                        : "0.00"}
+                    </div>
+                    <Button
+                      variant="outline"
+                      className="flex items-center gap-2 px-2 py-1 rounded-lg bg-muted/50 hover:bg-muted/70 border border-border/50 text-foreground"
+                      onClick={() => setTokenModalOpen(true)}
+                      aria-label="Select cryptocurrency"
+                    >
+                      <img
+                        src={CRYPTO_TOKENS.find((t) => t.symbol === tokenSymbol)?.icon || "/placeholder.svg"}
+                        alt={tokenSymbol}
+                        className="w-5 h-5"
+                      />
+                      <span className="font-medium text-sm">{tokenSymbol}</span>
+                      <ChevronDown className="w-4 h-4 ml-1" />
+                    </Button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+                  <div className="text-xs text-muted-foreground mb-2">You Pay</div>
+                  <div className="flex items-center justify-between">
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={formattedAmount}
+                      onChange={(e) => handleAmountChange(e.target.value)}
+                      onWheel={handleWheel}
+                      className="text-2xl font-bold bg-transparent border-none outline-none w-full"
+                      placeholder="0"
+                      aria-label="Amount to pay in crypto"
+                    />
+
+                    <Button
+                      variant="outline"
+                      className="flex items-center gap-2 px-2 py-1 rounded-lg bg-muted/50 hover:bg-muted/70 border border-border/50 text-foreground"
+                      onClick={() => setTokenModalOpen(true)}
+                      aria-label="Select cryptocurrency"
+                    >
+                      <img
+                        src={CRYPTO_TOKENS.find((t) => t.symbol === tokenSymbol)?.icon || "/placeholder.svg"}
+                        alt={tokenSymbol}
+                        className="w-5 h-5"
+                      />
+                      <span className="font-medium text-sm">{tokenSymbol}</span>
+                      <ChevronDown className="w-4 h-4 ml-1" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* <div className="flex items-center justify-between bg-primary/10 rounded-xl px-3 py-2">
+                    {rateLoading && !exchangeRate ? (
+                      <ExchangeRateSkeleton />
+                    ) : (
+                      <div className="flex items-center gap-2 text-sm text-primary">
+                        <span>
+                          1 {tokenSymbol} = {effectiveRate.toLocaleString()} NGN
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0"
+                          onClick={refreshRate}
+                          aria-label="Refresh exchange rate"
+                        >
+                          <RefreshCw className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    )}
+                    {rateError && (
+                      <div className="flex items-center gap-1 text-xs text-destructive">
+                        <AlertCircle className="h-4 w-4" />
+                        <span>Error loading rate</span>
+                      </div>
+                    )}
+                  </div> */}
+
+                <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+                  <div className="text-xs text-muted-foreground mb-2">You Receive</div>
+                  <div className="flex items-center justify-between">
+                    <div className="text-2xl font-bold">
+                      {computedReceiving > 0
+                        ? computedReceiving.toLocaleString("en-US", {
+                          maximumFractionDigits: 2,
+                        })
+                        : "0.00"}
+                    </div>
+                    <Button
+                      variant="outline"
+                      className="flex items-center gap-2 px-2 py-1 rounded-lg bg-muted/50 hover:bg-muted/70 border border-border/50 text-foreground"
+                      aria-label="Fiat currency"
+                    >
+                      <img src={logoNGN || "/placeholder.svg"} alt="NGN" className="w-5 h-5" />
+                      <span className="font-medium text-sm">NGN</span>
+                    </Button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/*  */}
+            <div className="flex items-center justify-between px-3 py-2">
+              {rateLoading && !exchangeRate ? (
+                <div className="text-xs text-muted-foreground">Loading rate...</div>
+              ) : (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <span>
+                    1 {tokenSymbol} ≈ ₦{effectiveRate.toLocaleString()}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-5 w-5 p-0 hover:bg-muted/60 rounded-full"
+                    onClick={refreshRate}
+                    aria-label="Refresh exchange rate"
+                  >
+                    <RefreshCw className="h-3 w-3" />
+                  </Button>
+                </div>
+              )}
+              {rateError && (
+                <div className="flex items-center gap-1 text-xs text-destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <span>Error loading rate</span>
+                </div>
+              )}
+            </div>
+
+            {fromAmount && Number(fromAmount) > 0 && (
+              <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="text-xs text-muted-foreground">{rampMode === "onramp" ? "To:" : "To:"}</div>
+                    {selectedWallet ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center">
+                          {selectedWallet.type === "wallet" ? (
+                            <Wallet className="h-3 w-3 text-primary" />
+                          ) : (
+                            <Building2 className="h-3 w-3 text-primary" />
+                          )}
+                        </div>
+                        <div>
+                          <div className="text-xs font-medium text-foreground">{selectedWallet.name}</div>
+                          <div className="text-xs text-muted-foreground">{selectedWallet.details}</div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
+                          {rampMode === "onramp" ? (
+                            <Wallet className="h-3 w-3 text-orange-500" />
+                          ) : (
+                            <Building2 className="h-3 w-3 text-orange-500" />
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2 text-xs text-orange-600 font-medium">
+                          <span>{rampMode === "onramp" ? "Select wallet" : "Select account"}</span>
+                          <AlertCircle className="h-4 w-4 text-orange-600" />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-7 px-3 text-xs font-medium text-foreground bg-transparent hover:bg-primary/10 rounded-xl"
+                    onClick={handleWalletSelect}
+                    aria-label={selectedWallet ? "Change wallet" : "Select wallet"}
+                  >
+                    {selectedWallet ? "Change" : "Select"}
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {rampMode === "onramp" && fromAmount && Number(fromAmount) > 0 && selectedWallet && (
+              <div className="bg-muted/30 rounded-xl p-4 border border-border/50 no-scrollbar">
+                <style jsx>{`
                     .no-scrollbar::-webkit-scrollbar {
                       display: none;
                     }
@@ -585,43 +584,43 @@ export function RampInterface({
                       scrollbar-width: none;
                     }
                   `}</style>
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="text-xs text-muted-foreground">Payment Method</div>
-                    {!selectedPaymentMethod && <AlertCircle className="h-4 w-4 text-orange-600" />}
-                  </div>
-                  <PaymentMethodSelector
-                    selectedMethod={selectedPaymentMethod || null}
-                    onMethodSelect={onPaymentMethodSelect || (() => { })}
-                    disabled={loading}
-                  />
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="text-xs text-muted-foreground">Payment Method</div>
+                  {!selectedPaymentMethod && <AlertCircle className="h-4 w-4 text-orange-600" />}
                 </div>
-              )}
+                <PaymentMethodSelector
+                  selectedMethod={selectedPaymentMethod || null}
+                  onMethodSelect={onPaymentMethodSelect || (() => { })}
+                  disabled={loading}
+                />
+              </div>
+            )}
 
-              <Button
-                className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
-                size="lg"
-                disabled={
-                  !fromAmount || !selectedWallet || (rampMode === "onramp" && !selectedPaymentMethod) || loading
-                }
-                onClick={openConfirm}
-                aria-label={`${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
-              >
-                {loading
-                  ? "Processing..."
-                  : !fromAmount
-                    ? "Enter amount"
-                    : !selectedWallet
-                      ? rampMode === "onramp"
-                        ? "Select wallet"
-                        : "Select account"
-                      : rampMode === "onramp" && !selectedPaymentMethod
-                        ? "Select payment method"
-                        : `${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            <Button
+              className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
+              size="lg"
+              disabled={
+                !fromAmount || !selectedWallet || (rampMode === "onramp" && !selectedPaymentMethod) || loading
+              }
+              onClick={openConfirm}
+              aria-label={`${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
+            >
+              {loading
+                ? "Processing..."
+                : !fromAmount
+                  ? "Enter amount"
+                  : !selectedWallet
+                    ? rampMode === "onramp"
+                      ? "Select wallet"
+                      : "Select account"
+                    : rampMode === "onramp" && !selectedPaymentMethod
+                      ? "Select payment method"
+                      : `${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
 
       {showSettings && <OnrampSettings onClose={() => setShowSettings(false)} />}
 
@@ -652,6 +651,6 @@ export function RampInterface({
       )}
 
       {checkoutUrl && <CheckoutModal url={checkoutUrl} onClose={() => setCheckoutUrl(null)} />}
-    </div>
+    </>
   )
 }

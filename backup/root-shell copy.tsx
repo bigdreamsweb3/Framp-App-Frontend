@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowUpCircle, QrCode, PiggyBank, Wallet as WalletIcon, Activity as ActivityIcon } from "lucide-react";
 import { AppHeader } from "../components/app_layout/app-header";
 import { AuthPage } from "@/components/auth-page";
-import { Profile } from "@/components/modals/profile";
+import { Profile } from "@/components/modals/profile-modal";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function RootShell({ children }: { children: React.ReactNode }) {

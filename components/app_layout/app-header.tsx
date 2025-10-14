@@ -93,8 +93,8 @@ export function AppHeader({
   return (
     <header
       ref={headerRef}
-      className={`sticky top-0 z-50 w-full bg-gradient-to-b from-background/95 to-background/80 backdrop-blur-lg transition-all duration-500 ease-out h-14
-        ${scrolled ? "shadow-md" : "shadow-none"}`}
+      className={`sticky top-0 z-50 w-full bg-background transition-all duration-500 ease-out h-14
+        ${scrolled ? "shadow-md bg-gradient-to-b from-background/95 to-background/80  backdrop-blur-md" : "shadow-none border-b"}`}
       data-tour="security"
     >
       <div className="w-full h-full pl-0 pr-4 flex items-center justify-between md:justify-end">

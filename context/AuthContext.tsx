@@ -90,12 +90,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function handleLogout() {
     try {
-      await logout();
+      console.log('AuthContext: calling logout API');
+      const res = await logout();
+      console.log('AuthContext: logout API response', res);
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
-      // Always clear user state, even if logout API fails
-      setUser(null);
+      // refresh user state from the server after logout (will set null if logged out)
+      try {
+        await fetchUser();
+      } catch (e) {
+        // fallback - ensure UI has no user
+        setUser(null);
+      }
     }
   }
 

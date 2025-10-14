@@ -168,19 +168,19 @@ export function TokenListModal({ tokens, selected, onSelect, onClose, isOpen }: 
                                             </div>
 
                                             {/* Price & Balance */}
-                                            <div className="text-right">
+                                            {/* <div className="text-right">
                                                 <div className="flex items-center gap-1">
                                                     {getRate(token.symbol) !== null && (
                                                         <span className="text-xs text-muted-foreground">₦{getRate(token.symbol)!.toLocaleString("en-NG", { maximumFractionDigits: 2 })}</span>
                                                     )}
-                                                    {/* {token.change24h !== undefined && (
+                                                    {token.change24h !== undefined && (
                                                         <span className={`text-xs ${token.change24h >= 0 ? "text-green-500" : "text-red-500"}`}>
                                                             {token.change24h >= 0 ? "+" : ""}
                                                             {token.change24h.toFixed(2)}%
                                                         </span>
-                                                    )} */}
+                                                    )} 
                                                 </div>
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </div>
                                 </div>
