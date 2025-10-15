@@ -80,6 +80,7 @@ interface RampInterfaceProps {
   onPaymentMethodSelect?: (method: string) => void
   selectedTransferMethod?: "connect_wallet" | "manual_transfer" | null
   onTransferMethodSelect?: (method: "connect_wallet" | "manual_transfer") => void
+  onConnectWallet?: () => void
   rampMode?: "onramp" | "offramp"
   onRampModeChange?: (mode: "onramp" | "offramp") => void
 }
@@ -99,6 +100,7 @@ export function RampInterface({
   onPaymentMethodSelect,
   selectedTransferMethod,
   onTransferMethodSelect,
+  onConnectWallet,
   rampMode: externalRampMode,
   onRampModeChange: externalOnRampModeChange,
 }: RampInterfaceProps) {
@@ -211,9 +213,22 @@ export function RampInterface({
       alert("Please select a wallet")
       return
     }
+    // ensure payment method for onramp
     if (rampMode === "onramp" && !selectedPaymentMethod) {
       alert("Please select a payment method")
       return
+    }
+
+    // for off-ramp require transfer method selection
+    if (rampMode === "offramp") {
+      if (!effectiveTransferMethod) {
+        alert("Please select a transfer method")
+        return
+      }
+      if (effectiveTransferMethod === "connect_wallet" && !selectedWallet) {
+        alert("Please connect a wallet before continuing")
+        return
+      }
     }
     setShowConfirm(true)
   }
@@ -637,27 +652,42 @@ export function RampInterface({
               </div>
             )}
 
-            <Button
-              className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
-              size="lg"
-              disabled={
-                !fromAmount || !selectedWallet || (rampMode === "onramp" && !selectedPaymentMethod) || loading
-              }
-              onClick={openConfirm}
-              aria-label={`${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
-            >
-              {loading
-                ? "Processing..."
-                : !fromAmount
-                  ? "Enter amount"
-                  : !selectedWallet
-                    ? rampMode === "onramp"
-                      ? "Select wallet"
-                      : "Select account"
-                    : rampMode === "onramp" && !selectedPaymentMethod
-                      ? "Select payment method"
-                      : `${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
-            </Button>
+            {rampMode === "offramp" && effectiveTransferMethod === "connect_wallet" && fromAmount && Number(fromAmount) > 0 && !selectedWallet ? (
+              <Button
+                className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
+                size="lg"
+                onClick={() => {
+                  // prefer an explicit connect handler, fall back to wallet select
+                  if (onConnectWallet) onConnectWallet()
+                  else onWalletSelect?.()
+                }}
+                aria-label="Connect wallet"
+              >
+                Connect wallet
+              </Button>
+            ) : (
+              <Button
+                className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
+                size="lg"
+                disabled={
+                  !fromAmount || !selectedWallet || (rampMode === "onramp" && !selectedPaymentMethod) || loading
+                }
+                onClick={openConfirm}
+                aria-label={`${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
+              >
+                {loading
+                  ? "Processing..."
+                  : !fromAmount
+                    ? "Enter amount"
+                    : !selectedWallet
+                      ? rampMode === "onramp"
+                        ? "Select wallet"
+                        : "Select account"
+                      : rampMode === "onramp" && !selectedPaymentMethod
+                        ? "Select payment method"
+                        : `${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>
