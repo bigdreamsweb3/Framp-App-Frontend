@@ -243,7 +243,7 @@ export function AppHeader({ onAuthClick, chatActive, onChatToggle, profileActive
             onClick={() => setMobileOpen(false)}
             className="inset-0 z-40 md:hidden min-h-screen w-full border-t border-border/20 "
           >
-            <div className="min-h-screen max-w-[75%] bg-background border-t border-border/20 px-4 py-3 flex flex-col gap-3 space-y-3 shadow">
+            <div className="min-h-screen max-w-[75%] bg-background border-t border-border/20 px-4 py-3 flex flex-col gap-3 space-y-3">
               <div>
                 <Link
                   href="/"

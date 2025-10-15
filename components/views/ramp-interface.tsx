@@ -76,11 +76,13 @@ interface RampInterfaceProps {
     accountNumber?: string
   } | null
   onWalletSelect?: () => void
+  onAccountSelect?: () => void
   selectedPaymentMethod?: string | null
   onPaymentMethodSelect?: (method: string) => void
   selectedTransferMethod?: "connect_wallet" | "manual_transfer" | null
   onTransferMethodSelect?: (method: "connect_wallet" | "manual_transfer") => void
   onConnectWallet?: () => void
+  isWalletConnected?: boolean
   rampMode?: "onramp" | "offramp"
   onRampModeChange?: (mode: "onramp" | "offramp") => void
 }
@@ -96,11 +98,13 @@ export function RampInterface({
   balance = 0,
   selectedWallet,
   onWalletSelect,
+  onAccountSelect,
   selectedPaymentMethod,
   onPaymentMethodSelect,
   selectedTransferMethod,
   onTransferMethodSelect,
   onConnectWallet,
+  isWalletConnected,
   rampMode: externalRampMode,
   onRampModeChange: externalOnRampModeChange,
 }: RampInterfaceProps) {
@@ -279,11 +283,19 @@ export function RampInterface({
   }
 
   const handleWalletSelect = () => {
-    onWalletSelect?.()
+    if (rampMode === "offramp") {
+      // off-ramp should select a fiat receiving account
+      if (onAccountSelect) onAccountSelect()
+      else onWalletSelect?.()
+    } else {
+      onWalletSelect?.()
+    }
   }
 
   // derive selected transfer method from props or internal state
   const effectiveTransferMethod = selectedTransferMethod ?? internalSelectedTransferMethod
+
+  const effectiveIsWalletConnected = isWalletConnected ?? false
 
   const setTransferMethod = (m: "connect_wallet" | "manual_transfer") => {
     setInternalSelectedTransferMethod(m)
@@ -652,7 +664,7 @@ export function RampInterface({
               </div>
             )}
 
-            {rampMode === "offramp" && effectiveTransferMethod === "connect_wallet" && fromAmount && Number(fromAmount) > 0 && !selectedWallet ? (
+            {rampMode === "offramp" && effectiveTransferMethod === "connect_wallet" && fromAmount && Number(fromAmount) > 0 && !effectiveIsWalletConnected ? (
               <Button
                 className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
                 size="lg"
@@ -670,7 +682,7 @@ export function RampInterface({
                 className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
                 size="lg"
                 disabled={
-                  !fromAmount || !selectedWallet || (rampMode === "onramp" && !selectedPaymentMethod) || loading
+                  !fromAmount || (!effectiveIsWalletConnected && effectiveTransferMethod === "connect_wallet") || (rampMode === "onramp" && !selectedPaymentMethod) || (rampMode === "offramp" && !selectedWallet) || loading
                 }
                 onClick={openConfirm}
                 aria-label={`${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}

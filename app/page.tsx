@@ -7,6 +7,7 @@ import { RampInterface } from "@/components/views/ramp-interface";
 import { ActivityView } from "@/components/views/activity-view";
 import { ProfileView } from "@/components/views/profile-view";
 import { WalletView } from "@/components/views/wallet-view";
+import BankAccountsView from "@/components/views/bank-accounts-view";
 import { AuthPage } from "@/components/auth-page";
 import { OnboardingTour } from "@/components/onboarding-tour";
 import { motion } from "framer-motion";
@@ -87,8 +88,9 @@ export default function FrampOnRamp() {
             fiatCurrency={fiatCurrency}
             onCurrencyChange={setTokenSymbol}
             receiving={toAmount ? Number(toAmount) : 0}
-            selectedWallet={selectedWallet}
+            selectedWallet={selectedWallet as any}
             onWalletSelect={() => setActiveView("wallet")}
+            onAccountSelect={() => setActiveView("bank")}
             selectedPaymentMethod={selectedPaymentMethod}
             onPaymentMethodSelect={setSelectedPaymentMethod}
           />
@@ -110,6 +112,17 @@ export default function FrampOnRamp() {
             onClose={() => setActiveView("onramp")}
           />
         );
+      case "bank":
+        return (
+          <BankAccountsView
+            onAccountSelect={(acct: any) => {
+              setSelectedWallet(acct)
+              setActiveView("onramp")
+            }}
+            selectedAccount={selectedWallet as any}
+            onClose={() => setActiveView("onramp")}
+          />
+        )
       default:
         return null;
     }
