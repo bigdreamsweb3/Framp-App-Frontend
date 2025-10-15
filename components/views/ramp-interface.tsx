@@ -13,7 +13,6 @@ import { CheckoutModal } from "@/components/modals/checkout-modal"
 import { TokenListModal, type Token } from "@/components/modals/token-list-modal"
 import { getPersonalizedDefaultToken, trackTokenSelection, trackTokenPurchase } from "@/lib/userBehavior/tokenTracker"
 import { ConfirmOnRampModal } from "../modals/confirm-onramp-modal"
-import { OfframpPanel } from "./offramp-panel"
 import { PaymentMethodSelector } from "../payment-method-selector"
 import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate"
 import { ExchangeRateSkeleton } from "../ui/exchange-rate-skeleton"
@@ -79,6 +78,8 @@ interface RampInterfaceProps {
   onWalletSelect?: () => void
   selectedPaymentMethod?: string | null
   onPaymentMethodSelect?: (method: string) => void
+  selectedTransferMethod?: "connect_wallet" | "manual_transfer" | null
+  onTransferMethodSelect?: (method: "connect_wallet" | "manual_transfer") => void
   rampMode?: "onramp" | "offramp"
   onRampModeChange?: (mode: "onramp" | "offramp") => void
 }
@@ -96,6 +97,8 @@ export function RampInterface({
   onWalletSelect,
   selectedPaymentMethod,
   onPaymentMethodSelect,
+  selectedTransferMethod,
+  onTransferMethodSelect,
   rampMode: externalRampMode,
   onRampModeChange: externalOnRampModeChange,
 }: RampInterfaceProps) {
@@ -134,13 +137,11 @@ export function RampInterface({
   const [checkoutUrl, setCheckoutUrl] = useState<string | null>(null)
   const [selectedToken, setSelectedToken] = useState<Token | null>(null)
   const [formattedAmount, setFormattedAmount] = useState("")
+  const [internalSelectedTransferMethod, setInternalSelectedTransferMethod] = useState<
+    "connect_wallet" | "manual_transfer" | null
+  >(null)
 
   const { user } = useAuth()
-  const [walletConnected, setWalletConnected] = useState(false)
-  const [accounts, setAccounts] = useState<{ id: string; name: string; details?: string }[]>([])
-  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null)
-  const [manualPaymentInfo, setManualPaymentInfo] = useState<{ orderId: string; walletAddress: string } | null>(null)
-  const [offrampMethod, setOfframpMethod] = useState<'wallet' | 'manual'>('wallet')
 
   // determine mode for exchange rate requests
   const rateMode: 'buy' | 'sell' = rampMode === 'onramp' ? 'buy' : 'sell';
@@ -266,28 +267,12 @@ export function RampInterface({
     onWalletSelect?.()
   }
 
-  async function handleConnectWallet() {
-    // TODO: integrate real wallet connect (Phantom, etc). For now simulate.
-    console.log('[v0] Simulated wallet connect')
-    // simulate fetching accounts from wallet
-    await new Promise((r) => setTimeout(r, 300))
-    setWalletConnected(true)
-    setAccounts([{ id: 'acc_1', name: 'Main Account', details: 'SOL • 0.52' }])
-    return true
-  }
+  // derive selected transfer method from props or internal state
+  const effectiveTransferMethod = selectedTransferMethod ?? internalSelectedTransferMethod
 
-  async function handleCreateOfframpOrder(payload: any) {
-    // call the API stub
-    const { createOfframp } = await import('@/lib/api/payments/offramp')
-    const res = await createOfframp({ ...payload, user_id: user?.id })
-    if (payload.method === 'manual') {
-      // Show manual payment info
-      setManualPaymentInfo({ orderId: res.data.order_id, walletAddress: 'So11111111111111111111111111111111111111112' })
-    } else {
-      // For wallet method, open confirm modal to sign and process
-      setShowConfirm(true)
-    }
-    return res
+  const setTransferMethod = (m: "connect_wallet" | "manual_transfer") => {
+    setInternalSelectedTransferMethod(m)
+    onTransferMethodSelect?.(m)
   }
 
   return (
@@ -437,39 +422,85 @@ export function RampInterface({
                 </div>
               </>
             ) : (
-              <OfframpPanel
-                formattedAmount={formattedAmount}
-                handleAmountChange={handleAmountChange}
-                handleWheel={handleWheel}
-                onOpenTokenModal={() => setTokenModalOpen(true)}
-                tokenSymbol={tokenSymbol}
-                tokenIcon={CRYPTO_TOKENS.find((t) => t.symbol === tokenSymbol)?.icon}
-                computedReceiving={computedReceiving}
-                logoNGN={logoNGN}
-                onConnectWallet={handleConnectWallet}
-                connected={walletConnected}
-                accounts={accounts}
-                selectedAccountId={selectedAccountId}
-                onCreateOrder={handleCreateOfframpOrder}
-                onMethodSelect={(method) => {
-                  // parent keeps track of selected method but does not create orders yet
-                  setOfframpMethod(method)
-                }}
-                onSelectAccount={async (id) => {
-                  // when user selects an account, create the order according to selected method
-                  setSelectedAccountId(id)
-                  const account = accounts.find((a) => a.id === id) || null
-                  const payload = {
-                    type: 'sell',
-                    method: offrampMethod === 'manual' ? 'manual' : 'wallet',
-                    status: offrampMethod === 'manual' ? 'awaiting_payment' : 'pending',
-                    amount: Number(fromAmount) || 0,
-                    bank_account: account,
-                    created_at: new Date().toISOString(),
-                  }
-                  await handleCreateOfframpOrder(payload)
-                }}
-              />
+              <>
+                <div className="bg-muted/40 rounded-xl p-3 border border-border/30">
+                  <div className="text-xs text-muted-foreground mb-2 font-medium">You pay</div>
+                  <div className="flex items-center justify-between gap-3">
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={formattedAmount}
+                      onChange={(e) => handleAmountChange(e.target.value)}
+                      onWheel={handleWheel}
+                      className="text-2xl font-semibold bg-transparent border-none outline-none w-full text-foreground placeholder:text-muted-foreground/40"
+                      placeholder="0"
+                      aria-label="Amount to pay in crypto"
+                    />
+                    <Button
+                      variant="ghost"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-background hover:bg-muted/60 border border-border/40 shrink-0"
+                      onClick={() => setTokenModalOpen(true)}
+                      aria-label="Select cryptocurrency"
+                    >
+                      <img
+                        src={CRYPTO_TOKENS.find((t) => t.symbol === tokenSymbol)?.icon || "/placeholder.svg"}
+                        alt={tokenSymbol}
+                        className="w-5 h-5"
+                      />
+                      <span className="font-medium text-sm">{tokenSymbol}</span>
+                      <ChevronDown className="w-4 h-4 ml-1" />
+                    </Button>
+                  </div>
+                </div>
+
+                {/* <div className="flex items-center justify-between bg-primary/10 rounded-xl px-3 py-2">
+                    {rateLoading && !exchangeRate ? (
+                      <ExchangeRateSkeleton />
+                    ) : (
+                      <div className="flex items-center gap-2 text-sm text-primary">
+                        <span>
+                          1 {tokenSymbol} = {effectiveRate.toLocaleString()} NGN
+                        </span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-6 w-6 p-0"
+                          onClick={refreshRate}
+                          aria-label="Refresh exchange rate"
+                        >
+                          <RefreshCw className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    )}
+                    {rateError && (
+                      <div className="flex items-center gap-1 text-xs text-destructive">
+                        <AlertCircle className="h-4 w-4" />
+                        <span>Error loading rate</span>
+                      </div>
+                    )}
+                  </div> */}
+
+                <div className="bg-muted/40 rounded-xl p-3 border border-border/30">
+                  <div className="text-xs text-muted-foreground mb-2 font-medium">You receive</div>
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-2xl font-semibold text-foreground">
+                      {computedReceiving > 0
+                        ? computedReceiving.toLocaleString("en-US", {
+                          maximumFractionDigits: 2,
+                        })
+                        : "0.00"}
+                    </div>
+                    <Button
+                      variant="ghost"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-background hover:bg-muted/60 border border-border/40 shrink-0"
+                      aria-label="Fiat currency"
+                    >
+                      <img src={logoNGN || "/placeholder.svg"} alt="NGN" className="w-5 h-5" />
+                      <span className="font-medium text-sm">NGN</span>
+                    </Button>
+                  </div>
+                </div>
+              </>
             )}
 
             {/*  */}
@@ -571,6 +602,41 @@ export function RampInterface({
               </div>
             )}
 
+            {rampMode === "offramp" && fromAmount && Number(fromAmount) > 0 && selectedWallet && (
+              <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="text-xs text-muted-foreground">Transfer Method</div>
+                  {!effectiveTransferMethod && <AlertCircle className="h-4 w-4 text-orange-600" />}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant={effectiveTransferMethod === "connect_wallet" ? "default" : "outline"}
+                    size="sm"
+                    className="h-9 px-3 rounded-xl"
+                    onClick={() => setTransferMethod("connect_wallet")}
+                    aria-label="Connect wallet transfer method"
+                  >
+                    Connect wallet
+                  </Button>
+
+                  <Button
+                    variant={effectiveTransferMethod === "manual_transfer" ? "default" : "outline"}
+                    size="sm"
+                    className="h-9 px-3 rounded-xl"
+                    onClick={() => setTransferMethod("manual_transfer")}
+                    aria-label="Manual transfer method"
+                  >
+                    Manual transfer
+                  </Button>
+                </div>
+
+                <div className="text-xs text-muted-foreground mt-3">
+                  Choose how you want to transfer tokens. Connect wallet to send directly, or select Manual transfer to get instructions.
+                </div>
+              </div>
+            )}
+
             <Button
               className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
               size="lg"
@@ -626,27 +692,6 @@ export function RampInterface({
       )}
 
       {checkoutUrl && <CheckoutModal url={checkoutUrl} onClose={() => setCheckoutUrl(null)} />}
-
-      {/* Manual payment info modal/sheet */}
-      {manualPaymentInfo && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-          <div className="bg-background rounded-lg p-6 w-full max-w-md">
-            <h3 className="text-lg font-semibold mb-2">Send payment to complete sale</h3>
-            <p className="text-sm text-muted-foreground mb-4">Order: {manualPaymentInfo.orderId}</p>
-            <div className="mb-4">
-              <div className="text-xs text-muted-foreground">Platform wallet (SOL)</div>
-              <div className="font-mono text-sm bg-muted/10 p-2 rounded mt-1 break-all">{manualPaymentInfo.walletAddress}</div>
-            </div>
-            <div className="mb-4">
-              {/* Placeholder for QR - could integrate a QR lib */}
-              <div className="w-36 h-36 bg-muted/20 rounded mx-auto flex items-center justify-center">QR</div>
-            </div>
-            <div className="flex gap-2">
-              <Button onClick={() => setManualPaymentInfo(null)} className="w-full">Close</Button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   )
 }
