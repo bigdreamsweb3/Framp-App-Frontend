@@ -85,9 +85,7 @@ export function SideHeader({
 
 
     return (
-        <header
-            className={`h-14`}
-        >
+        <header className={`h-14 relative z-10`}>
             <div className="w-full h-full px-4 flex items-center justify-between">
                 {/* Logo Section */}
 

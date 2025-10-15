@@ -111,7 +111,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             {/* Desktop Layout */}
             <div className="hidden md:flex h-screen overflow-hidden">
                 {/* Sidebar */}
-                <div className="flex flex-col justify-between h-full w-80 border-r bg-background">
+                <div className="flex flex-col justify-between h-full w-80 border-r bg-background relative z-10">
                     <div>
                         <SideHeader
                             onAuthClick={handleShowAuth}
@@ -219,8 +219,8 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                 />
 
                 <main className="container mx-auto px-4 py-6 max-w-md pb-28">
-                    <div className="flex flex-row items-center gap-2 h-fit mb-6">
-                       {/*   <Tabs
+                    {/* <div className="flex flex-row items-center gap-2 h-fit mb-6">
+                         <Tabs
                             value={activeView}
                             onValueChange={handleTabChange}
                             className="w-full flex flex-row"
@@ -268,7 +268,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                             </TabsList>
                         </Tabs>
 
-                        {/* 
+                        
                         <Link
                             href="/activity"
                             onClick={() => setActiveView("activity")}
@@ -276,10 +276,10 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                 }`}
                         >
                             <ActivityIcon className="w-4 h-4" />
-                        </Link> */}
+                        </Link>
 
 
-                    </div>
+                    </div> */}
                     {children}
                 </main>
 
@@ -289,8 +289,8 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
             {/* Mobile Bottom Navigation */}
             <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden">
-                <div className="mx-auto max-w-md px-4 pb-safe bg-transparent">
-                    <div className="rounded-t-xl border-t bg-card/95 shadow-lg py-2 flex items-center justify-between gap-2">
+                <div className="w-full pb-safe bg-transparent">
+                    <div className="rounded-t-xl border-t bg-card shadow-lg px-2 py-3 flex items-center justify-between gap-2 w-full">
                         <button
                             onClick={() => handleTabChange('onramp')}
                             aria-label="Gate"

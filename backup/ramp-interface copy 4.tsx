@@ -262,8 +262,10 @@ export function RampInterface({
 
   return (
     <>
-      <Card className="w-full mx-auto max-w-md bg-card dark:bg-card/50 backdrop-blur-sm gap-3" data-tour="onramp-card">
+      <Card className="w-full mx-auto max-w-md bg-card dark:bg-card/50 backdrop-blur-sm" data-tour="onramp-card">
         <CardHeader>
+
+
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               {/* {rampMode === "onramp" ? (
@@ -338,8 +340,8 @@ export function RampInterface({
                       onChange={(e) => handleAmountChange(e.target.value)}
                       onWheel={handleWheel}
                       className="text-2xl font-semibold bg-transparent border-none outline-none w-full text-foreground placeholder:text-muted-foreground/40"
-                      placeholder="0"
-                      aria-label="Amount to pay in NGN"
+                      placeholder="0.00"
+                      aria-label="Amount to pay in crypto"
                     />
                     <Button
                       variant="ghost"
@@ -383,9 +385,9 @@ export function RampInterface({
                   <div className="text-xs text-muted-foreground mb-2 font-medium">You receive</div>
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-2xl font-semibold text-foreground">
-                      {computedReceiving > 0
-                        ? computedReceiving.toLocaleString("en-US", {
-                          maximumFractionDigits: 5,
+                      {receiving > 0
+                        ? receiving.toLocaleString("en-US", {
+                          maximumFractionDigits: 2,
                         })
                         : "0.00"}
                     </div>
@@ -418,7 +420,7 @@ export function RampInterface({
                       onChange={(e) => handleAmountChange(e.target.value)}
                       onWheel={handleWheel}
                       className="text-2xl font-semibold bg-transparent border-none outline-none w-full text-foreground placeholder:text-muted-foreground/40"
-                      placeholder="0"
+                      placeholder="0.00"
                       aria-label="Amount to pay in crypto"
                     />
                     <Button
@@ -469,8 +471,8 @@ export function RampInterface({
                   <div className="text-xs text-muted-foreground mb-2 font-medium">You receive</div>
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-2xl font-semibold text-foreground">
-                      {computedReceiving > 0
-                        ? computedReceiving.toLocaleString("en-US", {
+                      {receiving > 0
+                        ? receiving.toLocaleString("en-US", {
                           maximumFractionDigits: 2,
                         })
                         : "0.00"}
@@ -500,7 +502,7 @@ export function RampInterface({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-5 w-5 p-0 hover:bg-muted/60 rounded-full"
+                    className="h-5 w-5 p-0 hover:bg-muted/60 rounded-xl"
                     onClick={refreshRate}
                     aria-label="Refresh exchange rate"
                   >
@@ -523,7 +525,7 @@ export function RampInterface({
                     <div className="text-xs text-muted-foreground">{rampMode === "onramp" ? "To:" : "To:"}</div>
                     {selectedWallet ? (
                       <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center">
+                        <div className="w-5 h-5 bg-primary/10 rounded-xl flex items-center justify-center">
                           {selectedWallet.type === "wallet" ? (
                             <Wallet className="h-3 w-3 text-primary" />
                           ) : (
@@ -537,7 +539,7 @@ export function RampInterface({
                       </div>
                     ) : (
                       <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
+                        <div className="w-5 h-5 bg-orange-100 rounded-xl flex items-center justify-center">
                           {rampMode === "onramp" ? (
                             <Wallet className="h-3 w-3 text-orange-500" />
                           ) : (

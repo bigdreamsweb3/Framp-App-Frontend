@@ -4,76 +4,75 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Updated color tokens to match FRAMP purple branding */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.3 0 0);
-  --card: oklch(100% 0.00011 271.152);
-  --card-foreground: oklch(0.3 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.3 0 0);
-  --primary: oklch(0.45 0.15 280);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.85 0.02 280);
-  --secondary-foreground: oklch(0.3 0 0);
-  --muted: oklch(0.975 0.005 280);
-  --muted-foreground: oklch(0.46 0.005 280);
-  --accent: oklch(0.85 0.02 280);
-  --accent-foreground: oklch(0.3 0 0);
+  --background: oklch(0.98 0.005 280); /* Slightly off-white with purple tint */
+  --foreground: oklch(0.2 0.02 280); /* Darker, more saturated text */
+  --card: oklch(1 0.01 280); /* Pure white cards with subtle purple */
+  --card-foreground: oklch(0.2 0.02 280);
+  --popover: oklch(1 0.01 280);
+  --popover-foreground: oklch(0.2 0.02 280);
+  --primary: oklch(0.5 0.2 280); /* More vibrant purple */
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.88 0.04 280); /* More saturated secondary */
+  --secondary-foreground: oklch(0.2 0.02 280);
+  --muted: oklch(0.94 0.015 280); /* Better contrast for muted areas */
+  --muted-foreground: oklch(0.5 0.02 280); /* Darker muted text */
+  --accent: oklch(0.88 0.04 280);
+  --accent-foreground: oklch(0.2 0.02 280);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.92 0 0);
-  --input: oklch(1 0 0);
-  --ring: oklch(0.45 0.15 280);
-  --chart-1: oklch(0.45 0.15 280);
-  --chart-2: oklch(0.3 0 0);
-  --chart-3: oklch(0.85 0.02 280);
-  --chart-4: oklch(0.98 0 0);
+  --border: oklch(0.88 0.02 280); /* More visible borders */
+  --input: oklch(0.96 0.01 280); /* Distinct input background */
+  --ring: oklch(0.5 0.2 280);
+  --chart-1: oklch(0.5 0.2 280);
+  --chart-2: oklch(0.6 0.15 200);
+  --chart-3: oklch(0.65 0.18 160);
+  --chart-4: oklch(0.55 0.22 320);
   --chart-5: oklch(0.577 0.245 27.325);
   --radius: 0.625rem;
-  --sidebar: oklch(1 0 0);
-  --sidebar-foreground: oklch(0.3 0 0);
-  --sidebar-primary: oklch(0.45 0.15 280);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.85 0.02 280);
-  --sidebar-accent-foreground: oklch(0.3 0 0);
-  --sidebar-border: oklch(0.92 0 0);
-  --sidebar-ring: oklch(0.45 0.15 280);
+  --sidebar: oklch(1 0.01 280);
+  --sidebar-foreground: oklch(0.2 0.02 280);
+  --sidebar-primary: oklch(0.5 0.2 280);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.88 0.04 280);
+  --sidebar-accent-foreground: oklch(0.2 0.02 280);
+  --sidebar-border: oklch(0.88 0.02 280);
+  --sidebar-ring: oklch(0.5 0.2 280);
 }
 
 .dark {
-  /* Updated dark mode colors to maintain FRAMP branding */
-  --background: oklch(14.31% 0.031 263.86);
-  --foreground: oklch(0.98 0 0);
-  --card: oklch(0.12 0.02 280);
-  --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.08 0.02 280);
-  --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.55 0.18 280);
-  --primary-foreground: oklch(1 0 0);
-  --secondary: oklch(0.2 0.02 280);
-  --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.2 0.02 280);
-  --accent-foreground: oklch(0.98 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.98 0 0);
-  --border: oklch(0.2 0.02 280);
-  --input: oklch(0.2 0.02 280);
-  --ring: oklch(0.55 0.18 280);
-  --chart-1: oklch(0.55 0.18 280);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.12 0.02 280);
-  --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.55 0.18 280);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.2 0.02 280);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
-  --sidebar-border: oklch(0.2 0.02 280);
-  --sidebar-ring: oklch(0.55 0.18 280);
+  /* Increased contrast between background and cards in dark mode, added more saturation */
+  --background: oklch(0.12 0.025 280); /* Darker background with purple tint */
+  --foreground: oklch(0.95 0.01 280); /* Brighter text */
+  --card: oklch(0.18 0.03 280); /* Lighter cards for clear separation */
+  --card-foreground: oklch(0.95 0.01 280);
+  --popover: oklch(0.16 0.03 280);
+  --popover-foreground: oklch(0.95 0.01 280);
+  --primary: oklch(0.6 0.22 280); /* Brighter, more vibrant purple */
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.25 0.04 280); /* More saturated secondary */
+  --secondary-foreground: oklch(0.95 0.01 280);
+  --muted: oklch(0.22 0.03 280); /* Better contrast for muted areas */
+  --muted-foreground: oklch(0.65 0.02 280); /* More visible muted text */
+  --accent: oklch(0.25 0.04 280);
+  --accent-foreground: oklch(0.95 0.01 280);
+  --destructive: oklch(0.5 0.2 25);
+  --destructive-foreground: oklch(0.99 0 0);
+  --border: oklch(0.28 0.04 280); /* More visible borders */
+  --input: oklch(0.2 0.03 280); /* Distinct input background */
+  --ring: oklch(0.6 0.22 280);
+  --chart-1: oklch(0.6 0.22 280);
+  --chart-2: oklch(0.7 0.18 160);
+  --chart-3: oklch(0.75 0.2 80);
+  --chart-4: oklch(0.65 0.25 310);
+  --chart-5: oklch(0.65 0.25 20);
+  --sidebar: oklch(0.16 0.03 280);
+  --sidebar-foreground: oklch(0.95 0.01 280);
+  --sidebar-primary: oklch(0.6 0.22 280);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.25 0.04 280);
+  --sidebar-accent-foreground: oklch(0.95 0.01 280);
+  --sidebar-border: oklch(0.28 0.04 280);
+  --sidebar-ring: oklch(0.6 0.22 280);
 }
 
 @theme inline {
@@ -121,26 +120,41 @@
   * {
     @apply border-border outline-ring/50;
   }
-
-  /* Base body styles with blockchain & tradfi icon pattern (randomly positioned) */
   body {
     @apply bg-background text-foreground;
     background-color: var(--background);
-    /* Removed piggy bank and money bag icons, kept dollar signs, blockchain cubes, chain links, bank buildings, charts, and credit cards */
-    background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239aa0a4' fill-opacity='0.15'%3E%3C!-- Dollar sign (large) --%3E%3Ctext x='15' y='35' font-size='18' font-weight='bold'%3E$%3C/text%3E%3C!-- Blockchain cube (small) --%3E%3Cpath d='M145 18l2.5-1.5 2.5 1.5v2.5l-2.5 1.5-2.5-1.5z' stroke='%239aa0a4' stroke-width='0.4' fill='none'/%3E%3C!-- Chain link (medium) --%3E%3Ccircle cx='78' cy='25' r='4' fill='none' stroke='%239aa0a4' stroke-width='1'/%3E%3Ccircle cx='86' cy='25' r='4' fill='none' stroke='%239aa0a4' stroke-width='1'/%3E%3Cline x1='81' y1='25' x2='83' y2='25' stroke='%239aa0a4' stroke-width='1'/%3E%3C!-- Chart/graph (large) --%3E%3Cpolyline points='125,48 132,42 139,45 146,38' fill='none' stroke='%239aa0a4' stroke-width='1.2'/%3E%3C!-- Credit card (medium) --%3E%3Crect x='8' y='78' width='20' height='13' rx='1.5' fill='none' stroke='%239aa0a4' stroke-width='0.7'/%3E%3Cline x1='8' y1='83' x2='28' y2='83' stroke='%239aa0a4' stroke-width='0.7'/%3E%3Cline x1='10' y1='87' x2='18' y2='87' stroke='%239aa0a4' stroke-width='0.5'/%3E%3C!-- Dollar sign (small) --%3E%3Ctext x='172' y='68' font-size='10' font-weight='bold'%3E$%3C/text%3E%3C!-- Blockchain cube (large) --%3E%3Cpath d='M95 75l5-3 5 3v5l-5 3-5-3z' stroke='%239aa0a4' stroke-width='0.8' fill='none'/%3E%3C!-- Chain link (small) --%3E%3Ccircle cx='135' cy='92' r='2.5' fill='none' stroke='%239aa0a4' stroke-width='0.6'/%3E%3Ccircle cx='141' cy='92' r='2.5' fill='none' stroke='%239aa0a4' stroke-width='0.6'/%3E%3Cline x1='137' y1='92' x2='139' y2='92' stroke='%239aa0a4' stroke-width='0.6'/%3E%3C!-- Dollar sign (medium) --%3E%3Ctext x='58' y='125' font-size='14' font-weight='bold'%3E$%3C/text%3E%3C!-- Credit card (small) --%3E%3Crect x='165' y='115' width='14' height='9' rx='1' fill='none' stroke='%239aa0a4' stroke-width='0.5'/%3E%3Cline x1='165' y1='118' x2='179' y2='118' stroke='%239aa0a4' stroke-width='0.5'/%3E%3Cline x1='167' y1='121' x2='173' y2='121' stroke='%239aa0a4' stroke-width='0.4'/%3E%3C!-- Chart/graph (small) --%3E%3Cpolyline points='18,145 22,141 26,143 30,138' fill='none' stroke='%239aa0a4' stroke-width='0.7'/%3E%3C!-- Blockchain cube (medium) --%3E%3Cpath d='M148 138l3.5-2 3.5 2v3.5l-3.5 2-3.5-2z' stroke='%239aa0a4' stroke-width='0.6' fill='none'/%3E%3C!-- Dollar sign (large) --%3E%3Ctext x='82' y='168' font-size='18' font-weight='bold'%3E$%3C/text%3E%3C!-- Chain link (large) --%3E%3Ccircle cx='38' cy='182' r='5' fill='none' stroke='%239aa0a4' stroke-width='1.2'/%3E%3Ccircle cx='48' cy='182' r='5' fill='none' stroke='%239aa0a4' stroke-width='1.2'/%3E%3Cline x1='42' y1='182' x2='44' y2='182' stroke='%239aa0a4' stroke-width='1.2'/%3E%3C!-- Credit card (large) --%3E%3Crect x='125' y='172' width='24' height='16' rx='2' fill='none' stroke='%239aa0a4' stroke-width='0.9'/%3E%3Cline x1='125' y1='178' x2='149' y2='178' stroke='%239aa0a4' stroke-width='0.9'/%3E%3Cline x1='128' y1='183' x2='138' y2='183' stroke='%239aa0a4' stroke-width='0.6'/%3E%3C!-- Chart/graph (medium) --%3E%3Cpolyline points='168,158 173,153 178,156 183,150' fill='none' stroke='%239aa0a4' stroke-width='0.9'/%3E%3C/g%3E%3C/svg%3E");
+    /* Financial and blockchain icons with increased opacity and stroke-width for better visibility */
+    background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239aa0a4' fill-opacity='0.28'%3E%3C!-- Dollar sign (large) --%3E%3Ctext x='15' y='35' font-size='20' font-weight='bold'%3E$%3C/text%3E%3C!-- Blockchain cube (small) --%3E%3Cpath d='M145 18l2.5-1.5 2.5 1.5v2.5l-2.5 1.5-2.5-1.5z' stroke='%239aa0a4' stroke-width='1' fill='none'/%3E%3C!-- Chain link (medium) --%3E%3Ccircle cx='78' cy='25' r='4' fill='none' stroke='%239aa0a4' stroke-width='1.5'/%3E%3Ccircle cx='86' cy='25' r='4' fill='none' stroke='%239aa0a4' stroke-width='1.5'/%3E%3Cline x1='81' y1='25' x2='83' y2='25' stroke='%239aa0a4' stroke-width='1.5'/%3E%3C!-- Chart/graph (large) --%3E%3Cpolyline points='125,48 132,42 139,45 146,38' fill='none' stroke='%239aa0a4' stroke-width='1.8'/%3E%3C!-- Credit card (medium) --%3E%3Crect x='8' y='78' width='20' height='13' rx='1.5' fill='none' stroke='%239aa0a4' stroke-width='1.2'/%3E%3Cline x1='8' y1='83' x2='28' y2='83' stroke='%239aa0a4' stroke-width='1.2'/%3E%3Cline x1='10' y1='87' x2='18' y2='87' stroke='%239aa0a4' stroke-width='0.8'/%3E%3C!-- Dollar sign (small) --%3E%3Ctext x='172' y='68' font-size='12' font-weight='bold'%3E$%3C/text%3E%3C!-- Blockchain cube (large) --%3E%3Cpath d='M95 75l5-3 5 3v5l-5 3-5-3z' stroke='%239aa0a4' stroke-width='1.4' fill='none'/%3E%3C!-- Chain link (small) --%3E%3Ccircle cx='135' cy='92' r='2.5' fill='none' stroke='%239aa0a4' stroke-width='1'/%3E%3Ccircle cx='141' cy='92' r='2.5' fill='none' stroke='%239aa0a4' stroke-width='1'/%3E%3Cline x1='137' y1='92' x2='139' y2='92' stroke='%239aa0a4' stroke-width='1'/%3E%3C!-- Dollar sign (medium) --%3E%3Ctext x='58' y='125' font-size='16' font-weight='bold'%3E$%3C/text%3E%3C!-- Credit card (small) --%3E%3Crect x='165' y='115' width='14' height='9' rx='1' fill='none' stroke='%239aa0a4' stroke-width='0.8'/%3E%3Cline x1='165' y1='118' x2='179' y2='118' stroke='%239aa0a4' stroke-width='0.8'/%3E%3Cline x1='167' y1='121' x2='173' y2='121' stroke='%239aa0a4' stroke-width='0.6'/%3E%3C!-- Bank building (medium) --%3E%3Crect x='42' y='155' width='18' height='12' fill='none' stroke='%239aa0a4' stroke-width='1.2'/%3E%3Cline x1='42' y1='155' x2='51' y2='148' stroke='%239aa0a4' stroke-width='1.2'/%3E%3Cline x1='60' y1='155' x2='51' y2='148' stroke='%239aa0a4' stroke-width='1.2'/%3E%3Cline x1='45' y1='158' x2='45' y2='167' stroke='%239aa0a4' stroke-width='0.8'/%3E%3Cline x1='51' y1='158' x2='51' y2='167' stroke='%239aa0a4' stroke-width='0.8'/%3E%3Cline x1='57' y1='158' x2='57' y2='167' stroke='%239aa0a4' stroke-width='0.8'/%3E%3C!-- Chart/graph (small) --%3E%3Cpolyline points='168,148 172,144 176,146 180,142' fill='none' stroke='%239aa0a4' stroke-width='1'/%3E%3C!-- Dollar sign (large) --%3E%3Ctext x='115' y='175' font-size='20' font-weight='bold'%3E$%3C/text%3E%3C!-- Blockchain cube (medium) --%3E%3Cpath d='M18 185l3.5-2 3.5 2v3.5l-3.5 2-3.5-2z' stroke='%239aa0a4' stroke-width='1.2' fill='none'/%3E%3C/g%3E%3C/svg%3E");
     background-size: 200px 200px;
     background-repeat: repeat;
     background-attachment: fixed;
+    position: relative;
   }
 
-  /* Dark mode: blockchain & tradfi icons with subtle white glow and random positions */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(
+      to bottom,
+      var(--background) 0%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
   .dark body {
     background-color: var(--background);
-    /* Removed piggy bank and money bag icons from dark mode as well */
-    background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.08'%3E%3C!-- Dollar sign (large) --%3E%3Ctext x='15' y='35' font-size='18' font-weight='bold'%3E$%3C/text%3E%3C!-- Blockchain cube (small) --%3E%3Cpath d='M145 18l2.5-1.5 2.5 1.5v2.5l-2.5 1.5-2.5-1.5z' stroke='%23ffffff' stroke-width='0.4' fill='none' stroke-opacity='0.08'/%3E%3C!-- Chain link (medium) --%3E%3Ccircle cx='78' cy='25' r='4' fill='none' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.08'/%3E%3Ccircle cx='86' cy='25' r='4' fill='none' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.08'/%3E%3Cline x1='81' y1='25' x2='83' y2='25' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.08'/%3E%3C!-- Chart/graph (large) --%3E%3Cpolyline points='125,48 132,42 139,45 146,38' fill='none' stroke='%23ffffff' stroke-width='1.2' stroke-opacity='0.08'/%3E%3C!-- Credit card (medium) --%3E%3Crect x='8' y='78' width='20' height='13' rx='1.5' fill='none' stroke='%23ffffff' stroke-width='0.7' stroke-opacity='0.08'/%3E%3Cline x1='8' y1='83' x2='28' y2='83' stroke='%23ffffff' stroke-width='0.7' stroke-opacity='0.08'/%3E%3Cline x1='10' y1='87' x2='18' y2='87' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.08'/%3E%3C!-- Dollar sign (small) --%3E%3Ctext x='172' y='68' font-size='10' font-weight='bold'%3E$%3C/text%3E%3C!-- Blockchain cube (large) --%3E%3Cpath d='M95 75l5-3 5 3v5l-5 3-5-3z' stroke='%23ffffff' stroke-width='0.8' fill='none' stroke-opacity='0.08'/%3E%3C!-- Chain link (small) --%3E%3Ccircle cx='135' cy='92' r='2.5' fill='none' stroke='%23ffffff' stroke-width='0.6' stroke-opacity='0.08'/%3E%3Ccircle cx='141' cy='92' r='2.5' fill='none' stroke='%23ffffff' stroke-width='0.6' stroke-opacity='0.08'/%3E%3Cline x1='137' y1='92' x2='139' y2='92' stroke='%23ffffff' stroke-width='0.6' stroke-opacity='0.08'/%3E%3C!-- Dollar sign (medium) --%3E%3Ctext x='58' y='125' font-size='14' font-weight='bold'%3E$%3C/text%3E%3C!-- Credit card (small) --%3E%3Crect x='165' y='115' width='14' height='9' rx='1' fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.08'/%3E%3Cline x1='165' y1='118' x2='179' y2='118' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.08'/%3E%3Cline x1='167' y1='121' x2='173' y2='121' stroke='%23ffffff' stroke-width='0.4' stroke-opacity='0.08'/%3E%3C!-- Chart/graph (small) --%3E%3Cpolyline points='18,145 22,141 26,143 30,138' fill='none' stroke='%23ffffff' stroke-width='0.7' stroke-opacity='0.08'/%3E%3C!-- Blockchain cube (medium) --%3E%3Cpath d='M148 138l3.5-2 3.5 2v3.5l-3.5 2-3.5-2z' stroke='%23ffffff' stroke-width='0.6' fill='none' stroke-opacity='0.08'/%3E%3C!-- Dollar sign (large) --%3E%3Ctext x='82' y='168' font-size='18' font-weight='bold'%3E$%3C/text%3E%3C!-- Chain link (large) --%3E%3Ccircle cx='38' cy='182' r='5' fill='none' stroke='%23ffffff' stroke-width='1.2' stroke-opacity='0.08'/%3E%3Ccircle cx='48' cy='182' r='5' fill='none' stroke='%23ffffff' stroke-width='1.2' stroke-opacity='0.08'/%3E%3Cline x1='42' y1='182' x2='44' y2='182' stroke='%23ffffff' stroke-width='1.2' stroke-opacity='0.08'/%3E%3C!-- Credit card (large) --%3E%3Crect x='125' y='172' width='24' height='16' rx='2' fill='none' stroke='%23ffffff' stroke-width='0.9' stroke-opacity='0.08'/%3E%3Cline x1='125' y1='178' x2='149' y2='178' stroke='%23ffffff' stroke-width='0.9' stroke-opacity='0.08'/%3E%3Cline x1='128' y1='183' x2='138' y2='183' stroke='%23ffffff' stroke-width='0.6' stroke-opacity='0.08'/%3E%3C!-- Chart/graph (medium) --%3E%3Cpolyline points='168,158 173,153 178,156 183,150' fill='none' stroke='%23ffffff' stroke-width='0.9' stroke-opacity='0.08'/%3E%3C/g%3E%3C/svg%3E");
+    /* Increased opacity and stroke-width for dark mode visibility */
+    background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.18'%3E%3C!-- Dollar sign (large) --%3E%3Ctext x='15' y='35' font-size='20' font-weight='bold'%3E$%3C/text%3E%3C!-- Blockchain cube (small) --%3E%3Cpath d='M145 18l2.5-1.5 2.5 1.5v2.5l-2.5 1.5-2.5-1.5z' stroke='%23ffffff' stroke-width='1' fill='none' stroke-opacity='0.18'/%3E%3C!-- Chain link (medium) --%3E%3Ccircle cx='78' cy='25' r='4' fill='none' stroke='%23ffffff' stroke-width='1.5' stroke-opacity='0.18'/%3E%3Ccircle cx='86' cy='25' r='4' fill='none' stroke='%23ffffff' stroke-width='1.5' stroke-opacity='0.18'/%3E%3Cline x1='81' y1='25' x2='83' y2='25' stroke='%23ffffff' stroke-width='1.5' stroke-opacity='0.18'/%3E%3C!-- Chart/graph (large) --%3E%3Cpolyline points='125,48 132,42 139,45 146,38' fill='none' stroke='%23ffffff' stroke-width='1.8' stroke-opacity='0.18'/%3E%3C!-- Credit card (medium) --%3E%3Crect x='8' y='78' width='20' height='13' rx='1.5' fill='none' stroke='%23ffffff' stroke-width='1.2' stroke-opacity='0.18'/%3E%3Cline x1='8' y1='83' x2='28' y2='83' stroke='%23ffffff' stroke-width='1.2' stroke-opacity='0.18'/%3E%3Cline x1='10' y1='87' x2='18' y2='87' stroke='%23ffffff' stroke-width='0.8' stroke-opacity='0.18'/%3E%3C!-- Dollar sign (small) --%3E%3Ctext x='172' y='68' font-size='12' font-weight='bold'%3E$%3C/text%3E%3C!-- Blockchain cube (large) --%3E%3Cpath d='M95 75l5-3 5 3v5l-5 3-5-3z' stroke='%23ffffff' stroke-width='1.4' fill='none' stroke-opacity='0.18'/%3E%3C!-- Chain link (small) --%3E%3Ccircle cx='135' cy='92' r='2.5' fill='none' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.18'/%3E%3Ccircle cx='141' cy='92' r='2.5' fill='none' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.18'/%3E%3Cline x1='137' y1='92' x2='139' y2='92' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.18'/%3E%3C!-- Dollar sign (medium) --%3E%3Ctext x='58' y='125' font-size='16' font-weight='bold'%3E$%3C/text%3E%3C!-- Credit card (small) --%3E%3Crect x='165' y='115' width='14' height='9' rx='1' fill='none' stroke='%23ffffff' stroke-width='0.8' stroke-opacity='0.18'/%3E%3Cline x1='165' y1='118' x2='179' y2='118' stroke='%23ffffff' stroke-width='0.8' stroke-opacity='0.18'/%3E%3Cline x1='167' y1='121' x2='173' y2='121' stroke='%23ffffff' stroke-width='0.6' stroke-opacity='0.18'/%3E%3C!-- Bank building (medium) --%3E%3Crect x='42' y='155' width='18' height='12' fill='none' stroke='%23ffffff' stroke-width='1.2' stroke-opacity='0.18'/%3E%3Cline x1='42' y1='155' x2='51' y2='148' stroke='%23ffffff' stroke-width='1.2' stroke-opacity='0.18'/%3E%3Cline x1='60' y1='155' x2='51' y2='148' stroke='%23ffffff' stroke-width='1.2' stroke-opacity='0.18'/%3E%3Cline x1='45' y1='158' x2='45' y2='167' stroke='%23ffffff' stroke-width='0.8' stroke-opacity='0.18'/%3E%3Cline x1='51' y1='158' x2='51' y2='167' stroke='%23ffffff' stroke-width='0.8' stroke-opacity='0.18'/%3E%3Cline x1='57' y1='158' x2='57' y2='167' stroke='%23ffffff' stroke-width='0.8' stroke-opacity='0.18'/%3E%3C!-- Chart/graph (small) --%3E%3Cpolyline points='168,148 172,144 176,146 180,142' fill='none' stroke='%23ffffff' stroke-width='1' stroke-opacity='0.18'/%3E%3C!-- Dollar sign (large) --%3E%3Ctext x='115' y='175' font-size='20' font-weight='bold'%3E$%3C/text%3E%3C!-- Blockchain cube (medium) --%3E%3Cpath d='M18 185l3.5-2 3.5 2v3.5l-3.5 2-3.5-2z' stroke='%23ffffff' stroke-width='1.2' fill='none' stroke-opacity='0.18'/%3E%3C/g%3E%3C/svg%3E");
     background-size: 200px 200px;
     background-repeat: repeat;
     background-attachment: fixed;
+    position: relative;
   }
 
   button:hover,

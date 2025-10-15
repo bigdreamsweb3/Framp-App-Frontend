@@ -1,100 +1,113 @@
-"use client";
+"use client"
 
-import { useState, useEffect, useRef } from "react";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { AnimatePresence, motion } from "framer-motion";
-import { Button } from "../ui/button";
+import { useState, useEffect, useRef } from "react"
+import { ThemeToggle } from "@/components/theme-toggle"
+import { AnimatePresence, motion } from "framer-motion"
+import { Button } from "../ui/button"
 
-import Image from "next/image";
-import { app_logo } from "@/asssets/image";
+import Image from "next/image"
+import { app_logo } from "@/asssets/image"
 
-import { useAuth } from "@/context/AuthContext";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { useAuth } from "@/context/AuthContext"
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { HelpCircle, Menu, User, X, Activity as ActivityIcon, BookOpen } from "lucide-react";
+import Link from "next/link"
+import { useRouter, usePathname } from "next/navigation"
+import { HelpCircle, Menu, User, X, ActivityIcon, BookOpen } from "lucide-react"
 
-import {
-  ArrowUpCircle,
-  QrCode,
-  PiggyBank,
-  Wallet as WalletIcon,
-} from "lucide-react"
+import { ArrowUpCircle, QrCode, PiggyBank } from "lucide-react"
 
 interface AppHeaderProps {
-  onAuthClick?: () => void;
-  chatActive?: boolean;
-  onChatToggle?: () => void;
-  profileActive?: boolean;
-  onProfileToggle?: () => void;
+  onAuthClick?: () => void
+  chatActive?: boolean
+  onChatToggle?: () => void
+  profileActive?: boolean
+  onProfileToggle?: () => void
 }
 
-export function AppHeader({
-  onAuthClick,
-  chatActive,
-  onChatToggle,
-  profileActive,
-  onProfileToggle,
-}: AppHeaderProps) {
-  const router = useRouter();
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const headerRef = useRef<HTMLElement>(null);
+export function AppHeader({ onAuthClick, chatActive, onChatToggle, profileActive, onProfileToggle }: AppHeaderProps) {
+  const router = useRouter()
+  const pathname = usePathname() || ""
+  const [scrolled, setScrolled] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const headerRef = useRef<HTMLElement>(null)
 
-  const { user, loading, logout } = useAuth();
+  const { user, loading, logout } = useAuth()
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+      // Check both window.scrollY and document.documentElement.scrollTop for cross-browser compatibility
+      const scrollPosition = window.scrollY || document.documentElement.scrollTop
+      const isScrolled = scrollPosition > 10
+
+      console.log(
+        "[v0] Scroll detected - Position:",
+        scrollPosition,
+        "Is scrolled:",
+        isScrolled,
+        "Window height:",
+        window.innerHeight,
+        "Document height:",
+        document.documentElement.scrollHeight,
+      )
+
+      setScrolled(isScrolled)
+    }
+
+    // Check initial scroll position on mount
+    handleScroll()
+
+    // Listen to scroll events on both window and document
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    document.addEventListener("scroll", handleScroll, { passive: true })
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      document.removeEventListener("scroll", handleScroll)
+    }
+  }, [])
 
   // Close mobile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent | TouchEvent) => {
       if (mobileOpen && headerRef.current && !headerRef.current.contains(event.target as Node)) {
-        setMobileOpen(false);
+        setMobileOpen(false)
       }
-    };
+    }
 
     // Add event listener when mobile menu is open
     if (mobileOpen) {
-      document.addEventListener("mousedown", handleClickOutside as EventListener);
-      document.addEventListener("touchstart", handleClickOutside as EventListener);
+      document.addEventListener("mousedown", handleClickOutside as EventListener)
+      document.addEventListener("touchstart", handleClickOutside as EventListener)
     }
 
     // Cleanup function
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside as EventListener);
-      document.removeEventListener("touchstart", handleClickOutside as EventListener);
-    };
-  }, [mobileOpen]);
+      document.removeEventListener("mousedown", handleClickOutside as EventListener)
+      document.removeEventListener("touchstart", handleClickOutside as EventListener)
+    }
+  }, [mobileOpen])
 
   // Close mobile menu when pressing Escape key
   useEffect(() => {
     const handleEscapeKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && mobileOpen) {
-        setMobileOpen(false);
+      if (event.key === "Escape" && mobileOpen) {
+        setMobileOpen(false)
       }
-    };
+    }
 
     if (mobileOpen) {
-      document.addEventListener('keydown', handleEscapeKey);
+      document.addEventListener("keydown", handleEscapeKey)
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscapeKey);
-    };
-  }, [mobileOpen]);
+      document.removeEventListener("keydown", handleEscapeKey)
+    }
+  }, [mobileOpen])
 
   return (
     <header
       ref={headerRef}
-      className={`sticky top-0 z-50 w-full bg-background transition-all duration-500 ease-out h-14
-        ${scrolled ? "shadow-md bg-gradient-to-b from-background/95 to-background/80  backdrop-blur-md" : "shadow-none border-b"}`}
+      className={`sticky top-0 z-50 w-full transition-all duration-500 ease-out h-14 ${scrolled || mobileOpen ? 'bg-background/95 backdrop-blur-lg' : 'shadow-none bg-transparent'} ${scrolled ? 'shadow-md border-b border-border/40' : ''}`}
       data-tour="security"
     >
       <div className="w-full h-full pl-0 pr-4 flex items-center justify-between md:justify-end">
@@ -104,7 +117,7 @@ export function AppHeader({
             <div className="relative flex items-center">
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-primary/30 to-primary/5 blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
               <Image
-                src={app_logo}
+                src={app_logo || "/placeholder.svg"}
                 alt="App Logo"
                 className="relative w-[max(2.5rem,5vh)] h-auto object-contain rounded-r-2xl"
               />
@@ -142,7 +155,7 @@ export function AppHeader({
                 href="/docs"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200"
+                className={`text-sm font-semibold ${pathname === '/docs' ? 'text-primary' : 'text-foreground'} hover:text-primary transition-colors duration-200`}
               >
                 <span className="flex items-center gap-0.5">
                   <BookOpen size={18} />
@@ -154,7 +167,7 @@ export function AppHeader({
                 href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200"
+                className="text-sm font-semibold text-foreground hover:text-primary transition-colors duration-200"
               >
                 <span className="flex items-center gap-0.5">
                   <HelpCircle size={18} />
@@ -168,7 +181,6 @@ export function AppHeader({
           <div className="md:hidden">
             <ThemeToggle />
           </div>
-
 
           {/* User Actions */}
           <div className="md:hidden">
@@ -197,19 +209,13 @@ export function AppHeader({
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300" />
                 <svg
-                  className={`relative w-6 h-6 md:w-8 md:h-8 transition-colors duration-300 ${profileActive
-                    ? "text-white"
-                    : "text-primary hover:text-primary/80"
+                  className={`relative w-6 h-6 md:w-8 md:h-8 transition-colors duration-300 ${profileActive ? "text-white" : "text-primary hover:text-primary/80"
                     }`}
                   fill="currentColor"
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                    clipRule="evenodd"
-                  />
+                  <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                 </svg>
                 {profileActive && (
                   <motion.div
@@ -229,105 +235,108 @@ export function AppHeader({
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="md:hidden bg-background border-t border-border/20 px-4 py-3 flex flex-col gap-3 space-y-3"
+            initial={{ x: "-100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            
+            onClick={() => setMobileOpen(false)}
+            className="inset-0 z-40 md:hidden min-h-screen w-full border-t border-border/20 "
           >
-            <div>
-              <Link
-                href="/"
-                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
-                onClick={() => setMobileOpen(false)}
-              >
-                <ArrowUpCircle size={18} />
-                Gate
-              </Link>
-            </div>
-            <div>
-              <Link
-                href="/bills"
-                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
-                onClick={() => setMobileOpen(false)}
-              >
-                <QrCode size={18} />
-                Bills
-              </Link>
-            </div>
-            <div>
-              <Link
-                href="/save"
-                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
-                onClick={() => setMobileOpen(false)}
-              >
-                <PiggyBank size={18} />
-                Save
-              </Link>
-            </div>
+            <div className="min-h-screen max-w-[75%] bg-background border-t border-border/20 px-4 py-3 flex flex-col gap-3 space-y-3 shadow">
+              <div>
+                <Link
+                  href="/"
+                  className={`flex items-center gap-2 text-sm font-medium ${pathname === '/' ? 'text-primary font-semibold' : 'text-foreground/80'} hover:text-foreground`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <ArrowUpCircle size={18} />
+                  Gate
+                </Link>
+              </div>
+              <div>
+                <Link
+                  href="/bills"
+                  className={`flex items-center gap-2 text-sm font-medium ${pathname.startsWith('/bills') ? 'text-primary font-semibold' : 'text-foreground/80'} hover:text-foreground`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <QrCode size={18} />
+                  Bills
+                </Link>
+              </div>
+              <div>
+                <Link
+                  href="/save"
+                  className={`flex items-center gap-2 text-sm font-medium ${pathname.startsWith('/save') ? 'text-primary font-semibold' : 'text-foreground/80'} hover:text-foreground`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <PiggyBank size={18} />
+                  Save
+                </Link>
+              </div>
 
+              <div>
+                <Link
+                  href="/wallets"
+                  className={`flex items-center gap-2 text-sm font-medium ${pathname.startsWith('/wallets') ? 'text-primary font-semibold' : 'text-foreground/80'} hover:text-foreground`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <User size={18} />
+                  Wallets
+                </Link>
+              </div>
 
-            <div>
-              <Link
-                href="/wallets"
-                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
-                onClick={() => setMobileOpen(false)}
-              >
-                <User size={18} />
-                Wallets
-              </Link>
-            </div>
+              <div>
+                <Link
+                  href="/activity"
+                  className={`flex items-center gap-2 text-sm font-medium ${pathname.startsWith('/activity') ? 'text-primary font-semibold' : 'text-foreground/80'} hover:text-foreground`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <ActivityIcon size={18} />
+                  Activity
+                </Link>
+              </div>
 
-
-            <div>
-              <Link
-                href="/activity"
-                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
-                onClick={() => setMobileOpen(false)}
-              >
-                <ActivityIcon size={18} />
-                Activity
-              </Link>
+              <div>
+                <Link
+                  href="/docs"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center gap-2 text-sm font-medium ${pathname === '/docs' ? 'text-primary font-semibold' : 'text-foreground/80'} hover:text-foreground`}
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <BookOpen size={18} />
+                  Docs
+                </Link>
+              </div>
+              <div>
+                <Link
+                  href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  <HelpCircle size={18} />
+                  Help
+                </Link>
+              </div>
+              {!loading && !user && (
+                <Button
+                  onClick={() => {
+                    setMobileOpen(false)
+                    onAuthClick?.()
+                  }}
+                  size="sm"
+                  className="w-full bg-gradient-to-r from-primary to-primary/80"
+                >
+                  Sign in
+                </Button>
+              )}
             </div>
-
-            <div>
-              <Link
-                href="/docs"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
-                onClick={() => setMobileOpen(false)}
-              >
-                <BookOpen size={18} />
-                Docs
-              </Link>
-            </div>
-            <div>
-              <Link
-                href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm font-medium text-foreground/80 hover:text-foreground"
-                onClick={() => setMobileOpen(false)}
-              >
-                <HelpCircle size={18} />
-                Help
-              </Link>
-            </div>
-            {!loading && !user && (
-              <Button
-                onClick={() => {
-                  setMobileOpen(false);
-                  onAuthClick?.();
-                }}
-                size="sm"
-                className="w-full bg-gradient-to-r from-primary to-primary/80"
-              >
-                Sign in
-              </Button>
-            )}
           </motion.div>
         )}
       </AnimatePresence>
     </header>
-  );
+  )
 }
