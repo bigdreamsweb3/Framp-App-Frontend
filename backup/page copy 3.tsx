@@ -6,7 +6,7 @@ import { AppHeader } from "@/components/app_layout/app-header";
 import { RampInterface } from "@/components/views/ramp-interface";
 import { ActivityView } from "@/components/views/activity-view";
 import { ProfileView } from "@/components/views/profile-view";
-import { WalletView } from "@/components/views/wallet-view";
+import { WalletView } from "@/components/views/selectors/wallet-selector-view";
 import { AuthPage } from "@/components/auth-page";
 import { OnboardingTour } from "@/components/onboarding-tour";
 import { motion } from "framer-motion";

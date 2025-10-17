@@ -74,7 +74,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
         setShowChat(false)
         const a = action?.toLowerCase?.() || ""
         if (a.includes("wallet") || a.includes("bank") || a.includes("payment")) {
-            router.push("/wallet")
+            router.push("/wallets") // Fixed: changed from "/wallet" to "/wallets"
         } else if (a.includes("activity") || a.includes("history")) {
             router.push("/activity")
         } else if (a.includes("buy") || a.includes("ramp") || a.includes("purchase")) {
@@ -111,7 +111,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             {/* Desktop Layout */}
             <div className="hidden md:flex h-screen overflow-hidden">
                 {/* Sidebar */}
-                <div className="flex flex-col justify-between h-full w-80 border-r bg-background relative z-10">
+                <div className="flex flex-col justify-between h-full w-80 border-r bg-sidebar relative z-10">
                     <div>
                         <SideHeader
                             onAuthClick={handleShowAuth}
@@ -153,7 +153,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                         </Button>
                                     </Link>
                                 </div>
-                                <div>
+                                {/* <div>
                                     <Link href="/save">
                                         <Button
                                             className="w-full justify-start gap-2 rounded-xl"
@@ -163,13 +163,13 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                             Save
                                         </Button>
                                     </Link>
-                                </div>
+                                </div> */}
 
                                 <div>
                                     <Link href="/wallets">
                                         <Button
                                             className="w-full justify-start gap-2 rounded-xl"
-                                            variant={pathname?.startsWith("/wallet") ? "default" : "ghost"}
+                                            variant={pathname?.startsWith("/wallets") ? "default" : "ghost"} // Fixed: changed from "/wallet" to "/wallets"
                                         >
                                             <WalletIcon className="h-4 w-4" />
                                             Wallets
@@ -194,7 +194,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 overflow-y-auto bg-transparent">
+                <div className="flex-1 overflow-y-auto">
                     <AppHeader
                         onAuthClick={handleShowAuth}
                         chatActive={showChat}
@@ -309,14 +309,14 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                             <span className="text-[12px] font-medium mt-1">Bills</span>
                         </button>
 
-                        <button
+                        {/* <button
                             onClick={() => handleTabChange('save')}
                             aria-label="Save"
                             className={`flex-1 flex flex-col items-center justify-center py-0 rounded-lg ${activeView === 'save' ? 'text-primary' : 'text-muted-foreground'}`}
                         >
                             <PiggyBank className="h-6 w-6" />
                             <span className="text-[12px] font-medium mt-1">Save</span>
-                        </button>
+                        </button> */}
 
                         <button
                             onClick={() => handleTabChange('wallets')}
@@ -380,7 +380,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                         {/* Auth Modal */}
             {
                 showAuth && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                    <div className="fixed inset-0 z-999 flex items-center justify-center p-4">
                         <div
                             className="absolute inset-0 bg-black/40"
                             onClick={handleHideAuth}
@@ -396,7 +396,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             {/* Profile Modal */}
             {
                 showProfile && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center md:justify-end">
+                    <div className="fixed inset-0 z-999 flex items-center justify-center md:justify-end">
                         <div
                             className="absolute inset-0 bg-black/40"
                             onClick={() => setShowProfile(false)}

@@ -304,7 +304,7 @@ export function RampInterface({
 
   return (
     <>
-      <Card className="w-full mx-auto max-w-md bg-card dark:bg-card/50 backdrop-blur-sm gap-3" data-tour="onramp-card">
+      <Card className="w-full mx-auto max-w-md bg-card backdrop-blur-sm gap-3" data-tour="onramp-card">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -326,12 +326,12 @@ export function RampInterface({
                     </h2> */}
 
               {/* Mode Switcher */}
-              <div className="inline-flex items-center gap-1 rounded-lg bg-muted/50 p-1 w-fit">
+              <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1 w-fit">
                 <Button
                   variant="ghost"
                   size="sm"
                   className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "onramp"
-                    ? "bg-background text-foreground shadow-sm"
+                    ? "bg-card dark:bg-background text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                     }`}
                   onClick={() => handleRampModeChange("onramp")}
@@ -343,7 +343,7 @@ export function RampInterface({
                   variant="ghost"
                   size="sm"
                   className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "offramp"
-                    ? "bg-background text-foreground shadow-sm"
+                    ? "bg-card dark:bg-background text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                     }`}
                   onClick={() => handleRampModeChange("offramp")}
@@ -370,7 +370,7 @@ export function RampInterface({
           <div className="px-4 space-y-4">
             {rampMode === "onramp" ? (
               <>
-                <div className="bg-muted/40 rounded-xl p-3 border border-border/30">
+                <div className="bg-muted rounded-xl p-3 border border-border">
                   <div className="text-xs text-muted-foreground mb-2 font-medium">You pay</div>
                   <div className="flex items-center justify-between gap-3">
                     <input
@@ -385,7 +385,7 @@ export function RampInterface({
                     />
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-background hover:bg-muted/60 border border-border/40 shrink-0"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card dark:bg-background hover:bg-muted/60 border border-border/40 shrink-0"
                       aria-label="Fiat currency"
                     >
                       <img src={logoNGN || "/placeholder.svg"} alt="NGN" className="w-5 h-5" />
@@ -394,34 +394,7 @@ export function RampInterface({
                   </div>
                 </div>
 
-                {/* <div className="flex items-center justify-between bg-primary/10 rounded-xl px-3 py-2">
-                    {rateLoading && !exchangeRate ? (
-                      <ExchangeRateSkeleton />
-                    ) : (
-                      <div className="flex items-center gap-2 text-sm text-primary">
-                        <span>
-                          1 {tokenSymbol} = {effectiveRate.toLocaleString()} NGN
-                        </span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 w-6 p-0"
-                          onClick={refreshRate}
-                          aria-label="Refresh exchange rate"
-                        >
-                          <RefreshCw className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    )}
-                    {rateError && (
-                      <div className="flex items-center gap-1 text-xs text-destructive">
-                        <AlertCircle className="h-4 w-4" />
-                        <span>Error loading rate</span>
-                      </div>
-                    )}
-                  </div> */}
-
-                <div className="bg-muted/40 rounded-xl p-3 border border-border/30">
+                <div className="bg-muted rounded-xl p-3 border border-border">
                   <div className="text-xs text-muted-foreground mb-2 font-medium">You receive</div>
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-2xl font-semibold text-foreground">
@@ -433,7 +406,7 @@ export function RampInterface({
                     </div>
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-background hover:bg-muted/60 border border-border/40 shrink-0"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card dark:bg-background hover:bg-muted/60 border border-border/40 shrink-0"
                       onClick={() => setTokenModalOpen(true)}
                       aria-label="Select cryptocurrency"
                     >
@@ -449,8 +422,9 @@ export function RampInterface({
                 </div>
               </>
             ) : (
+              // OFF RAMP SECTION
               <>
-                <div className="bg-muted/40 rounded-xl p-3 border border-border/30">
+                <div className="bg-muted rounded-xl p-3 border border-border">
                   <div className="text-xs text-muted-foreground mb-2 font-medium">You pay</div>
                   <div className="flex items-center justify-between gap-3">
                     <input
@@ -465,7 +439,7 @@ export function RampInterface({
                     />
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-background hover:bg-muted/60 border border-border/40 shrink-0"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card dark:bg-background hover:bg-muted/60 border border-border/40 shrink-0"
                       onClick={() => setTokenModalOpen(true)}
                       aria-label="Select cryptocurrency"
                     >
@@ -480,34 +454,8 @@ export function RampInterface({
                   </div>
                 </div>
 
-                {/* <div className="flex items-center justify-between bg-primary/10 rounded-xl px-3 py-2">
-                    {rateLoading && !exchangeRate ? (
-                      <ExchangeRateSkeleton />
-                    ) : (
-                      <div className="flex items-center gap-2 text-sm text-primary">
-                        <span>
-                          1 {tokenSymbol} = {effectiveRate.toLocaleString()} NGN
-                        </span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 w-6 p-0"
-                          onClick={refreshRate}
-                          aria-label="Refresh exchange rate"
-                        >
-                          <RefreshCw className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    )}
-                    {rateError && (
-                      <div className="flex items-center gap-1 text-xs text-destructive">
-                        <AlertCircle className="h-4 w-4" />
-                        <span>Error loading rate</span>
-                      </div>
-                    )}
-                  </div> */}
 
-                <div className="bg-muted/40 rounded-xl p-3 border border-border/30">
+                <div className="bg-muted rounded-xl p-3 border border-border">
                   <div className="text-xs text-muted-foreground mb-2 font-medium">You receive</div>
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-2xl font-semibold text-foreground">
@@ -519,7 +467,7 @@ export function RampInterface({
                     </div>
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-background hover:bg-muted/60 border border-border/40 shrink-0"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card dark:bg-background hover:bg-muted/60 border border-border/40 shrink-0"
                       aria-label="Fiat currency"
                     >
                       <img src={logoNGN || "/placeholder.svg"} alt="NGN" className="w-5 h-5" />
@@ -559,7 +507,7 @@ export function RampInterface({
             </div>
 
             {fromAmount && Number(fromAmount) > 0 && (
-              <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+              <div className="bg-muted rounded-xl p-4 border border-border">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="text-xs text-muted-foreground">{rampMode === "onramp" ? "To:" : "To:"}</div>
@@ -607,7 +555,7 @@ export function RampInterface({
             )}
 
             {rampMode === "onramp" && fromAmount && Number(fromAmount) > 0 && selectedWallet && (
-              <div className="bg-muted/30 rounded-xl p-4 border border-border/50 no-scrollbar">
+              <div className="bg-muted rounded-xl p-4 border border-border no-scrollbar">
                 <style jsx>{`
                     .no-scrollbar::-webkit-scrollbar {
                       display: none;
@@ -630,7 +578,7 @@ export function RampInterface({
             )}
 
             {rampMode === "offramp" && fromAmount && Number(fromAmount) > 0 && selectedWallet && (
-              <div className="bg-muted/30 rounded-xl p-4 border border-border/50">
+              <div className="bg-muted rounded-xl p-4 border border-border">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="text-xs text-muted-foreground">Transfer Method</div>
                   {!effectiveTransferMethod && <AlertCircle className="h-4 w-4 text-orange-600" />}
@@ -682,7 +630,11 @@ export function RampInterface({
                 className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
                 size="lg"
                 disabled={
-                  !fromAmount || (!effectiveIsWalletConnected && effectiveTransferMethod === "connect_wallet") || (rampMode === "onramp" && !selectedPaymentMethod) || (rampMode === "offramp" && !selectedWallet) || loading
+                  !fromAmount ||
+                  (!effectiveIsWalletConnected && effectiveTransferMethod === "connect_wallet") ||
+                  (rampMode === "onramp" && !selectedPaymentMethod) ||
+                  (rampMode === "offramp" && (!selectedWallet || !effectiveTransferMethod)) ||
+                  loading
                 }
                 onClick={openConfirm}
                 aria-label={`${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
@@ -697,7 +649,9 @@ export function RampInterface({
                         : "Select account"
                       : rampMode === "onramp" && !selectedPaymentMethod
                         ? "Select payment method"
-                        : `${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
+                        : rampMode === "offramp" && !effectiveTransferMethod
+                          ? "Select transfer method"
+                          : `${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
               </Button>
             )}
           </div>

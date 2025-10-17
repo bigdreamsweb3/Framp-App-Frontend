@@ -87,19 +87,16 @@ export function SideHeader({
     return (
         <header className={`h-14 relative z-10`}>
             <div className="w-full h-full px-4 flex items-center justify-between">
-                {/* Logo Section */}
-
-                <div className="flex items-center gap-0">
-                    <div className="relative flex items-center h-8 w-8 md:w-10 md:h-10">
-                        <div className="absolute inset-0 rounded-2xl bg-gradient-to-tr from-primary/30 to-primary/5 blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
+                {/* Left side - Logo and menu button */}
+                <div className="flex items-center h-fit">
+                    <div className="relative flex items-center h-8 w-8">
                         <Image
                             src={app_logo}
                             alt="App Logo"
                             className="relative w-[max(2rem,5vh)] h-auto object-contain rounded-r-2xl"
                         />
                     </div>
-                    {/* Vertical Beta Badge - positioned beside logo */}
-                    <span className="text-[0.55rem] font-bold px-1 py-2 text-muted-foreground transform -rotate-90 origin-center ml-0 h-7 w-7">
+                    <span className="text-[0.55rem] font-bold px-1 mx-auto text-muted-foreground transform -rotate-90 origin-center">
                         BETA
                     </span>
                 </div>
@@ -133,7 +130,7 @@ export function SideHeader({
                     </nav> */}
 
                     {/* Theme Toggle */}
-                    <ThemeToggle />
+                    {/* <ThemeToggle /> */}
 
                     {/* User Actions */}
                     {loading ? (
@@ -143,7 +140,7 @@ export function SideHeader({
                             onClick={onAuthClick}
                             variant="default"
                             size="sm"
-                            className="h-8 px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-200"
+                            className="px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-200"
                             aria-label="Sign in or sign up"
                         >
                             Sign in

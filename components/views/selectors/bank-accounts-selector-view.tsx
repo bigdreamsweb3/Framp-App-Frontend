@@ -50,22 +50,22 @@ export const BankAccountsView: React.FC<BankAccountsViewProps> = ({ onAccountSel
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Select bank account</h2>
-        <Button variant="ghost" size="sm" onClick={onClose}>Close</Button>
+        {/* <Button variant="ghost" size="sm" onClick={onClose}>Close</Button> */}
       </div>
 
-      <div className="space-y-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {accounts.map((a) => (
-          <div key={a.id} className={`p-3 rounded-xl border ${selectedAccount?.id === a.id ? 'border-primary bg-primary/5' : 'border-border'}`}>
-            <div className="flex items-center justify-between">
+          <div key={a.id} onClick={() => { onAccountSelect(a); onClose(); }} className={`p-3 rounded-xl border bg-card ${selectedAccount?.id === a.id ? 'ring-2 ring-primary bg-primary/5' : 'border-border'}`}>
+            <div className="flex items-center justify-between h-full max-h-16">
               <div>
                 <div className="text-sm font-medium">{a.name}</div>
                 <div className="text-xs text-muted-foreground">{a.details}</div>
               </div>
-              <div className="flex items-center gap-2">
+              {/* <div className="flex items-center gap-2">
                 <Button size="sm" onClick={() => { onAccountSelect(a); onClose(); }}>
                   Use
                 </Button>
-              </div>
+              </div> */}
             </div>
           </div>
         ))}

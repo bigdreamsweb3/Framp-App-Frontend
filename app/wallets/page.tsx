@@ -1,6 +1,6 @@
 "use client";
 
-import { WalletView } from "@/components/views/wallet-view";
+import { WalletView } from "@/components/views/selectors/wallet-selector-view";
 import React, { useState } from "react";
 import type { WalletMethod } from "@/types/wallet";
 
