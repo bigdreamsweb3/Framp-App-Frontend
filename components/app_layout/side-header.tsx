@@ -89,10 +89,10 @@ export function SideHeader({
             <div className="w-full h-full pr-4 flex items-center justify-between">
                 {/* Left side - Logo and menu button */}
                 <div className="flex items-center h-fit">
-                    <span className="text-[0.55rem] font-bold px-1 mx-auto text-muted-foreground transform -rotate-90 origin-center">
+                    <span className="text-[0.55rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
                         BETA
                     </span>
-                    <div className="relative flex items-center h-8 w-8">
+                    <div className="relative flex items-center h-9 w-9">
                         <Image
                             src={app_logo}
                             alt="App Logo"
@@ -101,89 +101,38 @@ export function SideHeader({
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between gap-4">
-                    {/* Desktop navigation */}
-                    {/* <nav className="hidden md:flex items-center gap-6">
-                        <Link
-                            href="/docs"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200"
-                        >
-                            <span className="flex items-center gap-0.5">
-                                <BookOpen size={18} />
-                                Docs
-                            </span>
-                        </Link>
 
-                        <Link
-                            href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200"
-                        >
-                            <span className="flex items-center gap-0.5">
-                                <HelpCircle size={18} />
-                                Help
-                            </span>
-                        </Link>
-                    </nav> */}
+                {/* Desktop navigation */}
 
-                    {/* Theme Toggle */}
-                    {/* <ThemeToggle /> */}
 
-                    {/* User Actions */}
-                    {loading ? (
-                        <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
-                    ) : !user ? (
-                        <Button
-                            onClick={onAuthClick}
-                            variant="default"
-                            size="sm"
-                            className="px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-200"
-                            aria-label="Sign in or sign up"
-                        >
-                            Sign in
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="ghost"
-                            aria-pressed={profileActive}
-                            aria-label={profileActive ? "Hide Profile" : "Show Profile"}
-                            onClick={onProfileToggle}
-                            className={`relative inline-flex items-center justify-center w-8 h-8 md:w-10 md:h-10 overflow-hidden rounded-full transition-all duration-300 ease-out transform hover:scale-105 active:scale-95 ${profileActive
+                {/* User Actions */}
+                {loading ? (
+                    <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
+                ) : !user ? (
+                    <Button
+                        onClick={onAuthClick}
+                        variant="default"
+                        size="sm"
+                        className="px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-200"
+                        aria-label="Sign in or sign up"
+                    >
+                        Sign in
+                    </Button>
+                ) : (
+                    <Button
+                        variant="ghost"
+                        aria-pressed={profileActive}
+                        onClick={onProfileToggle}
+                        className={`relative inline-flex items-center justify-center w-9 h-9 overflow-hidden rounded-full
+                    transition-all duration-300 ease-out transform hover:scale-105
+                    ${profileActive
                                 ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
-                                : "bg-gradient-to-br from-primary/20 to-primary/10 hover:from-primary/30 hover:to-primary/20 hover:shadow-md border border-primary/20 hover:border-primary/40"
-                                }`}
-                        >
-                            <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300" />
-                            <svg
-                                className={`relative w-6 h-6 md:w-8 md:h-8 transition-colors duration-300 ${profileActive
-                                    ? "text-white"
-                                    : "text-primary hover:text-primary/80"
-                                    }`}
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    fillRule="evenodd"
-                                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                                    clipRule="evenodd"
-                                />
-                            </svg>
-                            {profileActive && (
-                                <motion.div
-                                    initial={{ scale: 0, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    exit={{ scale: 0, opacity: 0 }}
-                                    className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-background"
-                                />
-                            )}
-                        </Button>
-                    )}
-
-                </div>
+                                : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
+                            }`}
+                    >
+                        <User className="text-primary" />
+                    </Button>
+                )}
             </div>
         </header>
     );

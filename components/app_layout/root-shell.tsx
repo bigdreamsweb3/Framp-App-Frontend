@@ -11,6 +11,8 @@ import {
     PiggyBank,
     Wallet as WalletIcon,
     Activity as ActivityIcon,
+    HelpCircle,
+    BookOpen,
 } from "lucide-react"
 import { AppHeader } from "./app-header"
 import { motion } from "framer-motion"
@@ -102,7 +104,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
         return () => {
             try {
                 window.removeEventListener('framp:closeProfile', onClose as any);
-            } catch (e) {}
+            } catch (e) { }
         };
     }, []);
 
@@ -189,6 +191,70 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                     </Link>
                                 </div>
                             </div>
+                        </div>
+
+
+                        <div className="mr-2 p-6 hidden md:block fixed bottom-0 w-full">
+                            <nav className="flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <Link
+                                        href="/docs"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className={`text-sm font-semibold ${pathname === "/docs" ? "text-primary" : "text-foreground"
+                                            } hover:text-primary transition`}
+                                    >
+                                        <BookOpen size={18} className="inline mr-1" />
+                                        Docs
+                                    </Link>
+
+                                    <Link
+                                        href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                         className={`text-sm font-semibold ${pathname === "/docs" ? "text-primary" : "text-foreground"
+                                            } hover:text-primary transition`}
+                                    >
+                                        <HelpCircle size={18} className="inline mr-1" />
+                                        Help
+                                    </Link>
+                                </div>
+
+                                {/* 🔸 Social Media Links (Compact Icons Only) */}
+                                <div className="flex justify-end items-center gap-4 mt-1">
+                                    <Link
+                                        href="https://x.com/FrampFi"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-sm font-semibold text-foreground hover:text-primary transition"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="currentColor"
+                                            viewBox="0 0 24 24"
+                                            className="w-4 h-4"
+                                        >
+                                            <path d="M18.244 2H21l-6.74 7.69L21.625 22h-4.6l-4.238-6.182L8.05 22H3.5l7.224-8.248L2.5 2h4.7l3.834 5.643L18.244 2z" />
+                                        </svg>
+                                    </Link>
+
+                                    <Link
+                                        href="https://t.me/Framp_HQ"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-sm font-semibold text-foreground hover:text-primary transition"
+                                    >
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="currentColor"
+                                            viewBox="0 0 24 24"
+                                            className="w-4 h-4"
+                                        >
+                                            <path d="M9.04 16.65 8.8 20a.6.6 0 0 0 .46-.23l2.2-2.1 4.56 3.35c.84.47 1.44.22 1.67-.77l3.02-14.18c.27-1.27-.46-1.78-1.27-1.48L2.65 9.12c-1.23.48-1.21 1.18-.22 1.49l4.98 1.56 11.56-7.28-9.94 7.9z" />
+                                        </svg>
+                                    </Link>
+                                </div>
+                            </nav>
                         </div>
                     </div>
                 </div>
@@ -377,7 +443,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                 </div>
             )}
 
-                        {/* Auth Modal */}
+            {/* Auth Modal */}
             {
                 showAuth && (
                     <div className="fixed inset-0 z-999 flex items-center justify-center p-4">
