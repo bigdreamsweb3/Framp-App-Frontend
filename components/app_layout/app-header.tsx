@@ -67,10 +67,13 @@ export function AppHeader({
           ${scrolled || mobileOpen ? "bg-sidebar shadow border-b border-border" : "bg-transparent"}
           ${scrolled ? "border-b border-border/40" : ""}`}
       >
-        <div className="w-full h-full px-4 flex items-center justify-between">
+        <div className="w-full h-full pr-4 flex items-center justify-between">
           {/* Left side - Logo and menu button */}
           <div className="flex items-center gap-0">
             <div className="flex items-center md:hidden w-fit">
+              <span className="text-[0.55rem] font-bold px-1 mx-auto text-muted-foreground transform -rotate-90 origin-center">
+                BETA
+              </span>
               <div className="relative flex items-center h-8 w-8">
                 <Image
                   src={app_logo}
@@ -78,9 +81,7 @@ export function AppHeader({
                   className="relative w-[max(2rem,5vh)] h-auto object-contain rounded-r-2xl"
                 />
               </div>
-              <span className="text-[0.55rem] font-bold px-1 mx-auto text-muted-foreground transform -rotate-90 origin-center">
-                BETA
-              </span>
+
             </div>
 
             <button
@@ -164,7 +165,7 @@ export function AppHeader({
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[99] md:hidden"
+            className="fixed inset-0 z-[99] md:hidden bg-background/80 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)} // click outside closes menu
           >
             <div

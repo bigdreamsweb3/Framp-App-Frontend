@@ -331,7 +331,7 @@ export function RampInterface({
                   variant="ghost"
                   size="sm"
                   className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "onramp"
-                    ? "bg-card dark:bg-background text-foreground shadow-sm"
+                    ? "bg-card text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                     }`}
                   onClick={() => handleRampModeChange("onramp")}
@@ -343,7 +343,7 @@ export function RampInterface({
                   variant="ghost"
                   size="sm"
                   className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "offramp"
-                    ? "bg-card dark:bg-background text-foreground shadow-sm"
+                    ? "bg-card text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                     }`}
                   onClick={() => handleRampModeChange("offramp")}
@@ -385,7 +385,7 @@ export function RampInterface({
                     />
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card dark:bg-background hover:bg-muted/60 border border-border/40 shrink-0"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card hover:bg-muted/60 border border-border shrink-0"
                       aria-label="Fiat currency"
                     >
                       <img src={logoNGN || "/placeholder.svg"} alt="NGN" className="w-5 h-5" />
@@ -406,7 +406,7 @@ export function RampInterface({
                     </div>
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card dark:bg-background hover:bg-muted/60 border border-border/40 shrink-0"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card hover:bg-muted/60 border border-border shrink-0"
                       onClick={() => setTokenModalOpen(true)}
                       aria-label="Select cryptocurrency"
                     >
@@ -439,7 +439,7 @@ export function RampInterface({
                     />
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card dark:bg-background hover:bg-muted/60 border border-border/40 shrink-0"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card hover:bg-muted/60 border border-border shrink-0"
                       onClick={() => setTokenModalOpen(true)}
                       aria-label="Select cryptocurrency"
                     >
@@ -467,7 +467,7 @@ export function RampInterface({
                     </div>
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card dark:bg-background hover:bg-muted/60 border border-border/40 shrink-0"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card hover:bg-muted/60 border border-border shrink-0"
                       aria-label="Fiat currency"
                     >
                       <img src={logoNGN || "/placeholder.svg"} alt="NGN" className="w-5 h-5" />
