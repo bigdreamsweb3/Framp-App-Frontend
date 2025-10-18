@@ -71,7 +71,7 @@ export function AppHeader({
       >
         <div className="w-full h-full pr-4 flex items-center justify-between">
           {/* Left side - Logo and menu button */}
-          <div onClick={() => setMobileOpen((p) => !p)} className="flex items-center gap-0">
+          <div onClick={() => setMobileOpen((p) => !p)} className="flex items-center gap-1.5">
             <div className="flex items-center md:hidden w-fit">
               <span className="text-[0.55rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
                 BETA
