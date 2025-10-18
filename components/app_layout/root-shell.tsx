@@ -202,8 +202,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                         {/*  */}
                         <div className="mr-2 p-6 hidden md:block fixed bottom-0 w-80 border-t border-border/30">
                             <nav className="flex items-center justify-between">
-                                <div className="flex items-center gap-4">
-                                    {/* 
+                                <div className="flex items-center gap-4">                                 
                                     <Link
                                         href="/docs"
                                         target="_blank"
@@ -224,9 +223,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                     >
                                         <HelpCircle size={18} className="inline mr-1" />
                                         Help
-                                    </Link> */}
-
-
+                                    </Link>
                                 </div>
 
                                 {/* 🔸 Social Media Links (Compact Icons Only) */}

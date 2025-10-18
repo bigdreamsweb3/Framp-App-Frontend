@@ -75,7 +75,7 @@ export function AppHeader({
           {/* Left side - Logo and menu button */}
           <div className="flex items-center gap-1.5">
             <div className="flex items-center md:hidden w-fit">
-              <div className="relative flex items-center h-7 w-7">
+              <div className="relative flex items-center h-8 w-8">
                 <Image
                   src={app_logo}
                   alt="App Logo"
@@ -101,7 +101,7 @@ export function AppHeader({
           {/* Right side actions */}
           <div className="flex items-center gap-3">
 
-            <nav className="hidden md:flex items-center justify-between ">
+            {/* <nav className="hidden md:flex items-center justify-between ">
               <div className="flex items-center gap-4">
 
                 <Link
@@ -128,7 +128,8 @@ export function AppHeader({
 
 
               </div>
-            </nav>
+            </nav> */}
+
             {/* 🔹 Desktop Connect Wallet */}
             {/* <div className="hidden md:block">
               <Button
@@ -251,21 +252,80 @@ export function AppHeader({
 
               </div>
 
-              {/* <div className="flex items-center justify-between px-6 py-3 border-y border-border/40 bg-sidebar/80 backdrop-blur-sm">
-                <ThemeToggle /> */}
-
-              {/* 🔹 Right: Wallet + Close */}
-              {/* <div className="flex items-center gap-1.5"> */}
-              {/* <Button
-                    variant="secondary"
+              <div className="px-6 py-3 border-y border-border/40 bg-sidebar/80 backdrop-blur-sm">
+                {loading ? (
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-muted animate-pulse rounded-full" />
+                    <div className="flex-1 space-y-1">
+                      <div className="w-24 h-4 bg-muted animate-pulse rounded" />
+                      <div className="w-32 h-3 bg-muted animate-pulse rounded" />
+                    </div>
+                  </div>
+                ) : !user ? (
+                  <Button
+                    onClick={onAuthClick}
+                    variant="default"
                     size="sm"
-                    className="flex items-center gap-1.5 h-8 px-2.5 rounded-md bg-transparent border hover:bg-accent/60 transition-all duration-200"
+                    className="w-full px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80"
                   >
-                    <Wallet2Icon size={12} className="text-primary" />
-                    <span className="text-[11px] font-mono text-foreground/80 tracking-tight">Connect</span>
-                  </Button> */}
-              {/* </div> */}
-              {/* </div> */}
+                    Sign in
+                  </Button>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    {/* Top row: Email + UID + Avatar */}
+                    <div className="flex items-center justify-end gap-2">
+                      <div className="text-right">
+                        <p className="text-xs text-muted-foreground font-bold">
+                          {(() => {
+                            const [local, domain] = user.email.split("@");
+                            const maskedLocal = local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
+                            const maskedDomain = domain ? `***` : "";
+                            return `${maskedLocal}@${maskedDomain}`;
+                          })()}
+                        </p>
+                        <span className="text-xs text-muted-foreground capitalize">
+                          UID: {user.id.slice(0, 8)}
+                        </span>
+                      </div>
+
+                      <Button
+                        variant="ghost"
+                        aria-pressed={profileActive}
+                        onClick={onProfileToggle}
+                        className={`relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full
+            transition-all duration-300 ease-out transform hover:scale-105
+            ${profileActive
+                            ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
+                            : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
+                          }`}
+                      >
+                        <User className="text-primary" />
+                      </Button>
+                    </div>
+
+                    {/* Bottom row: Finance quick info */}
+                    {/* <div className="flex items-center justify-between gap-4 text-xs text-muted-foreground">
+                      <div className="flex flex-col items-start">
+                        <span className="font-bold text-foreground text-sm">₦12,450.00</span>
+                        <span>Balance</span>
+                      </div>
+                      <div className="flex flex-col items-start">
+                        <span className="flex items-center gap-1 text-success">
+                          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l7 12H5l7-12z" />
+                          </svg>
+                          +2.5%
+                        </span>
+                        <span>Portfolio</span>
+                      </div>
+                      <div className="flex flex-col items-start">
+                        <span>3</span>
+                        <span>Transactions</span>
+                      </div>
+                    </div> */}
+                  </div>
+                )}
+              </div>
 
               {/* Scrollable content */}
               <div className="flex-1 flex flex-col px-4 py-4 overflow-y-auto gap-3">
