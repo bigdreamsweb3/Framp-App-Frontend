@@ -73,9 +73,7 @@ export function AppHeader({
           {/* Left side - Logo and menu button */}
           <div onClick={() => setMobileOpen((p) => !p)} className="flex items-center gap-1.5">
             <div className="flex items-center md:hidden w-fit">
-              <span className="text-[0.55rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
-                BETA
-              </span>
+
               <div className="relative flex items-center h-9 w-9">
                 <Image
                   src={app_logo}
@@ -83,6 +81,10 @@ export function AppHeader({
                   className="relative w-[max(2rem,5vh)] h-auto object-contain rounded-r-2xl"
                 />
               </div>
+
+              <span className="text-[0.55rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
+                BETA
+              </span>
             </div>
 
             <button
@@ -166,9 +168,7 @@ export function AppHeader({
                   {/* Left side - Logo and menu button */}
                   <div className="flex items-center gap-0">
                     <div className="flex items-center md:hidden w-fit">
-                      <span className="text-[0.55rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
-                        BETA
-                      </span>
+
                       <div className="relative flex items-center h-9 w-9">
                         <Image
                           src={app_logo}
@@ -176,6 +176,10 @@ export function AppHeader({
                           className="relative w-[max(2rem,5vh)] h-auto object-contain rounded-r-2xl"
                         />
                       </div>
+
+                      <span className="text-[0.55rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
+                        BETA
+                      </span>
                     </div>
                   </div>
 

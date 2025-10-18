@@ -89,9 +89,6 @@ export function SideHeader({
             <div className="w-full h-full pr-4 flex items-center justify-between">
                 {/* Left side - Logo and menu button */}
                 <div className="flex items-center h-fit">
-                    <span className="text-[0.55rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
-                        BETA
-                    </span>
                     <div className="relative flex items-center h-9 w-9">
                         <Image
                             src={app_logo}
@@ -99,6 +96,10 @@ export function SideHeader({
                             className="relative w-[max(2rem,5vh)] h-auto object-contain rounded-r-2xl"
                         />
                     </div>
+
+                    <span className="text-[0.55rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
+                        BETA
+                    </span>
                 </div>
 
 
