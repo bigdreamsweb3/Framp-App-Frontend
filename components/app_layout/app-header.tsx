@@ -205,7 +205,7 @@ export function AppHeader({
 
               </div>
 
-              <div className="flex items-center justify-between px-3 py-2 border-y border-border/40 bg-sidebar/80 backdrop-blur-sm">
+              <div className="flex items-center justify-between px-6 py-3 border-y border-border/40 bg-sidebar/80 backdrop-blur-sm">
                 <ThemeToggle />
 
                 {/* 🔹 Right: Wallet + Close */}
