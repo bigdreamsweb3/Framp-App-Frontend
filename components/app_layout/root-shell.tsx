@@ -368,25 +368,27 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card sm:hidden">
                 <div className="mb-[env(safe-area-inset-bottom)] flex h-14 items-center text-sm">
                     <div className="grid size-full grid-cols-4">
-                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/" ? "text-primary-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/" ? "text-primary dark:text-primary-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
                             } hover:text-primary transition`} href="/">
                             <ArrowUpCircle className="h-4 w-4" />
                             <span className="w-full text-center">Gate</span>
                         </Link>
 
-                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 font-medium transition duration-100 text-sm  ${pathname === "/bills" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+
+                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/bills" ? "text-primary dark:text-primary-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
                             } hover:text-primary transition`} href="/bills">
                             <QrCode className="h-4 w-4" />
                             <span className="w-full text-center">Bills</span>
                         </Link>
 
-                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 font-medium transition duration-100 text-sm  ${pathname === "/wallets" ? "text-primary-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
+
+                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/wallets" ? "text-primary dark:text-primary-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
                             } hover:text-primary transition`} href="/wallets">
                             <WalletIcon className="h-4 w-4" />
                             <span className="w-full text-center">Wallets</span>
                         </Link>
 
-                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 font-medium transition duration-100 text-sm  ${pathname === "/activity" ? "text-primary-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/activity" ? "text-primary dark:text-primary-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
                             } hover:text-primary transition`} href="/activity">
                             <ActivityIcon className="h-4 w-4" />
                             <span className="w-full text-center">Activity</span>
