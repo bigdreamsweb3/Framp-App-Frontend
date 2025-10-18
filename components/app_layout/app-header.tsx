@@ -220,7 +220,7 @@ export function AppHeader({
               {/* </div> */}
 
               {/* Scrollable content */}
-              <div className="flex-1 flex flex-col px-6 py-4 overflow-y-auto gap-3">
+              <div className="flex-1 flex flex-col px-4 py-4 overflow-y-auto gap-3">
                 <Link
                   href="/"
                 >
