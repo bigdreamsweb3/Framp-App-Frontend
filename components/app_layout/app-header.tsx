@@ -185,31 +185,32 @@ export function AppHeader({
 
                   {/* Right side actions */}
                   <div className="flex items-center gap-1.5">
+                    <ThemeToggle />
 
-                    <button
-                      onClick={() => setMobileOpen(false)}
-                      className="p-3.5 rounded-lg hover:bg-primary/10 transition"
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="flex items-center gap-1.5 h-8 px-2.5 rounded-md bg-transparent border hover:bg-accent/60 transition-all duration-200"
                     >
-                      <X size={18} />
-                    </button>
+                      <Wallet2Icon size={12} className="text-primary" />
+                      <span className="text-[11px] font-mono text-foreground/80 tracking-tight">Connect</span>
+                    </Button>
                   </div>
                 </div>
 
               </div>
 
-              <div className="flex items-center justify-between px-3 py-2 border-y border-border/40 bg-sidebar/80 backdrop-blur-sm">
-                <ThemeToggle />
+              <div className="flex items-center justify-end px-3 py-2 border-y border-border/40 bg-sidebar/80 backdrop-blur-sm">
+                {/* <ThemeToggle /> */}
 
                 {/* 🔹 Right: Wallet + Close */}
                 <div className="flex items-center gap-1.5">
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    className="flex items-center gap-1.5 h-8 px-2.5 rounded-md bg-transparent border hover:bg-accent/60 transition-all duration-200"
+                  <button
+                    onClick={() => setMobileOpen(false)}
+                    className="p-3.5 rounded-lg hover:bg-primary/10 transition"
                   >
-                    <Wallet2Icon size={12} className="text-primary" />
-                    <span className="text-[11px] font-mono text-foreground/80 tracking-tight">Connect</span>
-                  </Button>
+                    <X size={18} />
+                  </button>
                 </div>
               </div>
 
