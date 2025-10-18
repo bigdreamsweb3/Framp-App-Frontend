@@ -96,10 +96,6 @@ export function AppHeader({
 
           {/* Right side actions */}
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex h-full items-center">
-              <ThemeToggle />
-            </div>
-
             {/* 🔹 Desktop Connect Wallet */}
             <div className="hidden md:block">
               <Button

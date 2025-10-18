@@ -22,6 +22,7 @@ import { AuthPage } from "@/components/auth-page"
 import { Profile } from "@/components/modals/profile-modal"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useUI } from "@/context/UIContext"
+import { ThemeToggle } from "../theme-toggle"
 
 export default function RootShell({ children }: { children: React.ReactNode }) {
     const [showAuth, setShowAuth] = useState(false)
@@ -197,6 +198,9 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                         <div className="mr-2 p-6 hidden md:block fixed bottom-0 w-80">
                             <nav className="flex items-center justify-between">
                                 <div className="flex items-center gap-4">
+
+                                    <ThemeToggle />
+
                                     <Link
                                         href="/docs"
                                         target="_blank"
