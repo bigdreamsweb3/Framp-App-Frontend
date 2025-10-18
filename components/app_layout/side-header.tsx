@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "../ui/button";
 
 import Image from "next/image";
-import { app_logo } from "@/asssets/image";
+import useAppLogo from "@/asssets/image";
 
 import { useAuth } from "@/context/AuthContext";
 
@@ -36,6 +36,8 @@ export function SideHeader({
     const [scrolled, setScrolled] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
     const headerRef = useRef<HTMLElement>(null);
+
+    const app_logo = useAppLogo()
 
     useEffect(() => {
         const handleScroll = () => {
@@ -89,7 +91,7 @@ export function SideHeader({
             <div className="w-full h-full px-4 flex items-center justify-between">
                 {/* Left side - Logo and menu button */}
                 <div className="flex items-center h-fit">
-                    <div className="relative flex items-center h-9 w-9">
+                    <div className="relative flex items-center h-8 w-8">
                         <Image
                             src={app_logo}
                             alt="App Logo"

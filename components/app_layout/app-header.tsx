@@ -5,7 +5,7 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { AnimatePresence, motion } from "framer-motion"
 import { Button } from "../ui/button"
 import Image from "next/image"
-import { app_logo } from "@/asssets/image"
+import useAppLogo from "@/asssets/image"
 import { useAuth } from "@/context/AuthContext"
 import Link from "next/link"
 import { useRouter, usePathname } from "next/navigation"
@@ -44,6 +44,8 @@ export function AppHeader({
   const headerRef = useRef<HTMLElement>(null)
   const { user, loading } = useAuth()
 
+  const app_logo = useAppLogo()
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = window.scrollY || document.documentElement.scrollTop
@@ -73,7 +75,7 @@ export function AppHeader({
           {/* Left side - Logo and menu button */}
           <div className="flex items-center gap-1.5">
             <div className="flex items-center md:hidden w-fit">
-              <div className="relative flex items-center h-8 w-8">
+              <div className="relative flex items-center h-7 w-7">
                 <Image
                   src={app_logo}
                   alt="App Logo"
@@ -86,14 +88,14 @@ export function AppHeader({
               </span>
             </div>
 
-            <button
+            {/* <button
               className="md:hidden p-2 rounded-lg hover:bg-primary/10 transition text-muted-foreground"
               aria-label="Toggle navigation"
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((p) => !p)}
             >
               {mobileOpen ? "" : <Menu size={26} />}
-            </button>
+            </button> */}
           </div>
 
           {/* Right side actions */}
@@ -145,8 +147,17 @@ export function AppHeader({
               <ThemeToggle />
             </div>
 
+            <button
+              className="md:hidden p-2 rounded-lg hover:bg-primary/10 transition text-muted-foreground"
+              aria-label="Toggle navigation"
+              aria-expanded={mobileOpen}
+              onClick={() => setMobileOpen((p) => !p)}
+            >
+              {mobileOpen ? <Menu size={26} /> : <Menu size={26} />}
+            </button>
+
             {/* User button or Sign in */}
-            <div className="md:hidden">
+            {/* <div className="md:hidden">
               {loading ? (
                 <div className="w-6 h-6 bg-muted animate-pulse rounded-xl" />
               ) : !user ? (
@@ -173,7 +184,7 @@ export function AppHeader({
                   <User className="text-primary" />
                 </Button>
               )}
-            </div>
+            </div> */}
           </div>
 
         </div>
@@ -202,7 +213,7 @@ export function AppHeader({
                   <div className="flex items-center gap-0">
                     <div className="flex items-center md:hidden w-fit">
 
-                      <div className="relative flex items-center h-8 w-8">
+                      <div className="relative flex items-center h-7 w-7">
                         <Image
                           src={app_logo}
                           alt="App Logo"
