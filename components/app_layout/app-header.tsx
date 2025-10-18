@@ -187,24 +187,28 @@ export function AppHeader({
                   <div className="flex items-center gap-1.5">
                     <ThemeToggle />
 
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="flex items-center gap-1.5 h-8 px-2.5 rounded-md bg-transparent border hover:bg-accent/60 transition-all duration-200"
+                    >
+                      <Wallet2Icon size={12} className="text-primary" />
+                      <span className="text-[11px] font-mono text-foreground/80 tracking-tight">Connect</span>
+                    </Button>
 
-                     <button
-                    onClick={() => setMobileOpen(false)}
-                    className="p-3.5 rounded-lg hover:bg-primary/10 transition"
-                  >
-                    <X size={18} />
-                  </button>
-
-                  
+                    <button
+                      onClick={() => setMobileOpen(false)}
+                      className="p-3.5 rounded-lg hover:bg-primary/10 transition"
+                    >
+                      <X size={18} />
+                    </button>
                   </div>
                 </div>
 
               </div>
 
-              <div className="flex items-center justify-end px-3 py-2 border-y border-border/40 bg-sidebar/80 backdrop-blur-sm">
-                {/* <ThemeToggle /> */}
-
-                {/* 🔹 Right: Wallet + Close */}
+              {/* <div className="flex items-center justify-end px-3 py-2 border-y border-border/40 bg-sidebar/80 backdrop-blur-sm">
+              
                 <div className="flex items-center gap-1.5">
                    <Button
                       variant="secondary"
@@ -215,7 +219,7 @@ export function AppHeader({
                       <span className="text-[11px] font-mono text-foreground/80 tracking-tight">Connect</span>
                     </Button>
                 </div>
-              </div>
+              </div> */}
 
               {/* Scrollable content */}
               <div className="flex-1 flex flex-col px-6 py-4 overflow-y-auto gap-3">
