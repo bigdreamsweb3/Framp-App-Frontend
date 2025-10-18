@@ -340,12 +340,12 @@ export function RampInterface({
                     </h2> */}
 
               {/* Mode Switcher */}
-              <div className="inline-flex items-center gap-1 rounded-lg bg-muted p-1 w-fit">
+              <div className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 transition-colors focus:outline-none p-1 w-fit">
                 <Button
                   variant="ghost"
                   size="sm"
                   className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "onramp"
-                    ? "bg-card text-foreground shadow-sm"
+                    ? "bg-card dark:bg-primary text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                     }`}
                   onClick={() => handleRampModeChange("onramp")}
@@ -357,7 +357,7 @@ export function RampInterface({
                   variant="ghost"
                   size="sm"
                   className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "offramp"
-                    ? "bg-card text-foreground shadow-sm"
+                    ? "bg-card dark:bg-primary text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                     }`}
                   onClick={() => handleRampModeChange("offramp")}

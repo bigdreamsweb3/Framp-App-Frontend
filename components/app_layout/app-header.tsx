@@ -65,20 +65,19 @@ export function AppHeader({
       {/* MAIN HEADER */}
       <header
         ref={headerRef}
-        className={`sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out
+        className={`sticky top-0 z-[100] w-full h-12.5 transition-all duration-500 ease-out
           ${scrolled || mobileOpen ? "" : "bg-transparent"}
           ${scrolled ? "border-b border-border/40 bg-sidebar" : ""}`}
       >
         <div className="w-full h-full px-4 flex items-center justify-between">
           {/* Left side - Logo and menu button */}
-          <div onClick={() => setMobileOpen((p) => !p)} className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1.5">
             <div className="flex items-center md:hidden w-fit">
-
-              <div className="relative flex items-center h-9 w-9">
+              <div className="relative flex items-center h-8 w-8">
                 <Image
                   src={app_logo}
                   alt="App Logo"
-                  className="relative w-[max(2rem,5vh)] h-auto object-contain rounded-r-2xl"
+                  className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-r-2xl"
                 />
               </div>
 
@@ -91,15 +90,45 @@ export function AppHeader({
               className="md:hidden p-2 rounded-lg hover:bg-primary/10 transition"
               aria-label="Toggle navigation"
               aria-expanded={mobileOpen}
+              onClick={() => setMobileOpen((p) => !p)}
             >
               {mobileOpen ? "" : <Menu size={26} />}
             </button>
           </div>
 
           {/* Right side actions */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+
+            <nav className="hidden md:flex items-center justify-between ">
+              <div className="flex items-center gap-4">
+
+                <Link
+                  href="/docs"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`text-sm font-semibold ${pathname === "/docs" ? "text-primary" : "text-foreground"
+                    } hover:text-primary transition`}
+                >
+                  <BookOpen size={18} className="inline mr-1" />
+                  Docs
+                </Link>
+
+                <Link
+                  href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`text-sm font-semibold ${pathname === "/docs" ? "text-primary" : "text-foreground"
+                    } hover:text-primary transition`}
+                >
+                  <HelpCircle size={18} className="inline mr-1" />
+                  Help
+                </Link>
+
+
+              </div>
+            </nav>
             {/* 🔹 Desktop Connect Wallet */}
-            <div className="hidden md:block">
+            {/* <div className="hidden md:block">
               <Button
                 variant="secondary"
                 size="sm"
@@ -110,6 +139,10 @@ export function AppHeader({
                   Connect
                 </span>
               </Button>
+            </div> */}
+
+            <div className="md:hidden my-auto flex items-center">
+              <ThemeToggle />
             </div>
 
             {/* User button or Sign in */}
@@ -154,26 +187,26 @@ export function AppHeader({
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 z-[999] md:hidden bg-background/80 backdrop-blur-sm"
+            className="fixed inset-0 z-[999] md:hidden bg-background/5 backdrop-blur-sm"
             onClick={() => setMobileOpen(false)} // click outside closes menu
           >
             <div
-              className="relative flex flex-col h-[100dvh] w-[75%] max-w-[320px] bg-sidebar border-r border-border shadow-xl"
+              className="relative flex flex-col h-[100dvh] max-w-xs bg-sidebar border-r border-border"
               onClick={(e) => e.stopPropagation()} // prevent inside click from closing
             >
               {/* 🟢 Mobile Menu Header (Smart + Minimal Polished) */}
               <div className="flex items-center justify-between border-b border-border/40 px-4">
 
-                <div className="sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out flex items-center justify-between">
+                <div className="sticky top-0 z-[100] w-full h-12.5 transition-all duration-500 ease-out flex items-center justify-between">
                   {/* Left side - Logo and menu button */}
                   <div className="flex items-center gap-0">
                     <div className="flex items-center md:hidden w-fit">
 
-                      <div className="relative flex items-center h-9 w-9">
+                      <div className="relative flex items-center h-8 w-8">
                         <Image
                           src={app_logo}
                           alt="App Logo"
-                          className="relative w-[max(2rem,5vh)] h-auto object-contain rounded-r-2xl"
+                          className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-r-2xl"
                         />
                       </div>
 
@@ -187,21 +220,21 @@ export function AppHeader({
                   <div className="flex items-center gap-3">
 
 
-                    <Button
+                    {/* <Button
                       variant="secondary"
                       size="sm"
                       className="flex items-center gap-1.5 h-8 px-2.5 rounded-md bg-transparent border hover:bg-accent/60 transition-all duration-200"
                     >
                       <Wallet2Icon size={12} className="text-primary" />
                       <span className="text-[11px] font-mono text-foreground/80 tracking-tight">Connect</span>
-                    </Button>
-                    {/* 
+                    </Button> */}
+
                     <button
                       onClick={() => setMobileOpen(false)}
-                      className="p-3.5 rounded-lg hover:bg-primary/10 transition"
+                      className="rounded-lg hover:bg-primary/10 transition text-muted-foreground"
                     >
-                      <X size={18} />
-                    </button> */}
+                      <X size={20} />
+                    </button>
                   </div>
                 </div>
 
@@ -226,7 +259,8 @@ export function AppHeader({
               {/* Scrollable content */}
               <div className="flex-1 flex flex-col px-4 py-4 overflow-y-auto gap-3">
                 <Link
-                  href="/"
+                  href="/" className={`relative flex h-fit select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                    } hover:text-primary transition`}
                 >
                   <Button
                     className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/" ? "default" : "ghost"}
@@ -236,7 +270,8 @@ export function AppHeader({
                 </Link>
 
                 <Link
-                  href="/bills"
+                  href="/bills" className={`relative flex h-fit select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/bills" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                    } hover:text-primary transition`}
                 >
                   <Button
                     className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/bills" ? "default" : "ghost"}
@@ -246,7 +281,8 @@ export function AppHeader({
                 </Link>
 
                 <Link
-                  href="/wallets"
+                  href="/wallets" className={`relative flex h-fit select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/wallets" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                    } hover:text-primary transition`}
                 >
                   <Button
                     className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/wallets" ? "default" : "ghost"}
@@ -256,7 +292,8 @@ export function AppHeader({
                 </Link>
 
                 <Link
-                  href="/activity"
+                  href="/activity" className={`relative flex h-fit select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/activity" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                    } hover:text-primary transition`}
                 >
                   <Button
                     className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/activity" ? "default" : "ghost"}
@@ -270,11 +307,6 @@ export function AppHeader({
               <div className="p-4 border-t border-border/30 bg-sidebar flex flex-col gap-3">
                 <div className="flex justify-between items-center">
                   <div className="flex gap-3">
-                    <ThemeToggle />
-                  </div>
-
-                  {/* 🔸 Social Media Links (Compact Icons Only) */}
-                  <div className="flex justify-end items-center gap-4 mt-1">
                     <Link
                       href="/docs"
                       target="_blank"
@@ -292,7 +324,10 @@ export function AppHeader({
                     >
                       <HelpCircle size={16} /> Help
                     </Link>
+                  </div>
 
+                  {/* 🔸 Social Media Links (Compact Icons Only) */}
+                  <div className="flex justify-end items-center gap-4 mt-1">
                     <Link
                       href="https://x.com/yourhandle"
                       target="_blank"

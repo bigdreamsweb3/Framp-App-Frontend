@@ -30,6 +30,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
     const [showChat, setShowChat] = useState(false)
     const [activeView, setActiveView] = useState<string>("onramp")
 
+
     const router = useRouter()
     const pathname = usePathname() || "/"
 
@@ -134,7 +135,8 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
                             <div className="space-y-3">
                                 <div>
-                                    <Link href="/">
+                                    <Link href="/" className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                                        } hover:text-primary transition`}>
                                         <Button
                                             className="w-full justify-start gap-2 rounded-xl"
                                             variant={pathname === "/" ? "default" : "ghost"}
@@ -146,7 +148,8 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                 </div>
 
                                 <div>
-                                    <Link href="/bills">
+                                    <Link href="/bills" className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/bills" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                                        } hover:text-primary transition`}>
                                         <Button
                                             className="w-full justify-start gap-2 rounded-xl"
                                             variant={pathname === "/bills" ? "default" : "ghost"}
@@ -169,7 +172,8 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                 </div> */}
 
                                 <div>
-                                    <Link href="/wallets">
+                                    <Link href="/wallets" className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/wallets" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                                        } hover:text-primary transition`}>
                                         <Button
                                             className="w-full justify-start gap-2 rounded-xl"
                                             variant={pathname?.startsWith("/wallets") ? "default" : "ghost"} // Fixed: changed from "/wallet" to "/wallets"
@@ -181,7 +185,8 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                 </div>
 
                                 <div>
-                                    <Link href="/activity">
+                                    <Link href="/activity" className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/activity" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                                        } hover:text-primary transition`}>
                                         <Button
                                             className="w-full justify-start gap-2 rounded-xl"
                                             variant={pathname === "/activity" ? "default" : "ghost"}
@@ -195,17 +200,10 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                         </div>
 
                         {/*  */}
-                        <div className="mr-2 p-6 hidden md:block fixed bottom-0 w-80">
+                        <div className="mr-2 p-6 hidden md:block fixed bottom-0 w-80 border-t border-border/30">
                             <nav className="flex items-center justify-between">
                                 <div className="flex items-center gap-4">
-
-                                    <ThemeToggle />
-
-
-                                </div>
-
-                                {/* 🔸 Social Media Links (Compact Icons Only) */}
-                                <div className="flex justify-end items-center gap-4 mt-1">
+                                    {/* 
                                     <Link
                                         href="/docs"
                                         target="_blank"
@@ -226,7 +224,14 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                     >
                                         <HelpCircle size={18} className="inline mr-1" />
                                         Help
-                                    </Link>
+                                    </Link> */}
+
+
+                                </div>
+
+                                {/* 🔸 Social Media Links (Compact Icons Only) */}
+                                <div className="flex justify-end items-center gap-4 mt-1">
+
                                     <Link
                                         href="https://x.com/FrampFi"
                                         target="_blank"
@@ -359,56 +364,37 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             </div >
 
             {/* Mobile Bottom Navigation */}
-            <div className="fixed bottom-0 left-0 right-0 z-40 md:hidden">
-                <div className="w-full pb-safe bg-transparent">
-                    <div className="rounded-t-xl border-t bg-card shadow-lg px-2 py-3 flex items-center justify-between gap-2 w-full">
-                        <button
-                            onClick={() => handleTabChange('onramp')}
-                            aria-label="Gate"
-                            className={`flex-1 flex flex-col items-center justify-center py-0 rounded-lg ${activeView === 'onramp' ? 'text-primary' : 'text-muted-foreground'}`}
-                        >
-                            <ArrowUpCircle className="h-6 w-6" />
-                            <span className="text-[12px] font-medium mt-1">Gate</span>
-                        </button>
 
-                        <button
-                            onClick={() => handleTabChange('bills')}
-                            aria-label="Bills"
-                            className={`flex-1 flex flex-col items-center justify-center py-0 rounded-lg ${activeView === 'bills' ? 'text-primary' : 'text-muted-foreground'}`}
-                        >
-                            <QrCode className="h-6 w-6" />
-                            <span className="text-[12px] font-medium mt-1">Bills</span>
-                        </button>
+            <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card sm:hidden">
+                <div className="mb-[env(safe-area-inset-bottom)] flex h-14 items-center text-sm">
+                    <div className="grid size-full grid-cols-4">
+                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/" ? "text-primary-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                            } hover:text-primary transition`} href="/">
+                            <ArrowUpCircle className="h-4 w-4" />
+                            <span className="w-full text-center">Gate</span>
+                        </Link>
 
-                        {/* <button
-                            onClick={() => handleTabChange('save')}
-                            aria-label="Save"
-                            className={`flex-1 flex flex-col items-center justify-center py-0 rounded-lg ${activeView === 'save' ? 'text-primary' : 'text-muted-foreground'}`}
-                        >
-                            <PiggyBank className="h-6 w-6" />
-                            <span className="text-[12px] font-medium mt-1">Save</span>
-                        </button> */}
+                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 font-medium transition duration-100 text-sm  ${pathname === "/bills" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                            } hover:text-primary transition`} href="/bills">
+                            <QrCode className="h-4 w-4" />
+                            <span className="w-full text-center">Bills</span>
+                        </Link>
 
-                        <button
-                            onClick={() => handleTabChange('wallets')}
-                            aria-label="Wallets"
-                            className={`flex-1 flex flex-col items-center justify-center py-0 rounded-lg ${activeView === 'wallets' ? 'text-primary' : 'text-muted-foreground'}`}
-                        >
-                            <WalletIcon className="h-6 w-6" />
-                            <span className="text-[12px] font-medium mt-1">Wallets</span>
-                        </button>
+                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 font-medium transition duration-100 text-sm  ${pathname === "/wallets" ? "text-primary-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                            } hover:text-primary transition`} href="/wallets">
+                            <WalletIcon className="h-4 w-4" />
+                            <span className="w-full text-center">Wallets</span>
+                        </Link>
 
-                        <button
-                            onClick={() => handleTabChange('activity')}
-                            aria-label="Activity"
-                            className={`flex-1 flex flex-col items-center justify-center py-0 rounded-lg ${activeView === 'activity' ? 'text-primary' : 'text-muted-foreground'}`}
-                        >
-                            <ActivityIcon className="h-6 w-6" />
-                            <span className="text-[12px] font-medium mt-1">Activity</span>
-                        </button>
+                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 font-medium transition duration-100 text-sm  ${pathname === "/activity" ? "text-primary-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                            } hover:text-primary transition`} href="/activity">
+                            <ActivityIcon className="h-4 w-4" />
+                            <span className="w-full text-center">Activity</span>
+                        </Link>
                     </div>
                 </div>
-            </div>
+            </nav>
+
 
             {/* Floating AI Chat Button */}
             {/* <motion.button

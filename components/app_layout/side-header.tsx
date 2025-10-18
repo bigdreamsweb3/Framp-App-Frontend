@@ -85,7 +85,7 @@ export function SideHeader({
 
 
     return (
-        <header className={`h-14 relative z-10`}>
+        <header className={`h-12.5 relative z-10`}>
             <div className="w-full h-full px-4 flex items-center justify-between">
                 {/* Left side - Logo and menu button */}
                 <div className="flex items-center h-fit">
@@ -104,36 +104,40 @@ export function SideHeader({
 
 
                 {/* Desktop navigation */}
+                <div className="flex items-center gap-3">
+                    <ThemeToggle />
 
 
-                {/* User Actions */}
-                {loading ? (
-                    <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
-                ) : !user ? (
-                    <Button
-                        onClick={onAuthClick}
-                        variant="default"
-                        size="sm"
-                        className="px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-200"
-                        aria-label="Sign in or sign up"
-                    >
-                        Sign in
-                    </Button>
-                ) : (
-                    <Button
-                        variant="ghost"
-                        aria-pressed={profileActive}
-                        onClick={onProfileToggle}
-                        className={`relative inline-flex items-center justify-center w-9 h-9 overflow-hidden rounded-full
-                    transition-all duration-300 ease-out transform hover:scale-105
+                    {/* User Actions */}
+                    {loading ? (
+                        <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
+                    ) : !user ? (
+                        <Button
+                            onClick={onAuthClick}
+                            variant="default"
+                            size="sm"
+                            className="px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-200"
+                            aria-label="Sign in or sign up"
+                        >
+                            Sign in
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="ghost"
+                            aria-pressed={profileActive}
+                            onClick={onProfileToggle}
+                            className={`relative inline-flex items-center justify-center w-9 h-9 overflow-hidden rounded-full
+                    transition-all duration-300 ease-out transform hover:scale-105 
                     ${profileActive
-                                ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
-                                : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
-                            }`}
-                    >
-                        <User className="text-primary" />
-                    </Button>
-                )}
+                                    ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
+                                    : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
+                                }`}
+                        >
+                            <User className="text-primary" />
+                        </Button>
+                    )}
+
+                </div>
             </div>
         </header>
     );
