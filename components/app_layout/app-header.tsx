@@ -164,7 +164,7 @@ export function AppHeader({
               onClick={(e) => e.stopPropagation()} // prevent inside click from closing
             >
               {/* 🟢 Mobile Menu Header (Smart + Minimal Polished) */}
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between border-b border-border/40">
 
                 <div className="sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out flex items-center justify-between">
                   {/* Left side - Logo and menu button */}
