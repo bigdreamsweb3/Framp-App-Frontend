@@ -223,42 +223,42 @@ export function AppHeader({
               <div className="flex-1 flex flex-col px-6 py-4 overflow-y-auto gap-3">
                 <Link
                   href="/"
-                  className={`flex items-center gap-2 py-2 text-sm font-medium ${pathname === "/"
-                    ? "text-primary font-semibold"
-                    : "text-foreground"
-                    } hover:text-primary`}
                 >
-                  <ArrowUpCircle size={18} /> Gate
+                  <Button
+                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/" ? "default" : "ghost"}
+                  >
+                    <ArrowUpCircle size={18} /> Gate
+                  </Button>
                 </Link>
 
                 <Link
-                  href="/bills"
-                  className={`flex items-center gap-2 py-2 text-sm font-medium ${pathname.startsWith("/bills")
-                    ? "text-primary font-semibold"
-                    : "text-foreground"
-                    } hover:text-primary`}
+                  href="/"
                 >
-                  <QrCode size={18} /> Bills
+                  <Button
+                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/" ? "default" : "ghost"}
+                  >
+                    <QrCode size={18} /> Bills
+                  </Button>
                 </Link>
 
                 <Link
-                  href="/wallets"
-                  className={`flex items-center gap-2 py-2 text-sm font-medium ${pathname.startsWith("/wallets")
-                    ? "text-primary font-semibold"
-                    : "text-foreground"
-                    } hover:text-primary`}
+                  href="/"
                 >
-                  <Wallet size={18} /> Wallets
+                  <Button
+                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/" ? "default" : "ghost"}
+                  >
+                    <Wallet size={18} /> Wallets
+                  </Button>
                 </Link>
 
                 <Link
-                  href="/activity"
-                  className={`flex items-center gap-2 py-2 text-sm font-medium ${pathname.startsWith("/activity")
-                    ? "text-primary font-semibold"
-                    : "text-foreground"
-                    } hover:text-primary`}
+                  href="/"
                 >
-                  <ActivityIcon size={18} /> Activity
+                  <Button
+                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/" ? "default" : "ghost"}
+                  >
+                    <ActivityIcon size={18} /> Activity
+                  </Button>
                 </Link>
               </div>
 
