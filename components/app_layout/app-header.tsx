@@ -87,7 +87,7 @@ export function AppHeader({
             </div>
 
             <button
-              className="md:hidden p-2 rounded-lg hover:bg-primary/10 transition"
+              className="md:hidden p-2 rounded-lg hover:bg-primary/10 transition text-muted-foreground"
               aria-label="Toggle navigation"
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((p) => !p)}
