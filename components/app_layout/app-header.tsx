@@ -232,30 +232,30 @@ export function AppHeader({
                 </Link>
 
                 <Link
-                  href="/"
+                  href="/bills"
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/bills" ? "default" : "ghost"}
                   >
                     <QrCode size={18} /> Bills
                   </Button>
                 </Link>
 
                 <Link
-                  href="/"
+                  href="/wallets"
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/wallets" ? "default" : "ghost"}
                   >
                     <Wallet size={18} /> Wallets
                   </Button>
                 </Link>
 
                 <Link
-                  href="/"
+                  href="/activity"
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/activity" ? "default" : "ghost"}
                   >
                     <ActivityIcon size={18} /> Activity
                   </Button>
