@@ -32,24 +32,24 @@ const PAYMENT_METHODS: PaymentMethod[] = [
     processingTime: "Instant",
     fees: "",
   },
-  {
-    id: "USSD",
-    name: "USSD",
-    description: "Mobile banking USSD",
-    icon: <Smartphone className="w-4 h-4" />,
-    isAvailable: false,
-    processingTime: "Instant",
-    fees: "",
-  },
-  {
-    id: "PHONE_NUMBER",
-    name: "Phone Number",
-    description: "Pay with phone number",
-    icon: <Smartphone className="w-4 h-4" />,
-    isAvailable: false,
-    processingTime: "Instant",
-    fees: "",
-  },
+  // {
+  //   id: "USSD",
+  //   name: "USSD",
+  //   description: "Mobile banking USSD",
+  //   icon: <Smartphone className="w-4 h-4" />,
+  //   isAvailable: false,
+  //   processingTime: "Instant",
+  //   fees: "",
+  // },
+  // {
+  //   id: "PHONE_NUMBER",
+  //   name: "Phone Number",
+  //   description: "Pay with phone number",
+  //   icon: <Smartphone className="w-4 h-4" />,
+  //   isAvailable: false,
+  //   processingTime: "Instant",
+  //   fees: "",
+  // },
 ];
 
 interface PaymentMethodSelectorProps {
