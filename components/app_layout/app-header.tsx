@@ -184,7 +184,7 @@ export function AppHeader({
                   </div>
 
                   {/* Right side actions */}
-                  <div className="flex items-center gap-1.5 pr-3.5">
+                  <div className="flex items-center gap-3 pr-3.5">
                     <ThemeToggle />
 
                     <Button
