@@ -71,7 +71,7 @@ export function AppHeader({
       >
         <div className="w-full h-full pr-4 flex items-center justify-between">
           {/* Left side - Logo and menu button */}
-          <div className="flex items-center gap-0">
+          <div onClick={() => setMobileOpen((p) => !p)} className="flex items-center gap-0">
             <div className="flex items-center md:hidden w-fit">
               <span className="text-[0.55rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
                 BETA
@@ -86,7 +86,6 @@ export function AppHeader({
             </div>
 
             <button
-              onClick={() => setMobileOpen((p) => !p)}
               className="md:hidden p-2 rounded-lg hover:bg-primary/10 transition"
               aria-label="Toggle navigation"
               aria-expanded={mobileOpen}
@@ -161,11 +160,11 @@ export function AppHeader({
             onClick={() => setMobileOpen(false)} // click outside closes menu
           >
             <div
-              className="relative flex flex-col h-[100dvh] w-[75%] max-w-[320px] bg-sidebar border-r border-border shadow-xl rounded-tr-2xl"
+              className="relative flex flex-col h-[100dvh] w-[75%] max-w-[320px] bg-sidebar border-r border-border shadow-xl"
               onClick={(e) => e.stopPropagation()} // prevent inside click from closing
             >
               {/* 🟢 Mobile Menu Header (Smart + Minimal Polished) */}
-              <div className="flex items-center justify-between ">
+              <div className="flex items-center justify-between">
 
                 <div className="sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out flex items-center justify-between">
                   {/* Left side - Logo and menu button */}
@@ -198,7 +197,7 @@ export function AppHeader({
 
               </div>
 
-              <div className="flex items-center justify-between px-3 py-2 border-y border-border/40 bg-sidebar/80 backdrop-blur-sm mt-[8px]">
+              <div className="flex items-center justify-between px-3 py-2 border-y border-border/40 bg-sidebar/80 backdrop-blur-sm">
                 <ThemeToggle />
 
                 {/* 🔹 Right: Wallet + Close */}

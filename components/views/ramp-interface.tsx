@@ -12,11 +12,11 @@ import { Button } from "../ui/button"
 import { CheckoutModal } from "@/components/modals/checkout-modal"
 import { TokenListModal, type Token } from "@/components/modals/token-list-modal"
 import { getPersonalizedDefaultToken, trackTokenSelection, trackTokenPurchase } from "@/lib/userBehavior/tokenTracker"
-import { ConfirmOnRampModal } from "../modals/confirm-onramp-modal"
+import { ConfirmRampModal } from "../modals/confirm-ramp-modal"
 import { PaymentMethodSelector } from "../payment-method-selector"
 import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate"
 import { ExchangeRateSkeleton } from "../ui/exchange-rate-skeleton"
-import { formatNairaInput, parseNairaAmount } from "@/lib/utils/naira-formatter"
+import { formatCurrency, parseNairaAmount } from "@/lib/utils/formatter"
 
 type TokenStats = {
   selections: number
@@ -61,7 +61,7 @@ interface RampInterfaceProps {
   onFromAmountChange: (value: string) => void
   tokenSymbol: string
   fiatCurrency: string
-  onCurrencyChange: (currency: string) => void
+  onCurrencyChange: (currency: string, type?: "fiat" | "crypto") => void
   receiving: number
   balance?: number
   selectedWallet?: {
@@ -186,14 +186,14 @@ export function RampInterface({
 
   useEffect(() => {
     if (fromAmount) {
-      setFormattedAmount(formatNairaInput(fromAmount))
+      setFormattedAmount(formatCurrency(fromAmount))
     } else {
       setFormattedAmount("")
     }
   }, [fromAmount])
 
   const handleAmountChange = (value: string) => {
-    const formatted = formatNairaInput(value)
+    const formatted = formatCurrency(value)
     setFormattedAmount(formatted)
 
     const numericValue = parseNairaAmount(formatted)
@@ -242,55 +242,69 @@ export function RampInterface({
     try {
       const walletAddress = selectedWallet?.walletAddress || user?.wallet_address || "YOUR_WALLET_ADDRESS"
 
-      // Prepare payload based on ramp mode
+      // Prepare common payload
       const payload = {
         fiatAmount: 0,
-        fiatCurrency: fiatCurrency,
-        tokenSymbol: tokenSymbol,
+        fiatCurrency,
+        tokenSymbol,
         tokenAmount: 0,
         exchangeRate: exchangeRate?.rate,
         tokenMint: CRYPTO_TOKENS.find((t) => t.symbol === tokenSymbol)?.tokenAddress || "",
-        walletAddress: walletAddress,
+        walletAddress,
         walletInfo: selectedWallet,
         paymentMethods: selectedPaymentMethod ? [selectedPaymentMethod] : ["CARD"],
       } as any
 
-      if (rampMode === 'onramp') {
-        // buying tokens with NGN: fromAmount is NGN, computedReceiving is tokens
+      if (rampMode === "onramp") {
+        // user is buying crypto with fiat
         payload.fiatAmount = Number(fromAmount)
         payload.tokenAmount = Number(computedReceiving)
+
+        const res = await createOnramp(payload)
+        if (res?.data?.checkout_url) {
+          trackTokenPurchase(user?.id, tokenSymbol)
+          setCheckoutUrl(res.data.checkout_url)
+        } else {
+          alert("Failed to initialize onramp payment")
+        }
+
       } else {
-        // selling tokens for NGN: fromAmount is token amount, computedReceiving is NGN
+        // user is selling crypto for fiat (offramp)
         payload.fiatAmount = Number(computedReceiving)
         payload.tokenAmount = Number(fromAmount)
+
+        // assuming createOfframp() exists in your API folder
+        const { createOfframp } = await import("@/lib/api/payments/offramp")
+        const res = await createOfframp(payload)
+
+        if (res?.data?.status === "success") {
+          alert("Offramp created successfully! Funds will be processed shortly.")
+        } else {
+          alert("Failed to initialize offramp.")
+        }
       }
 
-      const res = await createOnramp(payload)
-
-      if (res?.data?.checkout_url) {
-        trackTokenPurchase(user?.id, tokenSymbol)
-        setCheckoutUrl(res.data.checkout_url)
-      } else {
-        alert("Failed to initialize payment")
-      }
     } catch (err: any) {
-      console.error("Onramp error:", err.message)
-      alert(err.message)
+      console.error("Ramp error:", err)
+      alert(err.message || "An error occurred during ramp processing.")
     } finally {
       setLoading(false)
       setShowConfirm(false)
     }
   }
 
+
   const handleWalletSelect = () => {
     if (rampMode === "offramp") {
-      // off-ramp should select a fiat receiving account
+      // Select bank account for off-ramp
       if (onAccountSelect) onAccountSelect()
       else onWalletSelect?.()
     } else {
+      // Select crypto wallet for on-ramp
       onWalletSelect?.()
     }
   }
+
 
   // derive selected transfer method from props or internal state
   const effectiveTransferMethod = selectedTransferMethod ?? internalSelectedTransferMethod
@@ -331,7 +345,7 @@ export function RampInterface({
                   variant="ghost"
                   size="sm"
                   className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "onramp"
-                    ? "bg-card text-foreground shadow-sm"
+                    ? "bg-background text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                     }`}
                   onClick={() => handleRampModeChange("onramp")}
@@ -343,7 +357,7 @@ export function RampInterface({
                   variant="ghost"
                   size="sm"
                   className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "offramp"
-                    ? "bg-card text-foreground shadow-sm"
+                    ? "bg-background text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-transparent"
                     }`}
                   onClick={() => handleRampModeChange("offramp")}
@@ -385,7 +399,7 @@ export function RampInterface({
                     />
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card hover:bg-muted/60 border border-border shrink-0"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-background hover:bg-muted/60 border border-border shrink-0"
                       aria-label="Fiat currency"
                     >
                       <img src={logoNGN || "/placeholder.svg"} alt="NGN" className="w-5 h-5" />
@@ -406,7 +420,7 @@ export function RampInterface({
                     </div>
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card hover:bg-muted/60 border border-border shrink-0"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-background hover:bg-muted/60 border border-border shrink-0"
                       onClick={() => setTokenModalOpen(true)}
                       aria-label="Select cryptocurrency"
                     >
@@ -439,7 +453,7 @@ export function RampInterface({
                     />
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card hover:bg-muted/60 border border-border shrink-0"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-background hover:bg-muted/60 border border-border shrink-0"
                       onClick={() => setTokenModalOpen(true)}
                       aria-label="Select cryptocurrency"
                     >
@@ -467,7 +481,7 @@ export function RampInterface({
                     </div>
                     <Button
                       variant="ghost"
-                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-card hover:bg-muted/60 border border-border shrink-0"
+                      className="flex items-center gap-2 h-9 px-3 rounded-xl bg-background hover:bg-muted/60 border border-border shrink-0"
                       aria-label="Fiat currency"
                     >
                       <img src={logoNGN || "/placeholder.svg"} alt="NGN" className="w-5 h-5" />
@@ -511,45 +525,66 @@ export function RampInterface({
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="text-xs text-muted-foreground">{rampMode === "onramp" ? "To:" : "To:"}</div>
-                    {selectedWallet ? (
-                      <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center">
-                          {selectedWallet.type === "wallet" ? (
-                            <Wallet className="h-3 w-3 text-primary" />
-                          ) : (
-                            <Building2 className="h-3 w-3 text-primary" />
-                          )}
+
+                    {(() => {
+                      const hasCorrectWalletType = selectedWallet &&
+                        ((rampMode === "onramp" && selectedWallet.type === "wallet") ||
+                          (rampMode === "offramp" && selectedWallet.type === "bank"));
+
+                      return hasCorrectWalletType ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-5 h-5 bg-primary/10 rounded-full flex items-center justify-center">
+                            {rampMode === "onramp" ? (
+                              <Wallet className="h-3 w-3 text-primary" />
+                            ) : (
+                              <Building2 className="h-3 w-3 text-primary" />
+                            )}
+                          </div>
+                          <div>
+                            <div className="text-xs font-medium text-foreground">{selectedWallet.name}</div>
+                            <div className="text-xs text-muted-foreground">
+                              {rampMode === "onramp"
+                                ? selectedWallet.details
+                                : `${selectedWallet.accountName} • ${selectedWallet.accountNumber}`
+                              }
+                            </div>
+                          </div>
                         </div>
-                        <div>
-                          <div className="text-xs font-medium text-foreground">{selectedWallet.name}</div>
-                          <div className="text-xs text-muted-foreground">{selectedWallet.details}</div>
+                      ) : (
+                        <div className="flex items-center gap-2">
+                          <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
+                            {rampMode === "onramp" ? (
+                              <Wallet className="h-3 w-3 text-orange-500" />
+                            ) : (
+                              <Building2 className="h-3 w-3 text-orange-500" />
+                            )}
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-orange-600 font-medium">
+                            <span>{rampMode === "onramp" ? "Select wallet" : "Select bank account"}</span>
+                            <AlertCircle className="h-4 w-4 text-orange-600" />
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 bg-orange-100 rounded-full flex items-center justify-center">
-                          {rampMode === "onramp" ? (
-                            <Wallet className="h-3 w-3 text-orange-500" />
-                          ) : (
-                            <Building2 className="h-3 w-3 text-orange-500" />
-                          )}
-                        </div>
-                        <div className="flex items-center gap-2 text-xs text-orange-600 font-medium">
-                          <span>{rampMode === "onramp" ? "Select wallet" : "Select account"}</span>
-                          <AlertCircle className="h-4 w-4 text-orange-600" />
-                        </div>
-                      </div>
-                    )}
+                      );
+                    })()}
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-7 px-3 text-xs font-medium text-foreground bg-transparent hover:bg-primary/10 rounded-xl"
-                    onClick={handleWalletSelect}
-                    aria-label={selectedWallet ? "Change wallet" : "Select wallet"}
-                  >
-                    {selectedWallet ? "Change" : "Select"}
-                  </Button>
+
+                  {(() => {
+                    const hasCorrectWalletType = selectedWallet &&
+                      ((rampMode === "onramp" && selectedWallet.type === "wallet") ||
+                        (rampMode === "offramp" && selectedWallet.type === "bank"));
+
+                    return (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 px-3 text-xs font-medium text-foreground bg-background hover:bg-primary/10 rounded-xl"
+                        onClick={handleWalletSelect}
+                        aria-label={hasCorrectWalletType ? "Change wallet" : "Select wallet"}
+                      >
+                        {hasCorrectWalletType ? "Change" : "Select"}
+                      </Button>
+                    );
+                  })()}
                 </div>
               </div>
             )}
@@ -612,12 +647,12 @@ export function RampInterface({
               </div>
             )}
 
+            {/* Main action button */}
             {rampMode === "offramp" && effectiveTransferMethod === "connect_wallet" && fromAmount && Number(fromAmount) > 0 && !effectiveIsWalletConnected ? (
               <Button
                 className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
                 size="lg"
                 onClick={() => {
-                  // prefer an explicit connect handler, fall back to wallet select
                   if (onConnectWallet) onConnectWallet()
                   else onWalletSelect?.()
                 }}
@@ -625,35 +660,41 @@ export function RampInterface({
               >
                 Connect wallet
               </Button>
-            ) : (
-              <Button
-                className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
-                size="lg"
-                disabled={
-                  !fromAmount ||
-                  (!effectiveIsWalletConnected && effectiveTransferMethod === "connect_wallet") ||
-                  (rampMode === "onramp" && !selectedPaymentMethod) ||
-                  (rampMode === "offramp" && (!selectedWallet || !effectiveTransferMethod)) ||
-                  loading
-                }
-                onClick={openConfirm}
-                aria-label={`${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
-              >
-                {loading
-                  ? "Processing..."
-                  : !fromAmount
-                    ? "Enter amount"
-                    : !selectedWallet
-                      ? rampMode === "onramp"
-                        ? "Select wallet"
-                        : "Select account"
-                      : rampMode === "onramp" && !selectedPaymentMethod
-                        ? "Select payment method"
-                        : rampMode === "offramp" && !effectiveTransferMethod
-                          ? "Select transfer method"
-                          : `${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
-              </Button>
-            )}
+            ) : (() => {
+              const hasCorrectWalletType = selectedWallet &&
+                ((rampMode === "onramp" && selectedWallet.type === "wallet") ||
+                  (rampMode === "offramp" && selectedWallet.type === "bank"));
+
+              return (
+                <Button
+                  className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
+                  size="lg"
+                  disabled={
+                    !fromAmount ||
+                    (!effectiveIsWalletConnected && effectiveTransferMethod === "connect_wallet") ||
+                    (rampMode === "onramp" && (!hasCorrectWalletType || !selectedPaymentMethod)) ||
+                    (rampMode === "offramp" && (!hasCorrectWalletType || !effectiveTransferMethod)) ||
+                    loading
+                  }
+                  onClick={openConfirm}
+                  aria-label={`${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
+                >
+                  {loading
+                    ? "Processing..."
+                    : !fromAmount
+                      ? "Enter amount"
+                      : !hasCorrectWalletType
+                        ? rampMode === "onramp"
+                          ? "Select wallet"
+                          : "Select account"
+                        : rampMode === "onramp" && !selectedPaymentMethod
+                          ? "Select payment method"
+                          : rampMode === "offramp" && !effectiveTransferMethod
+                            ? "Select transfer method"
+                            : `${rampMode === "onramp" ? "Buy" : "Sell"} ${tokenSymbol}`}
+                </Button>
+              );
+            })()}
           </div>
         </CardContent>
       </Card>
@@ -674,18 +715,25 @@ export function RampInterface({
         }}
       />
 
-      {showConfirm && (
-        <ConfirmOnRampModal
-          fiatAmount={fromAmount}
-          fiatCurrency={rateMode === 'buy' ? 'NGN' : 'NGN'}
-          receiveAmount={computedReceiving}
-          receiveToken={tokenSymbol}
-          paymentMethod={selectedPaymentMethod || "Card"}
-          selectedWallet={selectedWallet}
-          onConfirm={handleConfirm}
-          onCancel={() => setShowConfirm(false)}
-        />
-      )}
+      <ConfirmRampModal
+        isOpen={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        rampMode={rampMode}
+        fiatAmount={fromAmount}
+        fiatCurrency={fiatCurrency}
+        tokenAmount={fromAmount}
+        tokenSymbol={tokenSymbol}
+        receiveAmount={computedReceiving}
+        exchangeRate={effectiveRate}
+        selectedWallet={selectedWallet}
+        selectedPaymentMethod={selectedPaymentMethod}
+        selectedTransferMethod={effectiveTransferMethod}
+        isWalletConnected={effectiveIsWalletConnected}
+        user={user}
+        onConfirm={handleConfirm}
+        loading={loading}
+      />
+
 
       {checkoutUrl && <CheckoutModal url={checkoutUrl} onClose={() => setCheckoutUrl(null)} />}
     </>

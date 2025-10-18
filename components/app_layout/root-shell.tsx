@@ -193,8 +193,8 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                             </div>
                         </div>
 
-
-                        <div className="mr-2 p-6 hidden md:block fixed bottom-0 w-full">
+                        {/*  */}
+                        <div className="mr-2 p-6 hidden md:block fixed bottom-0 w-80">
                             <nav className="flex items-center justify-between">
                                 <div className="flex items-center gap-4">
                                     <Link
@@ -212,7 +212,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                         href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                         className={`text-sm font-semibold ${pathname === "/docs" ? "text-primary" : "text-foreground"
+                                        className={`text-sm font-semibold ${pathname === "/docs" ? "text-primary" : "text-foreground"
                                             } hover:text-primary transition`}
                                     >
                                         <HelpCircle size={18} className="inline mr-1" />

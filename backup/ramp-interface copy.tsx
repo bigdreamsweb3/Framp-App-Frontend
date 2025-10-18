@@ -31,15 +31,15 @@ import {
   trackTokenSelection,
   trackTokenPurchase,
 } from "@/lib/userBehavior/tokenTracker";
-import { ConfirmOnRampModal } from "../components/modals/confirm-onramp-modal";
+import { ConfirmRampModal } from "../components/modals/confirm-ramp-modal";
 import { PaymentMethodSelector } from "../components/payment-method-selector";
 import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate";
 import { ExchangeRateStatus } from "../components/ui/exchange-rate-status";
 import { ExchangeRateSkeleton } from "../components/ui/exchange-rate-skeleton";
 import {
-  formatNairaInput,
+  formatCurrency,
   parseNairaAmount,
-} from "@/lib/utils/naira-formatter";
+} from "@/lib/utils/formatter";
 
 type TokenStats = {
   selections: number;
@@ -148,7 +148,7 @@ export function RampInterface({
   // Sync formatted amount with fromAmount prop
   useEffect(() => {
     if (fromAmount) {
-      setFormattedAmount(formatNairaInput(fromAmount));
+      setFormattedAmount(formatCurrency(fromAmount));
     } else {
       setFormattedAmount("");
     }
@@ -156,7 +156,7 @@ export function RampInterface({
 
   // Handle input change with formatting
   const handleAmountChange = (value: string) => {
-    const formatted = formatNairaInput(value);
+    const formatted = formatCurrency(value);
     setFormattedAmount(formatted);
 
     // Parse the formatted value back to numeric for the parent component
@@ -492,7 +492,7 @@ export function RampInterface({
       />
 
       {showConfirm && (
-        <ConfirmOnRampModal
+        <ConfirmRampModal
           fiatAmount={fromAmount}
           fiatCurrency="NGN"
           receiveAmount={receiving}

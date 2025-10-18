@@ -26,7 +26,7 @@ import {
   trackTokenSelection,
   trackTokenPurchase,
 } from "@/lib/userBehavior/tokenTracker";
-import { ConfirmOnRampModal } from "../components/modals/confirm-onramp-modal";
+import { ConfirmRampModal } from "../components/modals/confirm-ramp-modal";
 import { PaymentMethodSelector } from "../components/payment-method-selector";
 import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate";
 import { ExchangeRateStatus } from "../components/ui/exchange-rate-status";
