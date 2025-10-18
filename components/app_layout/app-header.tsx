@@ -184,7 +184,7 @@ export function AppHeader({
                   </div>
 
                   {/* Right side actions */}
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 pr-3.5">
                     <Button
                       variant="secondary"
                       size="sm"
@@ -193,13 +193,13 @@ export function AppHeader({
                       <Wallet2Icon size={12} className="text-primary" />
                       <span className="text-[11px] font-mono text-foreground/80 tracking-tight">Connect</span>
                     </Button>
-
+{/* 
                     <button
                       onClick={() => setMobileOpen(false)}
                       className="p-3.5 rounded-lg hover:bg-primary/10 transition"
                     >
                       <X size={18} />
-                    </button>
+                    </button> */}
                   </div>
                 </div>
 
