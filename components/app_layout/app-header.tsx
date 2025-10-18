@@ -67,7 +67,7 @@ export function AppHeader({
         ref={headerRef}
         className={`sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out
           ${scrolled || mobileOpen ? "" : "bg-transparent"}
-          ${scrolled ? "border-b border-border/40" : ""}`}
+          ${scrolled ? "border-b border-border/40 bg-sidebar" : ""}`}
       >
         <div className="w-full h-full pr-4 flex items-center justify-between">
           {/* Left side - Logo and menu button */}
