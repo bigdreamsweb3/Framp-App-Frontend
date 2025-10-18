@@ -16,7 +16,7 @@ import { Eye, EyeOff, ArrowLeft, Wallet } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { app_logo } from "@/asssets/image";
+import useAppLogo from "@/asssets/image";
 import { App_Name } from "@/app/appConfig";
 
 interface AuthPageProps {
@@ -33,6 +33,8 @@ export function AuthPage({ onBack }: AuthPageProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+
+  const app_logo = useAppLogo()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

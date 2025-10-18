@@ -266,28 +266,15 @@ export function AppHeader({
                     onClick={onAuthClick}
                     variant="default"
                     size="sm"
-                    className="w-full px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80"
+                    className="px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-200"
+                    aria-label="Sign in or sign up"
                   >
-                    Sign in
+                    Sign Up or Sign in
                   </Button>
                 ) : (
                   <div className="flex flex-col gap-2">
                     {/* Top row: Email + UID + Avatar */}
-                    <div className="flex items-center justify-end gap-2">
-                      <div className="text-right">
-                        <p className="text-xs text-muted-foreground font-bold">
-                          {(() => {
-                            const [local, domain] = user.email.split("@");
-                            const maskedLocal = local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
-                            const maskedDomain = domain ? `***` : "";
-                            return `${maskedLocal}@${maskedDomain}`;
-                          })()}
-                        </p>
-                        <span className="text-xs text-muted-foreground capitalize">
-                          UID: {user.id.slice(0, 8)}
-                        </span>
-                      </div>
-
+                    <div className="flex items-center justify-start gap-2">
                       <Button
                         variant="ghost"
                         aria-pressed={profileActive}
@@ -301,6 +288,20 @@ export function AppHeader({
                       >
                         <User className="text-primary" />
                       </Button>
+
+                      <div className="text-left">
+                        <p className="text-xs text-muted-foreground font-bold">
+                          {(() => {
+                            const [local, domain] = user.email.split("@");
+                            const maskedLocal = local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
+                            const maskedDomain = domain ? `***` : "";
+                            return `${maskedLocal}@${maskedDomain}`;
+                          })()}
+                        </p>
+                        <span className="text-xs text-muted-foreground capitalize">
+                          UID: {user.id.slice(0, 8)}
+                        </span>
+                      </div>
                     </div>
 
                     {/* Bottom row: Finance quick info */}
@@ -451,7 +452,7 @@ export function AppHeader({
 
 
 
-                {!loading && !user && (
+                {/* {!loading && !user && (
                   <Button
                     onClick={() => {
                       setMobileOpen(false)
@@ -462,7 +463,7 @@ export function AppHeader({
                   >
                     Sign in
                   </Button>
-                )}
+                )} */}
               </div>
             </div>
           </motion.div>
