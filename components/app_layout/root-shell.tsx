@@ -201,6 +201,11 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
                                     <ThemeToggle />
 
+
+                                </div>
+
+                                {/* 🔸 Social Media Links (Compact Icons Only) */}
+                                <div className="flex justify-end items-center gap-4 mt-1">
                                     <Link
                                         href="/docs"
                                         target="_blank"
@@ -222,10 +227,6 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                         <HelpCircle size={18} className="inline mr-1" />
                                         Help
                                     </Link>
-                                </div>
-
-                                {/* 🔸 Social Media Links (Compact Icons Only) */}
-                                <div className="flex justify-end items-center gap-4 mt-1">
                                     <Link
                                         href="https://x.com/FrampFi"
                                         target="_blank"

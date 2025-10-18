@@ -267,7 +267,10 @@ export function AppHeader({
                 <div className="flex justify-between items-center">
                   <div className="flex gap-3">
                     <ThemeToggle />
+                  </div>
 
+                  {/* 🔸 Social Media Links (Compact Icons Only) */}
+                  <div className="flex justify-end items-center gap-4 mt-1">
                     <Link
                       href="/docs"
                       target="_blank"
@@ -285,10 +288,7 @@ export function AppHeader({
                     >
                       <HelpCircle size={16} /> Help
                     </Link>
-                  </div>
 
-                  {/* 🔸 Social Media Links (Compact Icons Only) */}
-                  <div className="flex justify-end items-center gap-4 mt-1">
                     <Link
                       href="https://x.com/yourhandle"
                       target="_blank"
