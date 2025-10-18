@@ -185,7 +185,7 @@ export function AppHeader({
 
                   {/* Right side actions */}
                   <div className="flex items-center gap-3 pr-3.5">
-                    <ThemeToggle />
+
 
                     <Button
                       variant="secondary"
@@ -210,9 +210,9 @@ export function AppHeader({
               {/* <div className="flex items-center justify-between px-6 py-3 border-y border-border/40 bg-sidebar/80 backdrop-blur-sm">
                 <ThemeToggle /> */}
 
-                {/* 🔹 Right: Wallet + Close */}
-                {/* <div className="flex items-center gap-1.5"> */}
-                {/* <Button
+              {/* 🔹 Right: Wallet + Close */}
+              {/* <div className="flex items-center gap-1.5"> */}
+              {/* <Button
                     variant="secondary"
                     size="sm"
                     className="flex items-center gap-1.5 h-8 px-2.5 rounded-md bg-transparent border hover:bg-accent/60 transition-all duration-200"
@@ -220,7 +220,7 @@ export function AppHeader({
                     <Wallet2Icon size={12} className="text-primary" />
                     <span className="text-[11px] font-mono text-foreground/80 tracking-tight">Connect</span>
                   </Button> */}
-                {/* </div> */}
+              {/* </div> */}
               {/* </div> */}
 
               {/* Scrollable content */}
@@ -270,6 +270,8 @@ export function AppHeader({
               <div className="p-4 border-t border-border/30 bg-sidebar flex flex-col gap-3">
                 <div className="flex justify-between items-center">
                   <div className="flex gap-3">
+                    <ThemeToggle />
+
                     <Link
                       href="/docs"
                       target="_blank"
