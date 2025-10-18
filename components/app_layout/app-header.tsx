@@ -213,7 +213,7 @@ export function AppHeader({
                   <div className="flex items-center gap-0">
                     <div className="flex items-center md:hidden w-fit">
 
-                      <div className="relative flex items-center h-7 w-7">
+                      <div className="relative flex items-center h-8 w-8">
                         <Image
                           src={app_logo}
                           alt="App Logo"
