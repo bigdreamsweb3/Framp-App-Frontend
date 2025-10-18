@@ -72,7 +72,7 @@ export function PaymentMethodSelector({
             className={`relative flex-shrink-0 flex flex-col items-center gap-1.5 p-3 min-w-[100px] h-16 rounded-lg border transition-all ${
               method.id === selectedMethod
                 ? "border-primary bg-primary/5 text-primary"
-                : "border-border bg-background hover:border-primary/50 text-foreground"
+                : "border-border bg-card hover:border-primary/50 text-foreground"
             } ${!method.isAvailable ? "opacity-50 cursor-not-allowed" : ""} ${
               disabled ? "opacity-50 cursor-not-allowed" : ""
             }`}
