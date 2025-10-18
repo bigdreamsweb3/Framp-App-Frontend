@@ -69,7 +69,7 @@ export function AppHeader({
           ${scrolled || mobileOpen ? "" : "bg-transparent"}
           ${scrolled ? "border-b border-border/40 bg-sidebar" : ""}`}
       >
-        <div className="w-full h-full pr-4 flex items-center justify-between">
+        <div className="w-full h-full px-4 flex items-center justify-between">
           {/* Left side - Logo and menu button */}
           <div onClick={() => setMobileOpen((p) => !p)} className="flex items-center gap-1.5">
             <div className="flex items-center md:hidden w-fit">
@@ -162,7 +162,7 @@ export function AppHeader({
               onClick={(e) => e.stopPropagation()} // prevent inside click from closing
             >
               {/* 🟢 Mobile Menu Header (Smart + Minimal Polished) */}
-              <div className="flex items-center justify-between border-b border-border/40">
+              <div className="flex items-center justify-between border-b border-border/40 px-4">
 
                 <div className="sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out flex items-center justify-between">
                   {/* Left side - Logo and menu button */}
@@ -184,7 +184,7 @@ export function AppHeader({
                   </div>
 
                   {/* Right side actions */}
-                  <div className="flex items-center gap-3 pr-3.5">
+                  <div className="flex items-center gap-3">
 
 
                     <Button
