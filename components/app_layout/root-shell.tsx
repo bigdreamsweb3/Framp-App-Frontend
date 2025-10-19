@@ -362,7 +362,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
             {/* Mobile Bottom Navigation */}
 
-            <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background sm:hidden">
+            <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-sidebar sm:hidden rounded-t-xl">
                 <div className="mb-[env(safe-area-inset-bottom)] flex h-14 items-center text-sm">
                     <div className="grid size-full grid-cols-4">
                         <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
