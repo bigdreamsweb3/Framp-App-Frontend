@@ -4,13 +4,13 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(100% 0.00011 271.152); 
+  --background: oklch(0.99 0.001 280); 
 
   /* --background: oklch(0.98 0.005 280); Slightly off-white with purple tint */
   --foreground: oklch(0.2 0.02 280); /* Darker, more saturated text */
-  --card: oklch(0.98 0.005 280); /* Slightly off-white with purple tint */
+  /* --card: oklch(0.98 0.005 280); Slightly off-white with purple tint */
 
-  /* --card: oklch(1 0.01 280); Pure white cards with subtle purple */
+  --card: oklch(1 0.01 280); /* Pure white cards with subtle purple */
   --card-foreground: oklch(0.2 0.02 280);
   --popover: oklch(1 0.01 280);
   --popover-foreground: oklch(0.2 0.02 280);
@@ -35,7 +35,7 @@
   --chart-4: oklch(0.55 0.22 320);
   --chart-5: oklch(0.577 0.245 27.325);
   --radius: 0.625rem;
-  --sidebar: oklch(0.99 0.001 280);
+  --sidebar: oklch(100% 0.00011 271.152);
   /* oklch(0.16 0.03 280) */
   /* --sidebar: oklch(1 0.01 280); */
   --sidebar-foreground: oklch(0.2 0.02 280);
