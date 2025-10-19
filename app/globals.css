@@ -4,9 +4,13 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.98 0.005 280); /* Slightly off-white with purple tint */
+  --background: oklch(100% 0.00011 271.152); 
+
+  /* --background: oklch(0.98 0.005 280); Slightly off-white with purple tint */
   --foreground: oklch(0.2 0.02 280); /* Darker, more saturated text */
-  --card: oklch(1 0.01 280); /* Pure white cards with subtle purple */
+  --card: oklch(0.98 0.005 280); /* Slightly off-white with purple tint */
+
+  /* --card: oklch(1 0.01 280); Pure white cards with subtle purple */
   --card-foreground: oklch(0.2 0.02 280);
   --popover: oklch(1 0.01 280);
   --popover-foreground: oklch(0.2 0.02 280);
@@ -16,7 +20,7 @@
   --secondary: oklch(0.88 0.04 280); /* More saturated secondary */
   --secondary-foreground: oklch(0.2 0.02 280);
   /* --muted: oklch(93.948% 0.01491 281.877 / 0.7); Better contrast for muted areas */
-  --muted:  oklch(93.948% 0.04 280 / 0.7);
+  --muted: oklch(93.948% 0.04 280 / 0.7);
   --muted-foreground: oklch(0.5 0.02 280); /* Darker muted text */
   --accent: oklch(0.88 0.04 280);
   --accent-foreground: oklch(0.2 0.02 280);
@@ -32,6 +36,7 @@
   --chart-5: oklch(0.577 0.245 27.325);
   --radius: 0.625rem;
   --sidebar: oklch(1 0.01 280);
+  /* --sidebar: oklch(1 0.01 280); */
   --sidebar-foreground: oklch(0.2 0.02 280);
   --sidebar-primary: oklch(0.5 0.2 280);
   --sidebar-primary-foreground: oklch(0.99 0 0);
@@ -55,7 +60,7 @@
   --secondary-foreground: oklch(0.95 0.01 280);
   /* --muted: oklch(0.22 0.03 280); Better contrast for muted areas */
 
-  --muted: oklch(0.22 0.04 280 / 0.90);
+  --muted: oklch(0.22 0.04 280 / 0.9);
   --muted-foreground: oklch(0.65 0.02 280); /* More visible muted text */
   --accent: oklch(0.25 0.04 280);
   --accent-foreground: oklch(0.95 0.01 280);
