@@ -116,7 +116,7 @@ export function AppHeader({
                 </Link>
 
                 <Link
-                  href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
+                  href="https://wa.me/2348168799622?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`text-sm font-semibold ${pathname === "/docs" ? "text-primary" : "text-foreground"

@@ -215,7 +215,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                     </Link>
 
                                     <Link
-                                        href="https://wa.me/2348012345678?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
+                                        href="https://wa.me/2348168799622?text=Hello%20I%20need%20help%20with%20my%20on-ramp"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={`text-sm font-semibold ${pathname === "/docs" ? "text-primary" : "text-foreground"
@@ -362,7 +362,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
             {/* Mobile Bottom Navigation */}
 
-            <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-sidebar sm:hidden rounded-t-xl">
+            <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-sidebar sm:hidden">
                 <div className="mb-[env(safe-area-inset-bottom)] flex h-14 items-center text-sm">
                     <div className="grid size-full grid-cols-4">
                         <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"

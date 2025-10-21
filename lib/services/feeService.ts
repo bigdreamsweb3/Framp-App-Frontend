@@ -1,121 +1,93 @@
 // File: lib/services/feeService.ts
 
 export interface FeeCalculation {
-  platformFee: number;
-  processingFee: number; // Banking API fee
-  totalFee: number;
+  serviceFee: number; // Fee amount in fiat (NGN)
+  totalFee: number; // Same as serviceFee
   feeRate: number;
-  netAmount: number;
+  netAmount: number; // Amount used to buy crypto (after fees)
   percentage: string;
-  breakdown: {
-    platform: { percentage: string; amount: number };
-    processing: { percentage: string; amount: number };
-  };
+  displayAmount: number;
+  displayCurrency: string;
+  cryptoAmount: number; // Actual crypto user receives
 }
 
 export interface FeeConfig {
-  onramp: {
-    total: number;      // 2% total
-    platform: number;   // 0.5% platform fee
-    processing: number; // 1.5% processing fee
-  };
-  offramp: {
-    total: number;      // 1% total  
-    platform: number;   // 0.5% platform fee
-    processing: number; // 0.5% processing fee
-  };
-  minimumFee: number;
+  onramp: number; // 0.5% total
+  offramp: number; // 0.1% total
+  minimumFee: number; // Minimum fee in NGN
 }
 
-// Updated fee configuration with breakdown
 const DEFAULT_FEE_CONFIG: FeeConfig = {
-  onramp: {
-    total: 0.02,    // 2% total
-    platform: 0.005, // 0.5% platform
-    processing: 0.015 // 1.5% processing
-  },
-  offramp: {
-    total: 0.01,    // 1% total
-    platform: 0.005, // 0.5% platform  
-    processing: 0.005 // 0.5% processing
-  },
-  minimumFee: 50
+  onramp: 0.005, // 0.5%
+  offramp: 0.001, // 0.1%
+  minimumFee: 50, // ₦50 minimum
 };
-
-/**
- * Calculate fees for ramp transactions with breakdown
- */
 
 export function calculateFees(
   amount: number,
   mode: "onramp" | "offramp",
   receiveAmount: number = 0,
+  exchangeRate: number = 0,
   customConfig?: Partial<FeeConfig>
 ): FeeCalculation {
   const config = { ...DEFAULT_FEE_CONFIG, ...customConfig };
-  const feeConfig = config[mode];
+  const feeRate = config[mode];
 
-  if (!amount || amount <= 0) {
+  if (!amount || amount <= 0 || !exchangeRate) {
     return {
-      platformFee: 0,
-      processingFee: 0,
+      serviceFee: 0,
       totalFee: 0,
-      feeRate: feeConfig.total,
-      netAmount: receiveAmount,
-      percentage: `${feeConfig.total * 100}%`,
-      breakdown: {
-        platform: { percentage: `${feeConfig.platform * 100}%`, amount: 0 },
-        processing: { percentage: `${feeConfig.processing * 100}%`, amount: 0 }
-      }
+      feeRate,
+      netAmount: 0,
+      percentage: `${feeRate * 100}%`,
+      displayAmount: 0,
+      displayCurrency: mode === "onramp" ? "NGN" : "TOKEN",
+      cryptoAmount: 0,
     };
   }
 
-  // Calculate individual fees based on input amount
-  let platformFee = amount * feeConfig.platform;
-  let processingFee = amount * feeConfig.processing;
-  
-  // Apply minimum fee to total
-  const totalCalculatedFee = platformFee + processingFee;
-  const totalFee = Math.max(totalCalculatedFee, config.minimumFee);
-  
-  // If minimum fee applies, distribute proportionally
-  if (totalCalculatedFee < config.minimumFee) {
-    const ratio = config.minimumFee / totalCalculatedFee;
-    platformFee = platformFee * ratio;
-    processingFee = processingFee * ratio;
+  if (mode === "onramp") {
+    // ONRAMP: Calculate fee in fiat and deduct from fiat amount
+    let serviceFee = amount * feeRate;
+    serviceFee = Math.max(serviceFee, config.minimumFee);
+
+    // Amount actually used to buy crypto (after fee deduction)
+    const netFiatAmount = amount - serviceFee;
+
+    // Calculate crypto amount based on net fiat amount
+    const cryptoAmount = netFiatAmount / exchangeRate;
+
+    return {
+      serviceFee: Math.round(serviceFee),
+      totalFee: Math.round(serviceFee),
+      feeRate,
+      netAmount: netFiatAmount, // Fiat amount used for crypto purchase
+      percentage: `${feeRate * 100}%`,
+      displayAmount: amount,
+      displayCurrency: "NGN",
+      cryptoAmount: cryptoAmount, // Actual crypto user receives
+    };
+  } else {
+    // OFFRAMP: Calculate fee in fiat first, then convert to crypto
+    const cryptoValueInFiat = amount * exchangeRate;
+    let serviceFeeInFiat = cryptoValueInFiat * feeRate;
+    serviceFeeInFiat = Math.max(serviceFeeInFiat, config.minimumFee);
+
+    const serviceFeeInCrypto = serviceFeeInFiat / exchangeRate;
+    const netAmount = Math.max(receiveAmount - serviceFeeInFiat, 0);
+
+    return {
+      serviceFee: serviceFeeInCrypto, // Display in crypto
+      totalFee: serviceFeeInCrypto,
+      feeRate,
+      netAmount, // Fiat amount user receives
+      percentage: `${feeRate * 100}%`,
+      displayAmount: amount,
+      displayCurrency: "TOKEN",
+      cryptoAmount: amount, // Crypto amount user sends
+    };
   }
-
-  // Round fees
-  platformFee = Math.round(platformFee);
-  processingFee = Math.round(processingFee);
-
-  // For onramp: user pays fee in fiat, receives full crypto amount
-  // For offramp: user pays fee from fiat amount they receive
-  const netAmount =
-    mode === "onramp"
-      ? receiveAmount
-      : Math.max(receiveAmount - totalFee, 0);
-
-  return {
-    platformFee,
-    processingFee,
-    totalFee,
-    feeRate: feeConfig.total,
-    netAmount,
-    percentage: `${feeConfig.total * 100}%`,
-    breakdown: {
-      platform: { 
-        percentage: `${feeConfig.platform * 100}%`, 
-        amount: platformFee 
-      },
-      processing: { 
-        percentage: `${feeConfig.processing * 100}%`, 
-        amount: processingFee 
-      }
-    }
-  };
 }
-
 /**
  * Get fee configuration (useful for displaying rates)
  */
@@ -128,5 +100,5 @@ export function getFeeConfig(): FeeConfig {
  */
 export function getFeePercentage(mode: "onramp" | "offramp"): string {
   const config = getFeeConfig();
-  return `${config[mode].total * 100}%`;
+  return `${config[mode] * 100}%`;
 }

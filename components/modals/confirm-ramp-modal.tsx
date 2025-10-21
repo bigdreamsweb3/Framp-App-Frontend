@@ -53,13 +53,12 @@ export function ConfirmRampModal({
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Calculate fees based on the transaction
-  // For onramp: fee based on fiat amount (NGN)
-  // For offramp: fee based on crypto amount (token amount)
-  const amount = rampMode === 'onramp' 
+  const amount = rampMode === 'onramp'
     ? Number(fiatAmount)   // Buying: fee based on NGN amount
     : Number(tokenAmount); // Selling: fee based on crypto amount
-  
-  const fees = useFees(amount, rampMode, receiveAmount);
+
+  // Pass exchangeRate to useFees hook
+  const fees = useFees(amount, rampMode, receiveAmount, exchangeRate);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => e.key === "Escape" && !isProcessing && onClose();
@@ -111,107 +110,94 @@ export function ConfirmRampModal({
         <div className="space-y-4 text-foreground">
           {rampMode === "onramp" ? (
             <>
-              {/* Onramp: User sends fiat, receives crypto */}
+              {/* Onramp: Show fee deduction from fiat */}
               <InfoRow
                 label={`You Pay`}
                 value={formatCurrency(fiatAmount, fiatCurrency)}
                 highlight
               />
 
-              {/* Fee Breakdown */}
-              <div className="bg-muted/30 rounded-lg p-3 space-y-2 border border-border">
-                <div className="text-sm font-medium text-muted-foreground mb-2">Fee Breakdown</div>
+              {/* Fee Breakdown - Deducted from fiat */}
+              {/* <div className="bg-muted/30 rounded-lg p-4 space-y-3 border border-border">
+                <div className="text-sm font-medium text-muted-foreground">Fee Breakdown</div>
 
-                {/* Platform Fee */}
                 <InfoRow
-                  label="Platform fee"
-                  value={`${fees.breakdown.platform.percentage} (${formatCurrency(fees.breakdown.platform.amount.toString(), fiatCurrency)})`}
-                  className="text-sm"
-                />
-
-                {/* Processing Fee */}
-                <InfoRow
-                  label="Processing fee"
-                  value={`${fees.breakdown.processing.percentage} (${formatCurrency(fees.breakdown.processing.amount.toString(), fiatCurrency)})`}
-                  className="text-sm"
-                  subValue="Charged by payment processor"
+                  label="Service fee"
+                  value={`${fees.percentage} (${formatCurrency(fees.serviceFee.toString(), fiatCurrency)})`}
+                  className="text-sm pb-2"
+                  noBorder
                 />
 
                 <div className="border-t border-border pt-2">
                   <InfoRow
-                    label="Total fees"
-                    value={formatCurrency(fees.totalFee.toString(), fiatCurrency)}
-                    className="font-medium"
+                    label="Amount for crypto"
+                    value={formatCurrency(fees.netAmount.toString(), fiatCurrency)}
+                    className="text-sm font-medium"
+                    subValue={`After ${fees.percentage} service fee`}
+                    noBorder
                   />
                 </div>
-              </div>
+              </div> */}
+
+              {/* <InfoRow
+                label={`You Receive`}
+                value={`${fees.cryptoAmount.toFixed(6)} ${tokenSymbol}`}
+                highlight
+              /> */}
 
               <InfoRow
-                label={`You Receive`}
-                value={`${receiveAmount.toFixed(4)} ${tokenSymbol}`}
+                label={`You'll Receive`}
+                value={`${fees.cryptoAmount.toFixed(6)} ${tokenSymbol}`}
                 highlight
+                subValue={`After ${fees.percentage} service fee`}
               />
-              <InfoRow label="Payment Method" value={paymentOrTransfer} />
             </>
           ) : (
             <>
-              {/* Offramp: User sends crypto, receives fiat */}
+              {/* Offramp: Show fee in crypto */}
               <InfoRow
                 label={`You Send`}
                 value={`${tokenAmount} ${tokenSymbol}`}
                 highlight
               />
 
-              {/* Fee Breakdown - Show percentage based on crypto amount but display in fiat */}
-              <div className="bg-muted/30 rounded-lg p-3 space-y-2 border border-border">
-                <div className="text-sm font-medium text-muted-foreground mb-2">Fee Breakdown</div>
-                
-                {/* Show that fees are calculated on the crypto amount */}
-                <div className="text-xs text-muted-foreground mb-2 italic">
-                  Fees calculated on {tokenAmount} {tokenSymbol} ({formatCurrency(receiveAmount.toString(), fiatCurrency)})
-                </div>
+              {/* Fee Breakdown - In crypto */}
+              {/* <div className="bg-muted/30 rounded-lg p-4 space-y-3 border border-border">
+                <div className="text-sm font-medium text-muted-foreground">Fee Breakdown</div>
 
-                {/* Platform Fee */}
                 <InfoRow
-                  label="Platform fee"
-                  value={`${fees.breakdown.platform.percentage} (${formatCurrency(fees.breakdown.platform.amount.toString(), fiatCurrency)})`}
+                  label="Service fee"
+                  value={`${fees.percentage} (${fees.serviceFee.toFixed(6)} ${tokenSymbol})`}
                   className="text-sm"
+                  noBorder
                 />
-
-                {/* Processing Fee */}
-                <InfoRow
-                  label="Processing fee"
-                  value={`${fees.breakdown.processing.percentage} (${formatCurrency(fees.breakdown.processing.amount.toString(), fiatCurrency)})`}
-                  className="text-sm"
-                  subValue="Bank transfer fee"
-                />
-
-                <div className="border-t border-border pt-2">
-                  <InfoRow
-                    label="Total fees"
-                    value={formatCurrency(fees.totalFee.toString(), fiatCurrency)}
-                    className="font-medium"
-                  />
-                </div>
-              </div>
+              </div> */}
 
               <InfoRow
                 label={`You'll Receive`}
                 value={formatCurrency(fees.netAmount.toString(), fiatCurrency)}
                 highlight
-                subValue={`Before fees: ${formatCurrency(receiveAmount.toString(), fiatCurrency)}`}
+                subValue={`After ${fees.percentage} service fee`}
               />
-              <InfoRow label="Transfer Method" value={paymentOrTransfer} />
             </>
           )}
 
-          {/* Exchange Rate - Uncomment if you want to show it */}
-          <div className="bg-primary/5 rounded-lg p-3 text-center border border-primary/10">
+          {/* Payment/Transfer Method */}
+          {rampMode === "onramp"
+            ? <InfoRow label="Payment Method" value={paymentOrTransfer} />
+            : <InfoRow label="Transfer Method" value={paymentOrTransfer} />
+          }
+
+
+
+
+          {/* Exchange Rate */}
+          {/* <div className="bg-primary/5 rounded-lg p-3 text-center border border-primary/20">
             <div className="text-sm text-muted-foreground">Exchange Rate</div>
             <div className="font-medium">
               1 {tokenSymbol} = {formatCurrency(exchangeRate.toString(), fiatCurrency)}
             </div>
-          </div>
+          </div> */}
 
           {selectedWallet && (
             <div className="py-2 border-b border-border">
@@ -222,10 +208,34 @@ export function ConfirmRampModal({
                 <div className="text-right">
                   <div className="font-semibold">{selectedWallet.name}</div>
                   <div className="text-sm text-muted-foreground">{selectedWallet.details}</div>
+                  {/* {selectedWallet.walletAddress && (
+                    <div className="text-xs text-muted-foreground font-mono mt-1">
+                      {selectedWallet.walletAddress.slice(0, 8)}...
+                      {selectedWallet.walletAddress.slice(-8)}
+                    </div>
+                  )} */}
                 </div>
               </div>
             </div>
           )}
+
+
+          {/* Fee Breakdown */}
+          {rampMode === "onramp"
+            ? <InfoRow
+              label="Service fee"
+              value={`${fees.percentage} (${formatCurrency(fees.serviceFee.toString(), fiatCurrency)})`}
+              className="text-sm pb-2"
+              noBorder
+            />
+            :
+            <InfoRow
+              label="Service fee"
+              value={`${fees.percentage} (${fees.serviceFee.toFixed(6)} ${tokenSymbol})`}
+              className="text-sm"
+              noBorder
+            />
+          }
         </div>
 
         <div className="mt-8 flex gap-3">
@@ -254,16 +264,18 @@ function InfoRow({
   value,
   subValue,
   highlight = false,
-  className = ""
+  className = "",
+  noBorder = false
 }: {
   label: string;
   value: string;
   subValue?: string;
   highlight?: boolean;
   className?: string;
+  noBorder?: boolean;
 }) {
   return (
-    <div className={`flex justify-between items-center py-2 border-b border-border ${className}`}>
+    <div className={`flex justify-between items-center py-2 ${noBorder ? '' : 'border-b border-border'} ${className}`}>
       <span className={`font-medium ${highlight ? "text-foreground" : "text-muted-foreground"}`}>
         {label}:
       </span>
