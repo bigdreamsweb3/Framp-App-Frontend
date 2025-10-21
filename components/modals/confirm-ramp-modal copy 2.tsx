@@ -53,12 +53,7 @@ export function ConfirmRampModal({
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Calculate fees based on the transaction
-  // For onramp: fee based on fiat amount (NGN)
-  // For offramp: fee based on crypto amount (token amount)
-  const amount = rampMode === 'onramp' 
-    ? Number(fiatAmount)   // Buying: fee based on NGN amount
-    : Number(tokenAmount); // Selling: fee based on crypto amount
-  
+  const amount = Number(rampMode === 'onramp' ? fiatAmount : tokenAmount);
   const fees = useFees(amount, rampMode, receiveAmount);
 
   useEffect(() => {
@@ -162,14 +157,9 @@ export function ConfirmRampModal({
                 highlight
               />
 
-              {/* Fee Breakdown - Show percentage based on crypto amount but display in fiat */}
+              {/* Fee Breakdown */}
               <div className="bg-muted/30 rounded-lg p-3 space-y-2 border border-border">
                 <div className="text-sm font-medium text-muted-foreground mb-2">Fee Breakdown</div>
-                
-                {/* Show that fees are calculated on the crypto amount */}
-                <div className="text-xs text-muted-foreground mb-2 italic">
-                  Fees calculated on {tokenAmount} {tokenSymbol} ({formatCurrency(receiveAmount.toString(), fiatCurrency)})
-                </div>
 
                 {/* Platform Fee */}
                 <InfoRow
@@ -205,13 +195,13 @@ export function ConfirmRampModal({
             </>
           )}
 
-          {/* Exchange Rate - Uncomment if you want to show it */}
-          <div className="bg-primary/5 rounded-lg p-3 text-center border border-primary/10">
+          {/* Exchange Rate */}
+          {/* <div className="bg-primary/5 rounded-lg p-3 text-center border border-primary/10">
             <div className="text-sm text-muted-foreground">Exchange Rate</div>
             <div className="font-medium">
               1 {tokenSymbol} = {formatCurrency(exchangeRate.toString(), fiatCurrency)}
             </div>
-          </div>
+          </div> */}
 
           {selectedWallet && (
             <div className="py-2 border-b border-border">
@@ -222,6 +212,12 @@ export function ConfirmRampModal({
                 <div className="text-right">
                   <div className="font-semibold">{selectedWallet.name}</div>
                   <div className="text-sm text-muted-foreground">{selectedWallet.details}</div>
+                  {/* {selectedWallet.walletAddress && (
+                    <div className="text-xs text-muted-foreground font-mono mt-1">
+                      {selectedWallet.walletAddress.slice(0, 8)}...
+                      {selectedWallet.walletAddress.slice(-8)}
+                    </div>
+                  )} */}
                 </div>
               </div>
             </div>

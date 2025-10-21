@@ -69,13 +69,11 @@ export function PaymentMethodSelector({
         {PAYMENT_METHODS.map((method) => (
           <button
             key={method.id}
-            className={`relative flex-shrink-0 flex flex-col items-center gap-1.5 p-3 min-w-[100px] h-16 rounded-lg border transition-all ${
-              method.id === selectedMethod
-                ? "border-primary bg-primary/5 text-primary"
-                : "border-border bg-card hover:border-primary/50 text-foreground"
-            } ${!method.isAvailable ? "opacity-50 cursor-not-allowed" : ""} ${
-              disabled ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`relative flex-shrink-0 flex flex-col items-center gap-2 px-3 py-2 rounded-lg border text-sm transition-all ${method.id === selectedMethod
+              ? "border-primary bg-primary/5 text-primary"
+              : "border-border bg-card hover:border-primary/50 text-foreground"
+              } ${!method.isAvailable ? "opacity-50 cursor-not-allowed" : ""} ${disabled ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             onClick={() => {
               if (method.isAvailable && !disabled) {
                 onMethodSelect(method.id);
@@ -84,11 +82,10 @@ export function PaymentMethodSelector({
             disabled={!method.isAvailable || disabled}
           >
             <div
-              className={`${
-                method.id === selectedMethod
-                  ? "text-primary"
-                  : "text-muted-foreground"
-              }`}
+              className={`${method.id === selectedMethod
+                ? "text-primary"
+                : "text-muted-foreground"
+                }`}
             >
               {method.icon}
             </div>

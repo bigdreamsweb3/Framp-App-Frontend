@@ -129,7 +129,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                     Framp Gateway
                                 </h3>
                                 <p className="text-xs text-muted-foreground/70">
-                                    Your gateway to doing more with crypto.
+                                    Doing more with crypto.
                                 </p>
                             </div>
 

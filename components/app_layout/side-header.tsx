@@ -118,10 +118,10 @@ export function SideHeader({
                             onClick={onAuthClick}
                             variant="default"
                             size="sm"
-                            className="px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-200"
+                            className="rounded-xl "
                             aria-label="Sign in or sign up"
                         >
-                            Sign in
+                           Sign in
                         </Button>
                     ) : (
                         <Button

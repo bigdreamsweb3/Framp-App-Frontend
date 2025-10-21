@@ -17,6 +17,7 @@ import { PaymentMethodSelector } from "../payment-method-selector"
 import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate"
 import { ExchangeRateSkeleton } from "../ui/exchange-rate-skeleton"
 import { formatCurrency, parseNairaAmount } from "@/lib/utils/formatter"
+import { useFees } from "@/lib/hooks/useFees"
 
 type TokenStats = {
   selections: number
@@ -176,6 +177,8 @@ export function RampInterface({
     }
   }, [fromAmount, effectiveRate, rateMode]);
 
+  const fees = useFees(Number(fromAmount), rampMode, computedReceiving);
+
   useEffect(() => {
     const isValid = CRYPTO_TOKENS.some((t) => t.symbol === tokenSymbol)
     if (!isValid || tokenSymbol === "NGN") {
@@ -319,56 +322,30 @@ export function RampInterface({
   return (
     <>
       <Card className="w-full mx-auto max-w-md bg-card backdrop-blur-sm gap-3" data-tour="onramp-card">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              {/* {rampMode === "onramp" ? (
-                      <ArrowUpCircle className="w-5 h-5 text-primary" />
-                    ) : (
-                      <ArrowDownCircle className="w-5 h-5 text-primary" />
-                    )} */}
-              {/* <h2 className="text-lg font-semibold flex items-center gap-1">
-                      {rampMode === "onramp" ? (
-                        <>
-                          Buy <span className="text-xs text-muted-foreground">(On-Ramp)</span>
-                        </>
-                      ) : (
-                        <>
-                          Sell <span className="text-xs text-muted-foreground">(Off-Ramp)</span>
-                        </>
-                      )}
-                    </h2> */}
-
-              {/* Mode Switcher */}
-              <div className="inline-flex items-center gap-1 rounded-lg bg-gradient-to-br from-primary/20 to-primary/10 transition-colors focus:outline-none p-1 w-fit">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "onramp"
-                    ? "bg-card dark:bg-primary dark:text-[#edeef5] shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-transparent"
-                    }`}
-                  onClick={() => handleRampModeChange("onramp")}
-                  aria-label="Switch to on-ramp mode"
-                >
-                  Buy
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className={`h-8 px-4 text-sm font-medium rounded-md transition-all ${rampMode === "offramp"
-                    ? "bg-card dark:bg-primary dark:text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-transparent"
-                    }`}
-                  onClick={() => handleRampModeChange("offramp")}
-                  aria-label="Switch to off-ramp mode"
-                >
-                  Sell
-                </Button>
-              </div>
+        <CardHeader className="flex items-center justify-between">
+          {/* Mode Switcher */}
+          <div className="flex justify-center">
+            <div className="inline-flex rounded-lg bg-muted p-1">
+              <button
+                className={`px-4 py-1 text-sm font-medium rounded-md transition-colors ${rampMode === "onramp"
+                  ? "bg-card dark:bg-primary dark:text-[#edeef5] shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+                  }`}
+                onClick={() => handleRampModeChange("onramp")}
+              >
+                Buy
+              </button>
+              <button
+                className={`px-4 py-1 text-sm font-medium rounded-md transition-colors ${rampMode === "offramp"
+                  ? "bg-card dark:bg-primary dark:text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+                  }`}
+                onClick={() => handleRampModeChange("offramp")}
+              >
+                Sell
+              </button>
             </div>
-          </CardTitle>
-
+          </div>
 
           {/* <CardDescription className="text-xs text-muted-foreground mt-2">
                   {rampMode === "onramp"
@@ -492,7 +469,7 @@ export function RampInterface({
               </>
             )}
 
-            {/*  */}
+            {/* Exchange & Fee */}
             <div className="flex items-center justify-between px-3 py-2">
               {rateLoading && !exchangeRate ? (
                 <div className="text-xs text-muted-foreground">Loading rate...</div>
@@ -516,6 +493,13 @@ export function RampInterface({
                 <div className="flex items-center gap-1 text-xs text-destructive">
                   <AlertCircle className="h-4 w-4" />
                   <span>Error loading rate</span>
+                </div>
+              )}
+
+              {fromAmount && Number(fromAmount) > 0 && (
+                <div className="flex items-center gap-1 text-xs text-muted-foreground bg-primary/5 rounded-lg px-2 py-1">
+                  <span>Fee:</span>
+                  <span className="font-medium">{fees.percentage}</span>
                 </div>
               )}
             </div>
@@ -647,6 +631,34 @@ export function RampInterface({
               </div>
             )}
 
+
+            {/* Add this after the payment/transfer method sections and before the main button */}
+
+            {/* {fromAmount && Number(fromAmount) > 0 && (
+              <div className="bg-muted rounded-xl p-4 border border-border space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Amount</span>
+                  {rampMode === 'onramp'
+                    ? `₦${Number(fromAmount).toLocaleString()}`
+                    : `${Number(fromAmount).toLocaleString()} ${tokenSymbol}`
+                  }
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Platform fee</span>
+                  <span>₦{calculateFee(Number(fromAmount))}</span>
+                </div>
+                <div className="flex justify-between text-sm font-medium pt-2 border-t">
+                  <span>You'll {rampMode === 'onramp' ? 'receive' : 'get'}</span>
+                  <span>
+                    {rampMode === 'onramp'
+                      ? `${computedReceiving.toFixed(4)} ${tokenSymbol}`
+                      : `₦${computedReceiving.toLocaleString()}`
+                    }
+                  </span>
+                </div>
+              </div>
+            )} */}
+
             {/* Main action button */}
             {rampMode === "offramp" && effectiveTransferMethod === "connect_wallet" && fromAmount && Number(fromAmount) > 0 && !effectiveIsWalletConnected ? (
               <Button
@@ -697,10 +709,11 @@ export function RampInterface({
             })()}
           </div>
         </CardContent>
-      </Card>
+      </Card >
 
 
-      {showSettings && <OnrampSettings onClose={() => setShowSettings(false)} />}
+      {showSettings && <OnrampSettings onClose={() => setShowSettings(false)} />
+      }
 
       <TokenListModal
         tokens={CRYPTO_TOKENS}
