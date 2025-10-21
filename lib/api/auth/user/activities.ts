@@ -34,11 +34,25 @@ export interface OnRampTransaction {
 
 export interface OffRampTransaction {
   id: string;
+  user_id: string;
+  wallet: string;
+  token: string;
+  token_mint_address: string;
   amount: string;
-  currency: string;
+  fiat_amount: string;
+  exchange_rate: string;
+  bank_name: string;
+  bank_account_number: string;
+  bank_code: string;
+  blockchain_tx_hash: string | null;
   status: "pending" | "processing" | "completed" | "failed" | "cancelled";
   created_at: string;
   updated_at: string;
+  fiat_disbursement_status: "pending" | "processing" | "completed" | "failed";
+  disbursed_at: string | null;
+  payout_reference: string | null;
+  admin_note: string | null;
+  currency: string;
 }
 
 export interface ActivityTransaction {
@@ -54,6 +68,27 @@ export interface ActivityTransaction {
   paymentMethod?: string;
   walletAddress?: string;
   bankDetails?: any;
+  
+  // Extended fields for detailed view
+  exchangeRate?: string;
+  feeAmount?: string;
+  feePercentage?: string;
+  blockchainHash?: string | null;
+  blockchainStatus?: string | null;
+  blockchainConfirmations?: number | null;
+  checkoutUrl?: string;
+  paymentReference?: string;
+  transactionReference?: string;
+  
+  // Off-ramp specific fields
+  bankName?: string;
+  bankAccountNumber?: string;
+  bankCode?: string;
+  fiatDisbursementStatus?: string;
+  disbursedAt?: string | null;
+  payoutReference?: string | null;
+  adminNote?: string | null;
+  tokenMintAddress?: string;
 }
 
 const API_BASE =
@@ -78,7 +113,8 @@ export interface PaginatedResponse<T> {
 }
 
 // Fetch all activities without pagination
-export async function fetchAllUserActivities() {
+// In lib/api/auth/user/activities.ts
+export async function fetchAllUserActivities(): Promise<ActivityTransaction[]> {
   try {
     const response = await fetch(`${API_BASE}/api/auth/me`, {
       method: "GET",
@@ -86,7 +122,7 @@ export async function fetchAllUserActivities() {
         "Content-Type": "application/json",
         "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
       },
-      credentials: "include", // cookies sent automatically
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -114,6 +150,15 @@ export async function fetchAllUserActivities() {
           completedAt: tx.completed_at,
           paymentMethod: tx.payment_method,
           walletAddress: tx.wallet_address,
+          exchangeRate: tx.exchange_rate,
+          feeAmount: tx.fee_amount,
+          feePercentage: tx.fee_percentage,
+          blockchainHash: tx.blockchain_tx_hash,
+          blockchainStatus: tx.blockchain_status,
+          blockchainConfirmations: tx.blockchain_confirmations,
+          checkoutUrl: tx.checkout_url,
+          paymentReference: tx.payment_reference,
+          transactionReference: tx.transaction_reference,
         });
       });
     }
@@ -124,12 +169,24 @@ export async function fetchAllUserActivities() {
         activities.push({
           id: tx.id,
           type: "offramp",
-          amount: tx.amount,
+          amount: tx.fiat_amount || tx.amount,
           currency: tx.currency,
-          tokenAmount: "",
+          tokenAmount: tx.amount,
+          tokenSymbol: tx.token,
           status: tx.status,
           createdAt: tx.created_at,
-          completedAt: tx.updated_at,
+          completedAt: tx.disbursed_at || tx.updated_at,
+          walletAddress: tx.wallet,
+          exchangeRate: tx.exchange_rate,
+          blockchainHash: tx.blockchain_tx_hash,
+          bankName: tx.bank_name,
+          bankAccountNumber: tx.bank_account_number,
+          bankCode: tx.bank_code,
+          fiatDisbursementStatus: tx.fiat_disbursement_status,
+          disbursedAt: tx.disbursed_at,
+          payoutReference: tx.payout_reference,
+          adminNote: tx.admin_note,
+          tokenMintAddress: tx.token_mint_address,
         });
       });
     }
@@ -146,104 +203,33 @@ export async function fetchAllUserActivities() {
     return [];
   }
 }
+// Fetch detailed transaction by ID (useful for the receipt view)
+export async function fetchTransactionDetails(id: string, type: "onramp" | "offramp") {
+  try {
+    const endpoint = type === "onramp" 
+      ? `${API_BASE}/api/onramp/${id}`
+      : `${API_BASE}/api/offramp/${id}`;
 
-// export async function fetchUserActivities(params: PaginationParams = {}) {
-//   try {
-//     const { page = 1, limit = 20 } = params;
-//     const offset = (page - 1) * limit;
+    const response = await fetch(endpoint, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
+      },
+      credentials: "include",
+    });
 
-//     const response = await fetch(
-//       `${API_BASE}/api/auth/me?page=${page}&limit=${limit}&offset=${offset}`,
-//       {
-//         method: "GET",
-//         headers: {
-//           "Content-Type": "application/json",
-//           "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
-//         },
-//         credentials: "include", // cookies sent automatically
-//       }
-//     );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${type} transaction details`);
+    }
 
-//     if (!response.ok) {
-//       throw new Error("Failed to fetch user activities");
-//     }
-
-//     const data = await response.json();
-//     const userInfo = data.user;
-
-//     // Combine and format onramp and offramp transactions
-//     const activities: ActivityTransaction[] = [];
-
-//     // Add onramp transactions
-//     if (userInfo.recent_onramps) {
-//       userInfo.recent_onramps.forEach((tx: OnRampTransaction) => {
-//         activities.push({
-//           id: tx.id,
-//           type: "onramp",
-//           amount: tx.fiat_amount || tx.amount,
-//           currency: tx.fiat_currency || tx.currency,
-//           tokenSymbol: tx.token_symbol,
-//           status: tx.status,
-//           createdAt: tx.created_at,
-//           completedAt: tx.completed_at,
-//           paymentMethod: tx.payment_method,
-//           walletAddress: tx.wallet_address,
-//         });
-//       });
-//     }
-
-//     // Add offramp transactions
-//     if (userInfo.recent_offramps) {
-//       userInfo.recent_offramps.forEach((tx: OffRampTransaction) => {
-//         activities.push({
-//           id: tx.id,
-//           type: "offramp",
-//           amount: tx.amount,
-//           currency: tx.currency,
-//           status: tx.status,
-//           createdAt: tx.created_at,
-//           completedAt: tx.updated_at,
-//         });
-//       });
-//     }
-
-//     // Sort by creation date (newest first)
-//     activities.sort(
-//       (a, b) =>
-//         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-//     );
-
-//     // Calculate pagination info
-//     const total = activities.length;
-//     const totalPages = Math.ceil(total / limit);
-//     const paginatedData = activities.slice(offset, offset + limit);
-
-//     return {
-//       data: paginatedData,
-//       pagination: {
-//         page,
-//         limit,
-//         total,
-//         totalPages,
-//         hasNext: page < totalPages,
-//         hasPrev: page > 1,
-//       },
-//     };
-//   } catch (error) {
-//     console.error("Error fetching user activities:", error);
-//     return {
-//       data: [],
-//       pagination: {
-//         page: 1,
-//         limit: 20,
-//         total: 0,
-//         totalPages: 0,
-//         hasNext: false,
-//         hasPrev: false,
-//       },
-//     };
-//   }
-// }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error fetching ${type} transaction details:`, error);
+    return null;
+  }
+}
 
 // Legacy function for backward compatibility
 // export async function fetchUserOnRampTxHistory() {

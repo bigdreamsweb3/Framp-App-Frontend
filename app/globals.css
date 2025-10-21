@@ -141,7 +141,7 @@
     position: relative;
   }
 
-  body::before {
+  /* body::before {
     content: "";
     position: fixed;
     top: 0;
@@ -155,17 +155,17 @@
     );
     pointer-events: none;
     z-index: 1;
-  }
+  } */
 
-  .dark body {
+  /* .dark body {
     background-color: var(--background);
-    /* Increased opacity and stroke-width for dark mode visibility */
+   
     background-image: url("");
     background-size: 200px 200px;
     background-repeat: repeat;
     background-attachment: fixed;
     position: relative;
-  }
+  } */
 
   button:hover,
   [role="button"]:hover,

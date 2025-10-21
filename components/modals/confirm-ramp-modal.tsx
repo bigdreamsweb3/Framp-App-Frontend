@@ -104,7 +104,7 @@ export function ConfirmRampModal({
         </Button>
 
         <h2 className="text-xl font-semibold mb-6 text-foreground">
-          {rampMode === "onramp" ? "Confirm Your Purchase" : "Confirm Your Sell Order"}
+          {rampMode === "onramp" ? "Confirm Your Buy Order" : "Confirm Your Sell Order"}
         </h2>
 
         <div className="space-y-4 text-foreground">
@@ -161,18 +161,6 @@ export function ConfirmRampModal({
                 highlight
               />
 
-              {/* Fee Breakdown - In crypto */}
-              {/* <div className="bg-muted/30 rounded-lg p-4 space-y-3 border border-border">
-                <div className="text-sm font-medium text-muted-foreground">Fee Breakdown</div>
-
-                <InfoRow
-                  label="Service fee"
-                  value={`${fees.percentage} (${fees.serviceFee.toFixed(6)} ${tokenSymbol})`}
-                  className="text-sm"
-                  noBorder
-                />
-              </div> */}
-
               <InfoRow
                 label={`You'll Receive`}
                 value={formatCurrency(fees.netAmount.toString(), fiatCurrency)}
@@ -198,14 +186,6 @@ export function ConfirmRampModal({
 
 
 
-          {/* Exchange Rate */}
-          {/* <div className="bg-primary/5 rounded-lg p-3 text-center border border-primary/20">
-            <div className="text-sm text-muted-foreground">Exchange Rate</div>
-            <div className="font-medium">
-              1 {tokenSymbol} = {formatCurrency(exchangeRate.toString(), fiatCurrency)}
-            </div>
-          </div> */}
-
           {selectedWallet && (
             <div className="py-2 border-b border-border">
               <div className="flex justify-between items-start">
@@ -215,12 +195,6 @@ export function ConfirmRampModal({
                 <div className="text-right">
                   <div className="font-semibold">{selectedWallet.name}</div>
                   <div className="text-sm text-muted-foreground">{selectedWallet.details}</div>
-                  {/* {selectedWallet.walletAddress && (
-                    <div className="text-xs text-muted-foreground font-mono mt-1">
-                      {selectedWallet.walletAddress.slice(0, 8)}...
-                      {selectedWallet.walletAddress.slice(-8)}
-                    </div>
-                  )} */}
                 </div>
               </div>
             </div>
