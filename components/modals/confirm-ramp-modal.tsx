@@ -183,10 +183,17 @@ export function ConfirmRampModal({
           )}
 
           {/* Payment/Transfer Method */}
-          {rampMode === "onramp"
-            ? <InfoRow label="Payment Method" value={paymentOrTransfer} />
-            : <InfoRow label="Transfer Method" value={paymentOrTransfer} />
-          }
+          <div className="py-2 border-b border-border">
+            <div className="flex justify-between items-center">
+              <span className="font-medium text-muted-foreground">
+                {rampMode === "onramp" ? "Payment Method:" : "Transfer Method:"}
+              </span>
+              <div className="text-right">
+                <div className="font-semibold text-xs px-2 py-1 border rounded-lg border-primary bg-primary/5 text-primary">{paymentOrTransfer}</div>
+              </div>
+            </div>
+          </div>
+
 
 
 
@@ -203,7 +210,7 @@ export function ConfirmRampModal({
             <div className="py-2 border-b border-border">
               <div className="flex justify-between items-start">
                 <span className="font-medium text-muted-foreground">
-                  {rampMode === "onramp" ? "Send to:" : "Receive to:"}
+                  {rampMode === "onramp" ? "Receive to:" : "Receive to:"}
                 </span>
                 <div className="text-right">
                   <div className="font-semibold">{selectedWallet.name}</div>
