@@ -48,30 +48,7 @@ export function Profile({ onQuickAction }: ProfileProps) {
   });
 
   const { user, logout } = useAuth();
-  console.log(user?.id)
-  useEffect(() => {
-    if (user) {
-      setUserProfile({
-        id: user?.id || "",
-        name: user.name || "User",
-        email: user.email || "Not set",
-        wallet: user.wallet_address || "Not connected",
-        accountNumber: user.accountNumber || "****1234",
-        tier: user.tier || "Standard",
-        joinDate: user.created_at
-          ? new Date(user.created_at).toLocaleDateString("en-US", {
-            month: "long",
-            year: "numeric",
-          })
-          : "Unknown",
-        stats: user.stats || {
-          total_transactions: 0,
-          total_volume_usd: 0,
-          portfolio_value: 0,
-        },
-      });
-    }
-  }, [user]);
+  // console.log(user?.id)
 
   const handleSave = () => {
     // save API call would go here
@@ -119,10 +96,7 @@ export function Profile({ onQuickAction }: ProfileProps) {
     router.push("/");
   };
 
-  const initials = useMemo(() => {
-    const parts = (userProfile.name || "").split(" ");
-    return ((parts[0]?.[0] || "U") + (parts[1]?.[0] || "")).toUpperCase();
-  }, [userProfile.name]);
+
 
   return (
     <div className="fixed inset-0 z-[999] flex items-center justify-center md:justify-end">
@@ -144,7 +118,7 @@ export function Profile({ onQuickAction }: ProfileProps) {
 
         {/* Profile Card */}
         <Card className="mb-6 items-center md:items-start text-center md:text-start flex-row gap-3">
-          {userProfile.id ? (
+          {user?.id ? (
             <>
               <Avatar className="ml-3 size-14">
                 <Button
@@ -170,12 +144,12 @@ export function Profile({ onQuickAction }: ProfileProps) {
               <div className="my-1 text-start">
                 <h2 className="text-md font-semibold">
                   <span className="lowercase">{App_Name}-
-                    {userProfile.name}</span>
-                  {userProfile.id && (
-                    <span className="text-sm text-muted-foreground capitalize">-ID: {userProfile.id.slice(0, 8)}</span>
+                    {user.name || "User" }</span>
+                  {user.id && (
+                    <span className="text-sm text-muted-foreground capitalize">-ID: {user.id.slice(0, 8)}</span>
                   )}
                 </h2>
-                <p className="text-muted-foreground text-sm">{userProfile.email}</p>
+                <p className="text-muted-foreground text-sm">{user.email}</p>
               </div>
             </>
           ) : (

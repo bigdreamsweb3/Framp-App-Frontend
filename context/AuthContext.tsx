@@ -6,6 +6,8 @@ import { login } from "@/lib/api/auth/login";
 import { signup } from "@/lib/api/auth/signup";
 import { logout } from "@/lib/api/auth/logout";
 import { getCurrentUser } from "@/lib/api/auth/me";
+import { getAuthToken } from "@dynamic-labs/sdk-react-core";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 
 type User = {
   id: string;
@@ -24,6 +26,7 @@ type User = {
 
 type AuthContextType = {
   user: User | null;
+  authToken: string | null; // 👈 Added: Expose token for global access
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string, name?: string, wallet?: string) => Promise<void>;
@@ -34,13 +37,31 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [authToken, setAuthToken] = useState<string | null>(null); // 👈 Added: Manage token in state
   const [loading, setLoading] = useState(true);
+
+  const { setShowAuthFlow, handleLogOut } = useDynamicContext();
+
+  // 👈 Added: Helper to get token and persist it
+  const fetchAndStoreToken = () => {
+    const token = getAuthToken();
+    if (token) {
+      localStorage.setItem('authToken', token); // Store in localStorage
+      setAuthToken(token);
+    } else {
+      // If no token, clear localStorage (e.g., on app init if expired)
+      localStorage.removeItem('authToken');
+      setAuthToken(null);
+    }
+    return token;
+  };
 
   const fetchUser = async () => {
     try {
       setLoading(true);
-      const res = await getCurrentUser(); // should call /api/auth/me
-      console.log("🔍 Current user from API:", res); // 👈 Log API response
+      const token = fetchAndStoreToken(); // 👈 Use helper to ensure token is stored
+      const res = await getCurrentUser(token || undefined);
+      console.log("🔍 Current user from API:", res);
       if (res && res.user) {
         setUser(res.user);
       } else {
@@ -49,12 +70,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (err) {
       console.error("AuthContext: no valid session", err);
       setUser(null);
+      // 👈 Clear invalid token
+      localStorage.removeItem('authToken');
+      setAuthToken(null);
     } finally {
       setLoading(false);
     }
   };
 
+  // 👈 Updated: Init effect - load token from localStorage first, then fetch user
   useEffect(() => {
+    // Restore token from localStorage on mount (e.g., page refresh)
+    const storedToken = localStorage.getItem('authToken');
+    if (storedToken) {
+      setAuthToken(storedToken);
+    }
     fetchUser();
   }, []);
 
@@ -64,6 +94,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await login(email, password);
       if (res.user) {
         setUser(res.user);
+        // 👈 Fetch and store token post-login (Dynamic Labs may set it internally)
+        fetchAndStoreToken();
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -79,6 +111,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const res = await signup(email, password, name, wallet);
       if (res.user) {
         setUser(res.user);
+        // 👈 Fetch and store token post-signup
+        fetchAndStoreToken();
       }
     } catch (error) {
       console.error("Signup error:", error);
@@ -91,16 +125,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function handleLogout() {
     try {
       console.log('AuthContext: calling logout API');
-      const res = await logout();
+      const res = await handleLogOut();
       console.log('AuthContext: logout API response', res);
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
-      // refresh user state from the server after logout (will set null if logged out)
+      // 👈 Clear token from state and localStorage on logout
+      localStorage.removeItem('authToken');
+      setAuthToken(null);
+      // Refresh user state (will set null)
       try {
         await fetchUser();
       } catch (e) {
-        // fallback - ensure UI has no user
         setUser(null);
       }
     }
@@ -108,7 +144,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, login: handleLogin, signup: handleSignup, logout: handleLogout }}
+      value={{ user, authToken, loading, login: handleLogin, signup: handleSignup, logout: handleLogout }} // 👈 Added authToken to value
     >
       {children}
     </AuthContext.Provider>

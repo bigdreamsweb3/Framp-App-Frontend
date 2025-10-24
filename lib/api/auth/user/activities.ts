@@ -68,7 +68,7 @@ export interface ActivityTransaction {
   paymentMethod?: string;
   walletAddress?: string;
   bankDetails?: any;
-  
+
   // Extended fields for detailed view
   exchangeRate?: string;
   feeAmount?: string;
@@ -79,7 +79,7 @@ export interface ActivityTransaction {
   checkoutUrl?: string;
   paymentReference?: string;
   transactionReference?: string;
-  
+
   // Off-ramp specific fields
   bankName?: string;
   bankAccountNumber?: string;
@@ -112,16 +112,36 @@ export interface PaginatedResponse<T> {
   };
 }
 
+const authToken =
+  typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+
+const getHeaders = (): HeadersInit => {
+  const accessToken = authToken;
+
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+    "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
+
+    Authorization: `Bearer ${accessToken}`,
+  };
+
+  // Add authorization header if accessToken exists
+  // if (accessToken) {
+  //   headers['Authorization'] = `Bearer ${accessToken}`;
+  // }
+
+  return headers;
+};
+
 // Fetch all activities without pagination
 // In lib/api/auth/user/activities.ts
-export async function fetchAllUserActivities(): Promise<ActivityTransaction[]> {
+export async function fetchAllUserActivities(
+  accessToken?: string
+): Promise<ActivityTransaction[]> {
   try {
     const response = await fetch(`${API_BASE}/api/auth/me`, {
       method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
-      },
+      headers: getHeaders(),
       credentials: "include",
     });
 
@@ -204,11 +224,15 @@ export async function fetchAllUserActivities(): Promise<ActivityTransaction[]> {
   }
 }
 // Fetch detailed transaction by ID (useful for the receipt view)
-export async function fetchTransactionDetails(id: string, type: "onramp" | "offramp") {
+export async function fetchTransactionDetails(
+  id: string,
+  type: "onramp" | "offramp"
+) {
   try {
-    const endpoint = type === "onramp" 
-      ? `${API_BASE}/api/onramp/${id}`
-      : `${API_BASE}/api/offramp/${id}`;
+    const endpoint =
+      type === "onramp"
+        ? `${API_BASE}/api/onramp/${id}`
+        : `${API_BASE}/api/offramp/${id}`;
 
     const response = await fetch(endpoint, {
       method: "GET",

@@ -132,40 +132,9 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-color: var(--background);
-    /* Financial and blockchain icons with increased opacity and stroke-width for better visibility */
-    background-image: url("");
-    background-size: 200px 200px;
-    background-repeat: repeat;
-    background-attachment: fixed;
-    position: relative;
   }
 
-  /* body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 120px;
-    background: linear-gradient(
-      to bottom,
-      var(--background) 0%,
-      transparent 100%
-    );
-    pointer-events: none;
-    z-index: 1;
-  } */
 
-  /* .dark body {
-    background-color: var(--background);
-   
-    background-image: url("");
-    background-size: 200px 200px;
-    background-repeat: repeat;
-    background-attachment: fixed;
-    position: relative;
-  } */
 
   button:hover,
   [role="button"]:hover,
@@ -173,15 +142,5 @@
     cursor: pointer;
   }
 
-  /* Hide number input arrows (Chrome, Safari, Edge, Opera) */
-  input[type="number"]::-webkit-outer-spin-button,
-  input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-
-  /* Hide number input arrows (Firefox) */
-  input[type="number"] {
-    -moz-appearance: textfield;
-  }
+ 
 }

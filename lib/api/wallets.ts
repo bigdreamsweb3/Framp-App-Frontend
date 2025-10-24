@@ -12,6 +12,28 @@ interface WalletMethod {
   network?: string;
 }
 
+const authToken =
+  typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
+
+// Helper function to get headers with authorization
+const getHeaders = (): HeadersInit => {
+  const accessToken = authToken;
+  
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+    "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
+
+    Authorization: `Bearer ${accessToken}`,
+  };
+
+  // Add authorization header if accessToken exists
+  // if (accessToken) {
+  //   headers['Authorization'] = `Bearer ${accessToken}`;
+  // }
+
+  return headers;
+};
+
 export class WalletAPI {
   static async addWallet(walletData: {
     name: string;
@@ -20,10 +42,7 @@ export class WalletAPI {
   }): Promise<WalletMethod> {
     const response = await fetch(`${App_Api_Base_Url}/api/user/wallets`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
-      },
+      headers: getHeaders(),
       credentials: "include",
       body: JSON.stringify(walletData),
     });
@@ -39,9 +58,7 @@ export class WalletAPI {
   static async getWallets(): Promise<WalletMethod[]> {
     const response = await fetch(`${App_Api_Base_Url}/api/user/wallets`, {
       method: "GET",
-      headers: {
-        "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
-      },
+      headers: getHeaders(),
       credentials: "include",
     });
 
@@ -63,10 +80,35 @@ export class WalletAPI {
   }
 
   static async deleteWallet(id: string): Promise<void> {
-    // Your implementation
+    const response = await fetch(`${App_Api_Base_Url}/api/user/wallets/${id}`, {
+      method: "DELETE",
+      headers: getHeaders(),
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to delete wallet");
+    }
+
+    return response.json();
   }
 
   static async setDefaultWallet(id: string): Promise<void> {
-    // Your implementation
+    const response = await fetch(
+      `${App_Api_Base_Url}/api/user/wallets/${id}/default`,
+      {
+        method: "PATCH",
+        headers: getHeaders(),
+        credentials: "include",
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Failed to set default wallet");
+    }
+
+    return response.json();
   }
 }

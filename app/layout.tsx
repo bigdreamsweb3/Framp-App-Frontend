@@ -14,6 +14,7 @@ import "./globals.css"
 // import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 import { AuthProvider } from "@/context/AuthContext"
 import { UIProvider } from "@/context/UIContext"
+import DProviders from "../lib/providers"
 
 export const metadata: Metadata = {
   title: {
@@ -41,16 +42,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${inter.variable} ${GeistMono.variable} antialiased`}>
-        <UIProvider>
-          <AuthProvider>
-          <Suspense fallback={null}>
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <DProviders>
+          <UIProvider>
+            <AuthProvider>
+              <Suspense fallback={null}>
+                <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 
-              <RootShell>
-                {children}
-              </RootShell>
+                  <RootShell>
+                    {children}
+                  </RootShell>
 
-              {/* <DynamicContextProvider
+                  {/* <DynamicContextProvider
                 settings={{
                   environmentId: "94779e7d-5bac-4634-bed1-fdec1ba6da64",
                   walletConnectors: [SolanaWalletConnectors],
@@ -59,11 +61,12 @@ export default function RootLayout({
                 {children}
                 <DynamicWidget />
               </DynamicContextProvider> */}
-            </ThemeProvider>
-          </Suspense>
-          <Analytics />
-        </AuthProvider>
-        </UIProvider>
+                </ThemeProvider>
+              </Suspense>
+              <Analytics />
+            </AuthProvider>
+          </UIProvider>
+        </DProviders>
       </body>
     </html>
   )

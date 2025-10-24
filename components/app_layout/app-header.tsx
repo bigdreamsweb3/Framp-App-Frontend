@@ -21,6 +21,11 @@ import {
   Wallet2Icon,
   Wallet,
 } from "lucide-react"
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
+
+
+
+
 
 interface AppHeaderProps {
   onAuthClick?: () => void
@@ -45,6 +50,10 @@ export function AppHeader({
   const { user, loading } = useAuth()
 
   const app_logo = useAppLogo()
+
+  const { setShowAuthFlow, handleLogOut } = useDynamicContext();
+
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -73,7 +82,7 @@ export function AppHeader({
       >
         <div className="w-full h-full px-4 flex items-center justify-between">
           {/* Left side - Logo and menu button */}
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-0">
             <div className="flex items-center md:hidden w-fit">
               <div className="relative flex items-center h-8 w-8">
                 <Image
@@ -88,14 +97,14 @@ export function AppHeader({
               </span>
             </div>
 
-            {/* <button
+            <button
               className="md:hidden p-2 rounded-lg hover:bg-primary/10 transition text-muted-foreground"
               aria-label="Toggle navigation"
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((p) => !p)}
             >
-              {mobileOpen ? "" : <Menu size={26} />}
-            </button> */}
+              {mobileOpen ? "" : <Menu size={20} />}
+            </button>
           </div>
 
           {/* Right side actions */}
@@ -147,7 +156,13 @@ export function AppHeader({
             <div className="md:hidden my-auto flex items-center">
               <ThemeToggle />
             </div>
+            {/* 
+            <button onClick={() => setShowAuthFlow(true)}>
+              Connect Wallet
+            </button> */}
 
+            {/* <button onClick={handleLogOut}>Disconnect Wallet</button> */}
+            {/* 
             <button
               className="md:hidden p-2 rounded-lg hover:bg-primary/10 transition text-muted-foreground"
               aria-label="Toggle navigation"
@@ -155,20 +170,20 @@ export function AppHeader({
               onClick={() => setMobileOpen((p) => !p)}
             >
               {mobileOpen ? <Menu size={26} /> : <Menu size={26} />}
-            </button>
+            </button> */}
 
             {/* User button or Sign in */}
-            {/* <div className="md:hidden">
+            <div className="md:hidden">
               {loading ? (
                 <div className="w-6 h-6 bg-muted animate-pulse rounded-xl" />
               ) : !user ? (
                 <Button
-                  onClick={onAuthClick}
+                  onClick={() => setShowAuthFlow(true)}
                   variant="default"
                   size="sm"
                   className="px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80"
                 >
-                  Sign in
+                  Sign in/Sign up
                 </Button>
               ) : (
                 <Button
@@ -185,7 +200,7 @@ export function AppHeader({
                   <User className="text-primary" />
                 </Button>
               )}
-            </div> */}
+            </div>
           </div>
 
         </div>

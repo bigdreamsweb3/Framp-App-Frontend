@@ -9,7 +9,7 @@ import Image from "next/image";
 import useAppLogo from "@/asssets/image";
 
 import { useAuth } from "@/context/AuthContext";
-
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 
 import Link from "next/link";
 import { HelpCircle, Menu, User, X, BookOpen } from "lucide-react";
@@ -38,6 +38,8 @@ export function SideHeader({
     const headerRef = useRef<HTMLElement>(null);
 
     const app_logo = useAppLogo()
+
+    const { setShowAuthFlow, handleLogOut } = useDynamicContext();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -115,13 +117,13 @@ export function SideHeader({
                         <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
                     ) : !user ? (
                         <Button
-                            onClick={onAuthClick}
+                            onClick={() => setShowAuthFlow(true)}
                             variant="default"
                             size="sm"
                             className="rounded-xl "
                             aria-label="Sign in or sign up"
                         >
-                           Sign in
+                            Sign in
                         </Button>
                     ) : (
                         <Button

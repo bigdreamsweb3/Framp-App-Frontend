@@ -1,0 +1,7 @@
+backup/
+docs/
+*.md
+.env*
+.git/
+node_modules/
+.next/
