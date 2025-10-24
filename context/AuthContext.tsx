@@ -40,10 +40,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [authToken, setAuthToken] = useState<string | null>(null); // 👈 Added: Manage token in state
   const [loading, setLoading] = useState(true);
 
-  const { setShowAuthFlow, handleLogOut } = useDynamicContext();
+  const { setShowAuthFlow, handleLogOut, user: dynamicUser } = useDynamicContext();
+
+  // 👈 Listen to Dynamic user changes and fetch user data
+  useEffect(() => {
+    if (dynamicUser) {
+      // User connected wallet - fetch user data
+      fetchUser();
+    } else {
+      // User disconnected - clear user state
+      setUser(null);
+      setAuthToken(null);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('authToken');
+      }
+    }
+  }, [dynamicUser]);
 
   // 👈 Added: Helper to get token and persist it
   const fetchAndStoreToken = () => {
+    if (typeof window === 'undefined') return null;
+    
     const token = getAuthToken();
     if (token) {
       localStorage.setItem('authToken', token); // Store in localStorage
@@ -71,7 +88,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error("AuthContext: no valid session", err);
       setUser(null);
       // 👈 Clear invalid token
-      localStorage.removeItem('authToken');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('authToken');
+      }
       setAuthToken(null);
     } finally {
       setLoading(false);
@@ -80,6 +99,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // 👈 Updated: Init effect - load token from localStorage first, then fetch user
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     // Restore token from localStorage on mount (e.g., page refresh)
     const storedToken = localStorage.getItem('authToken');
     if (storedToken) {
@@ -96,6 +117,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(res.user);
         // 👈 Fetch and store token post-login (Dynamic Labs may set it internally)
         fetchAndStoreToken();
+        // 👈 Refetch user data to ensure we have the latest state
+        await fetchUser();
       }
     } catch (error) {
       console.error("Login error:", error);
@@ -113,6 +136,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(res.user);
         // 👈 Fetch and store token post-signup
         fetchAndStoreToken();
+        // 👈 Refetch user data to ensure we have the latest state
+        await fetchUser();
       }
     } catch (error) {
       console.error("Signup error:", error);
@@ -131,7 +156,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error("Logout error:", error);
     } finally {
       // 👈 Clear token from state and localStorage on logout
-      localStorage.removeItem('authToken');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('authToken');
+      }
       setAuthToken(null);
       // Refresh user state (will set null)
       try {

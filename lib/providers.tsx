@@ -1,18 +1,22 @@
 'use client';
-import { DynamicContextProvider, DynamicWidget } from '@dynamic-labs/sdk-react-core';
+import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core';
 import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 
+export default function DynamicAuthProvider({ children }: { children: React.ReactNode }) {
+    const environmentId = process.env.NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID;
+    
+    if (!environmentId) {
+        throw new Error('NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID is required');
+    }
 
-export default function DProviders({ children }: { children: React.ReactNode }) {
     return (
         <DynamicContextProvider
             settings={{
-                environmentId: "94779e7d-5bac-4634-bed1-fdec1ba6da64",
+                environmentId,
                 walletConnectors: [SolanaWalletConnectors],
             }}
         >
             {children}
-            {/* <DynamicWidget /> */}
         </DynamicContextProvider>
     );
 }

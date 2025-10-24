@@ -22,7 +22,17 @@ export async function getCurrentUser(accessToken?: string) {
 
   console.log("📡 Response status:", res.status);
 
-  if (!res.ok) throw new Error((await res.json()).error || "Unauthorized");
+  if (!res.ok) {
+    let errorMessage = "Unauthorized";
+    try {
+      const errorData = await res.json();
+      errorMessage = errorData.error || errorMessage;
+    } catch {
+      // If JSON parsing fails, use status text or default message
+      errorMessage = res.statusText || errorMessage;
+    }
+    throw new Error(errorMessage);
+  }
 
   const data = await res.json();
   console.log("✅ Response JSON:", data);

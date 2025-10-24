@@ -89,27 +89,27 @@ export function SideHeader({
 
 
     return (
-        <header className={`h-12.5 relative z-10`}>
+        <header className={`h-14 relative z-10 border-b border-border/40`}>
             <div className="w-full h-full px-4 flex items-center justify-between">
                 {/* Left side - Logo and menu button */}
-                <div className="flex items-center h-fit">
-                    <div className="relative flex items-center h-8 w-8">
+                <div className="flex items-center w-fit h-9 flex-shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5">
+                    <div className="relative flex items-center h-9 w-9">
                         <Image
                             src={app_logo}
                             alt="App Logo"
-                            className="relative w-[max(2rem,5vh)] h-auto object-contain rounded-r-2xl"
+                            className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-r-2xl rounded-l-md"
                         />
-                    </div>
 
-                    <span className="text-[0.55rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
-                        BETA
-                    </span>
+                        <span className="text-[0.4rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
+                            BETA
+                        </span>
+                    </div>
                 </div>
 
 
                 {/* Desktop navigation */}
                 <div className="flex items-center gap-3">
-                    <ThemeToggle />
+                    {/* <ThemeToggle /> */}
 
 
                     {/* User Actions */}
@@ -118,29 +118,42 @@ export function SideHeader({
                     ) : !user ? (
                         <Button
                             onClick={() => setShowAuthFlow(true)}
-                            variant="default"
+                            variant="soft_gradient"
                             size="sm"
-                            className="rounded-xl "
+                            className="rounded-xl"
                             aria-label="Sign in or sign up"
                         >
-                            Sign in
+                            Get Started
                         </Button>
                     ) : (
                         <Button
-                            variant="ghost"
-                            aria-pressed={profileActive}
                             onClick={onProfileToggle}
-                            className={`relative inline-flex items-center justify-center w-9 h-9 overflow-hidden rounded-full
-                    transition-all duration-300 ease-out transform hover:scale-105 
-                    ${profileActive
+                            variant="soft_gradient"
+                            size="sm"
+                            className="pr-0 md:pr-0 rounded-xl">
+                            <div className="flex-1 space-y-1">
+                                <p className="text-xs text-muted-foreground font-bold mb-0">
+                                    {(() => {
+                                        const [local, domain] = user.email.split("@");
+                                        const maskedLocal = local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
+                                        const maskedDomain = domain ? `***` : "";
+                                        return `${maskedLocal}@${maskedDomain}`;
+                                    })()}
+                                </p>
+                            </div>
+                            <Button
+                                variant="ghost"
+                                aria-pressed={profileActive}
+                                onClick={onProfileToggle}
+                                className={`relative inline-flex items-center justify-center w-9 h-9 overflow-hidden rounded-full transition-all duration-300 ease-out transform hover:scale-105 ${profileActive
                                     ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
                                     : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
-                                }`}
-                        >
-                            <User className="text-primary" />
+                                    }`}
+                            >
+                                <User className="text-primary" />
+                            </Button>
                         </Button>
                     )}
-
                 </div>
             </div>
         </header>

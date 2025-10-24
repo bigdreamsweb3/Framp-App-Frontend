@@ -76,29 +76,32 @@ export function AppHeader({
       {/* MAIN HEADER */}
       <header
         ref={headerRef}
-        className={`sticky top-0 z-[100] w-full h-12.5 transition-all duration-500 ease-out
+        className={`sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out
           ${scrolled || mobileOpen ? "" : "bg-transparent"}
           ${scrolled ? "border-b border-border/40 bg-sidebar" : ""}`}
       >
         <div className="w-full h-full px-4 flex items-center justify-between">
           {/* Left side - Logo and menu button */}
           <div className="flex items-center gap-0">
-            <div className="flex items-center md:hidden w-fit">
-              <div className="relative flex items-center h-8 w-8">
-                <Image
-                  src={app_logo}
-                  alt="App Logo"
-                  className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-r-2xl"
-                />
-              </div>
+            <Link href="/">
+              <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5 mr-2">
+                <div className="relative flex items-center h-8 w-8">
+                  <Image
+                    src={app_logo}
+                    alt="App Logo"
+                    className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-r-2xl rounded-l-md"
+                  />
 
-              <span className="text-[0.55rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
-                BETA
-              </span>
-            </div>
+                  <span className="text-[0.4rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
+                    BETA
+                  </span>
+                </div>
+              </div>
+            </Link>
+
 
             <button
-              className="md:hidden p-2 rounded-lg hover:bg-primary/10 transition text-muted-foreground"
+              className="md:hidden transition text-muted-foreground flex size-8 items-center justify-center rounded-lg hover:text-primary focus:outline-primary"
               aria-label="Toggle navigation"
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((p) => !p)}
@@ -153,9 +156,9 @@ export function AppHeader({
               </Button>
             </div> */}
 
-            <div className="md:hidden my-auto flex items-center">
+            {/* <div className="md:hidden my-auto flex items-center">
               <ThemeToggle />
-            </div>
+            </div> */}
             {/* 
             <button onClick={() => setShowAuthFlow(true)}>
               Connect Wallet
@@ -179,11 +182,12 @@ export function AppHeader({
               ) : !user ? (
                 <Button
                   onClick={() => setShowAuthFlow(true)}
-                  variant="default"
+                  variant="soft_gradient"
                   size="sm"
-                  className="px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80"
+                  className="px-4 rounded-xl"
+                  aria-label="Get Started"
                 >
-                  Sign in/Sign up
+                  Get Started
                 </Button>
               ) : (
                 <Button
@@ -224,20 +228,17 @@ export function AppHeader({
               {/* 🟢 Mobile Menu Header (Smart + Minimal Polished) */}
               <div className="flex items-center justify-between border-b border-border/40 px-4">
 
-                <div className="sticky top-0 z-[100] w-full h-12.5 transition-all duration-500 ease-out flex items-center justify-between">
+                <div className="sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out flex items-center justify-between">
                   {/* Left side - Logo and menu button */}
-                  <div className="flex items-center gap-0">
-                    <div className="flex items-center md:hidden w-fit">
+                  <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5">
+                    <div className="relative flex items-center h-8 w-8">
+                      <Image
+                        src={app_logo}
+                        alt="App Logo"
+                        className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-r-2xl rounded-l-md"
+                      />
 
-                      <div className="relative flex items-center h-8 w-8">
-                        <Image
-                          src={app_logo}
-                          alt="App Logo"
-                          className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-r-2xl"
-                        />
-                      </div>
-
-                      <span className="text-[0.55rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
+                      <span className="text-[0.4rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
                         BETA
                       </span>
                     </div>
@@ -246,19 +247,9 @@ export function AppHeader({
                   {/* Right side actions */}
                   <div className="flex items-center gap-3">
 
-
-                    {/* <Button
-                      variant="secondary"
-                      size="sm"
-                      className="flex items-center gap-1.5 h-8 px-2.5 rounded-md bg-transparent border hover:bg-accent/60 transition-all duration-200"
-                    >
-                      <Wallet2Icon size={12} className="text-primary" />
-                      <span className="text-[11px] font-mono text-foreground/80 tracking-tight">Connect</span>
-                    </Button> */}
-
                     <button
                       onClick={() => setMobileOpen(false)}
-                      className="rounded-lg hover:bg-primary/10 transition text-muted-foreground"
+                      className="transition text-muted-foreground flex size-8 items-center justify-center rounded-lg hover:text-primary focus:outline-primary"
                     >
                       <X size={20} />
                     </button>
@@ -267,112 +258,20 @@ export function AppHeader({
 
               </div>
 
-              <div className="px-6 py-3 border-y border-border/40 bg-sidebar/80 backdrop-blur-sm">
-                {loading ? (
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-muted animate-pulse rounded-full" />
-                    <div className="flex-1 space-y-1">
-                      <div className="w-24 h-4 bg-muted animate-pulse rounded" />
-                      <div className="w-32 h-3 bg-muted animate-pulse rounded" />
-                    </div>
-                  </div>
-                ) : !user ? (
-                  <Button
-                    onClick={onAuthClick}
-                    variant="default"
-                    size="sm"
-                    className="px-4 rounded-xl font-medium text-sm bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-200"
-                    aria-label="Sign in or sign up"
-                  >
-                    Sign Up or Sign in
-                  </Button>
-                ) : (
-                  <div className="flex items-center gap-3">
-                    <Button
-                      variant="ghost"
-                      aria-pressed={profileActive}
-                      onClick={onProfileToggle}
-                      className={`relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full
-            transition-all duration-300 ease-out transform hover:scale-105
-            ${profileActive
-                          ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
-                          : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
-                        }`}
-                    >
-                      <User className="text-primary" />
-                    </Button>
-                    <div className="flex-1 space-y-1">
-                      <p className="text-xs text-muted-foreground font-bold mb-0">
-                        {(() => {
-                          const [local, domain] = user.email.split("@");
-                          const maskedLocal = local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
-                          const maskedDomain = domain ? `***` : "";
-                          return `${maskedLocal}@${maskedDomain}`;
-                        })()}
-                      </p>
-                      <span className="text-xs text-muted-foreground capitalize">
-                        UID: {user.id.slice(0, 8)}
-                      </span>
-                    </div>
-                  </div>
-                  //       <div className="flex flex-col gap-2">
-                  //         {/* Top row: Email + UID + Avatar */}
-                  //         <div className="flex items-center justify-start gap-2">
-                  //           <Button
-                  //             variant="ghost"
-                  //             aria-pressed={profileActive}
-                  //             onClick={onProfileToggle}
-                  //             className={`relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full
-                  // transition-all duration-300 ease-out transform hover:scale-105
-                  // ${profileActive
-                  //                 ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
-                  //                 : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
-                  //               }`}
-                  //           >
-                  //             <User className="text-primary" />
-                  //           </Button>
-
-                  //           <div className="text-left">
-                  //             <p className="text-xs text-muted-foreground font-bold">
-                  //               {(() => {
-                  //                 const [local, domain] = user.email.split("@");
-                  //                 const maskedLocal = local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
-                  //                 const maskedDomain = domain ? `***` : "";
-                  //                 return `${maskedLocal}@${maskedDomain}`;
-                  //               })()}
-                  //             </p>
-                  //             <span className="text-xs text-muted-foreground capitalize">
-                  //               UID: {user.id.slice(0, 8)}
-                  //             </span>
-                  //           </div>
-                  //         </div>
-
-                  //         {/* Bottom row: Finance quick info */}
-                  //         {/* <div className="flex items-center justify-between gap-4 text-xs text-muted-foreground">
-                  //           <div className="flex flex-col items-start">
-                  //             <span className="font-bold text-foreground text-sm">₦12,450.00</span>
-                  //             <span>Balance</span>
-                  //           </div>
-                  //           <div className="flex flex-col items-start">
-                  //             <span className="flex items-center gap-1 text-success">
-                  //               <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
-                  //                 <path d="M12 2l7 12H5l7-12z" />
-                  //               </svg>
-                  //               +2.5%
-                  //             </span>
-                  //             <span>Portfolio</span>
-                  //           </div>
-                  //           <div className="flex flex-col items-start">
-                  //             <span>3</span>
-                  //             <span>Transactions</span>
-                  //           </div>
-                  //         </div> */}
-                  //       </div>
-                )}
-              </div>
 
               {/* Scrollable content */}
               <div className="flex-1 flex flex-col px-4 py-4 overflow-y-auto gap-3">
+                <div className="mb-3 flex items-center justify-between">
+                  <div className="">
+                    <h3 className="text-sm font-semibold text-muted-foreground">
+                      Framp Gateway
+                    </h3>
+                    <p className="text-xs text-muted-foreground/70">
+                      Do more with crypto.
+                    </p>
+                  </div>
+                </div>
+
                 <Link
                   href="/" className={`relative flex h-fit select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
                     } hover:text-primary transition`}
@@ -419,8 +318,65 @@ export function AppHeader({
               </div>
 
               {/* Fixed Footer */}
-              <div className="p-4 border-t border-border/30 bg-sidebar flex flex-col gap-3">
-                <div className="flex justify-between items-center">
+              <div className="bg-sidebar flex flex-col">
+                <div className="flex items-center justify-between p-4 border-t border-border/30">
+                  <div className="">
+                    <ThemeToggle />
+                  </div>
+
+                  {loading ? (
+                    <div className="flex items-center gap-3">
+                      <div className="flex-1 space-y-1">
+                        <div className="w-24 h-4 bg-muted animate-pulse rounded" />
+                        <div className="w-32 h-3 bg-muted animate-pulse rounded" />
+                      </div>
+                      <div className="w-8 h-8 bg-muted animate-pulse rounded-full" />
+                    </div>
+                  ) : !user ? (
+                    <Button
+                      onClick={onAuthClick}
+                      variant="soft_gradient"
+                      size="sm"
+                      className="px-4 rounded-xl"
+                      aria-label="Get Started"
+                    >
+                      Get Started
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={onProfileToggle}
+                      variant="soft_gradient"
+                      size="sm"
+                      className="pr-0 rounded-xl">
+                      <div className="flex-1 space-y-1">
+                        <p className="text-xs text-muted-foreground font-bold mb-0">
+                          {(() => {
+                            const [local, domain] = user.email.split("@");
+                            const maskedLocal = local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
+                            const maskedDomain = domain ? `***` : "";
+                            return `${maskedLocal}@${maskedDomain}`;
+                          })()}
+                        </p>
+                        {/* <span className="text-xs text-muted-foreground capitalize">
+                          UID: {user.id.slice(0, 8)}
+                        </span>  */}
+                      </div>
+                      <Button
+                        variant="ghost"
+                        aria-pressed={profileActive}
+                        onClick={onProfileToggle}
+                        className={`relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full transition-all duration-300 ease-out transform hover:scale-105 ${profileActive
+                          ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
+                          : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
+                          }`}
+                      >
+                        <User className="text-primary" />
+                      </Button>
+                    </Button>
+                  )}
+                </div>
+
+                <div className="flex justify-between items-center p-4 border-t border-border/30">
                   <div className="flex gap-3">
                     <Link
                       href="/docs"

@@ -18,7 +18,7 @@ const authToken =
 // Helper function to get headers with authorization
 const getHeaders = (): HeadersInit => {
   const accessToken = authToken;
-  
+
   const headers: HeadersInit = {
     "Content-Type": "application/json",
     "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
@@ -80,10 +80,11 @@ export class WalletAPI {
   }
 
   static async deleteWallet(id: string): Promise<void> {
-    const response = await fetch(`${App_Api_Base_Url}/api/user/wallets/${id}`, {
+    const response = await fetch(`${App_Api_Base_Url}/api/user/wallets/`, {
       method: "DELETE",
       headers: getHeaders(),
       credentials: "include",
+      body: JSON.stringify(id),
     });
 
     if (!response.ok) {
@@ -95,14 +96,12 @@ export class WalletAPI {
   }
 
   static async setDefaultWallet(id: string): Promise<void> {
-    const response = await fetch(
-      `${App_Api_Base_Url}/api/user/wallets/${id}/default`,
-      {
-        method: "PATCH",
-        headers: getHeaders(),
-        credentials: "include",
-      }
-    );
+    const response = await fetch(`${App_Api_Base_Url}/api/user/wallets/`, {
+      method: "PUT",
+      headers: getHeaders(),
+      credentials: "include",
+      body: JSON.stringify(id),
+    });
 
     if (!response.ok) {
       const errorData = await response.json();

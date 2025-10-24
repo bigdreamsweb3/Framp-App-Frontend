@@ -13,6 +13,7 @@ import {
     Activity as ActivityIcon,
     HelpCircle,
     BookOpen,
+    User,
 } from "lucide-react"
 import { AppHeader } from "./app-header"
 import { motion } from "framer-motion"
@@ -22,6 +23,7 @@ import { AuthPage } from "@/components/auth-page"
 import { Profile } from "@/components/modals/profile-modal"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useUI } from "@/context/UIContext"
+import { useAuth } from "@/context/AuthContext"
 import { ThemeToggle } from "../theme-toggle"
 
 export default function RootShell({ children }: { children: React.ReactNode }) {
@@ -33,6 +35,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
     const router = useRouter()
     const pathname = usePathname() || "/"
+    const { user, loading } = useAuth()
 
     // Keep active tab synced with current route
     useEffect(() => {
@@ -199,9 +202,35 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                             </div>
                         </div>
 
-                        {/*  */}
-                        <div className="mr-2 p-6 hidden md:block fixed bottom-0 w-80 border-t border-border/30">
-                            <nav className="flex items-center justify-between">
+                        {/* Sidebar Footer */}
+                        <div className="hidden md:flex flex-col fixed bottom-0 w-80">
+                            <div className="flex items-center justify-between px-4 py-3 border-t border-border/30">
+                                <div className="">
+                                    <ThemeToggle />
+                                </div>
+                                {loading ? (
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex-1 space-y-1">
+                                            <div className="w-24 h-4 bg-muted animate-pulse rounded" />
+                                            <div className="w-32 h-3 bg-muted animate-pulse rounded" />
+                                        </div>
+                                        <div className="w-8 h-8 bg-muted animate-pulse rounded-full" />
+                                    </div>
+                                ) : !user ? (
+                                    <Button
+                                        onClick={handleShowAuth}
+                                        variant="soft_gradient"
+                                        size="sm"
+                                        className="rounded-xl"
+                                        aria-label="Get Started"
+                                    >
+                                        Get Started
+                                    </Button>
+                                ) : (
+                                    ""
+                                )}
+                            </div>
+                            <nav className="flex items-center justify-between px-4 py-5 border-t border-border/30">
                                 <div className="flex items-center gap-4">
                                     <Link
                                         href="/docs"

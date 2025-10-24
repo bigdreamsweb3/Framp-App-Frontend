@@ -14,7 +14,7 @@ import "./globals.css"
 // import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 import { AuthProvider } from "@/context/AuthContext"
 import { UIProvider } from "@/context/UIContext"
-import DProviders from "../lib/providers"
+import DynamicAuthProvider from "../lib/providers"
 
 export const metadata: Metadata = {
   title: {
@@ -29,6 +29,12 @@ export const metadata: Metadata = {
     shortcut: "/favicon-32x32.png",
     apple: "/apple-touch-icon.png",
   },
+  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
+  other: {
+    "theme-color": "#7C5ABF",
+    "apple-mobile-web-app-status-bar-style": "light-content",
+    "apple-mobile-web-app-capable": "yes",
+  },
 }
 
 
@@ -42,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${inter.variable} ${GeistMono.variable} antialiased`}>
-        <DProviders>
+        <DynamicAuthProvider>
           <UIProvider>
             <AuthProvider>
               <Suspense fallback={null}>
@@ -66,7 +72,7 @@ export default function RootLayout({
               <Analytics />
             </AuthProvider>
           </UIProvider>
-        </DProviders>
+        </DynamicAuthProvider>
       </body>
     </html>
   )
