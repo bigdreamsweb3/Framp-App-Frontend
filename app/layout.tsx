@@ -1,38 +1,17 @@
 "use client";
 
 import type React from "react";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { GeistMono } from "geist/font/mono";
-import { Suspense } from "react";
-
+import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import RootShell from "@/components/app_layout/root-shell";
+import { Suspense } from "react";
 import "./globals.css";
-
-import dynamic from "next/dynamic";
 import { AuthProvider } from "@/context/AuthContext";
 import { UIProvider } from "@/context/UIContext";
-
-export const metadata: Metadata = {
-  title: {
-    default: "FRAMP - Your Gateway to Crypto Ramping",
-    template: "%s | FRAMP",
-  },
-  description:
-    "FRAMP lets you easily on-ramp to crypto, spend it on everyday bills, and explore the Solana ecosystem—all in one seamless experience.",
-  generator: "github.com/bigdreamsweb3",
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-32x32.png",
-    apple: "/apple-touch-icon.png",
-  },
-  other: {
-    "theme-color": "#7C5ABF",
-    "apple-mobile-web-app-status-bar-style": "light-content",
-    "apple-mobile-web-app-capable": "yes",
-  },
-};
+import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
+import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,55 +19,31 @@ const inter = Inter({
   display: "swap",
 });
 
-// Prevent SSR DynamicProvider initialization by forcing client-only
-const DynamicContextProvider = dynamic(
-  () =>
-    import("@dynamic-labs/sdk-react-core").then(
-      (mod) => mod.DynamicContextProvider
-    ),
-  {
-    ssr: false,
-    loading: () => null,
-  }
-);
-
-import { SolanaWalletConnectors } from "@dynamic-labs/solana";
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   const environmentId = process.env.NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID;
+
+  if (!environmentId) {
+    throw new Error("Missing NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID environment variable");
+  }
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`font-sans antialiased ${inter.variable} ${GeistMono.variable}`}
-      >
+      <body className={`font-sans antialiased ${inter.variable} ${GeistMono.variable}`}>
         <UIProvider>
           <AuthProvider>
             <Suspense fallback={null}>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
-                {environmentId ? (
-                  <DynamicContextProvider
-                    settings={{
-                      environmentId,
-                      walletConnectors: [SolanaWalletConnectors],
-                    }}
-                  >
-                    <RootShell>{children}</RootShell>
-                  </DynamicContextProvider>
-                ) : (
+              <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                <DynamicContextProvider
+                  settings={{
+                    environmentId,
+                    walletConnectors: [SolanaWalletConnectors],
+                  }}
+                >
                   <RootShell>{children}</RootShell>
-                )}
+                </DynamicContextProvider>
               </ThemeProvider>
             </Suspense>
+            <Analytics />
           </AuthProvider>
         </UIProvider>
       </body>
