@@ -1,20 +1,19 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter } from 'next/font/google'
-import { GeistMono } from "geist/font/mono"
-import { Analytics } from "@vercel/analytics/next"
-import { ThemeProvider } from "@/components/theme-provider"
+"use client";
+
+import type React from "react";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { GeistMono } from "geist/font/mono";
+import { Analytics } from "@vercel/analytics/next";
+import { ThemeProvider } from "@/components/theme-provider";
 import RootShell from "@/components/app_layout/root-shell";
-import { Suspense } from "react"
-import "./globals.css"
-// import {
-//   DynamicContextProvider,
-//   DynamicWidget,
-// } from "@dynamic-labs/sdk-react-core";
-// import { SolanaWalletConnectors } from "@dynamic-labs/solana";
-import { AuthProvider } from "@/context/AuthContext"
-import { UIProvider } from "@/context/UIContext"
-import DynamicAuthProvider from "../lib/providers"
+import { Suspense, useEffect, useState } from "react";
+import "./globals.css";
+
+import { AuthProvider } from "@/context/AuthContext";
+import { UIProvider } from "@/context/UIContext";
+import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
+import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 
 export const metadata: Metadata = {
   title: {
@@ -35,39 +34,58 @@ export const metadata: Metadata = {
     "apple-mobile-web-app-status-bar-style": "light-content",
     "apple-mobile-web-app-capable": "yes",
   },
-}
+};
 
-
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+}: {
+  children: React.ReactNode;
+}) {
+  const environmentId = process.env.NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID;
+
+  if (!environmentId) {
+    throw new Error(
+      "Missing NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID environment variable"
+    );
+  }
+
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans ${inter.variable} ${GeistMono.variable} antialiased`}>
-
+      <body
+        className={`font-sans antialiased ${inter.variable} ${GeistMono.variable}`}
+      >
         <UIProvider>
           <AuthProvider>
             <Suspense fallback={null}>
-              <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-                <DynamicAuthProvider>
-                  <RootShell>
-                    {children}
-                  </RootShell>
-                </DynamicAuthProvider>
-
-                {/* <DynamicContextProvider
-                settings={{
-                  environmentId: "94779e7d-5bac-4634-bed1-fdec1ba6da64",
-                  walletConnectors: [SolanaWalletConnectors],
-                }}
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
               >
-                {children}
-                <DynamicWidget />
-              </DynamicContextProvider> */}
+                {mounted ? (
+                  <DynamicContextProvider
+                    settings={{
+                      environmentId,
+                      walletConnectors: [SolanaWalletConnectors],
+                    }}
+                  >
+                    <RootShell>{children}</RootShell>
+                  </DynamicContextProvider>
+                ) : (
+                  <RootShell>{children}</RootShell>
+                )}
               </ThemeProvider>
             </Suspense>
             <Analytics />
@@ -75,5 +93,5 @@ export default function RootLayout({
         </UIProvider>
       </body>
     </html>
-  )
+  );
 }
