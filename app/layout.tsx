@@ -5,7 +5,7 @@ import { GeistMono } from "geist/font/mono";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/theme-provider";
 import RootShell from "@/components/app_layout/root-shell";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense } from "react";
 import "./globals.css";
 
 import { AuthProvider } from "@/context/AuthContext";
@@ -52,11 +52,6 @@ export default function RootLayout({
       "Missing NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID environment variable"
     );
   }
-
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   return (
     <html lang="en" suppressHydrationWarning>
