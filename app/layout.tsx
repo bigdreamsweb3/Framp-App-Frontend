@@ -1,5 +1,3 @@
-"use client";
-
 import type React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -74,18 +72,16 @@ export default function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
-                {mounted ? (
-                  <DynamicContextProvider
-                    settings={{
-                      environmentId,
-                      walletConnectors: [SolanaWalletConnectors],
-                    }}
-                  >
-                    <RootShell>{children}</RootShell>
-                  </DynamicContextProvider>
-                ) : (
+
+                <DynamicContextProvider
+                  settings={{
+                    environmentId,
+                    walletConnectors: [SolanaWalletConnectors],
+                  }}
+                >
                   <RootShell>{children}</RootShell>
-                )}
+                </DynamicContextProvider>
+
               </ThemeProvider>
             </Suspense>
             <Analytics />

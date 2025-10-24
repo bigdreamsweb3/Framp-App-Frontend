@@ -1,32 +1,17 @@
-'use client';
-import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core';
-import { SolanaWalletConnectors } from '@dynamic-labs/solana';
-import { useEffect, useState } from 'react';
+"use client";
 
-export default function DynamicAuthProvider({ children }: { children: React.ReactNode }) {
-    const [mounted, setMounted] = useState(false);
-    const environmentId = process.env.NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID;
+import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
+import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    if (!environmentId) {
-        throw new Error('NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID is required');
-    }
-
-    if (!mounted) {
-        return <div>{children}</div>;
-    }
-
-    return (
-        <DynamicContextProvider
-            settings={{
-                environmentId,
-                walletConnectors: [SolanaWalletConnectors],
-            }}
-        >
-            {children}
-        </DynamicContextProvider>
-    );
+export default function ClientProviders({ children }: { children: React.ReactNode }) {
+  return (
+    <DynamicContextProvider
+      settings={{
+        environmentId: process.env.NEXT_PUBLIC_DYNAMIC_ENV!,
+        walletConnectors: [SolanaWalletConnectors],
+      }}
+    >
+      {children}
+    </DynamicContextProvider>
+  );
 }
