@@ -100,7 +100,7 @@ export function SideHeader({
                             className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-r-2xl rounded-l-md"
                         />
 
-                        <span className="text-[0.4rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
+                        <span className="text-[0.5rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
                             BETA
                         </span>
                     </div>
