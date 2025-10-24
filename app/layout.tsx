@@ -14,7 +14,7 @@ import "./globals.css"
 // import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 import { AuthProvider } from "@/context/AuthContext"
 import { UIProvider } from "@/context/UIContext"
-import DynamicAuthProvider from "../lib/providers"
+// import DynamicAuthProvider from "../lib/providers"
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core"
 import { SolanaWalletConnectors } from "@dynamic-labs/solana"
 
@@ -31,12 +31,12 @@ export const metadata: Metadata = {
     shortcut: "/favicon-32x32.png",
     apple: "/apple-touch-icon.png",
   },
-  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
-  other: {
-    "theme-color": "#7C5ABF",
-    "apple-mobile-web-app-status-bar-style": "light-content",
-    "apple-mobile-web-app-capable": "yes",
-  },
+  // viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
+  // other: {
+  //   "theme-color": "#7C5ABF",
+  //   "apple-mobile-web-app-status-bar-style": "light-content",
+  //   "apple-mobile-web-app-capable": "yes",
+  // },
 }
 
 
