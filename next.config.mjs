@@ -6,6 +6,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Force Webpack instead of Turbopack
+  experimental: {
+    webpack: true,
+    turbopack: false,
+  },
   webpack: (config, { dev }) => {
     if (dev) {
       config.watchOptions = {
