@@ -40,7 +40,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [authToken, setAuthToken] = useState<string | null>(null); // 👈 Added: Manage token in state
   const [loading, setLoading] = useState(true);
 
-  const { setShowAuthFlow, handleLogOut, user: dynamicUser } = useDynamicContext();
+  // Safe access to Dynamic context with fallback
+  let setShowAuthFlow: ((show: boolean) => void) | undefined;
+  let handleLogOut: (() => Promise<void>) | undefined;
+  let dynamicUser: any;
+  try {
+    const dynamicContext = useDynamicContext();
+    setShowAuthFlow = dynamicContext.setShowAuthFlow;
+    handleLogOut = dynamicContext.handleLogOut;
+    dynamicUser = dynamicContext.user;
+  } catch {
+    // Dynamic context not available yet
+    setShowAuthFlow = () => {};
+    handleLogOut = async () => {};
+    dynamicUser = null;
+  }
 
   // 👈 Listen to Dynamic user changes and fetch user data
   useEffect(() => {
@@ -150,7 +164,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function handleLogout() {
     try {
       console.log('AuthContext: calling logout API');
-      const res = await handleLogOut();
+      const res = await handleLogOut?.();
       console.log('AuthContext: logout API response', res);
     } catch (error) {
       console.error("Logout error:", error);
