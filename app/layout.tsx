@@ -29,7 +29,6 @@ export const metadata: Metadata = {
     shortcut: "/favicon-32x32.png",
     apple: "/apple-touch-icon.png",
   },
-  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
   other: {
     "theme-color": "#7C5ABF",
     "apple-mobile-web-app-status-bar-style": "light-content",
@@ -37,6 +36,11 @@ export const metadata: Metadata = {
   },
 }
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+}
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
 
