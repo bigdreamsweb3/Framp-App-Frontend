@@ -59,17 +59,17 @@ export default function RootLayout({
 
 
 
-                <DynamicContextProvider
+                {/* <DynamicContextProvider
                   settings={{
                     environmentId: "94779e7d-5bac-4634-bed1-fdec1ba6da64",
                     walletConnectors: [SolanaWalletConnectors],
                   }}
-                >
+                > */}
                   <RootShell>
                     {children}
                   </RootShell>
                   {/* <DynamicWidget /> */}
-                </DynamicContextProvider>
+                {/* </DynamicContextProvider> */}
               </ThemeProvider>
             </Suspense>
             <Analytics />
