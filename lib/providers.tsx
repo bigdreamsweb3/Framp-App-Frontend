@@ -15,7 +15,9 @@ export default function DynamicAuthProvider({ children }: { children: React.Reac
         throw new Error('NEXT_PUBLIC_DYNAMIC_ENVIRONMENT_ID is required');
     }
 
-    if (!mounted) return null; // ✅ no rendering during SSR
+    if (!mounted) {
+        return <div>{children}</div>;
+    }
 
     return (
         <DynamicContextProvider

@@ -48,17 +48,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${inter.variable} ${GeistMono.variable} antialiased`}>
-        <DynamicAuthProvider>
-          <UIProvider>
-            <AuthProvider>
-              <Suspense fallback={null}>
-                <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 
+        <UIProvider>
+          <AuthProvider>
+            <Suspense fallback={null}>
+              <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                <DynamicAuthProvider>
                   <RootShell>
                     {children}
                   </RootShell>
+                </DynamicAuthProvider>
 
-                  {/* <DynamicContextProvider
+                {/* <DynamicContextProvider
                 settings={{
                   environmentId: "94779e7d-5bac-4634-bed1-fdec1ba6da64",
                   walletConnectors: [SolanaWalletConnectors],
@@ -67,12 +68,11 @@ export default function RootLayout({
                 {children}
                 <DynamicWidget />
               </DynamicContextProvider> */}
-                </ThemeProvider>
-              </Suspense>
-              <Analytics />
-            </AuthProvider>
-          </UIProvider>
-        </DynamicAuthProvider>
+              </ThemeProvider>
+            </Suspense>
+            <Analytics />
+          </AuthProvider>
+        </UIProvider>
       </body>
     </html>
   )
