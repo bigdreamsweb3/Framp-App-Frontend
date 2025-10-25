@@ -130,20 +130,20 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
                         <div className="py-6 px-4 space-y-4 overflow-y-auto">
                             <div className="mb-6">
-                                <h3 className="text-sm font-semibold text-muted-foreground">
+                                <h3 className="text-sm font-semibold text-foreground">
                                     Framp Gateway
                                 </h3>
-                                <p className="text-xs text-muted-foreground/70">
+                                <p className="text-xs text-foreground/70">
                                     Do more with crypto.
                                 </p>
                             </div>
 
                             <div className="space-y-3">
                                 <div>
-                                    <Link href="/" className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                                    <Link href="/" className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1sition duration-100 ${pathname === "/" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
                                         } hover:text-primary transition`}>
                                         <Button
-                                            className="w-full justify-start gap-2 rounded-xl"
+                                            className="w-full justify-start gap-2 rounded-md"
                                             variant={pathname === "/" ? "default" : "ghost"}
                                         >
                                             <ArrowUpCircle className="h-4 w-4" />
@@ -153,10 +153,10 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                 </div>
 
                                 <div>
-                                    <Link href="/bills" className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/bills" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                                    <Link href="/bills" className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap transition duration-100 ${pathname === "/bills" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
                                         } hover:text-primary transition`}>
                                         <Button
-                                            className="w-full justify-start gap-2 rounded-xl"
+                                            className="w-full justify-start gap-2 rounded-md"
                                             variant={pathname === "/bills" ? "default" : "ghost"}
                                         >
                                             <QrCode className="h-4 w-4" />
@@ -167,7 +167,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                 {/* <div>
                                     <Link href="/save">
                                         <Button
-                                            className="w-full justify-start gap-2 rounded-xl"
+                                            className="w-full justify-start gap-2 rounded-md"
                                             variant={pathname === "/save" ? "default" : "ghost"}
                                         >
                                             <PiggyBank className="h-4 w-4" />
@@ -177,10 +177,10 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                 </div> */}
 
                                 <div>
-                                    <Link href="/wallets" className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/wallets" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                                    <Link href="/wallets" className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap transition duration-100 ${pathname === "/wallets" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
                                         } hover:text-primary transition`}>
                                         <Button
-                                            className="w-full justify-start gap-2 rounded-xl"
+                                            className="w-full justify-start gap-2 rounded-md"
                                             variant={pathname?.startsWith("/wallets") ? "default" : "ghost"} // Fixed: changed from "/wallet" to "/wallets"
                                         >
                                             <WalletIcon className="h-4 w-4" />
@@ -190,10 +190,10 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                 </div>
 
                                 <div>
-                                    <Link href="/activity" className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/activity" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                                    <Link href="/activity" className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap transition duration-100 ${pathname === "/activity" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
                                         } hover:text-primary transition`}>
                                         <Button
-                                            className="w-full justify-start gap-2 rounded-xl"
+                                            className="w-full justify-start gap-2 rounded-md"
                                             variant={pathname === "/activity" ? "default" : "ghost"}
                                         >
                                             <ActivityIcon className="h-4 w-4" />
@@ -206,7 +206,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
                         {/* Sidebar Footer */}
                         <div className="hidden md:flex flex-col fixed bottom-0 w-80">
-                            <div className="flex items-center justify-between px-4 py-3 border-t border-border/30">
+                            <div className="flex items-center justify-between px-4 py-3 border-t border-border/30 h-12">
                                 <div className="">
                                     <ThemeToggle />
                                 </div>
@@ -214,7 +214,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                             <nav className="flex items-center justify-between px-4 py-5 border-t border-border/30">
                                 <div className="flex items-center gap-4">
                                     <Link
-                                        href="/docs"
+                                        href="https://frampfi.gitbook.io/frampfi/"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={`text-sm font-semibold ${pathname === "/docs" ? "text-primary" : "text-foreground"
@@ -375,27 +375,27 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-sidebar sm:hidden">
                 <div className="mb-[env(safe-area-inset-bottom)] flex h-14 items-center text-sm">
                     <div className="grid size-full grid-cols-4">
-                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 traon duration-100 ${pathname === "/" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
                             } hover:text-primary transition`} href="/">
                             <ArrowUpCircle className="h-4 w-4" />
                             <span className="w-full text-center">Gate</span>
                         </Link>
 
 
-                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/bills" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 traon duration-100 ${pathname === "/bills" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
                             } hover:text-primary transition`} href="/bills">
                             <QrCode className="h-4 w-4" />
                             <span className="w-full text-center">Bills</span>
                         </Link>
 
 
-                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/wallets" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 traon duration-100 ${pathname === "/wallets" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
                             } hover:text-primary transition`} href="/wallets">
                             <WalletIcon className="h-4 w-4" />
                             <span className="w-full text-center">Wallets</span>
                         </Link>
 
-                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/activity" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
+                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 traon duration-100 ${pathname === "/activity" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
                             } hover:text-primary transition`} href="/activity">
                             <ActivityIcon className="h-4 w-4" />
                             <span className="w-full text-center">Activity</span>

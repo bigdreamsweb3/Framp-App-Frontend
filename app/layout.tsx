@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     shortcut: "/favicon-32x32.png",
     apple: "/apple-touch-icon.png",
   },
-  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
+  // viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
   other: {
     // "theme-color": "#7C5ABF",
     "apple-mobile-web-app-status-bar-style": "light-content",

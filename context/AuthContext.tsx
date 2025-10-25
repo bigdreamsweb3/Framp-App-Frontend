@@ -60,13 +60,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (dynamicUser) {
       // User connected wallet - fetch user data
-      fetchUser();
+      fetchUser().then(() => {
+        // Notify other components that user data has been updated
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('userDataUpdated'));
+        }
+      });
     } else {
       // User disconnected - clear user state
       setUser(null);
       setAuthToken(null);
       if (typeof window !== 'undefined') {
         localStorage.removeItem('authToken');
+        window.dispatchEvent(new CustomEvent('userDataUpdated'));
       }
     }
   }, [dynamicUser]);

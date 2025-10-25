@@ -82,17 +82,17 @@ export function AppHeader({
       >
         <div className="w-full h-full px-4 flex items-center justify-between">
           {/* Left side - Logo and menu button */}
-          <div className="flex items-center gap-0">
+          <div className="flex items-center gap-1.5">
             <Link href="/">
               <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5 mr-2">
-                <div className="relative flex items-center h-8 w-8">
+                <div className="relative flex items-center h-9 w-9">
                   <Image
                     src={app_logo}
                     alt="App Logo"
                     className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
                   />
 
-                  <span className="text-[0.4rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
+                  <span className="text-[0.5rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
                     BETA
                   </span>
                 </div>
@@ -191,17 +191,32 @@ export function AppHeader({
                 </Button>
               ) : (
                 <Button
-                  variant="ghost"
-                  aria-pressed={profileActive}
                   onClick={onProfileToggle}
-                  className={`relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full
-                    transition-all duration-300 ease-out transform hover:scale-105
-                    ${profileActive
+                  // variant="soft_gradient"
+                  size="sm"
+                  className="pr-0 rounded-xl bg-card border overflow-hidden">
+                  <div className="flex-1 space-y-1">
+                    <p className="text-xs text-muted-foreground dark:text-foreground font-bold mb-0">
+                      {(() => {
+                        const [local, domain] = user.email.split("@");
+                        const maskedLocal = local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
+                        const maskedDomain = domain ? `***` : "";
+                        return `${maskedLocal}@${maskedDomain}`;
+                      })()}
+                    </p>
+                 
+                  </div>
+                  <div
+                    // variant="ghost"
+                    aria-pressed={profileActive}
+                    onClick={onProfileToggle}
+                    className={`relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full transition-all duration-300 ease-out transform hover:scale-105 ${profileActive
                       ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
                       : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
-                    }`}
-                >
-                  <User className="text-primary" />
+                      }`}
+                  >
+                    <User className="text-primary" />
+                  </div>
                 </Button>
               )}
             </div>
@@ -231,14 +246,14 @@ export function AppHeader({
                 <div className="sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out flex items-center justify-between">
                   {/* Left side - Logo and menu button */}
                   <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5">
-                    <div className="relative flex items-center h-8 w-8">
+                    <div className="relative flex items-center h-9 w-9">
                       <Image
                         src={app_logo}
                         alt="App Logo"
                         className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
                       />
 
-                      <span className="text-[0.4rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
+                      <span className="text-[0.5rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
                         BETA
                       </span>
                     </div>
@@ -251,7 +266,7 @@ export function AppHeader({
                       onClick={() => setMobileOpen(false)}
                       className="transition text-muted-foreground flex size-8 items-center justify-center rounded-lg hover:text-primary focus:outline-primary"
                     >
-                      <X size={20} />
+                      <X size={22} />
                     </button>
                   </div>
                 </div>
@@ -277,7 +292,7 @@ export function AppHeader({
                     } hover:text-primary transition`}
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/" ? "default" : "ghost"}
                   >
                     <ArrowUpCircle size={18} /> Gate
                   </Button>
@@ -288,7 +303,7 @@ export function AppHeader({
                     } hover:text-primary transition`}
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/bills" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/bills" ? "default" : "ghost"}
                   >
                     <QrCode size={18} /> Bills
                   </Button>
@@ -299,7 +314,7 @@ export function AppHeader({
                     } hover:text-primary transition`}
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/wallets" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/wallets" ? "default" : "ghost"}
                   >
                     <Wallet size={18} /> Wallets
                   </Button>
@@ -310,7 +325,7 @@ export function AppHeader({
                     } hover:text-primary transition`}
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-xl" variant={pathname === "/activity" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/activity" ? "default" : "ghost"}
                   >
                     <ActivityIcon size={18} /> Activity
                   </Button>
@@ -324,7 +339,7 @@ export function AppHeader({
                     <ThemeToggle />
                   </div>
 
-                  {loading ? (
+                  {/* {loading ? (
                     <div className="flex items-center gap-3">
                       <div className="flex-1 space-y-1">
                         <div className="w-24 h-4 bg-muted animate-pulse rounded" />
@@ -359,7 +374,7 @@ export function AppHeader({
                         </p>
                         {/* <span className="text-xs text-muted-foreground capitalize">
                           UID: {user.id.slice(0, 8)}
-                        </span>  */}
+                        </span>  
                       </div>
                       <Button
                         variant="ghost"
@@ -373,13 +388,13 @@ export function AppHeader({
                         <User className="text-primary" />
                       </Button>
                     </Button>
-                  )}
+                  )} */}
                 </div>
 
                 <div className="flex justify-between items-center p-4 border-t border-border/30">
                   <div className="flex gap-3">
                     <Link
-                      href="/docs"
+                      href="https://frampfi.gitbook.io/frampfi/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className={`flex items-center gap-1 text-sm font-semibold ${pathname === "/docs" ? "text-primary" : "text-foreground"

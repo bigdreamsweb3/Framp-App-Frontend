@@ -220,11 +220,11 @@ export function WalletView({
               Please sign in to manage wallets
             </h3>
             <p className="text-sm text-muted-foreground mb-4">Sign in to view and manage your saved wallets and payment methods.</p>
-            <div className="flex items-center justify-center gap-2">
+            {/* <div className="flex items-center justify-center gap-2">
               <Button onClick={() => { onLogin?.(); ui.openAuth?.(); }} className="rounded-xl bg-primary">
                 Sign in
               </Button>
-            </div>
+            </div> */}
           </div>
         ) : showAddWallet ? (
           <div className="space-y-3">
