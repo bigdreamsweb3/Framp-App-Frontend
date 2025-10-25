@@ -43,14 +43,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const fetchUser = async () => {
     try {
       setLoading(true);
-      const token = fetchAndStoreToken(); // 👈 Use helper to ensure token is stored
-      const res = await getCurrentUser(token || undefined);
-      console.log("🔍 Current user from API:", res);
-      if (res && res.user) {
-        setUser(res.user);
-      } else {
-        setUser(null);
-      }
+      // const token = fetchAndStoreToken(); // 👈 Use helper to ensure token is stored
+      // const res = await getCurrentUser(token || undefined);
+      // console.log("🔍 Current user from API:", res);
+      // if (res && res.user) {
+      //   setUser(res.user);
+      // } else {
+      //   setUser(null);
+      // }
     } catch (err) {
       console.error("AuthContext: no valid session", err);
       setUser(null);
