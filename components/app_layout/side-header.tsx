@@ -92,7 +92,7 @@ export function SideHeader({
         <header className={`h-14 relative z-10 border-b border-border/40`}>
             <div className="w-full h-full px-4 flex items-center justify-between">
                 {/* Left side - Logo and menu button */}
-                <div className="flex items-center w-fit h-9 flex-shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5">
+                <div className="flex items-center w-fit h-9 shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5">
                     <div className="relative flex items-center h-9 w-9">
                         <Image
                             src={app_logo}

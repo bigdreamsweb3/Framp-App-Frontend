@@ -1,5 +1,5 @@
 'use client';
-import { DynamicContextProvider } from '@dynamic-labs/sdk-react-core';
+import { DynamicContextProvider, getAuthToken } from '@dynamic-labs/sdk-react-core';
 import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 
 
@@ -24,3 +24,5 @@ export default function DynamicAuthProvider({ children }: { children: React.Reac
         </DynamicContextProvider>
     );
 }
+
+

@@ -17,6 +17,7 @@ import { UIProvider } from "@/context/UIContext"
 // import DynamicAuthProvider from "../lib/providers"
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core"
 import { SolanaWalletConnectors } from "@dynamic-labs/solana"
+import DynamicAuthProvider from "@/lib/providers"
 
 export const metadata: Metadata = {
   title: {
@@ -50,31 +51,32 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${inter.variable} ${GeistMono.variable} antialiased`}>
+        <DynamicAuthProvider>
+          <UIProvider>
+            <AuthProvider>
+              <Suspense fallback={null}>
+                <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
 
-        <UIProvider>
-          <AuthProvider>
-            <Suspense fallback={null}>
-              <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-
-
-
-
-                {/* <DynamicContextProvider
-                  settings={{
-                    environmentId: "94779e7d-5bac-4634-bed1-fdec1ba6da64",
-                    walletConnectors: [SolanaWalletConnectors],
-                  }}
-                > */}
                   <RootShell>
                     {children}
                   </RootShell>
-                  {/* <DynamicWidget /> */}
-                {/* </DynamicContextProvider> */}
-              </ThemeProvider>
-            </Suspense>
-            <Analytics />
-          </AuthProvider>
-        </UIProvider>
+
+
+                  {/* <DynamicContextProvider
+                    settings={{
+                      environmentId: "94779e7d-5bac-4634-bed1-fdec1ba6da64",
+                      walletConnectors: [SolanaWalletConnectors],
+                    }}
+                  >
+                   
+                    {/* <DynamicWidget /> */}
+                  {/* </DynamicContextProvider> */}
+                </ThemeProvider>
+              </Suspense>
+              <Analytics />
+            </AuthProvider>
+          </UIProvider>
+        </DynamicAuthProvider>
       </body>
     </html>
   )
