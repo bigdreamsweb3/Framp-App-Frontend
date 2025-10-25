@@ -38,19 +38,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // const { setShowAuthFlow, handleLogOut } = useDynamicContext();
+  const { setShowAuthFlow, handleLogOut } = useDynamicContext();
 
   const fetchUser = async () => {
     try {
       setLoading(true);
-      // const token = fetchAndStoreToken(); // 👈 Use helper to ensure token is stored
-      // const res = await getCurrentUser(token || undefined);
-      // console.log("🔍 Current user from API:", res);
-      // if (res && res.user) {
-      //   setUser(res.user);
-      // } else {
-      //   setUser(null);
-      // }
+      const token = fetchAndStoreToken(); // 👈 Use helper to ensure token is stored
+      const res = await getCurrentUser(token || undefined);
+      console.log("🔍 Current user from API:", res);
+      if (res && res.user) {
+        setUser(res.user);
+      } else {
+        setUser(null);
+      }
     } catch (err) {
       console.error("AuthContext: no valid session", err);
       setUser(null);
@@ -74,9 +74,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function handleLogout() {
     try {
       console.log('AuthContext: calling logout API');
-      // const res = await handleLogOut()
+      const res = await handleLogOut()
       await logoutDynamicUser()
-      // console.log('AuthContext: logout API response', res);
+      console.log('AuthContext: logout API response', res);
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
