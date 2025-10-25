@@ -218,7 +218,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                     </div>
                                 ) : !user ? (
                                     <Button
-                                        onClick={handleShowAuth}
+                                        onClick={() => setShowAuthFlow(true)}
                                         variant="soft_gradient"
                                         size="sm"
                                         className="rounded-xl"

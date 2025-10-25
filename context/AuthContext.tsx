@@ -6,11 +6,8 @@ import { login } from "@/lib/api/auth/login";
 import { signup } from "@/lib/api/auth/signup";
 import { logout } from "@/lib/api/auth/logout";
 import { getCurrentUser } from "@/lib/api/auth/me";
+import { getAuthToken } from "@dynamic-labs/sdk-react-core";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
-import { fetchAndStoreToken } from "@/lib/dynamic-auth-manager";
-
-
-import { useRouter } from "next/navigation"; 
 
 type User = {
   id: string;
@@ -29,8 +26,10 @@ type User = {
 
 type AuthContextType = {
   user: User | null;
-  // authToken: string | null; // 👈 Added: Expose token for global access
+  authToken: string | null; // 👈 Added: Expose token for global access
   loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string, name?: string, wallet?: string) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -38,11 +37,55 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [authToken, setAuthToken] = useState<string | null>(null); // 👈 Added: Manage token in state
   const [loading, setLoading] = useState(true);
 
-  const router = useRouter();
+  // Safe access to Dynamic context with fallback
+  let setShowAuthFlow: ((show: boolean) => void) | undefined;
+  let handleLogOut: (() => Promise<void>) | undefined;
+  let dynamicUser: any;
+  try {
+    const dynamicContext = useDynamicContext();
+    setShowAuthFlow = dynamicContext.setShowAuthFlow;
+    handleLogOut = dynamicContext.handleLogOut;
+    dynamicUser = dynamicContext.user;
+  } catch {
+    // Dynamic context not available yet
+    setShowAuthFlow = () => {};
+    handleLogOut = async () => {};
+    dynamicUser = null;
+  }
 
-  // const { setShowAuthFlow, handleLogOut } = useDynamicContext();
+  // 👈 Listen to Dynamic user changes and fetch user data
+  useEffect(() => {
+    if (dynamicUser) {
+      // User connected wallet - fetch user data
+      fetchUser();
+    } else {
+      // User disconnected - clear user state
+      setUser(null);
+      setAuthToken(null);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('authToken');
+      }
+    }
+  }, [dynamicUser]);
+
+  // 👈 Added: Helper to get token and persist it
+  const fetchAndStoreToken = () => {
+    if (typeof window === 'undefined') return null;
+    
+    const token = getAuthToken();
+    if (token) {
+      localStorage.setItem('authToken', token); // Store in localStorage
+      setAuthToken(token);
+    } else {
+      // If no token, clear localStorage (e.g., on app init if expired)
+      localStorage.removeItem('authToken');
+      setAuthToken(null);
+    }
+    return token;
+  };
 
   const fetchUser = async () => {
     try {
@@ -58,6 +101,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (err) {
       console.error("AuthContext: no valid session", err);
       setUser(null);
+      // 👈 Clear invalid token
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('authToken');
+      }
+      setAuthToken(null);
     } finally {
       setLoading(false);
     }
@@ -65,26 +113,67 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // 👈 Updated: Init effect - load token from localStorage first, then fetch user
   useEffect(() => {
-    if (router){}
-    const token = fetchAndStoreToken();
-    if (token) {
-      fetchUser();
-    } else {
-      setLoading(false); // nothing to fetch yet
+    if (typeof window === 'undefined') return;
+    
+    // Restore token from localStorage on mount (e.g., page refresh)
+    const storedToken = localStorage.getItem('authToken');
+    if (storedToken) {
+      setAuthToken(storedToken);
     }
+    fetchUser();
   }, []);
 
+  async function handleLogin(email: string, password: string) {
+    try {
+      setLoading(true);
+      const res = await login(email, password);
+      if (res.user) {
+        setUser(res.user);
+        // 👈 Fetch and store token post-login (Dynamic Labs may set it internally)
+        fetchAndStoreToken();
+        // 👈 Refetch user data to ensure we have the latest state
+        await fetchUser();
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }
 
+  async function handleSignup(email: string, password: string, name?: string, wallet?: string) {
+    try {
+      setLoading(true);
+      const res = await signup(email, password, name, wallet);
+      if (res.user) {
+        setUser(res.user);
+        // 👈 Fetch and store token post-signup
+        fetchAndStoreToken();
+        // 👈 Refetch user data to ensure we have the latest state
+        await fetchUser();
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function handleLogout() {
     try {
       console.log('AuthContext: calling logout API');
-      // const res = await logoutDynamicUser()
-      // await logoutDynamicUser()
-      // console.log('AuthContext: logout API response', res);
+      const res = await handleLogOut?.();
+      console.log('AuthContext: logout API response', res);
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
+      // 👈 Clear token from state and localStorage on logout
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('authToken');
+      }
+      setAuthToken(null);
       // Refresh user state (will set null)
       try {
         await fetchUser();
@@ -96,7 +185,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, logout: handleLogout }} // 👈 Added authToken to value
+      value={{ user, authToken, loading, login: handleLogin, signup: handleSignup, logout: handleLogout }} // 👈 Added authToken to value
     >
       {children}
     </AuthContext.Provider>

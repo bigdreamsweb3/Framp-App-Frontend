@@ -334,7 +334,7 @@ export function AppHeader({
                     </div>
                   ) : !user ? (
                     <Button
-                      onClick={onAuthClick}
+                      onClick={() => setShowAuthFlow(true)}
                       variant="soft_gradient"
                       size="sm"
                       className="px-4 rounded-xl"
