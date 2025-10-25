@@ -25,6 +25,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useUI } from "@/context/UIContext"
 import { useAuth } from "@/context/AuthContext"
 import { ThemeToggle } from "../theme-toggle"
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 
 export default function RootShell({ children }: { children: React.ReactNode }) {
     const [showAuth, setShowAuth] = useState(false)
@@ -32,6 +33,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
     const [showChat, setShowChat] = useState(false)
     const [activeView, setActiveView] = useState<string>("onramp")
 
+    const { setShowAuthFlow, handleLogOut } = useDynamicContext();
 
     const router = useRouter()
     const pathname = usePathname() || "/"
