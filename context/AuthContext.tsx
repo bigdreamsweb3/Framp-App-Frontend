@@ -7,8 +7,10 @@ import { signup } from "@/lib/api/auth/signup";
 import { logout } from "@/lib/api/auth/logout";
 import { getCurrentUser } from "@/lib/api/auth/me";
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
-import { fetchAndStoreToken, logoutDynamicUser } from "@/lib/dynamic-auth-manager";
+import { fetchAndStoreToken } from "@/lib/dynamic-auth-manager";
 
+
+import { useRouter } from "next/navigation"; 
 
 type User = {
   id: string;
@@ -38,7 +40,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const { setShowAuthFlow, handleLogOut } = useDynamicContext();
+  const router = useRouter();
+
+  // const { setShowAuthFlow, handleLogOut } = useDynamicContext();
 
   const fetchUser = async () => {
     try {
@@ -61,6 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // 👈 Updated: Init effect - load token from localStorage first, then fetch user
   useEffect(() => {
+    if (router){}
     const token = fetchAndStoreToken();
     if (token) {
       fetchUser();
@@ -74,9 +79,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function handleLogout() {
     try {
       console.log('AuthContext: calling logout API');
-      const res = await handleLogOut()
-      await logoutDynamicUser()
-      console.log('AuthContext: logout API response', res);
+      // const res = await logoutDynamicUser()
+      // await logoutDynamicUser()
+      // console.log('AuthContext: logout API response', res);
     } catch (error) {
       console.error("Logout error:", error);
     } finally {

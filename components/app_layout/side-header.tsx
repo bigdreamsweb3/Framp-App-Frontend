@@ -14,6 +14,7 @@ import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 import Link from "next/link";
 import { HelpCircle, Menu, User, X, BookOpen } from "lucide-react";
 
+
 interface SideHeaderProps {
     onAuthClick?: () => void;
     chatActive?: boolean;

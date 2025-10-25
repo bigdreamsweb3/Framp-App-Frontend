@@ -1,4 +1,4 @@
-import { getAuthToken, useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import { getAuthToken } from "@dynamic-labs/sdk-react-core";
 
 export const fetchAndStoreToken = () => {
   const token = getAuthToken();
@@ -10,10 +10,5 @@ export const fetchAndStoreToken = () => {
   return token;
 };
 
-export async function logoutDynamicUser() {
-  // const { handleLogOut } = useDynamicContext();
-  // await handleLogOut(); // ✅ actually execute logout
-
-  localStorage.removeItem("authToken");
-  return true;
-}
+// Note: Dynamic context functions must be called from React components
+// Use useDynamicContext() directly in your components instead

@@ -9,30 +9,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+}
 
-  turbopack: {
-    rules: {
-      "*.svg": {
-        loaders: ["@svgr/webpack"],
-        as: "*.js",
-      },
-    },
-  },
-
-  webpack: (config, { dev, isServer }) => {
-    if (dev) {
-      config.watchOptions = {
-        poll: 1000,
-        aggregateTimeout: 300,
-      };
-    }
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-    };
-    config.externals.push("pino-pretty", "lokijs", "encoding");
-    return config;
-  },
-};
-
-export default nextConfig;
+export default nextConfig
