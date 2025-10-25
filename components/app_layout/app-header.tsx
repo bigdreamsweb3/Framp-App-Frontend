@@ -261,7 +261,7 @@ export function AppHeader({
 
               {/* Scrollable content */}
               <div className="flex-1 flex flex-col px-4 py-4 overflow-y-auto gap-3">
-                <div className="mb-3 flex items-center justify-between">
+                {/* <div className="mb-3 flex items-center justify-between">
                   <div className="">
                     <h3 className="text-sm font-semibold text-muted-foreground">
                       Framp Gateway
@@ -270,7 +270,7 @@ export function AppHeader({
                       Do more with crypto.
                     </p>
                   </div>
-                </div>
+                </div> */}
 
                 <Link
                   href="/" className={`relative flex h-fit select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 transition duration-100 ${pathname === "/" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
