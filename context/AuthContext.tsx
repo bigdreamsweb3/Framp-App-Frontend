@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const { setShowAuthFlow, handleLogOut } = useDynamicContext();
+  // const { setShowAuthFlow, handleLogOut } = useDynamicContext();
 
   const fetchUser = async () => {
     try {
@@ -74,9 +74,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function handleLogout() {
     try {
       console.log('AuthContext: calling logout API');
-      const res = await handleLogOut()
+      // const res = await handleLogOut()
       await logoutDynamicUser()
-      console.log('AuthContext: logout API response', res);
+      // console.log('AuthContext: logout API response', res);
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
