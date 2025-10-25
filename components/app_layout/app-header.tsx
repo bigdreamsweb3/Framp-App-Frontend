@@ -89,7 +89,7 @@ export function AppHeader({
                   <Image
                     src={app_logo}
                     alt="App Logo"
-                    className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-r-2xl rounded-l-md"
+                    className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
                   />
 
                   <span className="text-[0.4rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
@@ -235,7 +235,7 @@ export function AppHeader({
                       <Image
                         src={app_logo}
                         alt="App Logo"
-                        className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-r-2xl rounded-l-md"
+                        className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
                       />
 
                       <span className="text-[0.4rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
