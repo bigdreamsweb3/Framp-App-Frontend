@@ -210,27 +210,6 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                 <div className="">
                                     <ThemeToggle />
                                 </div>
-                                {loading ? (
-                                    <div className="flex items-center gap-3">
-                                        <div className="flex-1 space-y-1">
-                                            <div className="w-24 h-4 bg-muted animate-pulse rounded" />
-                                            <div className="w-32 h-3 bg-muted animate-pulse rounded" />
-                                        </div>
-                                        <div className="w-8 h-8 bg-muted animate-pulse rounded-full" />
-                                    </div>
-                                ) : !user ? (
-                                    <Button
-                                        onClick={() => setShowAuthFlow(true)}
-                                        variant="soft_gradient"
-                                        size="sm"
-                                        className="rounded-xl"
-                                        aria-label="Get Started"
-                                    >
-                                        Get Started
-                                    </Button>
-                                ) : (
-                                    ""
-                                )}
                             </div>
                             <nav className="flex items-center justify-between px-4 py-5 border-t border-border/30">
                                 <div className="flex items-center gap-4">
