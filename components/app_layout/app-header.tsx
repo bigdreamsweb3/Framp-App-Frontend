@@ -106,7 +106,7 @@ export function AppHeader({
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((p) => !p)}
             >
-              {mobileOpen ? "" : <Menu size={20} />}
+              {mobileOpen ? "" : <Menu size={22} />}
             </button>
           </div>
 
