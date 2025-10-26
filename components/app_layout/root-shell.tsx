@@ -206,11 +206,11 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
                         {/* Sidebar Footer */}
                         <div className="hidden md:flex flex-col fixed bottom-0 w-80">
-                            <div className="flex items-center justify-between px-4 py-3 border-t border-border/30 h-12">
+                            {/* <div className="flex items-center justify-between px-4 py-3 border-t border-border/30 h-12">
                                 <div className="">
                                     <ThemeToggle />
                                 </div>
-                            </div>
+                            </div> */}
                             <nav className="flex items-center justify-between px-4 py-5 border-t border-border/30">
                                 <div className="flex items-center gap-4">
                                     <Link

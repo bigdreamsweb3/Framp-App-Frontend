@@ -18,6 +18,7 @@ import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate"
 import { ExchangeRateSkeleton } from "../ui/exchange-rate-skeleton"
 import { formatCurrency, parseNairaAmount } from "@/lib/utils/formatter"
 import { useFees } from "@/lib/hooks/useFees"
+import { useRouter } from 'next/navigation';
 
 type TokenStats = {
   selections: number
@@ -109,6 +110,9 @@ export function RampInterface({
   rampMode: externalRampMode,
   onRampModeChange: externalOnRampModeChange,
 }: RampInterfaceProps) {
+
+  const router = useRouter()
+
   const [internalRampMode, setInternalRampMode] = useState<"onramp" | "offramp">(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("rampMode")
@@ -272,20 +276,36 @@ export function RampInterface({
         }
 
       } else {
-        // user is selling crypto for fiat (offramp)
-        payload.fiatAmount = Number(computedReceiving)
-        payload.tokenAmount = Number(fromAmount)
-
-        // assuming createOfframp() exists in your API folder
         const { createOfframp } = await import("@/lib/api/payments/offramp")
-        const res = await createOfframp(payload)
 
-        if (res?.data?.status === "success") {
-          alert("Offramp created successfully! Funds will be processed shortly.")
+        const res = await createOfframp({
+          userWallet: walletAddress,
+          // expectedWalletAddress: process.env.NEXT_PUBLIC_FRAMP_POOL_WALLET as string,
+          tokenSymbol,
+          tokenMintAddress: CRYPTO_TOKENS.find((t) => t.symbol === tokenSymbol)?.tokenAddress || "",
+          amount: Number(fromAmount),
+          exchangeRate: Number(exchangeRate?.rate),
+          fiatAmount: Number(computedReceiving),
+          bankName: selectedWallet?.name || null,
+          bankAccountNumber: selectedWallet?.accountNumber ?? "",
+          bankAccountName: selectedWallet?.accountName ?? "",
+          bankCode: selectedWallet?.bankCode ?? "",
+          currency: fiatCurrency,
+          signedTransaction: null,
+        })
+
+
+        const offrampId = res.offrampId
+
+        if (selectedPaymentMethod === "CONNECTED_WALLET") {
+          // user will sign + broadcast SOL transaction
+          router.push(`/ramp/offramp/send/${offrampId}`)
         } else {
-          alert("Failed to initialize offramp.")
+          // show wallet to send USDC to frampPoolWallet manually
+          router.push(`/ramp/offramp/${offrampId}`)
         }
       }
+
 
     } catch (err: any) {
       console.error("Ramp error:", err)

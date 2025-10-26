@@ -9,6 +9,7 @@ import useAppLogo from "@/asssets/image"
 import { useAuth } from "@/context/AuthContext"
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 import { User } from "lucide-react"
+import { ThemeToggle } from "../theme-toggle"
 
 interface SideHeaderProps {
     onAuthClick?: () => void
@@ -95,10 +96,10 @@ export function SideHeader({ onAuthClick, chatActive, onChatToggle, profileActiv
 
                 {/* Desktop navigation */}
                 <div className="flex items-center gap-3">
-                    {/* <ThemeToggle /> */}
+                    <ThemeToggle />
 
                     {/* User Actions */}
-                    {loading ? (
+                    {/* {loading ? (
                         <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
                     ) : !user ? (
                         <Button
@@ -138,7 +139,7 @@ export function SideHeader({ onAuthClick, chatActive, onChatToggle, profileActiv
                                 <User className="text-primary" />
                             </div>
                         </Button>
-                    )}
+                    )} */}
                 </div>
             </div>
         </header>
