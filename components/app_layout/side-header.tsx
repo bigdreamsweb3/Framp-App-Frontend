@@ -10,6 +10,8 @@ import { useAuth } from "@/context/AuthContext"
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 import { User } from "lucide-react"
 import { ThemeToggle } from "../theme-toggle"
+import Link from "next/link"
+
 
 interface SideHeaderProps {
     onAuthClick?: () => void
@@ -79,7 +81,8 @@ export function SideHeader({ onAuthClick, chatActive, onChatToggle, profileActiv
     return (
         <header className={`h-14 relative z-10 border-b border-border/40`}>
             <div className="w-full h-full px-4 flex items-center justify-between">
-                {/* Left side - Logo and menu button */}<Link href="/">
+                {/* Left side - Logo and menu button */}
+                <Link href="/">
   <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5 mr-2 relative">
     <div className="relative flex items-center h-9 w-9">
       <Image
