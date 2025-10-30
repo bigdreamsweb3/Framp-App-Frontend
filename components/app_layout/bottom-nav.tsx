@@ -15,7 +15,7 @@ export function BottomNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background backdrop-blur-md sm:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-background/50 backdrop-blur-md sm:hidden">
       <div className="mb-[env(safe-area-inset-bottom)] flex h-14 items-center text-sm">
         <div className="grid size-full grid-cols-4">
           {navItems.map((item) => {
