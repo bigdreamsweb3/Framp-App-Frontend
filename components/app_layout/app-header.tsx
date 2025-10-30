@@ -196,13 +196,13 @@ export function AppHeader({
           size="sm"
           className={`flex items-center gap-2 pr-0 rounded-xl overflow-hidden transition-all duration-300 ease-out ${
             profileActive
-              ? "bg-muted/60 ring-1 ring-primary/20"
+              ? "bg-muted/50 ring-1 ring-primary/20"
               : "bg-muted/40 hover:bg-muted/60"
           }`}
           aria-pressed={profileActive}
         >
           <div className="flex-1 pl-3 text-left">
-            <p className="text-xs text-muted-foreground dark:text-foreground font-semibold truncate max-w-[90px]">
+            <p className="text-xs text-muted-foreground dark:text-foreground font-bold truncate max-w-[90px]">
               {(() => {
                 const [local, domain] = user.email.split("@")
                 const maskedLocal =
