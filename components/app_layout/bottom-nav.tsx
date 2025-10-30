@@ -28,11 +28,11 @@ export function BottomNav() {
                 href={item.href}
                 className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 duration-100 transition ${
                   isActive
-                    ? "text-primary font-bold text-base"
+                    ? "text-primary dark:text-foreground font-bold text-base"
                     : "text-muted-foreground font-medium text-sm hover:text-primary"
                 }`}
               >
-                <Icon className={`h-5 w-5 ${isActive ? "text-primary" : ""}`} />
+                <Icon className={`h-5 w-5 ${isActive ? "text-primary dark:text-foreground" : ""}`} />
                 <span className="w-full text-center">{item.label}</span>
               </Link>
             )
