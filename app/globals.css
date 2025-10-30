@@ -14,7 +14,7 @@
   --popover: oklch(1 0.01 280);
   --popover-foreground: oklch(0.20 0.03 270);
 
---primary: oklch(0.6 0.2 280); /* Soft periwinkle lavender (~#8A84F7) */
+--primary: oklch(0.6 0.23 280); /* Soft periwinkle lavender (~#8A84F7) */
 
   --primary-foreground: oklch(0.99 0 0);
 
