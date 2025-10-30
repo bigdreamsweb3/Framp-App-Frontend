@@ -345,27 +345,30 @@ export function RampInterface({
         <CardHeader className="flex items-center justify-between">
           {/* Mode Switcher */}
           <div className="flex justify-center">
-            <div className="inline-flex rounded-lg py-2 px-0 gap-2.5">
-              <button
-                className={`px-4 py-1 text-sm rounded-md border border-border transition-colors duration-100 ${rampMode === "onramp"
-                  ? "bg-gradient-to-br from-primary/20 to-primary/10 text-muted-foreground dark:text-foreground font-bold shadow-sm"
-                  : "font-medium text-sm text-muted-foreground hover:text-foreground hover:bg-transparent"
-                  }`}
-                onClick={() => handleRampModeChange("onramp")}
-              >
-                On-ramp (Buy)
-              </button>
-              <button
-                className={`px-4 py-1 text-sm rounded-md border border-border transition-colors duration-100 ${rampMode === "offramp"
-                  ? "bg-gradient-to-br from-primary/20 to-primary/10 text-muted-foreground dark:text-foreground font-bold shadow-sm"
-                  : "font-medium text-sm text-muted-foreground hover:text-foreground hover:bg-transparent"
-                  }`}
-                onClick={() => handleRampModeChange("offramp")}
-              >
-                Off-ramp (Sell)
-              </button>
-            </div>
-          </div>
+  <div className="inline-flex rounded-lg py-2 px-0 gap-2.5">
+    <button
+      className={`px-4 py-1 text-sm rounded-md border border-border transition-colors duration-100 ${
+        rampMode === "onramp"
+          ? "bg-gradient-to-br from-primary/20 to-primary/10 text-foreground font-semibold shadow-sm"
+          : "text-muted-foreground hover:text-foreground/80 hover:bg-muted/30"
+      }`}
+      onClick={() => handleRampModeChange("onramp")}
+    >
+      On-ramp (Buy)
+    </button>
+    <button
+      className={`px-4 py-1 text-sm rounded-md border border-border transition-colors duration-100 ${
+        rampMode === "offramp"
+          ? "bg-gradient-to-br from-primary/20 to-primary/10 text-foreground font-semibold shadow-sm"
+          : "text-muted-foreground hover:text-foreground/80 hover:bg-muted/30"
+      }`}
+      onClick={() => handleRampModeChange("offramp")}
+    >
+      Off-ramp (Sell)
+    </button>
+  </div>
+</div>
+
 
           {/* <CardDescription className="text-xs text-muted-foreground mt-2">
                   {rampMode === "onramp"
