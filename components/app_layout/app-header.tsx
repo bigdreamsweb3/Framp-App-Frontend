@@ -92,7 +92,7 @@ export function AppHeader({
         className="w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
       />
       {/* BETA badge */}
-      <span className="absolute -top-1 -right-1 text-[0.5rem] font-bold px-[2px] py-[1px] bg-primary text-background rounded-sm rotate-12">
+      <span className="absolute -top-1 -right-1 text-[0.5rem] font-bold px-[2px] py-[1px] bg-primary text-white rounded-sm rotate-12">
         BETA
       </span>
     </div>
