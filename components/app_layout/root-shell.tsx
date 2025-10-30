@@ -302,7 +302,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                     onProfileToggle={() => setShowProfile((p) => !p)}
                 />
 
-                <main className="container mx-auto px-4 py-6 max-w-md pb-28 mt-[15px]">
+                <main className="container mx-auto px-4 py-6 max-w-md pb-28 mt-[6px]">
                     {/* <div className="flex flex-row items-center gap-2 h-fit mb-6">
                          <Tabs
                             value={activeView}
