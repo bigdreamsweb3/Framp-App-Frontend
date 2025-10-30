@@ -344,30 +344,30 @@ export function RampInterface({
       <Card className="w-full mx-auto max-w-md bg-card backdrop-blur-sm gap-3" data-tour="onramp-card">
         <CardHeader className="flex items-center justify-between">
           {/* Mode Switcher */}
-          <div className="flex justify-center">
-  <div className="inline-flex rounded-lg py-2 px-0 gap-2.5">
-    <button
-      className={`px-4 py-1 text-sm rounded-md border border-border transition-colors duration-100 ${
-        rampMode === "onramp"
-          ? "bg-gradient-to-br from-primary/20 to-primary/10 text-foreground font-semibold shadow-sm"
-          : "text-muted-foreground hover:text-foreground/80 hover:bg-muted/30"
-      }`}
-      onClick={() => handleRampModeChange("onramp")}
-    >
-      On-ramp (Buy)
-    </button>
-    <button
-      className={`px-4 py-1 text-sm rounded-md border border-border transition-colors duration-100 ${
-        rampMode === "offramp"
-          ? "bg-gradient-to-br from-primary/20 to-primary/10 text-foreground font-semibold shadow-sm"
-          : "text-muted-foreground hover:text-foreground/80 hover:bg-muted/30"
-      }`}
-      onClick={() => handleRampModeChange("offramp")}
-    >
-      Off-ramp (Sell)
-    </button>
+          <div className="relative w-full max-w-xs mx-auto">
+  <div className="flex bg-muted/50 border border-border rounded-xl overflow-hidden backdrop-blur-sm">
+    {(["onramp", "offramp"] as const).map((mode) => (
+      <button
+        key={mode}
+        onClick={() => handleRampModeChange(mode)}
+        className={`flex-1 py-2 text-sm font-medium transition-all duration-300
+          ${
+            rampMode === mode
+              ? "bg-card text-foreground shadow-[inset_0_0_0_1px_var(--border)] font-semibold"
+              : "text-muted-foreground hover:text-foreground hover:bg-card/50"
+          }`}
+      >
+        {mode === "onramp" ? "Buy Crypto" : "Sell Crypto"}
+      </button>
+    ))}
   </div>
+
+  <div
+    className={`absolute inset-0 rounded-xl border border-border transition-all duration-300 pointer-events-none
+      ${rampMode === "onramp" ? "shadow-[0_0_8px_rgba(var(--primary-rgb),0.3)]" : "shadow-[0_0_8px_rgba(var(--accent-rgb),0.3)]"}`}
+  />
 </div>
+
 
 
           {/* <CardDescription className="text-xs text-muted-foreground mt-2">
