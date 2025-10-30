@@ -374,6 +374,8 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             {/* Mobile Bottom Navigation */}
             <BottomNav />
 
+            {/*
+
             <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-sidebar sm:hidden">
                 <div className="mb-[env(safe-area-inset-bottom)] flex h-14 items-center text-sm">
                     <div className="grid size-full grid-cols-4">
@@ -404,7 +406,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                         </Link>
                     </div>
                 </div>
-            </nav>
+            </nav> */}
 
 
             {/* Floating AI Chat Button */}
