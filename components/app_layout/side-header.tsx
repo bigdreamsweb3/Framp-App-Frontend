@@ -82,7 +82,10 @@ export function SideHeader({ onAuthClick, chatActive, onChatToggle, profileActiv
         <header className={`h-14 relative z-10 border-b border-border/40`}>
             <div className="w-full h-full px-4 flex items-center justify-between">
                 {/* Left side - Logo and menu button */}
-                <Link href="/">
+<div className="w-full h-full px-4 flex items-center justify-between">
+          {/* Left side - Logo + Mobile Menu */}
+<div className="flex items-center gap-2">
+<Link href="/">
   <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5 mr-2 relative">
     <div className="relative flex items-center h-9 w-9">
       <Image
@@ -97,7 +100,7 @@ export function SideHeader({ onAuthClick, chatActive, onChatToggle, profileActiv
     </div>
   </div>
 </Link>
-
+</div>
                 {/* Desktop navigation */}
                 <div className="flex items-center gap-3">
                     <ThemeToggle />
