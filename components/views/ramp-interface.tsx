@@ -396,7 +396,7 @@ export function RampInterface({
           <div className="px-4 space-y-4">
             {rampMode === "onramp" ? (
               <>
-                <div className="bg-muted rounded-xl p-3 border border-border">
+                <div className="bg-muted/50 rounded-xl p-3 border border-border">
                   <div className="text-xs text-muted-foreground mb-2 font-medium">You pay</div>
                   <div className="flex items-center justify-between gap-3">
                     <input
@@ -420,7 +420,7 @@ export function RampInterface({
                   </div>
                 </div>
 
-                <div className="bg-muted rounded-xl p-3 border border-border">
+                <div className="bg-muted/50 rounded-xl p-3 border border-border">
                   <div className="text-xs text-muted-foreground mb-2 font-medium">You receive</div>
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-2xl font-semibold text-foreground">
@@ -450,7 +450,7 @@ export function RampInterface({
             ) : (
               // OFF RAMP SECTION
               <>
-                <div className="bg-muted rounded-xl p-3 border border-border">
+                <div className="bg-muted/50 rounded-xl p-3 border border-border">
                   <div className="text-xs text-muted-foreground mb-2 font-medium">You pay</div>
                   <div className="flex items-center justify-between gap-3">
                     <input
@@ -481,7 +481,7 @@ export function RampInterface({
                 </div>
 
 
-                <div className="bg-muted rounded-xl p-3 border border-border">
+                <div className="bg-muted/50 rounded-xl p-3 border border-border">
                   <div className="text-xs text-muted-foreground mb-2 font-medium">You receive</div>
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-2xl font-semibold text-foreground">
@@ -540,7 +540,7 @@ export function RampInterface({
             </div>
 
             {fromAmount && Number(fromAmount) > 0 && (
-              <div className="bg-muted rounded-xl p-4 border border-border">
+              <div className="bg-muted/50 rounded-xl p-4 border border-border">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="text-xs text-muted-foreground">{rampMode === "onramp" ? "To:" : "To:"}</div>
@@ -609,7 +609,7 @@ export function RampInterface({
             )}
 
             {rampMode === "onramp" && fromAmount && Number(fromAmount) > 0 && selectedWallet && (
-              <div className="bg-muted rounded-xl p-4 border border-border no-scrollbar">
+              <div className="bg-muted/50 rounded-xl p-4 border border-border no-scrollbar">
                 <style jsx>{`
                     .no-scrollbar::-webkit-scrollbar {
                       display: none;
@@ -632,7 +632,7 @@ export function RampInterface({
             )}
 
             {rampMode === "offramp" && fromAmount && Number(fromAmount) > 0 && selectedWallet && (
-              <div className="bg-muted rounded-xl p-4 border border-border">
+              <div className="bg-muted/50 rounded-xl p-4 border border-border">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="text-xs text-muted-foreground">Transfer Method</div>
                   {!effectiveTransferMethod && <AlertCircle className="h-4 w-4 text-orange-600" />}
