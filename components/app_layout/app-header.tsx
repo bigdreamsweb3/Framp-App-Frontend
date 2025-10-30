@@ -176,54 +176,48 @@ export function AppHeader({
             </button> */}
 
             {/* User button or Sign in */}
-            <div className="">
-  {loading ? (
-    <div className="h-[24px] px-4 w-[110px] bg-muted/50 border border-border rounded-xl backdrop-blur-sm animate-pulse" />
-  ) : !user ? (
-    <Button
-      onClick={() => setShowAuthFlow(true)}
-      variant="soft_gradient"
-      size="sm"
-      className="rounded-xl px-4 py-2 bg-muted/50 border border-border backdrop-blur-sm hover:bg-card/50 transition-all duration-300"
-      aria-label="Sign in or sign up"
-    >
-      <span className="font-medium text-foreground">Get Started</span>
-    </Button>
-  ) : (
-    <Button
-      onClick={onProfileToggle}
-      variant="soft_gradient"
-      size="sm"
-      className={`rounded-xl px-3 pr-1 flex items-center gap-2 bg-muted/50 border border-border backdrop-blur-sm transition-all duration-300 ${
-        profileActive
-          ? "shadow-[0_0_10px_rgba(var(--primary-rgb),0.25)]"
-          : "hover:bg-card/50"
-      }`}
-    >
-      {/*
-      <p className="text-xs text-muted-foreground dark:text-foreground font-semibold truncate max-w-[90px]">
-        {(() => {
-          const [local, domain] = user.email.split("@")
-          const maskedLocal =
-            local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`
-          const maskedDomain = domain ? `***` : ""
-          return `${maskedLocal}@${maskedDomain}`
-        })()}
-      </p> */}
+            <div className="flex items-center justify-end">
+      {loading ? (
+        <div className="h-[28px] w-[110px] bg-muted/40 border border-border/40 rounded-xl animate-pulse backdrop-blur-sm" />
+      ) : !user ? (
+        <Button
+          onClick={() => setShowAuthFlow?.(true)}
+          variant="soft_gradient"
+          size="sm"
+          className="rounded-xl px-4 py-[6px] text-sm font-medium bg-muted/40 border border-border/40 backdrop-blur-sm hover:bg-muted/60 hover:border-border/60 transition-all duration-300"
+          aria-label="Sign in or sign up"
+        >
+          Get Started
+        </Button>
+      ) : (
+        <Button
+          onClick={onProfileToggle}
+          variant="soft_gradient"
+          size="sm"
+          className={`rounded-xl px-2.5 py-[6px] flex items-center gap-2 transition-all duration-300 border backdrop-blur-sm ${
+            profileActive
+              ? "border-primary/30 bg-primary/10 ring-1 ring-primary/30"
+              : "border-border/40 bg-muted/40 hover:bg-muted/60"
+          }`}
+        >
+          <div
+            className={`w-7 h-7 flex items-center justify-center rounded-full transition-all duration-300 ${
+              profileActive
+                ? "bg-gradient-to-br from-primary to-primary/70 shadow-sm"
+                : "bg-gradient-to-br from-primary/20 to-primary/10"
+            }`}
+          >
+            <User
+              className={`size-4 ${
+                profileActive ? "text-primary-foreground" : "text-primary"
+              }`}
+            />
+          </div>
+        </Button>
+      )}
+    </div>
+  
 
-      <div
-        aria-pressed={profileActive}
-        className={`w-7 h-7 flex items-center justify-center rounded-full transition-all duration-300 ${
-          profileActive
-            ? "bg-gradient-to-br from-primary to-primary/80 shadow-md ring-1 ring-primary/30"
-            : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
-        }`}
-      >
-        <User className="size-4 text-primary" />
-      </div>
-    </Button>
-  )}
-</div>
 
 
 
