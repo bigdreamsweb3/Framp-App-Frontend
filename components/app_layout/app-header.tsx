@@ -180,49 +180,64 @@ export function AppHeader({
   {loading ? (
     <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
   ) : !user ? (
-    <Button
-      onClick={() => setShowAuthFlow(true)}
-      variant="soft_gradient"
-      size="sm"
-      className="rounded-xl relative overflow-hidden transition-all duration-300 ease-out group"
-      aria-label="Sign in or sign up"
-    >
-      <span className="relative z-10">Get Started</span>
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500" />
-    </Button>
-  ) : (
-    <Button
-      onClick={onProfileToggle}
-      variant="soft_gradient"
-      size="sm"
-      className="pr-1 pl-3 rounded-xl overflow-hidden relative flex items-center gap-2 transition-all duration-300 ease-out group"
-    >
-      <div className="flex-1 space-y-1">
-        <p className="text-xs text-muted-foreground dark:text-foreground font-bold mb-0 truncate max-w-[100px]">
-          {(() => {
-            const [local, domain] = user.email.split("@");
-            const maskedLocal =
-              local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
-            const maskedDomain = domain ? `***` : "";
-            return `${maskedLocal}@${maskedDomain}`;
-          })()}
-        </p>
-      </div>
-      <div
-        aria-pressed={profileActive}
-        onClick={onProfileToggle}
-        className={`relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full transition-all duration-500 ease-out group-hover:scale-105 ${
-          profileActive
-            ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
-            : "bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/10"
-        }`}
+    <div className="flex bg-muted/50 border border-border rounded-xl overflow-hidden backdrop-blur-sm relative w-[130px]">
+      {/* Animated highlight */}
+      <div className="absolute top-0 left-0 h-full w-full bg-gradient-to-r from-primary/15 to-primary/10 opacity-0 hover:opacity-100 transition-all duration-300 ease-in-out" />
+      <button
+        onClick={() => setShowAuthFlow(true)}
+        className="flex-1 py-2 text-sm md:text-[15px] font-semibold text-foreground relative z-10 hover:text-primary transition-all"
       >
-        <User className="text-primary transition-all duration-300 group-hover:scale-110" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent opacity-0 group-hover:opacity-100 blur-md transition-all duration-500" />
-      </div>
-    </Button>
+        Get Started
+      </button>
+    </div>
+  ) : (
+    <div className="flex bg-muted/50 border border-border rounded-xl overflow-hidden backdrop-blur-sm relative w-[190px]">
+      {/* Animated highlight */}
+      <div
+        className={`absolute top-0 left-0 h-full w-1/2 bg-gradient-to-r from-primary/15 to-primary/10 rounded-xl transition-transform duration-300 ease-in-out ${
+          profileActive ? "translate-x-full" : "translate-x-0"
+        }`}
+      />
+      <button
+        onClick={onProfileToggle}
+        className="flex items-center justify-between flex-1 py-2 px-3 text-sm md:text-[15px] font-medium text-foreground relative z-10 transition-all"
+      >
+        <div className="flex flex-col items-start leading-tight">
+          <span className="text-xs text-muted-foreground dark:text-foreground font-semibold">
+            {(() => {
+              const [local, domain] = user.email.split("@")
+              const maskedLocal =
+                local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`
+              const maskedDomain = domain ? `***` : ""
+              return `${maskedLocal}@${maskedDomain}`
+            })()}
+          </span>
+          <span
+            className={`text-[11px] font-normal ${
+              profileActive
+                ? "text-primary/90"
+                : "text-muted-foreground/70"
+            }`}
+          >
+            Profile
+          </span>
+        </div>
+
+        <div
+          aria-pressed={profileActive}
+          className={`flex items-center justify-center w-7 h-7 rounded-full transition-all duration-300 ease-out ${
+            profileActive
+              ? "bg-gradient-to-br from-primary to-primary/80 shadow-md ring-1 ring-primary/30"
+              : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
+          }`}
+        >
+          <User className="size-4 text-primary" />
+        </div>
+      </button>
+    </div>
   )}
 </div>
+
 
           </div>
 
