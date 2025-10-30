@@ -4,86 +4,97 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.99 0.001 280); 
+  /* --- LIGHT MODE --- */
+  --background: oklch(0.985 0.005 270); /* Soft neutral base */
+  --foreground: oklch(0.20 0.03 270); /* Crisp readable text */
 
-  /* --background: oklch(0.98 0.005 280); Slightly off-white with purple tint */
-  --foreground: oklch(0.2 0.02 280); /* Darker, more saturated text */
-  /* --card: oklch(0.98 0.005 280); Slightly off-white with purple tint */
+  --card: oklch(1 0.01 280);
+  --card-foreground: oklch(0.20 0.03 270);
 
-  --card: oklch(1 0.01 280); /* Pure white cards with subtle purple */
-  --card-foreground: oklch(0.2 0.02 280);
   --popover: oklch(1 0.01 280);
-  --popover-foreground: oklch(0.2 0.02 280);
-  --primary: oklch(0.5 0.2 280); /* More vibrant purple #7C5ABF
- */
+  --popover-foreground: oklch(0.20 0.03 270);
+
+  --primary: oklch(0.56 0.23 280); /* Vibrant purple (~#7A5CF1) */
   --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.88 0.04 280); /* More saturated secondary */
-  --secondary-foreground: oklch(0.2 0.02 280);
-  /* --muted: oklch(93.948% 0.01491 281.877 / 0.7); Better contrast for muted areas */
-  --muted: oklch(93.948% 0.04 280 / 0.7);
-  --muted-foreground: oklch(0.5 0.02 280); /* Darker muted text */
-  --accent: oklch(0.88 0.04 280);
-  --accent-foreground: oklch(0.2 0.02 280);
-  --destructive: oklch(0.577 0.245 27.325);
+
+  --secondary: oklch(0.90 0.04 270); /* Light lilac background */
+  --secondary-foreground: oklch(0.25 0.03 270);
+
+  --muted: oklch(0.93 0.02 270 / 0.8);
+  --muted-foreground: oklch(0.48 0.02 270);
+
+  --accent: oklch(0.92 0.06 280);
+  --accent-foreground: oklch(0.25 0.03 270);
+
+  --destructive: oklch(0.65 0.24 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.88 0.02 280); /* More visible borders */
-  --input: oklch(0.96 0.01 280); /* Distinct input background */
-  --ring: oklch(0.5 0.2 280);
-  --chart-1: oklch(0.5 0.2 280);
-  --chart-2: oklch(0.6 0.15 200);
-  --chart-3: oklch(0.65 0.18 160);
-  --chart-4: oklch(0.55 0.22 320);
-  --chart-5: oklch(0.577 0.245 27.325);
+
+  --border: oklch(0.88 0.015 270);
+  --input: oklch(0.96 0.01 270);
+  --ring: oklch(0.56 0.23 280);
+
+  --chart-1: oklch(0.56 0.23 280);
+  --chart-2: oklch(0.65 0.18 200);
+  --chart-3: oklch(0.67 0.20 160);
+  --chart-4: oklch(0.58 0.22 320);
+  --chart-5: oklch(0.65 0.22 40);
+
   --radius: 0.625rem;
-  --sidebar: oklch(1 0.03 280);
-   /* --sidebar: oklch(100% 0.00011 271.152); */
-  /* oklch(0.16 0.03 280) */
-  /* --sidebar: oklch(1 0.01 280); */
-  --sidebar-foreground: oklch(0.2 0.02 280);
-  --sidebar-primary: oklch(0.5 0.2 280);
+
+  --sidebar: oklch(0.98 0.01 280);
+  --sidebar-foreground: oklch(0.25 0.03 270);
+  --sidebar-primary: oklch(0.56 0.23 280);
   --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.88 0.04 280);
-  --sidebar-accent-foreground: oklch(0.2 0.02 280);
-  --sidebar-border: oklch(0.88 0.02 280);
-  --sidebar-ring: oklch(0.5 0.2 280);
+  --sidebar-accent: oklch(0.90 0.04 280);
+  --sidebar-accent-foreground: oklch(0.25 0.03 270);
+  --sidebar-border: oklch(0.88 0.015 270);
+  --sidebar-ring: oklch(0.56 0.23 280);
 }
 
+/* --- DARK MODE --- */
 .dark {
-  /* Increased contrast between background and cards in dark mode, added more saturation */
-  --background: oklch(0.12 0.025 280); /* Darker background with purple tint */
-  --foreground: oklch(0.95 0.01 280); /* Brighter text */
-  --card: oklch(0.18 0.03 280); /* Lighter cards for clear separation */
-  --card-foreground: oklch(0.95 0.01 280);
-  --popover: oklch(0.16 0.03 280);
-  --popover-foreground: oklch(0.95 0.01 280);
-  --primary: oklch(0.6 0.22 280); /* Brighter, more vibrant purple #6d65fe*/
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.25 0.04 280); /* More saturated secondary */
-  --secondary-foreground: oklch(0.95 0.01 280);
-  /* --muted: oklch(0.22 0.03 280); Better contrast for muted areas */
+  --background: oklch(0.14 0.025 280); /* Deep night with soft tint */
+  --foreground: oklch(0.96 0.015 270); /* Clear, legible white */
 
-  --muted: oklch(0.22 0.04 280 / 0.9);
-  --muted-foreground: oklch(0.65 0.02 280); /* More visible muted text */
-  --accent: oklch(0.25 0.04 280);
-  --accent-foreground: oklch(0.95 0.01 280);
-  --destructive: oklch(0.5 0.2 25);
+  --card: oklch(0.18 0.03 280);
+  --card-foreground: oklch(0.96 0.015 270);
+
+  --popover: oklch(0.17 0.03 280);
+  --popover-foreground: oklch(0.96 0.015 270);
+
+  --primary: oklch(0.68 0.25 280); /* Bright neon purple accent */
+  --primary-foreground: oklch(0.99 0 0);
+
+  --secondary: oklch(0.25 0.05 280);
+  --secondary-foreground: oklch(0.92 0.015 270);
+
+  --muted: oklch(0.22 0.04 280 / 0.8);
+  --muted-foreground: oklch(0.70 0.02 270);
+
+  --accent: oklch(0.28 0.06 280);
+  --accent-foreground: oklch(0.96 0.015 270);
+
+  --destructive: oklch(0.55 0.24 25);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(0.28 0.04 280); /* More visible borders */
-  --input: oklch(0.2 0.03 280); /* Distinct input background */
-  --ring: oklch(0.6 0.22 280);
-  --chart-1: oklch(0.6 0.22 280);
-  --chart-2: oklch(0.7 0.18 160);
-  --chart-3: oklch(0.75 0.2 80);
-  --chart-4: oklch(0.65 0.25 310);
-  --chart-5: oklch(0.65 0.25 20);
-  --sidebar: oklch(0.16 0.03 280);
-  --sidebar-foreground: oklch(0.95 0.01 280);
-  --sidebar-primary: oklch(0.6 0.22 280);
+
+  --border: oklch(0.26 0.04 280);
+  --input: oklch(0.20 0.03 280);
+  --ring: oklch(0.68 0.25 280);
+
+  --chart-1: oklch(0.68 0.25 280);
+  --chart-2: oklch(0.72 0.18 180);
+  --chart-3: oklch(0.75 0.20 80);
+  --chart-4: oklch(0.70 0.22 320);
+  --chart-5: oklch(0.68 0.25 30);
+
+  --sidebar: oklch(0.18 0.03 280);
+  --sidebar-foreground: oklch(0.95 0.015 270);
+  --sidebar-primary: oklch(0.68 0.25 280);
   --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.25 0.04 280);
-  --sidebar-accent-foreground: oklch(0.95 0.01 280);
-  --sidebar-border: oklch(0.28 0.04 280);
-  --sidebar-ring: oklch(0.6 0.22 280);
+  --sidebar-accent: oklch(0.25 0.05 280);
+  --sidebar-accent-foreground: oklch(0.95 0.015 270);
+  --sidebar-border: oklch(0.26 0.04 280);
+  --sidebar-ring: oklch(0.68 0.25 280);
 }
 
 @theme inline {
@@ -132,51 +143,42 @@
     @apply border-border outline-ring/50;
   }
 
-body {
-  @apply bg-background text-foreground;
-  background-color: var(--background);
-  background-image: url("/img/IMG_3234.PNG"); /* Light mode image */
-  background-size: cover; /* Fill entire screen */
-  background-repeat: no-repeat; /* Don't repeat */
-  background-position: center; /* Center the image */
-  background-attachment: fixed;
-  position: relative;
-}
+  body {
+    @apply bg-background text-foreground;
+    background-color: var(--background);
+    background-image: url("/img/IMG_3234.PNG");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+  }
 
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
-  background: linear-gradient(
-    to bottom,
-    var(--background) 0%,
-    transparent 100%
-  );
-  pointer-events: none;
-  z-index: 1;
-}
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(to bottom, var(--background) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
 
-/* Dark mode background */
-.dark body {
-  background-color: var(--background);
-  background-image: url("/img/IMG_3235.PNG"); /* Dark mode image */
-  background-size: cover; /* Fill entire screen */
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
-  position: relative;
-}
-
-
+  .dark body {
+    background-color: var(--background);
+    background-image: url("/img/IMG_3235.PNG");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+  }
 
   button:hover,
   [role="button"]:hover,
   a:hover {
     cursor: pointer;
   }
-
- 
-}
+  }
+    
