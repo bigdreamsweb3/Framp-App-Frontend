@@ -2,153 +2,98 @@
 
 import { useState, useEffect, useRef } from "react"
 import { Button } from "../ui/button"
-
 import Image from "next/image"
-import useAppLogo from "@/asssets/image"
-
+import Link from "next/link"
 import { useAuth } from "@/context/AuthContext"
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 import { User } from "lucide-react"
 import { ThemeToggle } from "../theme-toggle"
-import Link from "next/link"
 
+// ✅ Correct import path
+import useAppLogo from "@/assets/image"
 
 interface SideHeaderProps {
-    onAuthClick?: () => void
-    chatActive?: boolean
-    onChatToggle?: () => void
-    profileActive?: boolean
-    onProfileToggle?: () => void
+  onAuthClick?: () => void
+  chatActive?: boolean
+  onChatToggle?: () => void
+  profileActive?: boolean
+  onProfileToggle?: () => void
 }
 
-export function SideHeader({ onAuthClick, chatActive, onChatToggle, profileActive, onProfileToggle }: SideHeaderProps) {
-    const { user, loading, logout } = useAuth()
+export function SideHeader({
+  onAuthClick,
+  chatActive,
+  onChatToggle,
+  profileActive,
+  onProfileToggle,
+}: SideHeaderProps) {
+  const { user, loading, logout } = useAuth()
+  const [scrolled, setScrolled] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const headerRef = useRef<HTMLElement>(null)
+  const app_logo = useAppLogo()
+  const { setShowAuthFlow, handleLogOut } = useDynamicContext()
 
-    const [scrolled, setScrolled] = useState(false)
-    const [mobileOpen, setMobileOpen] = useState(false)
-    const headerRef = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 10)
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
-    const app_logo = useAppLogo()
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+      if (mobileOpen && headerRef.current && !headerRef.current.contains(event.target as Node)) {
+        setMobileOpen(false)
+      }
+    }
 
-    const { setShowAuthFlow, handleLogOut } = useDynamicContext()
+    if (mobileOpen) {
+      document.addEventListener("mousedown", handleClickOutside as EventListener)
+      document.addEventListener("touchstart", handleClickOutside as EventListener)
+    }
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setScrolled(window.scrollY > 10)
-        }
-        window.addEventListener("scroll", handleScroll)
-        return () => window.removeEventListener("scroll", handleScroll)
-    }, [])
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside as EventListener)
+      document.removeEventListener("touchstart", handleClickOutside as EventListener)
+    }
+  }, [mobileOpen])
 
-    // Close mobile menu when clicking outside
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-            if (mobileOpen && headerRef.current && !headerRef.current.contains(event.target as Node)) {
-                setMobileOpen(false)
-            }
-        }
+  useEffect(() => {
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && mobileOpen) setMobileOpen(false)
+    }
 
-        // Add event listener when mobile menu is open
-        if (mobileOpen) {
-            document.addEventListener("mousedown", handleClickOutside as EventListener)
-            document.addEventListener("touchstart", handleClickOutside as EventListener)
-        }
+    if (mobileOpen) document.addEventListener("keydown", handleEscapeKey)
+    return () => document.removeEventListener("keydown", handleEscapeKey)
+  }, [mobileOpen])
 
-        // Cleanup function
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside as EventListener)
-            document.removeEventListener("touchstart", handleClickOutside as EventListener)
-        }
-    }, [mobileOpen])
-
-    // Close mobile menu when pressing Escape key
-    useEffect(() => {
-        const handleEscapeKey = (event: KeyboardEvent) => {
-            if (event.key === "Escape" && mobileOpen) {
-                setMobileOpen(false)
-            }
-        }
-
-        if (mobileOpen) {
-            document.addEventListener("keydown", handleEscapeKey)
-        }
-
-        return () => {
-            document.removeEventListener("keydown", handleEscapeKey)
-        }
-    }, [mobileOpen])
-
-    return (
-        <header className={`h-14 relative z-10 border-b border-border/40`}>
-            <div className="w-full h-full px-4 flex items-center justify-between">
-                {/* Left side - Logo and menu button */}
-<div className="w-full h-full px-4 flex items-center justify-between">
-          {/* Left side - Logo + Mobile Menu */}
-<div className="flex items-center gap-2">
-<Link href="/">
-  <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5 mr-2 relative">
-    <div className="relative flex items-center h-9 w-9">
-      <Image
-        src={app_logo}
-        alt="App Logo"
-        className="w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
-      />
-      {/* BETA badge */}
-      <span className="absolute -top-1 -right-1 text-[0.5rem] font-bold px-[2px] py-[1px] bg-primary text-white rounded-sm rotate-12">
-        BETA
-      </span>
-    </div>
-  </div>
-</Link>
-</div>
-                {/* Desktop navigation */}
-                <div className="flex items-center gap-3">
-                    <ThemeToggle />
-
-                    {/* User Actions */}
-                    {/* {loading ? (
-                        <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
-                    ) : !user ? (
-                        <Button
-                            onClick={() => setShowAuthFlow(true)}
-                            variant="soft_gradient"
-                            size="sm"
-                            className="rounded-xl"
-                            aria-label="Sign in or sign up"
-                        >
-                            Get Started
-                        </Button>
-                    ) : (
-                        <Button
-                            onClick={onProfileToggle}
-                            variant="soft_gradient"
-                            size="sm"
-                            className="pr-0 rounded-xl overflow-hidden">
-                            <div className="flex-1 space-y-1">
-                                <p className="text-xs text-muted-foreground dark:text-foreground font-bold mb-0">
-                                    {(() => {
-                                        const [local, domain] = user.email.split("@");
-                                        const maskedLocal = local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
-                                        const maskedDomain = domain ? `***` : "";
-                                        return `${maskedLocal}@${maskedDomain}`;
-                                    })()}
-                                </p>
-                            </div>
-                            <div
-                                // variant="ghost"
-                                aria-pressed={profileActive}
-                                onClick={onProfileToggle}
-                                className={`relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full transition-all duration-300 ease-out transform hover:scale-105 ${profileActive
-                                    ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
-                                    : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
-                                    }`}
-                            >
-                                <User className="text-primary" />
-                            </div>
-                        </Button>
-                    )} */}
-                </div>
+  return (
+    <header ref={headerRef} className="h-14 relative z-10 border-b border-border/40">
+      <div className="w-full h-full px-4 flex items-center justify-between">
+        {/* ✅ Left side - Logo */}
+        <Link href="/">
+          <div className="flex items-center w-fit h-9 flex-shrink-0 pr-1.5 relative">
+            <div className="relative flex items-center h-9 w-9">
+              <Image
+                src={app_logo}
+                alt="App Logo"
+                width={36}
+                height={36}
+                className="object-contain rounded-md"
+              />
+              <span className="absolute -top-1 -right-1 text-[0.5rem] font-bold px-[2px] py-[1px] bg-primary text-white rounded-sm rotate-12">
+                BETA
+              </span>
             </div>
-        </header>
-    )
+          </div>
+        </Link>
+
+        {/* ✅ Right side - Theme & Actions */}
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          {/* You can re-enable your user buttons here later */}
+        </div>
+      </div>
+    </header>
+  )
 }
