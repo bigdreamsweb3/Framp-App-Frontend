@@ -19,7 +19,7 @@ export function ThemeToggle() {
         <Button
           variant="ghost"
           size="sm"
-          className="relative flex items-center justify-center w-9 h-9 rounded-2xl border border-border bg-muted/50 backdrop-blur-sm hover:bg-card/50 transition-all duration-300 hover:shadow-[0_0_8px_rgba(var(--primary-rgb),0.25)] group"
+          className="relative flex items-center justify-center w-8 h-8 rounded-2xl border border-border bg-muted/50 backdrop-blur-sm hover:bg-card/50 transition-all duration-300 hover:shadow-[0_0_8px_rgba(var(--primary-rgb),0.25)] group"
           aria-label="Toggle theme"
         >
           {/* Animated icons */}
