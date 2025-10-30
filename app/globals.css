@@ -135,9 +135,10 @@
 body {
   @apply bg-background text-foreground;
   background-color: var(--background);
-  background-image: url("/img/IMG_3234.PNG"); /* light mode image */
-  background-size: 200px 200px;
-  background-repeat: repeat;
+  background-image: url("/img/IMG_3234.PNG"); /* Light mode image */
+  background-size: cover; /* Fill entire screen */
+  background-repeat: no-repeat; /* Don't repeat */
+  background-position: center; /* Center the image */
   background-attachment: fixed;
   position: relative;
 }
@@ -161,12 +162,14 @@ body::before {
 /* Dark mode background */
 .dark body {
   background-color: var(--background);
-  background-image: url("/img/IMG_3235.PNG"); /* dark mode image */
-  background-size: 200px 200px;
-  background-repeat: repeat;
+  background-image: url("/img/IMG_3235.PNG"); /* Dark mode image */
+  background-size: cover; /* Fill entire screen */
+  background-repeat: no-repeat;
+  background-position: center;
   background-attachment: fixed;
   position: relative;
 }
+
 
 
   button:hover,
