@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { SideHeader } from "./side-header"
+import { BottomNav} from "./bottom-nav"
 import { Button } from "@/components/ui/button"
 import {
     ArrowUpCircle,
@@ -371,6 +372,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             </div >
 
             {/* Mobile Bottom Navigation */}
+            <BottomNav />
 
             <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-sidebar sm:hidden">
                 <div className="mb-[env(safe-area-inset-bottom)] flex h-14 items-center text-sm">
