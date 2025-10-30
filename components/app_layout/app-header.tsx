@@ -177,48 +177,53 @@ export function AppHeader({
 
             {/* User button or Sign in */}
             <div className="">
-              {loading ? (
-                <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
-              ) : !user ? (
-                <Button
-                  onClick={() => setShowAuthFlow(true)}
-                  variant="soft_gradient"
-                  size="sm"
-                  className="rounded-xl"
-                  aria-label="Sign in or sign up"
-                >
-                  Get Started
-                </Button>
-              ) : (
-                <Button
-                  onClick={onProfileToggle}
-                  variant="soft_gradient"
-                  size="sm"
-                  className="pr-0 rounded-xl overflow-hidden">
-                  <div className="flex-1 space-y-1">
-                    <p className="text-xs text-muted-foreground dark:text-foreground font-bold mb-0">
-                      {(() => {
-                        const [local, domain] = user.email.split("@");
-                        const maskedLocal = local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
-                        const maskedDomain = domain ? `***` : "";
-                        return `${maskedLocal}@${maskedDomain}`;
-                      })()}
-                    </p>
-                  </div>
-                  <div
-                    // variant="ghost"
-                    aria-pressed={profileActive}
-                    onClick={onProfileToggle}
-                    className={`relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full transition-all duration-300 ease-out transform hover:scale-105 ${profileActive
-                      ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
-                      : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
-                      }`}
-                  >
-                    <User className="text-primary" />
-                  </div>
-                </Button>
-              )}
-            </div>
+  {loading ? (
+    <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
+  ) : !user ? (
+    <Button
+      onClick={() => setShowAuthFlow(true)}
+      variant="soft_gradient"
+      size="sm"
+      className="rounded-xl relative overflow-hidden transition-all duration-300 ease-out group"
+      aria-label="Sign in or sign up"
+    >
+      <span className="relative z-10">Get Started</span>
+      <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 blur-xl transition-all duration-500" />
+    </Button>
+  ) : (
+    <Button
+      onClick={onProfileToggle}
+      variant="soft_gradient"
+      size="sm"
+      className="pr-1 pl-3 rounded-xl overflow-hidden relative flex items-center gap-2 transition-all duration-300 ease-out group"
+    >
+      <div className="flex-1 space-y-1">
+        <p className="text-xs text-muted-foreground dark:text-foreground font-bold mb-0 truncate max-w-[100px]">
+          {(() => {
+            const [local, domain] = user.email.split("@");
+            const maskedLocal =
+              local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
+            const maskedDomain = domain ? `***` : "";
+            return `${maskedLocal}@${maskedDomain}`;
+          })()}
+        </p>
+      </div>
+      <div
+        aria-pressed={profileActive}
+        onClick={onProfileToggle}
+        className={`relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full transition-all duration-500 ease-out group-hover:scale-105 ${
+          profileActive
+            ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
+            : "bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/10"
+        }`}
+      >
+        <User className="text-primary transition-all duration-300 group-hover:scale-110" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-transparent opacity-0 group-hover:opacity-100 blur-md transition-all duration-500" />
+      </div>
+    </Button>
+  )}
+</div>
+
           </div>
 
         </div>
