@@ -14,7 +14,8 @@
   --popover: oklch(1 0.01 280);
   --popover-foreground: oklch(0.20 0.03 270);
 
-  --primary: oklch(0.56 0.23 280); /* Vibrant purple (~#7A5CF1) */
+  --primary: oklch(0.5 0.2 280); /* More vibrant purple #7C5ABF
+ */
   --primary-foreground: oklch(0.99 0 0);
 
   --secondary: oklch(0.90 0.04 270); /* Light lilac background */
