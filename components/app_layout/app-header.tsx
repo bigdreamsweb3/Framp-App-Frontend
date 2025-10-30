@@ -83,20 +83,22 @@ export function AppHeader({
         <div className="w-full h-full px-4 flex items-center justify-between">
           {/* Left side - Logo + Mobile Menu */}
 <div className="flex items-center gap-2">
-  <Link href="/">
-    <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 mr-2 relative">
-      <div className="relative flex items-center justify-center h-9 w-9">
-        <Image
-          src={app_logo}
-          alt="App Logo"
-          className="w-9 h-9 object-contain rounded-md"
-        />
-        <span className="absolute text-[0.55rem] font-bold text-muted-foreground dark:text-foreground -rotate-90 origin-center">
-          BETA
-        </span>
-      </div>
+<Link href="/">
+  <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 mr-2 relative">
+    <div className="relative h-9 w-9">
+      <Image
+        src={app_logo}
+        alt="App Logo"
+        className="w-9 h-9 object-contain rounded-md"
+      />
+      {/* BETA badge */}
+      <span className="absolute -top-1 -right-1 text-[0.55rem] font-bold text-muted-foreground dark:text-foreground rotate-[-45deg]">
+        BETA
+      </span>
     </div>
-  </Link>
+  </div>
+</Link>
+
 
   <button
     className="md:hidden flex items-center justify-center h-9 w-9 rounded-lg text-muted-foreground dark:text-foreground transition hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
