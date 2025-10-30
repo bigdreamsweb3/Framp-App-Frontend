@@ -153,28 +153,30 @@
     background-position: center;
     background-attachment: fixed;
     position: relative;
-  }
+    /* Add these properties */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000;
+    will-change: background-image;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
 
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 120px;
-    background: linear-gradient(to bottom, var(--background) 0%, transparent 100%);
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .dark body {
+.dark body {
     background-color: var(--background);
     background-image: url("/img/IMG_3235.PNG");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     background-attachment: fixed;
-  }
+    /* Add the same properties */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000;
+    will-change: background-image;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
 
   button:hover,
   [role="button"]:hover,
