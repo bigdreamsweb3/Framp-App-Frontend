@@ -344,7 +344,7 @@ export function RampInterface({
       <Card className="w-full mx-auto max-w-md bg-card backdrop-blur-sm gap-3" data-tour="onramp-card">
         <CardHeader className="flex items-center justify-between">
           {/* Mode Switcher */}
-          <div className="relative w-full">
+  <div className="relative w-full">
   <div className="flex justify-start">
     <div className="flex bg-muted/50 border border-border rounded-xl overflow-hidden backdrop-blur-sm relative w-[180px]">
       {/* Animated highlight background */}
@@ -379,13 +379,6 @@ export function RampInterface({
       ))}
     </div>
   </div>
-</div>
-
-
-  <div
-    className={`absolute inset-0 rounded-xl border border-border transition-all duration-300 pointer-events-none
-      ${rampMode === "onramp" ? "shadow-[0_0_8px_rgba(var(--primary-rgb),0.3)]" : "shadow-[0_0_8px_rgba(var(--accent-rgb),0.3)]"}`}
-  />
 </div>
 
 
