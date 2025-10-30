@@ -178,7 +178,7 @@ export function AppHeader({
             {/* User button or Sign in */}
             <div className="">
   {loading ? (
-    <div className="h-[38px] px-4 w-[110px] bg-muted/50 border border-border rounded-xl backdrop-blur-sm animate-pulse" />
+    <div className="h-[24px] px-4 w-[110px] bg-muted/50 border border-border rounded-xl backdrop-blur-sm animate-pulse" />
   ) : !user ? (
     <Button
       onClick={() => setShowAuthFlow(true)}
@@ -200,6 +200,7 @@ export function AppHeader({
           : "hover:bg-card/50"
       }`}
     >
+      {/*
       <p className="text-xs text-muted-foreground dark:text-foreground font-semibold truncate max-w-[90px]">
         {(() => {
           const [local, domain] = user.email.split("@")
@@ -208,11 +209,11 @@ export function AppHeader({
           const maskedDomain = domain ? `***` : ""
           return `${maskedLocal}@${maskedDomain}`
         })()}
-      </p>
+      </p> */}
 
       <div
         aria-pressed={profileActive}
-        className={`w-7 h-7 flex items-center justify-center rounded-lg transition-all duration-300 ${
+        className={`w-7 h-7 flex items-center justify-center rounded-full transition-all duration-300 ${
           profileActive
             ? "bg-gradient-to-br from-primary to-primary/80 shadow-md ring-1 ring-primary/30"
             : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
