@@ -4,18 +4,11 @@ import { Inter } from 'next/font/google'
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
-import RootShell from "@/components/app_layout/root-shell";
+import RootShell from "@/components/app_layout/root-shell"
 import { Suspense } from "react"
 import "./globals.css"
-// import {
-//   DynamicContextProvider,
-//   DynamicWidget,
-// } from "@dynamic-labs/sdk-react-core";
-// import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 
-// import DynamicWrapper from "../lib/providers"
 import DynamicWrapper from "@/lib/providers"
-
 import { AuthProvider } from "@/context/AuthContext"
 import { UIProvider } from "@/context/UIContext"
 
@@ -32,15 +25,13 @@ export const metadata: Metadata = {
     shortcut: "/favicon-32x32.png",
     apple: "/apple-touch-icon.png",
   },
-  // viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
   other: {
-    // "theme-color": "#7C5ABF",
     "apple-mobile-web-app-status-bar-style": "light-content",
     "apple-mobile-web-app-capable": "yes",
   },
 }
 
-
+/* ---------- FONTS ---------- */
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' })
 
 export default function RootLayout({
@@ -50,17 +41,33 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      {/* ---- 100vh fallback for very old browsers (optional) ---- */}
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                function setVH(){document.documentElement.style.setProperty('--vh',window.innerHeight*.01+'px');}
+                setVH();
+                window.addEventListener('resize',setVH);
+                window.addEventListener('orientationchange',setVH);
+              })();
+            `,
+          }}
+        />
+      </head>
+
       <body className={`font-sans ${inter.variable} ${GeistMono.variable} antialiased`}>
         <DynamicWrapper>
           <UIProvider>
             <AuthProvider>
               <Suspense fallback={null}>
                 <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-
                   <RootShell>
-                    <div id="__next">{children}</div>
+                    {/* The actual page content */}
+                    {children}
                   </RootShell>
-
                 </ThemeProvider>
               </Suspense>
               <Analytics />
