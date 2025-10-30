@@ -194,7 +194,7 @@ export function AppHeader({
           onClick={onProfileToggle}
           variant="ghost"
           size="sm"
-          className={`flex items-center gap-2 pr-0 rounded-xl overflow-hidden transition-all duration-300 ease-out ${
+          className={`flex items-center gap-2 pr-0 rounded-xl border border-border overflow-hidden transition-all duration-300 ease-out ${
             profileActive
               ? "bg-muted/50 ring-1 ring-primary/20"
               : "bg-muted/40 hover:bg-muted/60"
