@@ -341,7 +341,7 @@ export function RampInterface({
 
   return (
     <>
-      <Card className="w-full mx-auto max-w-md bg-card backdrop-blur-sm gap-3" data-tour="onramp-card">
+      <Card className="w-full mx-auto max-w-md bg-card gap-3" data-tour="onramp-card">
         <CardHeader className="flex items-center justify-between">
           {/* Mode Switcher */}
 <div className="relative w-full">
