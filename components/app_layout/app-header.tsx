@@ -84,20 +84,21 @@ export function AppHeader({
           {/* Left side - Logo + Mobile Menu */}
 <div className="flex items-center gap-2">
 <Link href="/">
-  <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 mr-2 relative">
-    <div className="relative h-9 w-9">
+  <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5 mr-2 relative">
+    <div className="relative flex items-center h-9 w-9">
       <Image
         src={app_logo}
         alt="App Logo"
-        className="w-9 h-9 object-contain rounded-md"
+        className="w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
       />
       {/* BETA badge */}
-      <span className="absolute -top-1 -right-1 text-[0.55rem] font-bold text-muted-foreground dark:text-foreground rotate-[-45deg]">
+      <span className="absolute -top-1 -right-1 text-[0.5rem] font-bold px-[2px] py-[1px] bg-primary text-background rounded-sm rotate-12">
         BETA
       </span>
     </div>
   </div>
 </Link>
+
 
 
   <button
