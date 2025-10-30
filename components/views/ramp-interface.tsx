@@ -345,7 +345,7 @@ export function RampInterface({
         <CardHeader className="flex items-center justify-between">
           {/* Mode Switcher */}
           <div className="flex justify-center">
-            <div className="inline-flex rounded-lg p-2 gap-2.5">
+            <div className="inline-flex rounded-lg py-2 px-0 gap-2.5">
               <button
                 className={`px-4 py-1 text-sm rounded-md border border-border transition-colors duration-100 ${rampMode === "onramp"
                   ? "bg-gradient-to-br from-primary/20 to-primary/10 text-muted-foreground dark:text-foreground font-bold shadow-sm"
