@@ -1,6 +1,6 @@
 "use client";
 
-import { WalletView } from "@/components/views/selectors/wallet-selector-view";
+import { WalletView } from "@/components/views/wallet-view";
 import React, { useState } from "react";
 import type { WalletMethod } from "@/types/wallet";
 
@@ -20,9 +20,6 @@ export default function WalletPage() {
 				<p className="text-sm text-muted-foreground">Manage connected wallets and payment methods here.</p>
 			</div> */}
 			<WalletView
-				onWalletSelect={setSelectedWallet}
-				selectedWallet={selectedWallet}
-				onLogin={handleLogin}
 			// onClose={() => setActiveView("onramp")}
 			/>
 		</div>

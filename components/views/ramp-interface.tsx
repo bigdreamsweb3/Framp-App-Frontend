@@ -345,24 +345,24 @@ export function RampInterface({
         <CardHeader className="flex items-center justify-between">
           {/* Mode Switcher */}
           <div className="flex justify-center">
-            <div className="inline-flex rounded-lg bg-muted p-1">
+            <div className="inline-flex rounded-lg p-2 gap-2.5">
               <button
-                className={`px-4 py-1 text-sm font-medium rounded-md transition-colors ${rampMode === "onramp"
-                  ? "bg-card dark:bg-primary dark:text-[#edeef5] shadow-sm"
-                  : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+                className={`px-4 py-1 text-sm rounded-md border border-border transition-colors duration-100 ${rampMode === "onramp"
+                  ? "bg-gradient-to-br from-primary/20 to-primary/10 text-muted-foreground dark:text-foreground font-bold shadow-sm"
+                  : "font-medium text-sm text-muted-foreground hover:text-foreground hover:bg-transparent"
                   }`}
                 onClick={() => handleRampModeChange("onramp")}
               >
-                Buy
+                On-ramp (Buy)
               </button>
               <button
-                className={`px-4 py-1 text-sm font-medium rounded-md transition-colors ${rampMode === "offramp"
-                  ? "bg-card dark:bg-primary dark:text-foreground shadow-sm"
-                  : "text-muted-foreground hover:text-foreground hover:bg-transparent"
+                className={`px-4 py-1 text-sm rounded-md border border-border transition-colors duration-100 ${rampMode === "offramp"
+                  ? "bg-gradient-to-br from-primary/20 to-primary/10 text-muted-foreground dark:text-foreground font-bold shadow-sm"
+                  : "font-medium text-sm text-muted-foreground hover:text-foreground hover:bg-transparent"
                   }`}
                 onClick={() => handleRampModeChange("offramp")}
               >
-                Sell
+                Off-ramp (Sell)
               </button>
             </div>
           </div>

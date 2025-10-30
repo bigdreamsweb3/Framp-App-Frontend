@@ -16,7 +16,7 @@ const buttonVariants = cva(
           "border bg-background hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
-        soft_gradient: "bg-gradient-to-br from-primary/20 to-primary/10 text-primary font-bold border hover:border-primary",
+        soft_gradient: "bg-gradient-to-br from-primary/20 to-primary/10 text-muted-foreground dark:text-foreground font-bold border hover:border-primary",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

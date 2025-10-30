@@ -92,7 +92,7 @@ export function AppHeader({
                     className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
                   />
 
-                  <span className="text-[0.5rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
+                  <span className="text-[0.5rem] font-bold mx-auto text-muted-foreground dark:text-foreground transform -rotate-90 origin-center">
                     BETA
                   </span>
                 </div>
@@ -101,7 +101,7 @@ export function AppHeader({
 
 
             <button
-              className="md:hidden transition text-muted-foreground flex size-9 items-center justify-center rounded-lg hover:text-primary focus:outline-primary"
+              className="md:hidden transition text-muted-foreground dark:text-foreground flex size-9 items-center justify-center rounded-lg hover:text-primary focus:outline-primary"
               aria-label="Toggle navigation"
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((p) => !p)}
@@ -177,47 +177,47 @@ export function AppHeader({
 
             {/* User button or Sign in */}
             <div className="">
-            {loading ? (
-                        <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
-                    ) : !user ? (
-                        <Button
-                            onClick={() => setShowAuthFlow(true)}
-                            variant="soft_gradient"
-                            size="sm"
-                            className="rounded-xl"
-                            aria-label="Sign in or sign up"
-                        >
-                            Get Started
-                        </Button>
-                    ) : (
-                        <Button
-                            onClick={onProfileToggle}
-                            variant="soft_gradient"
-                            size="sm"
-                            className="pr-0 rounded-xl overflow-hidden">
-                            <div className="flex-1 space-y-1">
-                                <p className="text-xs text-muted-foreground dark:text-foreground font-bold mb-0">
-                                    {(() => {
-                                        const [local, domain] = user.email.split("@");
-                                        const maskedLocal = local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
-                                        const maskedDomain = domain ? `***` : "";
-                                        return `${maskedLocal}@${maskedDomain}`;
-                                    })()}
-                                </p>
-                            </div>
-                            <div
-                                // variant="ghost"
-                                aria-pressed={profileActive}
-                                onClick={onProfileToggle}
-                                className={`relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full transition-all duration-300 ease-out transform hover:scale-105 ${profileActive
-                                    ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
-                                    : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
-                                    }`}
-                            >
-                                <User className="text-primary" />
-                            </div>
-                        </Button>
-                    )}
+              {loading ? (
+                <div className="w-6 h-6 md:w-8 md:h-8 bg-muted animate-pulse rounded-xl" />
+              ) : !user ? (
+                <Button
+                  onClick={() => setShowAuthFlow(true)}
+                  variant="soft_gradient"
+                  size="sm"
+                  className="rounded-xl"
+                  aria-label="Sign in or sign up"
+                >
+                  Get Started
+                </Button>
+              ) : (
+                <Button
+                  onClick={onProfileToggle}
+                  variant="soft_gradient"
+                  size="sm"
+                  className="pr-0 rounded-xl overflow-hidden">
+                  <div className="flex-1 space-y-1">
+                    <p className="text-xs text-muted-foreground dark:text-foreground font-bold mb-0">
+                      {(() => {
+                        const [local, domain] = user.email.split("@");
+                        const maskedLocal = local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`;
+                        const maskedDomain = domain ? `***` : "";
+                        return `${maskedLocal}@${maskedDomain}`;
+                      })()}
+                    </p>
+                  </div>
+                  <div
+                    // variant="ghost"
+                    aria-pressed={profileActive}
+                    onClick={onProfileToggle}
+                    className={`relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full transition-all duration-300 ease-out transform hover:scale-105 ${profileActive
+                      ? "bg-gradient-to-br from-primary to-primary/80 shadow-lg ring-2 ring-primary/30"
+                      : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
+                      }`}
+                  >
+                    <User className="text-primary" />
+                  </div>
+                </Button>
+              )}
             </div>
           </div>
 
@@ -263,7 +263,7 @@ export function AppHeader({
 
                     <button
                       onClick={() => setMobileOpen(false)}
-                      className="transition text-muted-foreground flex size-8 items-center justify-center rounded-lg hover:text-primary focus:outline-primary"
+                      className="transition text-muted-foreground dark:text-foreground flex size-8 items-center justify-center rounded-lg hover:text-primary focus:outline-primary"
                     >
                       <X className="w-6 h-6" />
                     </button>

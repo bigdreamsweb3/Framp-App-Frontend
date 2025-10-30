@@ -50,7 +50,7 @@ export const BankAccountsView: React.FC<BankAccountsViewProps> = ({ onAccountSel
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold">Select bank account</h2>
-        {/* <Button variant="ghost" size="sm" onClick={onClose}>Close</Button> */}
+        <Button variant="ghost" size="sm" onClick={onClose}>Close</Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
