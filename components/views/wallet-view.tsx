@@ -154,7 +154,7 @@ export function WalletView({
 
   if (isLoading) {
     return (
-      <Card className="w-full max-w-4xl mx-auto bg-card dark:bg-card/50 backdrop-blur-sm">
+      <Card className="w-full max-w-4xl mx-auto bg-card">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center gap-2">
