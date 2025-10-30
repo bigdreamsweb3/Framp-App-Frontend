@@ -79,20 +79,21 @@ export function SideHeader({ onAuthClick, chatActive, onChatToggle, profileActiv
     return (
         <header className={`h-14 relative z-10 border-b border-border/40`}>
             <div className="w-full h-full px-4 flex items-center justify-between">
-                {/* Left side - Logo and menu button */}
-                <div className="flex items-center w-fit h-9 shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5">
-                    <div className="relative flex items-center h-9 w-9">
-                        <Image
-                            src={app_logo || "/placeholder.svg"}
-                            alt="App Logo"
-                            className="relative w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
-                        />
-
-                        <span className="text-[0.5rem] font-bold mx-auto text-muted-foreground transform -rotate-90 origin-center">
-                            BETA
-                        </span>
-                    </div>
-                </div>
+                {/* Left side - Logo and menu button */}<Link href="/">
+  <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5 mr-2 relative">
+    <div className="relative flex items-center h-9 w-9">
+      <Image
+        src={app_logo}
+        alt="App Logo"
+        className="w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
+      />
+      {/* BETA badge */}
+      <span className="absolute -top-1 -right-1 text-[0.5rem] font-bold px-[2px] py-[1px] bg-primary text-white rounded-sm rotate-12">
+        BETA
+      </span>
+    </div>
+  </div>
+</Link>
 
                 {/* Desktop navigation */}
                 <div className="flex items-center gap-3">
