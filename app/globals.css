@@ -146,76 +146,35 @@
 
   body {
     @apply bg-background text-foreground;
-}
-
-/* -------------------------------------------------
-   1. Full-height chain (html → body → #__next)
-   ------------------------------------------------- */
-html,
-body,
-#__next {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
-
-/* #__next is the container that Next.js fills */
-#__next {
-  position: relative;
-  min-height: 100vh;               /* fallback */
-  min-height: 100dvh;              /* modern browsers – real viewport height */
-  background-color: var(--background);
-}
-
-/* -------------------------------------------------
-   2. Fixed background layer (never moves)
-   ------------------------------------------------- */
-#__next::before {
-  content: "";
-  position: fixed;
-  inset: 0;                         /* top/right/bottom/left = 0 */
-  background-image: url("/img/IMG_3234.PNG");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-attachment: fixed;
-  z-index: -1;
-  pointer-events: none;
-  transition: background-image 0.3s ease;   /* smooth dark-mode swap */
-}
-
-/* -------------------------------------------------
-   3. Gradient overlay (your 120 px top fade)
-   ------------------------------------------------- */
-#__next::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 120px;
-  background: linear-gradient(to bottom, var(--background) 0%, transparent 100%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* -------------------------------------------------
-   4. Dark mode image swap
-   ------------------------------------------------- */
-.dark #__next::before {
-  background-image: url("/img/IMG_3235.PNG");
-}
-
-/* -------------------------------------------------
-   5. Optional CSS custom property fallback
-   ------------------------------------------------- */
-@supports not (height: 100dvh) {
-  #__next,
-  #__next::before {
-    height: calc(var(--vh, 1vh) * 100);
+    background-color: var(--background);
+    background-image: url("/img/IMG_3234.PNG");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
   }
-}
+
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(to bottom, var(--background) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .dark body {
+    background-color: var(--background);
+    background-image: url("/img/IMG_3235.PNG");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+  }
 
   button:hover,
   [role="button"]:hover,
