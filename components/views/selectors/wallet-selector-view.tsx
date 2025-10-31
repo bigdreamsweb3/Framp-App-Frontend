@@ -5,18 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Wallet, Plus, Trash2, Copy, Check } from "lucide-react";
+import { Wallet, Plus, Copy, Check, X, Loader2 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useUI } from "@/context/UIContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { WalletAPI } from "@/lib/api/wallets";
-
 import type { WalletMethod } from "@/types/wallet";
 
 interface WalletViewProps {
-  // isLoggedIn: boolean;
-  // onLogin: () => void;
-  onLogin?: () => void;
   onWalletSelect?: (wallet: WalletMethod) => void;
   selectedWallet?: WalletMethod | null;
   onClose?: () => void;
@@ -26,7 +22,6 @@ export function WalletView({
   onWalletSelect,
   selectedWallet,
   onClose,
-  onLogin,
 }: WalletViewProps) {
   const { user, loading: authLoading } = useAuth();
   const ui = useUI();
@@ -36,19 +31,14 @@ export function WalletView({
   const [isLoading, setIsLoading] = useState(true);
   const [newWallet, setNewWallet] = useState({ walletAddress: "", walletName: "" });
   const [error, setError] = useState<string | null>(null);
+  const [addingWallet, setAddingWallet] = useState(false);
 
-  // Fetch wallets from backend API when user is ready
   useEffect(() => {
-    // Wait for auth check to complete before making requests. This avoids
-    // calling protected endpoints while the auth state is still being determined
-    // (which can cause 401s and noisy console errors during initial load).
     if (authLoading) {
-      // keep the wallets loading indicator until auth resolved
       setIsLoading(true);
       return;
     }
 
-    // If no authenticated user, skip calling protected API and show prompt
     if (!user) {
       setIsLoading(false);
       setWallets([]);
@@ -64,10 +54,7 @@ export function WalletView({
         setWallets(data);
       } catch (err: any) {
         console.error("Failed to fetch wallets:", err);
-        // If the backend returned 401/unauthorized, show a friendly message.
-        if (err?.status === 401) {
-          setError("You must sign in to view wallets.");
-        } else if (err?.message?.toLowerCase?.().includes("unauthorized")) {
+        if (err?.status === 401 || err?.message?.toLowerCase?.().includes("unauthorized")) {
           setError("You must sign in to view wallets.");
         } else {
           setError("Failed to load wallets. Please try again.");
@@ -79,9 +66,8 @@ export function WalletView({
     };
 
     fetchWallets();
-  }, [user]);
+  }, [user, authLoading]);
 
-  // Add new wallet function - FIXED
   const handleAddWallet = async () => {
     if (!newWallet.walletAddress || !newWallet.walletName) {
       setError("Wallet address and name are required");
@@ -90,10 +76,11 @@ export function WalletView({
 
     try {
       setError(null);
+      setAddingWallet(true);
       const addedWallet = await WalletAPI.addWallet({
         name: newWallet.walletName,
         walletAddress: newWallet.walletAddress,
-        network: "solana", // or get from user input
+        network: "solana",
       });
 
       setWallets(prev => [...prev, addedWallet]);
@@ -102,37 +89,8 @@ export function WalletView({
     } catch (err) {
       console.error("Failed to add wallet:", err);
       setError("Failed to add wallet. Please try again.");
-    }
-  };
-
-  // FIXED: Use WalletAPI for delete operation
-  const handleRemoveWallet = async (id: string) => {
-    try {
-      await WalletAPI.deleteWallet(id);
-      setWallets(prev => {
-        const updated = prev.filter(w => w.id !== id);
-        // Handle default wallet logic if needed
-        if (updated.length > 0 && !updated.some(w => w.isDefault)) {
-          updated[0].isDefault = true;
-        }
-        return updated;
-      });
-      setError(null);
-    } catch (err) {
-      console.error("Failed to remove wallet:", err);
-      setError("Failed to remove wallet. Please try again.");
-    }
-  };
-
-  // FIXED: Use WalletAPI for set default operation
-  const handleSetDefault = async (id: string) => {
-    try {
-      await WalletAPI.setDefaultWallet(id);
-      setWallets(prev => prev.map(w => ({ ...w, isDefault: w.id === id })));
-      setError(null);
-    } catch (err) {
-      console.error("Failed to set default wallet:", err);
-      setError("Failed to set default wallet. Please try again.");
+    } finally {
+      setAddingWallet(false);
     }
   };
 
@@ -152,280 +110,246 @@ export function WalletView({
     onClose?.();
   };
 
-  if (isLoading) {
-    return (
-      <Card className="w-full max-w-4xl mx-auto bg-card dark:bg-card/50 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Wallet className="w-5 h-5 text-primary" />
-              <h2 className="text-lg font-semibold">Wallets</h2>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowAddWallet(true)}
-              className="h-8 w-8 p-0 rounded-xl bg-primary/10 hover:bg-primary/20"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-6">
-          <div className="animate-pulse space-y-4">
-            <div className="h-6 w-32 bg-muted/30 rounded" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-24 bg-muted/30 rounded-xl" />
-              ))}
-            </div>
+  // Loading Skeleton Component
+  const WalletSkeleton = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      {[...Array(6)].map((_, index) => (
+        <div
+          key={index}
+          className="p-4 rounded-xl border border-border/50 bg-muted/20 animate-pulse"
+        >
+          <div className="flex items-center gap-2 mb-3">
+            <div className="w-2 h-2 rounded-full bg-muted-foreground/30" />
+            <div className="h-4 bg-muted-foreground/20 rounded w-3/4" />
           </div>
-        </CardContent>
-      </Card>
-    );
-  }
+          <div className="flex items-center gap-2">
+            <div className="h-3 bg-muted-foreground/20 rounded w-1/2" />
+            <div className="w-6 h-6 rounded-lg bg-muted-foreground/20 ml-auto" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 
   return (
-    <Card className="w-full max-w-4xl mx-auto bg-card/50 backdrop-blur-sm">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Wallet className="w-5 h-5 text-primary" />
-            <h2 className="text-lg font-semibold">Wallets</h2>
+    <div className="fixed inset-0 z-999 flex items-center justify-center">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm" 
+        onClick={onClose}
+      />
+      
+      {/* Main Panel - Full screen on mobile, 70% width on desktop */}
+      <div className="relative bg-background w-full h-full md:h-auto md:max-h-[85vh] md:w-[70%] md:max-w-4xl md:rounded-2xl border-border/50 md:border shadow-2xl overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-border/50 bg-background/95 backdrop-blur-sm">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-primary/10">
+              <Wallet className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-xl font-semibold text-foreground">Select Wallet</h2>
+              <p className="text-sm text-muted-foreground">Choose receiving wallet</p>
+            </div>
           </div>
-          {user && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowAddWallet(true)}
-              className="h-8 w-8 p-0 rounded-xl bg-primary/10 hover:bg-primary/20"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
+          
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="h-8 w-8 rounded-lg hover:bg-muted"
+          >
+            <X className="w-4 h-4" />
+          </Button>
+        </div>
+
+        {/* Content */}
+        <div className="p-6 h-[calc(100%-80px)] md:max-h-[calc(85vh-80px)] overflow-y-auto">
+          {error && (
+            <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive text-sm">
+              {error}
+            </div>
           )}
-        </CardTitle>
-      </CardHeader>
 
-      <CardContent className="p-4 sm:p-6 relative">
-        {error && (
-          <div className="mb-4 p-3 bg-destructive/10 text-destructive text-sm rounded-xl">
-            {error}
-          </div>
-        )}
-
-        {!user ? (
-          <div className="text-center py-8">
-            <Wallet className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2 text-foreground">
-              Please sign in to manage wallets
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">Sign in to view and manage your saved wallets and payment methods.</p>
-            {/* <div className="flex items-center justify-center gap-2">
-              <Button onClick={() => { onLogin?.(); ui.openAuth?.(); }} className="rounded-xl bg-primary">
-                Sign in
-              </Button>
-            </div> */}
-          </div>
-        ) : showAddWallet ? (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h4 className="text-sm font-semibold">Add Wallet</h4>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowAddWallet(false)}
-                className="h-8 w-8 p-0 rounded-xl bg-primary/10 hover:bg-primary/20"
-              >
-                ×
-              </Button>
+          {!user ? (
+            <div className="flex flex-col items-center justify-center h-full py-8">
+              <Wallet className="h-16 w-16 text-muted-foreground mb-4 opacity-50" />
+              <h3 className="text-lg font-semibold mb-2 text-foreground">
+                Sign In Required
+              </h3>
+              <p className="text-sm text-muted-foreground text-center mb-4">
+                Please sign in to manage your wallets
+              </p>
             </div>
-
-            <div className="grid grid-cols-1 gap-4">
-              <div className="space-y-2">
-                <Label className="text-xs font-medium">Wallet Address</Label>
-                <Input
-                  placeholder="Enter Solana wallet address"
-                  value={newWallet.walletAddress}
-                  onChange={(e) =>
-                    setNewWallet({ ...newWallet, walletAddress: e.target.value })
-                  }
-                  className="rounded-xl text-sm font-mono"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label className="text-xs font-medium">Wallet Name</Label>
-                <Input
-                  placeholder="e.g., Main Wallet"
-                  value={newWallet.walletName}
-                  onChange={(e) =>
-                    setNewWallet({ ...newWallet, walletName: e.target.value })
-                  }
-                  className="rounded-xl text-sm"
-                />
-              </div>
-
-              <div className="flex gap-2 pt-3">
+          ) : showAddWallet ? (
+            <div className="space-y-6 max-w-md mx-auto">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Add New Wallet</h3>
                 <Button
-                  onClick={handleAddWallet} // FIXED: removed the function call
-                  className="flex-1 rounded-xl bg-primary text-sm"
-                >
-                  Add Wallet
-                </Button>
-                <Button
-                  variant="outline"
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setShowAddWallet(false)}
-                  className="flex-1 rounded-xl text-sm"
+                  className="h-8 w-8 rounded-lg"
+                  disabled={addingWallet}
                 >
-                  Cancel
+                  <X className="w-4 h-4" />
                 </Button>
               </div>
-            </div>
-          </div>
-        ) : wallets.length === 0 ? (
-          <div className="text-center py-8">
-            <Wallet className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <p className="text-sm text-muted-foreground mb-4">No wallets added</p>
-            <Button
-              onClick={() => setShowAddWallet(true)}
-              variant="outline"
-              className="rounded-xl bg-primary/10 hover:bg-primary/20 text-sm"
-            >
-              Add Wallet
-            </Button>
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {wallets.map((wallet) => (
-                <div key={wallet.id} onClick={() => handleSelect(wallet)} className={`p-3 rounded-xl border bg-card ${selectedWallet?.id === wallet.id ? "ring-2 ring-primary bg-primary/5" : ""
-                  }`}>
-                  <div className="flex items-center justify-between h-full max-h-16 ">
-                    <div>
-                      <div className="text-sm font-medium">{wallet.name}</div>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground relative">
-                        <span>{wallet.details}</span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-4 w-4 p-0"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCopy(wallet.walletAddress, wallet.id);
-                          }}
-                        >
-                          {copiedId === wallet.id ? (
-                            <Check className="h-3 w-3 text-green-600" />
-                          ) : (
-                            <Copy className="h-3 w-3" />
-                          )}
-                        </Button>
-                        <AnimatePresence>
-                          {copiedId === wallet.id && (
-                            <motion.span
-                              initial={{ opacity: 0, y: -10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -10 }}
-                              className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-primary/90 text-white text-xs px-2 py-1 rounded-xl"
-                            >
-                              Copied!
-                            </motion.span>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    </div>
-                    {/* <div className="flex items-center gap-2">
-                <Button size="sm" onClick={() => { onAccountSelect(a); onClose(); }}>
-                  Use
-                </Button>
-              </div> */}
-                  </div>
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Wallet Name</Label>
+                  <Input
+                    placeholder="e.g., Main Wallet"
+                    value={newWallet.walletName}
+                    onChange={(e) => setNewWallet({ ...newWallet, walletName: e.target.value })}
+                    className="rounded-lg"
+                    disabled={addingWallet}
+                  />
                 </div>
-              ))}
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium">Wallet Address</Label>
+                  <Input
+                    placeholder="Enter Solana wallet address"
+                    value={newWallet.walletAddress}
+                    onChange={(e) => setNewWallet({ ...newWallet, walletAddress: e.target.value })}
+                    className="rounded-lg font-mono text-sm"
+                    disabled={addingWallet}
+                  />
+                </div>
+
+                <div className="flex gap-3 pt-2">
+                  <Button
+                    onClick={handleAddWallet}
+                    disabled={addingWallet || !newWallet.walletAddress || !newWallet.walletName}
+                    className="flex-1 rounded-lg bg-primary hover:bg-primary/90"
+                  >
+                    {addingWallet ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Adding...
+                      </>
+                    ) : (
+                      "Add Wallet"
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowAddWallet(false)}
+                    disabled={addingWallet}
+                    className="flex-1 rounded-lg"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </div>
             </div>
-            {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              {wallets.map((wallet) => (
-                <div
-                  key={wallet.id}
-                  className={`p-4 bg-muted/30 rounded-xl border border-border/50 cursor-pointer hover:bg-muted/50 transition-all ${selectedWallet?.id === wallet.id ? "ring-2 ring-primary bg-primary/5" : ""
+          ) : isLoading ? (
+            <div className="space-y-6">
+              {/* Loading State */}
+              <div className="flex items-center justify-center py-8">
+                <div className="text-center">
+                  <div className="relative mb-4">
+                    <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2 text-foreground">Loading Wallets</h3>
+                  <p className="text-sm text-muted-foreground">Fetching your wallet information...</p>
+                </div>
+              </div>
+              <WalletSkeleton />
+            </div>
+          ) : wallets.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-full py-8">
+              <Wallet className="h-16 w-16 text-muted-foreground mb-4 opacity-50" />
+              <h3 className="text-lg font-semibold mb-2 text-foreground">
+                No Wallets Added
+              </h3>
+              <p className="text-sm text-muted-foreground text-center mb-6">
+                Get started by adding your first wallet
+              </p>
+              <Button
+                onClick={() => setShowAddWallet(true)}
+                className="rounded-lg bg-primary hover:bg-primary/90"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Your First Wallet
+              </Button>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {/* Wallets Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {wallets.map((wallet) => (
+                  <div
+                    key={wallet.id}
+                    onClick={() => handleSelect(wallet)}
+                    className={`p-4 rounded-xl border cursor-pointer transition-all ${
+                      selectedWallet?.id === wallet.id 
+                        ? "border-primary bg-primary/5 ring-2 ring-primary/20" 
+                        : "border-border/50 hover:border-border hover:bg-muted/50"
                     }`}
-                  onClick={() => handleSelect(wallet)}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-col">
-                      <span className="font-medium text-sm">{wallet.name}</span>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground relative">
-                        <span>{wallet.details}</span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-4 w-4 p-0"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCopy(wallet.walletAddress, wallet.id);
-                          }}
-                        >
-                          {copiedId === wallet.id ? (
-                            <Check className="h-3 w-3 text-green-600" />
-                          ) : (
-                            <Copy className="h-3 w-3" />
-                          )}
-                        </Button>
-                        <AnimatePresence>
-                          {copiedId === wallet.id && (
-                            <motion.span
-                              initial={{ opacity: 0, y: -10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -10 }}
-                              className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-primary/90 text-white text-xs px-2 py-1 rounded-xl"
-                            >
-                              Copied!
-                            </motion.span>
-                          )}
-                        </AnimatePresence>
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className={`w-2 h-2 rounded-full ${
+                            selectedWallet?.id === wallet.id ? "bg-primary" : "bg-muted-foreground/50"
+                          }`} />
+                          <span className="font-medium text-sm truncate">{wallet.name}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted-foreground font-mono truncate">
+                            {wallet.walletAddress.slice(0, 8)}...{wallet.walletAddress.slice(-8)}
+                          </span>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 rounded-lg hover:bg-muted"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleCopy(wallet.walletAddress, wallet.id);
+                            }}
+                          >
+                            {copiedId === wallet.id ? (
+                              <Check className="w-3 h-3 text-green-600" />
+                            ) : (
+                              <Copy className="w-3 h-3" />
+                            )}
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      {/* {!wallet.isDefault && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="text-xs px-2 py-1 h-auto rounded-xl bg-primary/10 hover:bg-primary/20"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleSetDefault(wallet.id);
-                          }}
+                    
+                    <AnimatePresence>
+                      {copiedId === wallet.id && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-foreground text-background text-xs px-2 py-1 rounded-lg"
                         >
-                          Set Default
-                        </Button>
+                          Copied!
+                        </motion.div>
                       )}
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRemoveWallet(wallet.id);
-                        }}
-                        className="h-6 w-6 p-0 text-destructive"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    </div>
+                    </AnimatePresence>
                   </div>
-                </div>
-              ))}
-            </div> */}
-            <Button
-              onClick={() => setShowAddWallet(true)}
-              variant="outline"
-              className="w-full mt-4 rounded-xl bg-primary/10 hover:bg-primary/20 text-sm"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Another Wallet
-            </Button>
-          </>
-        )}
-      </CardContent>
-    </Card>
+                ))}
+              </div>
+
+              {/* Add Wallet Button */}
+              <Button
+                onClick={() => setShowAddWallet(true)}
+                variant="outline"
+                className="w-full rounded-lg border-border/50 hover:bg-muted/50 py-3"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add New Wallet
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

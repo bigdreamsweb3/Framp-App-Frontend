@@ -1,5 +1,6 @@
 // lib/api/wallet-api.ts
 import { App_Api_Base_Url } from "@/app/appConfig";
+import { getAuthToken } from "@dynamic-labs/sdk-react-core";
 
 interface WalletMethod {
   id: string;
@@ -12,24 +13,20 @@ interface WalletMethod {
   network?: string;
 }
 
-const authToken =
-  typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
-
 // Helper function to get headers with authorization
 const getHeaders = (): HeadersInit => {
-  const accessToken = authToken;
+  // Use Dynamic Labs token instead of localStorage
+  const accessToken = getAuthToken();
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
     "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
-
-    Authorization: `Bearer ${accessToken}`,
   };
 
   // Add authorization header if accessToken exists
-  // if (accessToken) {
-  //   headers['Authorization'] = `Bearer ${accessToken}`;
-  // }
+  if (accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`;
+  }
 
   return headers;
 };
@@ -84,7 +81,7 @@ export class WalletAPI {
       method: "DELETE",
       headers: getHeaders(),
       credentials: "include",
-      body: JSON.stringify(id),
+      body: JSON.stringify({ id }),
     });
 
     if (!response.ok) {
@@ -96,11 +93,11 @@ export class WalletAPI {
   }
 
   static async setDefaultWallet(id: string): Promise<void> {
-    const response = await fetch(`${App_Api_Base_Url}/api/user/wallets/`, {
+    const response = await fetch(`${App_Api_Base_Url}/api/user/wallets/default`, {
       method: "PUT",
       headers: getHeaders(),
       credentials: "include",
-      body: JSON.stringify(id),
+      body: JSON.stringify({ id }),
     });
 
     if (!response.ok) {

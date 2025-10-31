@@ -8,9 +8,7 @@ import { useAuth } from "@/context/AuthContext"
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 import { User } from "lucide-react"
 import { ThemeToggle } from "../theme-toggle"
-
-// ✅ Correct import path
-import useAppLogo from "@/assets/image"
+import useAppLogo from "@/asssets/image"
 
 interface SideHeaderProps {
   onAuthClick?: () => void
@@ -90,7 +88,7 @@ export function SideHeader({
 
         {/* ✅ Right side - Theme & Actions */}
         <div className="flex items-center gap-3">
-          <ThemeToggle />
+          {/* <ThemeToggle /> */}
           {/* You can re-enable your user buttons here later */}
         </div>
       </div>

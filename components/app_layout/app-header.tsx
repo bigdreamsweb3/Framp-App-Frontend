@@ -82,34 +82,34 @@ export function AppHeader({
       >
         <div className="w-full h-full px-4 flex items-center justify-between">
           {/* Left side - Logo + Mobile Menu */}
-<div className="flex items-center gap-2">
-<Link href="/">
-  <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 pr-1.5 xs:pr-2 sm:pr-2.5 mr-2 relative">
-    <div className="relative flex items-center h-9 w-9">
-      <Image
-        src={app_logo}
-        alt="App Logo"
-        className="w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
-      />
-      {/* BETA badge */}
-      <span className="absolute -top-1 -right-1 text-[0.5rem] font-bold px-[2px] py-[1px] bg-primary text-white rounded-sm rotate-12">
-        BETA
-      </span>
-    </div>
-  </div>
-</Link>
+          <div className="flex items-center gap-2">
+            <Link href="/">
+              <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 relative">
+                <div className="relative flex items-center h-9 w-9">
+                  <Image
+                    src={app_logo}
+                    alt="App Logo"
+                    className="w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
+                  />
+                  {/* BETA badge */}
+                  <span className="absolute -top-1 -right-1 text-[0.5rem] font-bold px-[2px] py-[1px] bg-primary text-white rounded-sm rotate-12">
+                    BETA
+                  </span>
+                </div>
+              </div>
+            </Link>
 
 
 
-  <button
-    className="md:hidden flex items-center justify-center h-9 w-9 rounded-lg text-muted-foreground dark:text-foreground transition hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-    aria-label="Toggle navigation"
-    aria-expanded={mobileOpen}
-    onClick={() => setMobileOpen((prev) => !prev)}
-  >
-    {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-  </button>
-</div>
+            <button
+              className="md:hidden flex items-center justify-center h-9 w-9 rounded-lg text-muted-foreground dark:text-foreground transition hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+              aria-label="Toggle navigation"
+              aria-expanded={mobileOpen}
+              onClick={() => setMobileOpen((prev) => !prev)}
+            >
+              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
 
 
           {/* Right side actions */}
@@ -158,7 +158,7 @@ export function AppHeader({
               </Button>
             </div> */}
 
-            <div className="md:hidden my-auto flex items-center">
+            <div className="my-auto flex items-center">
               <ThemeToggle />
             </div>
             {/* 
@@ -179,59 +179,56 @@ export function AppHeader({
 
             {/* User button or Sign in */}
             <div className="flex items-center justify-end">
-      {loading ? (
-        <div className="w-[110px] h-6 md:h-8 bg-muted animate-pulse rounded-xl" />
-      ) : !user ? (
-        <Button
-          onClick={() => setShowAuthFlow(true)}
-          variant="soft_gradient"
-          size="sm"
-          className="rounded-xl"
-          aria-label="Sign in or sign up"
-        >
-          Get Started
-        </Button>
-      ) : (
-        <Button
-          onClick={onProfileToggle}
-          variant="ghost"
-          size="sm"
-          className={`flex items-center gap-2 pr-0 rounded-xl border border-border overflow-hidden transition-all duration-300 ease-out ${
-            profileActive
-              ? "bg-muted/50 ring-1 ring-primary/20"
-              : "bg-muted/40 hover:bg-muted/60"
-          }`}
-          aria-pressed={profileActive}
-        >
-          <div className="flex-1 pl-3 text-left">
-            <p className="text-xs text-muted-foreground dark:text-foreground font-bold truncate max-w-[90px]">
-              {(() => {
-                const [local, domain] = user.email.split("@")
-                const maskedLocal =
-                  local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`
-                const maskedDomain = domain ? `***` : ""
-                return `${maskedLocal}@${maskedDomain}`
-              })()}
-            </p>
-          </div>
+              {loading ? (
+                <div className="w-[110px] h-6 md:h-8 bg-muted animate-pulse rounded-xl" />
+              ) : !user ? (
+                <Button
+                  onClick={() => setShowAuthFlow(true)}
+                  variant="soft_gradient"
+                  size="sm"
+                  className="rounded-xl"
+                  aria-label="Sign in or sign up"
+                >
+                  Get Started
+                </Button>
+              ) : (
+                <Button
+                  onClick={onProfileToggle}
+                  variant="ghost"
+                  size="sm"
+                  className={`flex items-center gap-2 pr-0 rounded-xl border border-border overflow-hidden transition-all duration-300 ease-out ${profileActive
+                    ? "bg-muted/50 ring-1 ring-primary/20"
+                    : "bg-muted/40 hover:bg-muted/60"
+                    }`}
+                  aria-pressed={profileActive}
+                >
+                  <div className="flex-1 pl-3 text-left">
+                    <p className="text-xs text-muted-foreground dark:text-foreground font-bold truncate max-w-[90px]">
+                      {(() => {
+                        const [local, domain] = user.email.split("@")
+                        const maskedLocal =
+                          local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`
+                        const maskedDomain = domain ? `***` : ""
+                        return `${maskedLocal}@${maskedDomain}`
+                      })()}
+                    </p>
+                  </div>
 
-          <div
-            onClick={onProfileToggle}
-            className={`relative inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ease-out transform hover:scale-105 ${
-              profileActive
-                ? "bg-gradient-to-br from-primary to-primary/80 shadow-md ring-2 ring-primary/30"
-                : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
-            }`}
-          >
-            <User
-              className={`size-4 ${
-                profileActive ? "text-primary-foreground" : "text-primary"
-              }`}
-            />
-          </div>
-        </Button>
-      )}
-    </div>
+                  <div
+                    onClick={onProfileToggle}
+                    className={`relative inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ease-out transform hover:scale-105 ${profileActive
+                      ? "bg-gradient-to-br from-primary to-primary/80 shadow-md ring-2 ring-primary/30"
+                      : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
+                      }`}
+                  >
+                    <User
+                      className={`size-4 ${profileActive ? "text-primary-foreground" : "text-primary"
+                        }`}
+                    />
+                  </div>
+                </Button>
+              )}
+            </div>
 
 
           </div>
