@@ -344,40 +344,37 @@ export function RampInterface({
       <Card className="w-full mx-auto max-w-md bg-card gap-3" data-tour="onramp-card">
         <CardHeader className="flex items-center justify-between">
           {/* Mode Switcher */}
-<div className="relative w-full">
-  <div className="flex justify-start">
-    <div className="flex bg-muted/50 border border-border rounded-xl overflow-hidden backdrop-blur-sm relative w-[200px]">
-      {/* Animated highlight background */}
-      <div
-        className={`absolute top-0 left-0 h-full w-1/2 rounded-xl bg-gradient-to-r from-primary/15 to-primary/10 transition-transform duration-300 ease-in-out ${
-          rampMode === "offramp" ? "translate-x-full" : "translate-x-0"
-        }`}
-      />
+          <div className="relative w-full">
+            <div className="flex justify-start">
+              <div className="flex bg-muted/50 border border-border rounded-xl overflow-hidden backdrop-blur-sm relative w-[200px]">
+                {/* Animated highlight background */}
+                <div
+                  className={`absolute top-0 left-0 h-full w-1/2 rounded-xl bg-gradient-to-r from-primary/15 to-primary/10 transition-transform duration-300 ease-in-out ${rampMode === "offramp" ? "translate-x-full" : "translate-x-0"
+                    }`}
+                />
 
-      {(["onramp", "offramp"] as const).map((mode) => (
-        <button
-          key={mode}
-          onClick={() => handleRampModeChange(mode)}
-          className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-sm md:text-[15px] font-medium transition-all duration-300 relative z-10
-            ${
-              rampMode === mode
-                ? "text-foreground font-semibold"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-        >
-          <span>{mode === "onramp" ? "Onramp" : "Offramp"}</span>
-          <span
-            className={`text-xs font-normal ${
-              rampMode === mode ? "text-primary/90" : "text-muted-foreground/70"
-            }`}
-          >
-            {mode === "onramp" ? "Buy" : "Sell"}
-          </span>
-        </button>
-      ))}
-    </div>
-  </div>
-</div>
+                {(["onramp", "offramp"] as const).map((mode) => (
+                  <button
+                    key={mode}
+                    onClick={() => handleRampModeChange(mode)}
+                    className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-sm md:text-[15px] font-medium transition-all duration-300 relative z-10
+            ${rampMode === mode
+                        ? "text-foreground font-semibold"
+                        : "text-muted-foreground hover:text-foreground"
+                      }`}
+                  >
+                    <span>{mode === "onramp" ? "Onramp" : "Offramp"}</span>
+                    <span
+                      className={`text-xs font-normal ${rampMode === mode ? "text-primary/90" : "text-muted-foreground/70"
+                        }`}
+                    >
+                      {mode === "onramp" ? "Buy" : "Sell"}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
 
 
 
@@ -645,6 +642,7 @@ export function RampInterface({
                     className="h-9 px-3 rounded-xl"
                     onClick={() => setTransferMethod("connect_wallet")}
                     aria-label="Connect wallet transfer method"
+                    disabled
                   >
                     Connect wallet
                   </Button>
