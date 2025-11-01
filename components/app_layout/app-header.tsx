@@ -102,7 +102,7 @@ export function AppHeader({
 
 
             <button
-              className="md:hidden flex items-center justify-center h-9 w-9 rounded-lg text-muted-foreground dark:text-foreground transition hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+              className="md:hidden flex items-center justify-center h-9 w-9 rounded-lg text-muted-foreground dark:text-foreground transition hover:text-primary focus:outline-none"
               aria-label="Toggle navigation"
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((prev) => !prev)}

@@ -346,7 +346,7 @@ export function RampInterface({
           {/* Mode Switcher */}
           <div className="relative w-full">
             <div className="flex justify-start">
-              <div className="flex bg-muted/50 border border-border rounded-xl overflow-hidden backdrop-blur-sm relative w-[200px]">
+              <div className="flex bg-muted/50 border border-primary/20 rounded-xl overflow-hidden backdrop-blur-sm relative w-[200px]">
                 {/* Animated highlight background */}
                 <div
                   className={`absolute top-0 left-0 h-full w-1/2 rounded-xl bg-gradient-to-r from-primary/15 to-primary/10 transition-transform duration-300 ease-in-out ${rampMode === "offramp" ? "translate-x-full" : "translate-x-0"
@@ -389,11 +389,11 @@ export function RampInterface({
                       : "Convert crypto to NGN and withdraw to your chosen account"}
                 </CardDescription> */}
         </CardHeader>
-        <CardContent className="">
-          <div className="space-y-3">
+        <CardContent className="p-0">
+          <div className="px-4 space-y-4">
             {rampMode === "onramp" ? (
               <>
-                <div className="bg-muted/50 rounded-xl p-2 border border-border">
+                <div className="bg-muted/50 rounded-xl p-2 border border-primary/20">
                   <div className="text-xs md:text-sm font-medium text-muted-foreground mb-1">You pay</div>
                   <div className="flex items-center justify-between gap-1.5">
                     <input
@@ -502,7 +502,7 @@ export function RampInterface({
             {/* Exchange & Fee */}
             <div className="flex items-center justify-between px-3 py-2">
               {rateLoading && !exchangeRate ? (
-                <div className="text-sm text-muted-foreground">Loading rate...</div>
+                <div className="text-xs text-muted-foreground">Loading rate...</div>
               ) : (
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <span>
@@ -511,7 +511,7 @@ export function RampInterface({
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-3 w-3 p-0 hover:bg-muted/60 rounded-full"
+                    className="h-5 w-5 p-0 hover:bg-muted/60 rounded-full"
                     onClick={refreshRate}
                     aria-label="Refresh exchange rate"
                   >
@@ -663,10 +663,37 @@ export function RampInterface({
             )}
 
 
+            {/* Add this after the payment/transfer method sections and before the main button */}
+
+            {/* {fromAmount && Number(fromAmount) > 0 && (
+              <div className="bg-muted rounded-xl p-4 border border-border space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Amount</span>
+                  {rampMode === 'onramp'
+                    ? `₦${Number(fromAmount).toLocaleString()}`
+                    : `${Number(fromAmount).toLocaleString()} ${tokenSymbol}`
+                  }
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span className="text-muted-foreground">Platform fee</span>
+                  <span>₦{calculateFee(Number(fromAmount))}</span>
+                </div>
+                <div className="flex justify-between text-sm font-medium pt-2 border-t">
+                  <span>You'll {rampMode === 'onramp' ? 'receive' : 'get'}</span>
+                  <span>
+                    {rampMode === 'onramp'
+                      ? `${computedReceiving.toFixed(4)} ${tokenSymbol}`
+                      : `₦${computedReceiving.toLocaleString()}`
+                    }
+                  </span>
+                </div>
+              </div>
+            )} */}
+
             {/* Main action button */}
             {rampMode === "offramp" && effectiveTransferMethod === "connect_wallet" && fromAmount && Number(fromAmount) > 0 && !effectiveIsWalletConnected ? (
               <Button
-                className="w-full rounded-xl text-base font-semibold mt-0 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
+                className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
                 size="lg"
                 onClick={() => {
                   if (onConnectWallet) onConnectWallet()
@@ -683,7 +710,7 @@ export function RampInterface({
 
               return (
                 <Button
-                  className="w-full rounded-xl text-base font-semibold mt-0 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
+                  className="w-full h-12 rounded-xl text-base font-semibold mt-3 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
                   size="lg"
                   disabled={
                     !fromAmount ||

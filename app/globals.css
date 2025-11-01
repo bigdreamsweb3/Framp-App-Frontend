@@ -184,7 +184,7 @@
   /* 🌑 DARK MODE (desktop) */
   @media (min-width: 768px) {
     .dark body::before {
-      /* background-image: url("/img/IMG_3235-desktop.webp");  */
+      background-image: url("/img/IMG_3235-desktop.webp");
       /* dark desktop landscape */
     }
   }
