@@ -341,7 +341,7 @@ export function RampInterface({
 
   return (
     <>
-      <div className="flex flex-col gap-3 w-full">
+      <div className="flex flex-col justify-center items-center gap-3 w-full">
         <Card className="w-full mx-auto max-w-md bg-card gap-3" data-tour="onramp-card">
           <CardHeader className="flex items-center justify-between">
             {/* Mode Switcher */}
@@ -647,7 +647,7 @@ export function RampInterface({
                     </Button>
 
                     <Button
-                      variant={effectiveTransferMethod === "manual_transfer" ? "default" : "outline"}
+                      variant={effectiveTransferMethod === "manual_transfer" ? "soft_gradient" : "outline"}
                       size="sm"
                       className="h-9 px-3 rounded-xl"
                       onClick={() => setTransferMethod("manual_transfer")}
@@ -715,12 +715,12 @@ export function RampInterface({
             </div>
           </CardContent>
         </Card >
-        <div className="flex justify-center items-center gap-1">
+        <div className="flex justify-center items-center gap-1 w-fit text-xs px-2 py-1 rounded-lg border border-border bg-muted/50 backdrop-blur-lg text-foreground/90 dark:text-foreground">
           <img
             alt="Powered by Solana" loading="lazy" width="15" height="15"
             src={solana_logo} // className="w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
           />
-          <span className="text-[14px] font-medium leading-[17.5px] text-foreground">Powered by Solana</span>
+          <span className="text-[14px] font-medium leading-[17.5px]">Powered by Solana</span>
         </div>
       </div>
       {showSettings && <OnrampSettings onClose={() => setShowSettings(false)} />
