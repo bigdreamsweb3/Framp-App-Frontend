@@ -199,7 +199,7 @@
     }
   }
 
-/* ✨ The Glass Overlay (blends with theme) */
+/* ✨ The Glass Overlay (balanced transparency) */
 body::after {
   content: "";
   position: fixed;
@@ -207,21 +207,23 @@ body::after {
   background: 
     linear-gradient(
       to bottom,
-      color-mix(in oklch, var(--background) 85%, transparent),
-      color-mix(in oklch, var(--background) 92%, transparent)
+      color-mix(in oklch, var(--background) 70%, transparent),
+      color-mix(in oklch, var(--background) 85%, transparent)
     ),
     radial-gradient(
       circle at 30% 20%,
-      color-mix(in oklch, var(--primary) 10%, transparent) 0%,
-      transparent 80%
+      color-mix(in oklch, var(--primary) 6%, transparent) 0%,
+      transparent 70%
     );
-  backdrop-filter: saturate(150%) blur(18px);
-  -webkit-backdrop-filter: saturate(150%) blur(18px);
-  mix-blend-mode: overlay;
+  backdrop-filter: saturate(120%) blur(10px);
+  -webkit-backdrop-filter: saturate(120%) blur(10px);
+  mix-blend-mode: soft-light;
+  opacity: 0.85;
   pointer-events: none;
   z-index: -1;
-  transition: background 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
 }
+
 
 
   button:hover,
