@@ -15,7 +15,7 @@ export function BottomNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-sidebar/80 backdrop-blur-sm sm:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-30 bg-background/70 backdrop-blur-lg sm:hidden">
       <div className="mb-[env(safe-area-inset-bottom)] flex h-14 items-center text-sm">
         <div className="grid size-full grid-cols-4">
           {navItems.map((item) => {
@@ -26,11 +26,10 @@ export function BottomNav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 duration-100 transition ${
-                  isActive
-                    ? "text-primary dark:text-foreground font-bold text-base"
-                    : "text-muted-foreground font-medium text-sm hover:text-primary"
-                }`}
+                className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 duration-100 transition ${isActive
+                  ? "text-primary dark:text-foreground font-bold text-base"
+                  : "text-muted-foreground font-medium text-sm hover:text-primary"
+                  }`}
               >
                 <Icon className={`h-5 w-5 ${isActive ? "text-primary dark:text-foreground" : ""}`} />
                 <span className="w-full text-center">{item.label}</span>

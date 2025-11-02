@@ -346,7 +346,7 @@ export function RampInterface({
           {/* Mode Switcher */}
           <div className="relative w-full">
             <div className="flex justify-start">
-              <div className="flex bg-muted/50 border border-border rounded-xl overflow-hidden backdrop-blur-sm relative w-[200px]">
+              <div className="flex bg-muted/50 rounded-xl overflow-hidden backdrop-blur-sm relative w-[200px]">
                 {/* Animated highlight background */}
                 <div
                   className={`absolute top-0 left-0 h-full w-1/2 rounded-xl bg-gradient-to-r from-primary/15 to-primary/10 transition-transform duration-300 ease-in-out ${rampMode === "offramp" ? "translate-x-full" : "translate-x-0"
@@ -393,7 +393,7 @@ export function RampInterface({
           <div className="space-y-3">
             {rampMode === "onramp" ? (
               <>
-                <div className="bg-muted/50 rounded-xl p-2 border border-border">
+                <div className="bg-muted/50 rounded-xl p-2">
                   <div className="text-xs md:text-sm font-medium text-muted-foreground mb-1">You pay</div>
                   <div className="flex items-center justify-between gap-1.5">
                     <input
@@ -417,7 +417,7 @@ export function RampInterface({
                   </div>
                 </div>
 
-                <div className="bg-muted/50 rounded-xl p-2 border border-border">
+                <div className="bg-muted/50 rounded-xl p-2">
                   <div className="text-xs md:text-sm font-medium text-muted-foreground mb-1">You receive</div>
                   <div className="flex items-center justify-between gap-1.5">
                     <div className="text-2xl font-semibold text-foreground">
@@ -446,7 +446,7 @@ export function RampInterface({
               </>
             ) : (
               <>
-                <div className="bg-muted/50 rounded-xl p-2 border border-border">
+                <div className="bg-muted/50 rounded-xl p-2">
                   <div className="text-xs md:text-sm font-medium text-muted-foreground mb-1">You pay</div>
                   <div className="flex items-center justify-between gap-1.5">
                     <input
@@ -476,7 +476,7 @@ export function RampInterface({
                   </div>
                 </div>
 
-                <div className="bg-muted/50 rounded-xl p-2 border border-border">
+                <div className="bg-muted/50 rounded-xl p-2">
                   <div className="text-xs md:text-sm font-medium text-muted-foreground mb-1">You receive</div>
                   <div className="flex items-center justify-between gap-1.5">
                     <div className="text-2xl font-semibold text-foreground">
@@ -535,7 +535,7 @@ export function RampInterface({
             </div>
 
             {fromAmount && Number(fromAmount) > 0 && (
-              <div className="bg-muted/50 rounded-xl p-4 border border-border">
+              <div className="bg-muted/50 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className="text-xs text-muted-foreground">{rampMode === "onramp" ? "To:" : "To:"}</div>
@@ -604,7 +604,7 @@ export function RampInterface({
             )}
 
             {rampMode === "onramp" && fromAmount && Number(fromAmount) > 0 && selectedWallet && (
-              <div className="bg-muted/50 rounded-xl p-4 border border-border no-scrollbar">
+              <div className="bg-muted/50 rounded-xl p-4 no-scrollbar">
                 <style jsx>{`
                     .no-scrollbar::-webkit-scrollbar {
                       display: none;
@@ -627,7 +627,7 @@ export function RampInterface({
             )}
 
             {rampMode === "offramp" && fromAmount && Number(fromAmount) > 0 && selectedWallet && (
-              <div className="bg-muted/50 rounded-xl p-4 border border-border">
+              <div className="bg-muted/50 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="text-xs text-muted-foreground">Transfer Method</div>
                   {!effectiveTransferMethod && <AlertCircle className="h-4 w-4 text-orange-600" />}
