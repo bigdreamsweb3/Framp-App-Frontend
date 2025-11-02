@@ -177,6 +177,23 @@
     transform: translateZ(0);
   }
 
+  /* ✨ The Glass Overlay (blends with theme) */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: 
+    linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--background) 85%, transparent),
+      color-mix(in oklch, var(--background) 92%, transparent)
+    );
+  backdrop-filter: saturate(150%) blur(18px);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: -1;
+}
+
   /* 🖥️ LIGHT MODE: larger screens use a wider image */
   @media (min-width: 768px) {
     body::before {
