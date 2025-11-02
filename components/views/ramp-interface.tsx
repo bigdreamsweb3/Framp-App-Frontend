@@ -649,7 +649,7 @@ export function RampInterface({
                     <Button
                       variant={effectiveTransferMethod === "manual_transfer" ? "soft_gradient" : "outline"}
                       size="sm"
-                      className="h-9 px-3 rounded-xl"
+                      className={`h-9 px-3 rounded-xl ${effectiveTransferMethod === "manual_transfer" ? "border border-primary" : ""}`}
                       onClick={() => setTransferMethod("manual_transfer")}
                       aria-label="Manual transfer method"
                     >
