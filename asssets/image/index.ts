@@ -6,7 +6,9 @@ import logo_dark from "../../public/img/logo_dark.webp";
 
 const logoNGN = "/img/NGN.svg";
 
-export { logoNGN };
+const solana_logo = "/icons/sol.svg";
+
+export { logoNGN, solana_logo };
 
 const useAppLogo = () => {
   const [appLogo, setAppLogo] = useState(logo_light);
