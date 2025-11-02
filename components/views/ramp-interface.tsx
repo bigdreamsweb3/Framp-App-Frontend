@@ -715,13 +715,14 @@ export function RampInterface({
             </div>
           </CardContent>
         </Card >
-        <div className="flex justify-center items-center gap-1 w-fit text-xs px-2 py-1 rounded-lg border border-border bg-gradient-to-r from-primary/15 to-primary/10 backdrop-blur-lg text-foreground/90 dark:text-foreground">
-          <img
-            alt="Powered by Solana" loading="lazy" width="15" height="15"
-            src={solana_logo} // className="w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
-          />
-          <span className="text-[14px] font-medium leading-[17.5px]">Powered by Solana</span>
-        </div>
+        {/* Powered by Solana Badge */}
+<div className="relative w-full flex justify-center mt-[-10px] z-10">
+  <div className="flex items-center gap-2 bg-gradient-to-r from-[#9945FF]/90 via-[#14F195]/90 to-[#00FFA3]/90 text-white text-[11px] font-medium px-3 py-1.5 rounded-full shadow-[0_2px_6px_rgba(0,0,0,0.15)] border border-white/20 backdrop-blur-sm">
+    <img src={solana_logo} alt="Solana" className="w-3.5 h-3.5" />
+    <span className="tracking-wide">Powered by Solana</span>
+  </div>
+</div>
+
       </div>
       {showSettings && <OnrampSettings onClose={() => setShowSettings(false)} />
       }
