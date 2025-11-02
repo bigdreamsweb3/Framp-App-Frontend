@@ -715,7 +715,7 @@ export function RampInterface({
             </div>
           </CardContent>
         </Card >
-        <div className="flex justify-center items-center gap-1 w-fit text-xs px-2 py-1 rounded-lg border border-border bg-muted/50 backdrop-blur-lg text-foreground/90 dark:text-foreground">
+        <div className="flex justify-center items-center gap-1 w-fit text-xs px-2 py-1 rounded-lg border border-border bg-gradient-to-r from-primary/15 to-primary/10 backdrop-blur-lg text-foreground/90 dark:text-foreground">
           <img
             alt="Powered by Solana" loading="lazy" width="15" height="15"
             src={solana_logo} // className="w-[max(1.4rem,5vh)] h-auto object-contain rounded-md"
