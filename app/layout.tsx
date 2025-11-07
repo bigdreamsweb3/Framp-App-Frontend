@@ -2,7 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from 'next/font/google'
 import { GeistMono } from "geist/font/mono"
-import { Analytics } from "@vercel/analytics/next"
+// import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import RootShell from "@/components/app_layout/root-shell"
 import { Suspense } from "react"
@@ -70,7 +70,6 @@ export default function RootLayout({
                   </RootShell>
                 </ThemeProvider>
               </Suspense>
-              <Analytics />
             </AuthProvider>
           </UIProvider>
         </DynamicWrapper>
