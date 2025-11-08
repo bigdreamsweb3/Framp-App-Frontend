@@ -77,7 +77,7 @@ export function AppHeader({
       <header
         ref={headerRef}
         className={`sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out
-          ${scrolled || mobileOpen ? "" : "shadow bg-sidebar/10 backdrop-blur-lg"}
+          ${scrolled || mobileOpen ? "" : "bg-transparent"}
           ${scrolled ? "shadow-md bg-sidebar/10 backdrop-blur-lg" : ""}`}
       >
         <div className="w-full h-full px-4 flex items-center justify-between">
