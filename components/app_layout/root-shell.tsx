@@ -120,7 +120,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
     return (
         <div className="min-h-screen bg-transparent text-foreground">
             {/* Desktop Layout */}
-            <div className="hidden md:flex h-screen overflow-hidden">
+            <div className="hidden md:flex h-screen">
                 {/* Sidebar */}
                 <div className="flex flex-col justify-between h-full w-80 border-r bg-sidebar relative z-10">
                     <div>
@@ -279,7 +279,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto relative">
                     <AppHeader
                         onAuthClick={handleShowAuth}
                         chatActive={showChat}
@@ -306,7 +306,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                 />
                 <ScrollMaskLayout topMaskHeight={56}>
 
-                <div className="flex-1 overflow-auto container mx-auto px-4 py-6 pb-28">
+                <div className="container mx-auto px-6 py-6 mt-[56px] max-w-7xl">
                     {/* <div className="flex flex-row items-center gap-2 h-fit mb-6">
                          <Tabs
                             value={activeView}
