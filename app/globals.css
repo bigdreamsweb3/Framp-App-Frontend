@@ -206,16 +206,16 @@ body::after {
   background: 
     linear-gradient(
       to bottom,
-      color-mix(in oklch, var(--background) 60%, transparent),
-      color-mix(in oklch, var(--background) 75%, transparent)
+      color-mix(in oklch, var(--background) 55%, transparent),
+      color-mix(in oklch, var(--background) 70%, transparent)
     ),
     radial-gradient(
       circle at 30% 20%,
       color-mix(in oklch, var(--primary) 6%, transparent) 0%,
-      transparent 60%
+      transparent 55%
     );
-  backdrop-filter: saturate(100%) blur(10px);
-  -webkit-backdrop-filter: saturate(100%) blur(10px);
+  backdrop-filter: saturate(95%) blur(10px);
+  -webkit-backdrop-filter: saturate(95%) blur(10px);
   mix-blend-mode: soft-light;
   opacity: 0.85;
   pointer-events: none;
