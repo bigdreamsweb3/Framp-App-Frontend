@@ -219,7 +219,7 @@ body::after {
   transition: all 0.4s ease-in-out;
 } 
 
-  /* --- HEADER ZONE (PLAIN CUT EFFECT) --- */
+/* --- HEADER ZONE (plain background cut) --- */
 .header-slot {
   position: fixed;
   top: 0;
@@ -228,9 +228,17 @@ body::after {
   height: 56px;
   z-index: 20;
   pointer-events: none;
-  /* same color as page background to create a “cut” illusion */
-  background: var(--background);
-  transition: background 0.3s ease;
+
+  /* Only show the fixed background image behind, hide scrolling content */
+  background: inherit;       /* uses same bg as body for seamless cut */
+}
+
+/* --- CONTENT UNDER HEADER --- */
+main {
+  position: relative;
+  z-index: 1;
+  margin-top: 56px; /* ensures header area stays above content */
+  background: transparent;
 }
 
 /* When scrolled, you can optionally tint or darken slightly */
@@ -238,13 +246,6 @@ body::after {
   background: var(--background);
 }
 
-/* --- CONTENT UNDER HEADER --- */
-main {
-  position: relative;
-  z-index: 1;
-  margin-top: 56px; /* ensures the header area stays above content */
-  background: transparent;
-}
 
 /* Smooth scrolling feel */
 html {
