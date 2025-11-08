@@ -120,7 +120,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
     return (
         <div className="min-h-screen bg-transparent text-foreground">
             {/* Desktop Layout */}
-            <div className="hidden md:flex h-screen">
+            <div className="hidden md:flex h-screen overflow-hidden">
                 {/* Sidebar */}
                 <div className="flex flex-col justify-between h-full w-80 border-r bg-sidebar relative z-10">
                     <div>
