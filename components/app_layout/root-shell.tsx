@@ -296,7 +296,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* Mobile Layout */}
-            <div className="md:hidden min-h-screen ">
+            <div className="md:hidden flex flex-col h-screen">
                 <AppHeader
                     onAuthClick={handleShowAuth}
                     chatActive={false}
@@ -306,7 +306,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                 />
                 <ScrollMaskLayout topMaskHeight={56}>
 
-                <div className="container mx-auto px-4 py-6 max-w-md pb-28 mt-[6px]">
+                <div className="flex-1 overflow-auto container mx-auto px-4 py-6 pb-28">
                     {/* <div className="flex flex-row items-center gap-2 h-fit mb-6">
                          <Tabs
                             value={activeView}
