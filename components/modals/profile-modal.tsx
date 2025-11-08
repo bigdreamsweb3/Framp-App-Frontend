@@ -109,8 +109,8 @@ export function Profile({ onQuickAction }: ProfileProps) {
         <div className="mb-6 flex items-center justify-between">
           
           <h1 className="text-lg font-semibold">My Profile</h1>
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <X className="size-5" onClick={handleBack} />
+          <Button variant="ghost" size="icon" onClick={handleBack} className="rounded-full">
+            <X className="size-5" />
           </Button>
         </div>
 
