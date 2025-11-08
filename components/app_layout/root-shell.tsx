@@ -145,7 +145,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                         } hover:text-primary transition`}>
                                         <Button
                                             className="w-full justify-start gap-2 rounded-md"
-                                            variant={pathname === "/" ? "default" : "ghost"}
+                                            variant={pathname === "/" ? "soft_gradient" : "ghost"}
                                         >
                                             <ArrowUpCircle className="h-4 w-4" />
                                             Gate
