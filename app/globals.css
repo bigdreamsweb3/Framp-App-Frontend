@@ -5,12 +5,11 @@
 
 :root {
   /* --- LIGHT MODE --- */
-  --background: oklch(1 0.01 280); /* Soft neutral base */
+  --background: oklch(0.985 0.005 270); /* Soft neutral base */
   /* --background: oklch(0.985 0.005 270);  */
   --foreground: oklch(0.2 0.03 270); /* Crisp readable text */
-
-  --card: oklch(0.985 0.005 270);
-  /* --card: oklch(1 0.01 280); */
+  
+  --card: oklch(1 0.01 280);
   --card-foreground: oklch(0.2 0.03 270);
 
   --popover: oklch(1 0.01 280);
