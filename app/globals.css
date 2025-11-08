@@ -9,7 +9,7 @@
   /* --background: oklch(0.985 0.005 270);  */
   --foreground: oklch(0.2 0.03 270); /* Crisp readable text */
   
-  --card: oklch(1 0.01 280);
+  --card: oklch(0.98 0.01 280);
   --card-foreground: oklch(0.2 0.03 270);
 
   --popover: oklch(1 0.01 280);
@@ -43,7 +43,7 @@
 
   --radius: 0.625rem;
 
-  --sidebar: oklch(0.98 0.01 280);
+  --sidebar: oklch(1 0.01 280);
   --sidebar-foreground: oklch(0.25 0.03 270);
   --sidebar-primary: oklch(0.56 0.23 280);
   --sidebar-primary-foreground: oklch(0.99 0 0);
@@ -62,7 +62,7 @@
   /* --background: oklch(0.14 0.025 280); Deep night with soft tint */
   --foreground: oklch(0.96 0.015 270); /* Clear, legible white */
 
-  --card: oklch(0.14 0.025 280);
+  --card: oklch(0.16 0.03 280);
   /* --card: oklch(); */
   --card-foreground: oklch(0.96 0.015 270);
 
@@ -94,7 +94,7 @@
   --chart-4: oklch(0.7 0.22 320);
   --chart-5: oklch(0.68 0.25 30);
 
-  --sidebar: oklch(0.16 0.03 280);
+  --sidebar: oklch(0.14 0.025 280);
   --sidebar-foreground: oklch(0.95 0.015 270);
   --sidebar-primary: oklch(0.68 0.25 280);
   --sidebar-primary-foreground: oklch(0.99 0 0);
