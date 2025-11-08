@@ -5,10 +5,10 @@
 
 :root {
   /* --- LIGHT MODE --- */
-  --background: oklch(0.985 0.006 280); /* Gentle neutral canvas */
+  --background: oklch(0.97 0.01 280); /* Gentle neutral canvas */
   --foreground: oklch(0.22 0.03 270); /* Crisp dark gray-blue text */
 
-  --card: oklch(0.97 0.01 280); /* Slight contrast for depth */
+  --card: oklch(0.985 0.006 280); /* Slight contrast for depth */
   --card-foreground: oklch(0.22 0.03 270);
 
   --popover: oklch(1 0.01 280);
