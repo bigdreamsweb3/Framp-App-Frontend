@@ -1,8 +1,9 @@
 import type React from "react"
+import { useEffect } from "react";
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { GeistMono } from "geist/font/mono"
-import { Analytics } from "@vercel/analytics/next"
+// import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
 import RootShell from "@/components/app_layout/root-shell"
 import { Suspense } from "react"
@@ -82,6 +83,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 56) document.body.classList.add("scrolled");
+      else document.body.classList.remove("scrolled");
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  
   return (
     <html
       lang="en"
@@ -116,6 +126,9 @@ export default function RootLayout({
       </head>
 
       <body className="antialiased bg-background text-foreground font-sans min-h-[100dvh]">
+        {/* --- Static 56px top cut zone --- */}
+        <div className="header-slot"></div>
+        
         <DynamicWrapper>
           <UIProvider>
             <AuthProvider>
@@ -128,7 +141,7 @@ export default function RootLayout({
                 <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-sm text-muted-foreground">Loading FRAMP...</div>}>
                   <RootShell>{children}</RootShell>
                 </Suspense>
-                <Analytics />
+              
               </ThemeProvider>
             </AuthProvider>
           </UIProvider>
