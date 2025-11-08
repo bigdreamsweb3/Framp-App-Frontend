@@ -184,7 +184,7 @@ export function AppHeader({
               ) : !user ? (
                 <Button
                   onClick={() => setShowAuthFlow(true)}
-                  variant="soft_gradient"
+                  variant="outline_soft_gradient"
                   size="sm"
                   className="rounded-xl"
                   aria-label="Sign in or sign up"
@@ -194,7 +194,7 @@ export function AppHeader({
               ) : (
                 <Button
                   onClick={onProfileToggle}
-                  variant="soft_gradient"
+                  variant="outline_soft_gradient"
                   size="sm"
                   className={`flex items-center gap-2 px-0 md:px-0 lg:px-0 rounded-xl border border-border overflow-hidden transition-all duration-300 ease-out ${profileActive
                     ? " ring-1 ring-primary/20"
