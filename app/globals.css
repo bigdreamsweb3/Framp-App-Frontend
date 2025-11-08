@@ -217,7 +217,7 @@ body::after {
   backdrop-filter: saturate(95%) blur(10px);
   -webkit-backdrop-filter: saturate(95%) blur(10px);
   mix-blend-mode: soft-light;
-  opacity: 0.85;
+  opacity: 0.95;
   pointer-events: none;
   z-index: -1;
   transition: all 0.4s ease-in-out;
