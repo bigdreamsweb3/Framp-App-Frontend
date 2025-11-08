@@ -157,20 +157,20 @@
 
   /* Fixed background layer */
   /* 🌞 LIGHT MODE (default) */
-  body::before {
+ /* body::before {
     content: "";
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-image: url("/img/IMG_3234.webp"); /* mobile portrait */
+    background-image: url("/img/IMG_3234.webp"); 
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     z-index: -1;
     transform: translateZ(0);
-  }
+  } */
 
 
   /* 🖥️ LIGHT MODE: larger screens use a wider image */
@@ -183,19 +183,19 @@
 
   /* 🌑 DARK MODE (mobile) */
   .dark body::before {
-    background-image: url("/img/IMG_3235.webp"); /* dark mobile portrait */
+  /*  background-image: url("/img/IMG_3235.webp"); /* dark mobile portrait */
   }
 
   /* 🌑 DARK MODE (desktop) */
   @media (min-width: 768px) {
     .dark body::before {
-      background-image: url("/img/IMG_3235-desktop.webp");
+    /*  background-image: url("/img/IMG_3235-desktop.webp");
       /* dark desktop landscape */
     }
   }
 
 /* The Glass Overlay (balanced transparency) */
-body::after {
+/* body::after {
   content: "";
   position: fixed;
   inset: 0;
@@ -217,7 +217,7 @@ body::after {
   pointer-events: none;
   z-index: -1;
   transition: all 0.4s ease-in-out;
-}
+} */
 
 
 
