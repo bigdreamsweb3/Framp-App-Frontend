@@ -219,7 +219,7 @@ body::after {
   transition: all 0.4s ease-in-out;
 } 
 
-/* --- HEADER ZONE (transparent cut effect) --- */
+/* Header always visible over background */
 .header-slot {
   position: fixed;
   top: 0;
@@ -227,40 +227,23 @@ body::after {
   width: 100%;
   height: 56px;
   z-index: 20;
-  pointer-events: none;
-
-  /* Transparent to see background */
   background: transparent;
-
-  /* Ensures any content behind this div is hidden */
-  backdrop-filter: none; 
-  isolation: isolate; /* create a new stacking context */
-  -webkit-mask-image: linear-gradient(black, black); /* mask everything except background */
-  mask-image: linear-gradient(black, black);
+  pointer-events: none;
 }
 
-  .scrolled .header-slot {
-  backdrop-filter: brightness(0.95);
-  transition: backdrop-filter 0.3s ease;
-  }
-  
-
-/* --- CONTENT UNDER HEADER --- */
+/* Main content: push down so nothing scrolls under header */
 main {
   position: relative;
   z-index: 1;
-  margin-top: 56px; /* ensures header area stays above content */
+  padding-top: 56px; /* leave space for header */
   background: transparent;
 }
-
 
 /* Smooth scrolling feel */
 html {
   scroll-behavior: smooth;
   }
   
-
-
   button:hover,
   [role="button"]:hover,
   a:hover {
