@@ -11,7 +11,7 @@ import { UIProvider } from "@/context/UIContext";
 import { ThemeProvider } from "@/components/theme-provider";
 import RootShell from "@/components/app_layout/root-shell";
 
-import HeaderSlot from "@/components/app_layout/HeaderSlotClient"; // <-- client component
+import HeaderSlotClient from "@/components/app_layout/HeaderSlotClient";
 
 /* ------------------ FONT CONFIG ------------------ */
 const inter = Inter({
@@ -23,8 +23,7 @@ const inter = Inter({
 /* ------------------ APP METADATA ------------------ */
 export const metadata: Metadata = {
   title: { default: "FRAMP - Your Gateway To Do More With Crypto", template: "%s | FRAMP" },
-  description:
-    "FRAMP lets you on-ramp/off-ramp to crypto, pay bills, and explore the Solana ecosystem seamlessly in one place.",
+  description: "FRAMP lets you on-ramp/off-ramp to crypto, pay bills, and explore the Solana ecosystem seamlessly in one place.",
   generator: "github.com/bigdreamsweb3",
   authors: [{ name: "Agbaka Daniel Ugonna Matthew", url: "https://framp.xyz" }],
   icons: { icon: "/favicon.ico" },
@@ -38,18 +37,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </head>
       <body className="antialiased bg-background text-foreground font-sans min-h-[100dvh]">
-        {/* --- Static 56px top cut zone handled in client --- */}
-        <HeaderSlot />
+        {/* Header “cut” that shows only background image */}
+        <HeaderSlotClient />
 
         <DynamicWrapper>
           <UIProvider>
             <AuthProvider>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-              >
+              <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
                 <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-sm text-muted-foreground">Loading FRAMP...</div>}>
                   <RootShell>{children}</RootShell>
                 </Suspense>
