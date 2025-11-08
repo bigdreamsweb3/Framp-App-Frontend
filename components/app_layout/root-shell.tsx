@@ -27,6 +27,7 @@ import { useUI } from "@/context/UIContext"
 import { useAuth } from "@/context/AuthContext"
 import { ThemeToggle } from "../theme-toggle"
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
+import ScrollHideLayout from "@/components/app_layout/ScrollHideLayout"
 
 export default function RootShell({ children }: { children: React.ReactNode }) {
     const [showAuth, setShowAuth] = useState(false)
@@ -286,9 +287,11 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                         profileActive={showProfile}
                         onProfileToggle={() => setShowProfile((p) => !p)}
                     />
+                    <ScrollHideLayout>
                     <div className="container mx-auto px-6 py-6 mt-[35px] max-w-7xl">
                         {children}
                     </div>
+                    </ScrollHideLayout>
                 </div>
             </div>
 
@@ -301,8 +304,9 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                     profileActive={showProfile}
                     onProfileToggle={() => setShowProfile((p) => !p)}
                 />
+                <ScrollHideLayout>
 
-                <main className="container mx-auto px-4 py-6 max-w-md pb-28 mt-[6px]">
+                <div className="container mx-auto px-4 py-6 max-w-md pb-28 mt-[6px]">
                     {/* <div className="flex flex-row items-center gap-2 h-fit mb-6">
                          <Tabs
                             value={activeView}
@@ -365,8 +369,8 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
                     </div> */}
                     {children}
-                </main>
-
+                </div>
+            </ScrollHideLayout>
 
 
             </div >
