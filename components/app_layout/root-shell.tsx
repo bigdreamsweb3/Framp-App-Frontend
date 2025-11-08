@@ -158,7 +158,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                         } hover:text-primary transition`}>
                                         <Button
                                             className="w-full justify-start gap-2 rounded-md"
-                                            variant={pathname === "/bills" ? "default" : "ghost"}
+                                            variant={pathname === "/bills" ? "soft_gradient" : "ghost"}
                                         >
                                             <QrCode className="h-4 w-4" />
                                             Bills
@@ -182,7 +182,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                         } hover:text-primary transition`}>
                                         <Button
                                             className="w-full justify-start gap-2 rounded-md"
-                                            variant={pathname?.startsWith("/wallets") ? "default" : "ghost"} // Fixed: changed from "/wallet" to "/wallets"
+                                            variant={pathname?.startsWith("/wallets") ? "soft_gradient" : "ghost"} // Fixed: changed from "/wallet" to "/wallets"
                                         >
                                             <WalletIcon className="h-4 w-4" />
                                             Wallets
@@ -195,7 +195,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                         } hover:text-primary transition`}>
                                         <Button
                                             className="w-full justify-start gap-2 rounded-md"
-                                            variant={pathname === "/activity" ? "default" : "ghost"}
+                                            variant={pathname === "/activity" ? "soft_gradient" : "ghost"}
                                         >
                                             <ActivityIcon className="h-4 w-4" />
                                             Activity
