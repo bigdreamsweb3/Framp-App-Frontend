@@ -219,7 +219,7 @@ body::after {
   transition: all 0.4s ease-in-out;
 } 
 
-/* --- HEADER ZONE (plain background cut) --- */
+/* --- HEADER ZONE (transparent cut effect) --- */
 .header-slot {
   position: fixed;
   top: 0;
@@ -229,9 +229,21 @@ body::after {
   z-index: 20;
   pointer-events: none;
 
-  /* Only show the fixed background image behind, hide scrolling content */
-  background: inherit;       /* uses same bg as body for seamless cut */
+  /* Transparent to see background */
+  background: transparent;
+
+  /* Ensures any content behind this div is hidden */
+  backdrop-filter: none; 
+  isolation: isolate; /* create a new stacking context */
+  -webkit-mask-image: linear-gradient(black, black); /* mask everything except background */
+  mask-image: linear-gradient(black, black);
 }
+
+  .scrolled .header-slot {
+  backdrop-filter: brightness(0.95);
+  transition: backdrop-filter 0.3s ease;
+  }
+  
 
 /* --- CONTENT UNDER HEADER --- */
 main {
