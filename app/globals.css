@@ -241,11 +241,6 @@ main {
   background: transparent;
 }
 
-/* When scrolled, you can optionally tint or darken slightly */
-.scrolled .header-slot {
-  background: var(--background);
-}
-
 
 /* Smooth scrolling feel */
 html {
