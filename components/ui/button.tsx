@@ -21,7 +21,7 @@ const buttonVariants = cva(
         soft_gradient:
           "bg-gradient-to-r from-primary/15 to-primary/10 text-foreground/90 dark:text-foreground font-semibold hover:from-primary/25 hover:to-primary/15 hover:border-primary/50 shadow-[0_0_10px_rgba(var(--primary-rgb),0.15)] hover:shadow-[0_0_14px_rgba(var(--primary-rgb),0.25)]",
         outline_soft_gradient:
-          "border border-primary bg-gradient-to-r from-primary/15 to-primary/10 text-foreground/90 dark:text-foreground font-semibold hover:from-primary/25 hover:to-primary/15 hover:border-primary/50 shadow-[0_0_10px_rgba(var(--primary-rgb),0.15)] hover:shadow-[0_0_14px_rgba(var(--primary-rgb),0.25)]",
+          "border border-primary/20 bg-gradient-to-r from-primary/15 to-primary/10 text-foreground/90 dark:text-foreground font-semibold hover:from-primary/25 hover:to-primary/15 hover:border-primary/50 shadow-[0_0_10px_rgba(var(--primary-rgb),0.15)] hover:shadow-[0_0_14px_rgba(var(--primary-rgb),0.25)]",
         link:
           "text-primary underline-offset-4 hover:underline",
       },
