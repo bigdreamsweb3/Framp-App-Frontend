@@ -303,7 +303,7 @@ export function AppHeader({
                     } hover:text-primary transition`}
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/" ? "soft_gradient" : "ghost"}
                   >
                     <ArrowUpCircle size={18} /> Gate
                   </Button>
@@ -314,7 +314,7 @@ export function AppHeader({
                     } hover:text-primary transition`}
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/bills" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/bills" ? "soft_gradient" : "ghost"}
                   >
                     <QrCode size={18} /> Bills
                   </Button>
@@ -325,7 +325,7 @@ export function AppHeader({
                     } hover:text-primary transition`}
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/wallets" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/wallets" ? "soft_gradient" : "ghost"}
                   >
                     <Wallet size={18} /> Wallets
                   </Button>
@@ -336,7 +336,7 @@ export function AppHeader({
                     } hover:text-primary transition`}
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/activity" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/activity" ? "soft_gradient" : "ghost"}
                   >
                     <ActivityIcon size={18} /> Activity
                   </Button>
