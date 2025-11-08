@@ -16,10 +16,10 @@ export default function ScrollMaskLayout({
       {/* Scrollable area */}
       <div
         className="overflow-y-auto w-full h-full"
-        style={{
-          paddingTop: topMaskHeight,
-          WebkitOverflowScrolling: "touch", // smooth scrolling on iOS
-        }}
+        // style={{
+        //   paddingTop: topMaskHeight,
+        //   WebkitOverflowScrolling: "touch", // smooth scrolling on iOS
+        // }}
       >
         {children}
       </div>

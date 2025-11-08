@@ -279,7 +279,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 max-h-screen">
                     <AppHeader
                         onAuthClick={handleShowAuth}
                         chatActive={showChat}
@@ -296,7 +296,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             </div>
 
             {/* Mobile Layout */}
-            <div className="md:hidden flex flex-col h-screen">
+            <div className="md:hidden flex flex-col h-screen max-h-screen">
                 <AppHeader
                     onAuthClick={handleShowAuth}
                     chatActive={false}

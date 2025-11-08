@@ -58,7 +58,7 @@
   --background: oklch(0.17 0.03 280); /* Deep muted violet-gray */
   --foreground: oklch(0.96 0.015 270); /* Soft white for eyes */
 
-  --card: oklch(0.19 0.035 280); 
+  --card: oklch(0.19 0.035 280);
   --card-foreground: oklch(0.96 0.015 270);
 
   --popover: oklch(0.18 0.035 280);
@@ -100,7 +100,6 @@
 
   --bottom-nav: oklch(0.26 0.05 280);
 }
-
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
@@ -157,14 +156,14 @@
 
   /* Fixed background layer */
   /* 🌞 LIGHT MODE (default) */
- body::before {
+  body::before {
     content: "";
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-image: url("/img/IMG_3234.webp"); 
+    background-image: url("/img/IMG_3234.webp");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -172,11 +171,10 @@
     transform: translateZ(0);
   }
 
-
   /* 🖥️ LIGHT MODE: larger screens use a wider image */
   @media (min-width: 768px) {
     body::before {
-     /*  background-image: url("/img/IMG_3234-desktop.PNG");  *\
+      /*  background-image: url("/img/IMG_3234-desktop.PNG");  *\
       /* desktop landscape */
     }
   }
@@ -189,59 +187,33 @@
   /* 🌑 DARK MODE (desktop) */
   @media (min-width: 768px) {
     .dark body::before {
-    background-image: url("/img/IMG_3235-desktop.webp");
+      background-image: url("/img/IMG_3235-desktop.webp");
       /* dark desktop landscape */
     }
   }
 
-/* The Glass Overlay (balanced transparency) */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: 
-    linear-gradient(
-      to bottom,
-      color-mix(in oklch, var(--background) 55%, transparent),
-      color-mix(in oklch, var(--background) 70%, transparent)
-    ),
-    radial-gradient(
-      circle at 30% 20%,
-      color-mix(in oklch, var(--primary) 6%, transparent) 0%,
-      transparent 55%
-    );
-  backdrop-filter: saturate(95%) blur(10px);
-  -webkit-backdrop-filter: saturate(95%) blur(10px);
-  mix-blend-mode: soft-light;
-  opacity: 0.70;
-  pointer-events: none;
-  z-index: -1;
-  transition: all 0.4s ease-in-out;
-} 
-
-/* Header always visible over background */
-.header-slot {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 56px;
-  z-index: 20;
-  background: transparent;
-  pointer-events: none;
-}
-
-/* Main content: push down so nothing scrolls under header */
-main {
-  position: relative;
-  z-index: 1;
-  padding-top: 56px; /* leave space for header */
-  background: transparent;
-}
-
-/* Smooth scrolling feel */
-html {
-  scroll-behavior: smooth;
+  /* The Glass Overlay (balanced transparency) */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--background) 55%, transparent),
+        color-mix(in oklch, var(--background) 70%, transparent)
+      ),
+      radial-gradient(
+        circle at 30% 20%,
+        color-mix(in oklch, var(--primary) 6%, transparent) 0%,
+        transparent 55%
+      );
+    backdrop-filter: saturate(95%) blur(10px);
+    -webkit-backdrop-filter: saturate(95%) blur(10px);
+    mix-blend-mode: soft-light;
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: -1;
+    transition: all 0.4s ease-in-out;
   }
   
   button:hover,
