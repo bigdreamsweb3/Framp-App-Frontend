@@ -11,7 +11,7 @@ import { UIProvider } from "@/context/UIContext";
 import { ThemeProvider } from "@/components/theme-provider";
 import RootShell from "@/components/app_layout/root-shell";
 
-import HeaderSlot from "@/components/layout/HeaderSlotClient"; // <-- client component
+import HeaderSlot from "@/components/app_layout/HeaderSlotClient"; // <-- client component
 
 /* ------------------ FONT CONFIG ------------------ */
 const inter = Inter({
