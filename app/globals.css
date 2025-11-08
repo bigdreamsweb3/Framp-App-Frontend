@@ -59,11 +59,11 @@
 
 /* --- DARK MODE --- */
 .dark {
-  --background: oklch(0.14 0.025 280); /* Deep night with soft tint */
+  --background: oklch(0.18 0.03 280); /* Deep night with soft tint */
   /* --background: oklch(0.14 0.025 280); Deep night with soft tint */
   --foreground: oklch(0.96 0.015 270); /* Clear, legible white */
 
-  --card: oklch(0.18 0.03 280);
+  --card: oklch(0.14 0.025 280);
   /* --card: oklch(); */
   --card-foreground: oklch(0.96 0.015 270);
 
