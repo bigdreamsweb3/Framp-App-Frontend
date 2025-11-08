@@ -78,7 +78,7 @@ export function AppHeader({
         ref={headerRef}
         className={`sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out
           ${scrolled || mobileOpen ? "" : "bg-transparent"}
-          ${scrolled ? "shadow-md bg-sidebar/10 backdrop-blur-lg" : ""}`}
+          ${scrolled ? "" : ""}`}
       >
         <div className="w-full h-full px-4 flex items-center justify-between">
           {/* Left side - Logo + Mobile Menu */}
@@ -184,7 +184,7 @@ export function AppHeader({
               ) : !user ? (
                 <Button
                   onClick={() => setShowAuthFlow(true)}
-                  variant="soft_gradient"
+                  variant="outline_soft_gradient"
                   size="sm"
                   className="rounded-xl"
                   aria-label="Sign in or sign up"
@@ -194,16 +194,16 @@ export function AppHeader({
               ) : (
                 <Button
                   onClick={onProfileToggle}
-                  variant="ghost"
+                  variant="outline_soft_gradient"
                   size="sm"
                   className={`flex items-center gap-2 px-0 md:px-0 lg:px-0 rounded-xl border border-border overflow-hidden transition-all duration-300 ease-out ${profileActive
-                    ? "bg-muted/50 ring-1 ring-primary/20"
-                    : "bg-muted/40 hover:bg-muted/60"
+                    ? " ring-1 ring-primary/20"
+                    : ""
                     }`}
                   aria-pressed={profileActive}
                 >
                   <div className="flex-1 pl-3 text-left">
-                    <p className="text-xs text-muted-foreground dark:text-foreground font-bold truncate max-w-[90px]">
+                    <p className="text-muted-foreground dark:text-foreground font-bold truncate max-w-[90px]">
                       {(() => {
                         const [local, domain] = user.email.split("@")
                         const maskedLocal =
@@ -252,7 +252,7 @@ export function AppHeader({
               onClick={(e) => e.stopPropagation()} // prevent inside click from closing
             >
               {/* 🟢 Mobile Menu Header (Smart + Minimal Polished) */}
-              <div className="flex items-center justify-between border-b border-border/40 px-4">
+              <div className="flex items-center justify-between px-4">
 
                 <div className="sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out flex items-center justify-between">
                   {/* Left side - Logo and menu button */}
@@ -303,7 +303,7 @@ export function AppHeader({
                     } hover:text-primary transition`}
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/" ? "soft_gradient" : "ghost"}
                   >
                     <ArrowUpCircle size={18} /> Gate
                   </Button>
@@ -314,7 +314,7 @@ export function AppHeader({
                     } hover:text-primary transition`}
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/bills" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/bills" ? "soft_gradient" : "ghost"}
                   >
                     <QrCode size={18} /> Bills
                   </Button>
@@ -325,7 +325,7 @@ export function AppHeader({
                     } hover:text-primary transition`}
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/wallets" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/wallets" ? "soft_gradient" : "ghost"}
                   >
                     <Wallet size={18} /> Wallets
                   </Button>
@@ -336,7 +336,7 @@ export function AppHeader({
                     } hover:text-primary transition`}
                 >
                   <Button
-                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/activity" ? "default" : "ghost"}
+                    className="w-full justify-start gap-2 rounded-md" variant={pathname === "/activity" ? "soft_gradient" : "ghost"}
                   >
                     <ActivityIcon size={18} /> Activity
                   </Button>

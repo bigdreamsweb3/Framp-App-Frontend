@@ -17,9 +17,9 @@ export function ThemeToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          variant="soft_gradient"
+          variant="outline_soft_gradient"
           size="sm"
-          className="relative flex items-center justify-center w-8 h-8 rounded-full hover:border-primary/60 hover:shadow-[0_0_10px_rgba(var(--primary-rgb),0.35)]
+          className="relative flex items-center justify-center w-8 h-8 rounded-full
                      transition-all duration-300 group"
           aria-label="Toggle theme"
         >

@@ -27,6 +27,7 @@ import { useUI } from "@/context/UIContext"
 import { useAuth } from "@/context/AuthContext"
 import { ThemeToggle } from "../theme-toggle"
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
+import ScrollMaskLayout from "@/components/app_layout/ScrollMaskLayout"
 
 export default function RootShell({ children }: { children: React.ReactNode }) {
     const [showAuth, setShowAuth] = useState(false)
@@ -145,7 +146,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                         } hover:text-primary transition`}>
                                         <Button
                                             className="w-full justify-start gap-2 rounded-md"
-                                            variant={pathname === "/" ? "default" : "ghost"}
+                                            variant={pathname === "/" ? "soft_gradient" : "ghost"}
                                         >
                                             <ArrowUpCircle className="h-4 w-4" />
                                             Gate
@@ -158,7 +159,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                         } hover:text-primary transition`}>
                                         <Button
                                             className="w-full justify-start gap-2 rounded-md"
-                                            variant={pathname === "/bills" ? "default" : "ghost"}
+                                            variant={pathname === "/bills" ? "soft_gradient" : "ghost"}
                                         >
                                             <QrCode className="h-4 w-4" />
                                             Bills
@@ -182,7 +183,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                         } hover:text-primary transition`}>
                                         <Button
                                             className="w-full justify-start gap-2 rounded-md"
-                                            variant={pathname?.startsWith("/wallets") ? "default" : "ghost"} // Fixed: changed from "/wallet" to "/wallets"
+                                            variant={pathname?.startsWith("/wallets") ? "soft_gradient" : "ghost"} // Fixed: changed from "/wallet" to "/wallets"
                                         >
                                             <WalletIcon className="h-4 w-4" />
                                             Wallets
@@ -195,7 +196,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                         } hover:text-primary transition`}>
                                         <Button
                                             className="w-full justify-start gap-2 rounded-md"
-                                            variant={pathname === "/activity" ? "default" : "ghost"}
+                                            variant={pathname === "/activity" ? "soft_gradient" : "ghost"}
                                         >
                                             <ActivityIcon className="h-4 w-4" />
                                             Activity
@@ -286,14 +287,16 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                         profileActive={showProfile}
                         onProfileToggle={() => setShowProfile((p) => !p)}
                     />
+                    <ScrollMaskLayout topMaskHeight={56}>
                     <div className="container mx-auto px-6 py-6 mt-[35px] max-w-7xl">
                         {children}
                     </div>
+                    </ScrollMaskLayout>
                 </div>
             </div>
 
             {/* Mobile Layout */}
-            <div className="md:hidden min-h-screen ">
+            <div className="md:hidden flex flex-col h-screen">
                 <AppHeader
                     onAuthClick={handleShowAuth}
                     chatActive={false}
@@ -301,8 +304,9 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                     profileActive={showProfile}
                     onProfileToggle={() => setShowProfile((p) => !p)}
                 />
+                <ScrollMaskLayout topMaskHeight={56}>
 
-                <main className="container mx-auto px-4 py-6 max-w-md pb-28 mt-[6px]">
+                <div className="flex-1 overflow-auto container mx-auto px-4 py-6 pb-28">
                     {/* <div className="flex flex-row items-center gap-2 h-fit mb-6">
                          <Tabs
                             value={activeView}
@@ -365,8 +369,8 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
                     </div> */}
                     {children}
-                </main>
-
+                </div>
+            </ScrollMaskLayout>
 
 
             </div >

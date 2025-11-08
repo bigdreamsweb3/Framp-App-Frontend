@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { LogOut, Edit, Save, User, User2Icon, MoreVertical, ArrowLeft } from "lucide-react";
+import { LogOut, Edit, Save, User, User2Icon, MoreVertical, ArrowLeft, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
@@ -107,12 +107,10 @@ export function Profile({ onQuickAction }: ProfileProps) {
       <div className="mx-auto md:mx-0 w-full md:w-[40%] h-full md:min-h-screen bg-background p-4 md:p-8 md:pl-8 relative z-20 overflow-auto">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
-          <Button variant="ghost" size="icon" className="rounded-full" onClick={handleBack}>
-            <ArrowLeft className="size-5" />
-          </Button>
+          
           <h1 className="text-lg font-semibold">My Profile</h1>
-          <Button variant="ghost" size="icon" className="rounded-full">
-            <MoreVertical className="size-5" />
+          <Button variant="ghost" size="icon" onClick={handleBack} className="rounded-full">
+            <X className="size-5" />
           </Button>
         </div>
 
