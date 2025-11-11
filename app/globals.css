@@ -187,7 +187,7 @@
   }
   
   .with-bg-img::before {
-    background-image: url("/img/IMG_3234.webp"); /* mobile portrait */
+   /* background-image: url("/img/IMG_3234.webp"); /* mobile portrait */
   }
 
   /* 🖥️ LIGHT MODE: larger screens use a wider image */
@@ -200,13 +200,13 @@
 
   /* 🌑 DARK MODE (mobile) */
   .dark .with-bg-img::before {
-    background-image: url("/img/IMG_3235.webp"); /* dark mobile portrait */
+   /* background-image: url("/img/IMG_3235.webp"); /* dark mobile portrait */
   }
 
   /* 🌑 DARK MODE (desktop) */
   @media (min-width: 768px) {
     .dark .with-bg-img::before {
-      background-image: url("/img/IMG_3235-desktop.webp");
+    /*  background-image: url("/img/IMG_3235-desktop.webp");
       /* dark desktop landscape */
     }
   }
