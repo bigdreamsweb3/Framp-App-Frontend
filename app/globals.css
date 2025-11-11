@@ -211,21 +211,6 @@
     }
   }
 
-  /* The Glass Overlay (balanced transparency) */
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(to bottom, var(--background) 0%, transparent 56px);
-    backdrop-filter: saturate(95%) blur(0.5px);
-    -webkit-backdrop-filter: saturate(95%) blur(0.5px);
-    mix-blend-mode: soft-light;
-    opacity: 0.7;
-    pointer-events: none;
-    z-index: -1;
-    transition: all 0.4s ease-in-out;
-  }
-
   .with-bg-img::after {
     content: "";
     position: fixed;
