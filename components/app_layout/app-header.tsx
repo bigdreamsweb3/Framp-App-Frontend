@@ -20,6 +20,7 @@ import {
   QrCode,
   Wallet2Icon,
   Wallet,
+  ChevronUpCircle,
 } from "lucide-react"
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
 
@@ -221,7 +222,7 @@ export function AppHeader({
                       : "bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20"
                       }`}
                   >
-                    <User
+                    <ChevronUpCircle
                       className={`size-4 ${profileActive ? "text-primary-foreground" : "text-primary"
                         }`}
                     />
