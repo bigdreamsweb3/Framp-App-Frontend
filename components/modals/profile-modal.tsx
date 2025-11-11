@@ -111,6 +111,7 @@ export function Profile({ onQuickAction }: ProfileProps) {
             </button>
           </div>
         </div>
+    </div>
         </div>
 
         {/* Profile Card */}
