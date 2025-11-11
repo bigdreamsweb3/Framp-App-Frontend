@@ -106,7 +106,7 @@ export default function FrampOnRamp() {
       case "wallet":
         return (
           <WalletView
-            onLogin={handleShowAuth}
+            // onLogin={handleShowAuth}
             onWalletSelect={setSelectedWallet}
             selectedWallet={selectedWallet}
             onClose={() => setActiveView("onramp")}

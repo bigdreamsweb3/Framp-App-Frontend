@@ -14,6 +14,8 @@ import {
   Copy,
   ChevronDown,
   Receipt,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import {
@@ -37,6 +39,9 @@ export function ActivityView() {
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
   const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const ITEMS_PER_PAGE = 10;
+  const [currentPage, setCurrentPage] = useState(1);
 
   const loadActivities = useCallback(async () => {
     if (!user) {
@@ -66,7 +71,7 @@ export function ActivityView() {
 
   const onrampActivities = activities.filter((a) => a.type === "onramp");
   const offrampActivities = activities.filter((a) => a.type === "offramp");
-  const billActivities = activities.filter((a) => a.type === "bill");
+  const billActivities = activities.filter((a) => a.type === "bills");
 
   const filteredActivities = activities.filter((activity) => {
     const matchesSearch =
@@ -83,11 +88,16 @@ export function ActivityView() {
     return matchesSearch && matchesType;
   });
 
+  const totalPages = Math.ceil(filteredActivities.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedActivities = filteredActivities.slice(startIndex, endIndex);
+
   const getTitle = () => {
     switch (typeFilter) {
       case "onramp": return "Onramp Activities";
       case "offramp": return "Offramp Activities";
-      case "bill": return "Bill Activities";
+      case "bill": return "Bills Activities";
       default: return "All Activities";
     }
   };
@@ -125,12 +135,17 @@ export function ActivityView() {
 
   const getActivityBg = (type: string) => {
     switch (type) {
-      case "onramp": return "bg-green-50";
-      case "offramp": return "bg-blue-50";
-      case "bill": return "bg-purple-50";
-      default: return "bg-muted";
+      case "onramp":
+        return "bg-green-50 dark:bg-green-900/30";
+      case "offramp":
+        return "bg-blue-50 dark:bg-blue-900/30";
+      case "bill":
+        return "bg-purple-50 dark:bg-purple-900/30";
+      default:
+        return "bg-muted dark:bg-muted/40";
     }
   };
+
 
   const getActivityLabel = (type: string) => {
     switch (type) {
@@ -180,30 +195,33 @@ export function ActivityView() {
 
   return (
     <div className="grid gap-5 w-full max-w-md mx-auto sm:max-w-2xl">
-      <Tabs value={typeFilter} onValueChange={setTypeFilter}>
-        <TabsContent value={typeFilter} className="mt-0">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="all" className="data-[state=active]:rounded-t-lg">
-              All 
-              {/* <Badge variant="secondary" className="text-xs">{activities.length}</Badge> */}
-            </TabsTrigger>
-            <TabsTrigger value="onramp" className="data-[state=active]:rounded-t-lg">
-              Onramp 
-              {/* <Badge variant="secondary" className="text-xs">{onrampActivities.length}</Badge> */}
-            </TabsTrigger>
-            <TabsTrigger value="offramp" className="data-[state=active]:rounded-t-lg">
-              Offramp 
-              {/* <Badge variant="secondary" className="text-xs">{offrampActivities.length}</Badge> */}
-            </TabsTrigger>
-            <TabsTrigger value="bill" className="data-[state=active]:rounded-t-lg">
-              Bill 
-              {/* <Badge variant="secondary" className="text-xs">{billActivities.length}</Badge> */}
-            </TabsTrigger>
-          </TabsList>
-        </TabsContent>
-      </Tabs>
 
-      <Card className="w-full max-w-md mx-auto sm:max-w-2xl">
+
+
+      <Card className="w-full max-w-md mx-auto sm:max-w-2xl pt-0">
+        <Tabs value={typeFilter} onValueChange={setTypeFilter}>
+          <TabsContent value={typeFilter} className="mt-0">
+            <TabsList className="grid w-full grid-cols-4 border-b border-primary/15">
+              <TabsTrigger value="all" className="data-[state=active]:rounded-t-lg">
+                All
+                {/* <Badge variant="secondary" className="text-xs">{activities.length}</Badge> */}
+              </TabsTrigger>
+              <TabsTrigger value="onramp" className="data-[state=active]:rounded-t-lg">
+                Onramp
+                {/* <Badge variant="secondary" className="text-xs">{onrampActivities.length}</Badge> */}
+              </TabsTrigger>
+              <TabsTrigger value="offramp" className="data-[state=active]:rounded-t-lg">
+                Offramp
+                {/* <Badge variant="secondary" className="text-xs">{offrampActivities.length}</Badge> */}
+              </TabsTrigger>
+              <TabsTrigger value="bills" className="data-[state=active]:rounded-t-lg">
+                Bills
+                {/* <Badge variant="secondary" className="text-xs">{billActivities.length}</Badge> */}
+              </TabsTrigger>
+            </TabsList>
+          </TabsContent>
+        </Tabs>
+
         <CardHeader className="space-y-2">
 
           <div className="flex flex-row items-center justify-between">
@@ -233,155 +251,160 @@ export function ActivityView() {
                 className="pl-7 h-8 text-xs"
               />
             </div>
-            <div className="space-y-2 max-h-96 overflow-y-auto">
+            <div className="space-y-2 md:max-h-96 overflow-y-auto">
+
               {filteredActivities.length === 0 ? (
                 <div className="p-4 text-center text-sm text-muted-foreground">
                   <Activity className="h-8 w-8 mx-auto mb-2 opacity-50" />
                   <p>{getEmptyStateText()}</p>
                 </div>
               ) : (
-                filteredActivities.map((activity) => (
-                  <div key={activity.id} className="space-y-1 border rounded-md overflow-hidden">
-                    <div
-                      className="flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors"
-                      onClick={() => toggleExpanded(activity.id)}
-                    >
-                      <div className="flex items-center gap-3 flex-1">
-                        <div className="flex-shrink-0">
-                          <div className={`w-8 h-8 rounded flex items-center justify-center ${getActivityBg(activity.type)}`}>
-                            {getActivityIcon(activity.type)}
+                <>
+                  {paginatedActivities.map((activity) => (
+                    <div key={activity.id} className="space-y-1 border rounded-md overflow-hidden bg-card">
+                      <div
+                        className="flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors"
+                        onClick={() => toggleExpanded(activity.id)}
+                      >
+                        <div className="flex items-center gap-3 flex-1">
+                          <div className="flex-shrink-0">
+                            <div className={`w-8 h-8 rounded flex items-center justify-center ${getActivityBg(activity.type)}`}>
+                              {getActivityIcon(activity.type)}
+                            </div>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1 mb-1">
+                              <span className="text-xs font-medium truncate">
+                                {getActivityLabel(activity.type)}
+                                {activity.tokenSymbol && ` (${activity.tokenSymbol})`}
+                              </span>
+                              {getStatusIcon(activity.status)}
+                            </div>
+                            <p className="text-xs text-muted-foreground truncate">
+                              {new Date(activity.createdAt).toLocaleString()}
+                            </p>
                           </div>
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1 mb-1">
-                            <span className="text-xs font-medium truncate">
-                              {getActivityLabel(activity.type)}
-                              {activity.tokenSymbol && ` (${activity.tokenSymbol})`}
+
+                        <div className="flex items-center justify-end gap-3">
+                          <div className="flex flex-col items-end flex-shrink-0 text-xs space-y-1">
+                            <span className="font-medium">
+                              {Number(activity.amount).toLocaleString("en-US", {
+                                style: "currency",
+                                currency: activity.currency,
+                              })}
                             </span>
-                            {getStatusIcon(activity.status)}
-                          </div>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {new Date(activity.createdAt).toLocaleString()}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-end gap-3">
-                        <div className="flex flex-col items-end flex-shrink-0 text-xs space-y-1">
-                          <span className="font-medium">
-                            {Number(activity.amount).toLocaleString("en-US", {
-                              style: "currency",
-                              currency: activity.currency,
-                            })}
-                          </span>
-                          <Badge
-                            variant="outline"
-                            className={`text-xs capitalize ${getStatusColor(activity.status)}`}
-                          >
-                            {activity.status}
-                            {/* {activity.confirmations ? ` (${activity.confirmations} conf.)` : ""} */}
-                          </Badge>
-                        </div>
-
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={(e) => toggleExpanded(activity.id, e)}
-                          className="h-6 w-6 p-0 text-xs text-muted-foreground hover:text-foreground"
-                        >
-                          <ChevronDown className={`h-3 w-3 transition-transform ${expandedId === activity.id ? 'rotate-180' : ''}`} />
-                        </Button>
-                      </div>
-                    </div>
-                    {expandedId === activity.id && (
-                      <div className="text-xs text-muted-foreground space-y-1 bg-muted/50 px-2 pb-2">
-                        {activity.status && activity.status && (
-                          <p className="flex items-center justify-between">
-                            <span>Fee:</span>
-                            <span>{Number(activity.status).toLocaleString("en-US", { style: "currency", currency: activity.currency })} ({activity.status})</span>
-                          </p>
-                        )}
-                        {activity.paymentMethod && (
-                          <p className="flex items-center justify-between">
-                            <span>Method:</span>
-                            <span>{activity.paymentMethod}</span>
-                          </p>
-                        )}
-                        {activity.status && (
-                          <p className="flex items-center justify-between">
-                            <span>From:</span>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <span
-                                  className="font-mono truncate cursor-pointer"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    copyToClipboard(activity.status!);
-                                  }}
-                                >
-                                  {truncateAddress(activity.status)}
-                                </span>
-                              </TooltipTrigger>
-                              <TooltipContent>Click to copy</TooltipContent>
-                            </Tooltip>
-                          </p>
-                        )}
-                        {activity.status && (
-                          <p className="flex items-center justify-between">
-                            <span>To:</span>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <span
-                                  className="font-mono truncate cursor-pointer"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    copyToClipboard(activity.status!);
-                                  }}
-                                >
-                                  {truncateAddress(activity.status)}
-                                </span>
-                              </TooltipTrigger>
-                              <TooltipContent>Click to copy</TooltipContent>
-                            </Tooltip>
-                          </p>
-                        )}
-                        {activity.blockchainHash && (
-                          <p className="flex items-center justify-between">
-                            <span>TX ID:</span>
-                            <Link
-                              href={getExplorerUrl(activity.blockchainHash, 'solana')}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-1 font-mono truncate hover:underline"
-                              onClick={(e) => e.stopPropagation()}
+                            <Badge
+                              variant="outline"
+                              className={`text-xs capitalize ${getStatusColor(activity.status)}`}
                             >
-                              <span className="truncate">{truncateAddress(activity.blockchainHash)}</span>
-                              <ExternalLink className="h-3 w-3" />
-                            </Link>
-                          </p>
-                        )}
-                        {activity.exchangeRate && (
-                          <p className="flex items-center justify-between">
-                            <span>Rate:</span>
-                            <span>{activity.exchangeRate}</span>
-                          </p>
-                        )}
-                        <div className="pt-2 border-t">
+                              {activity.status}
+                              {/* {activity.confirmations ? ` (${activity.confirmations} conf.)` : ""} */}
+                            </Badge>
+                          </div>
+
                           <Button
-                            asChild
-                            variant="link"
+                            variant="ghost"
                             size="sm"
-                            className="h-auto p-0 text-xs text-primary hover:text-primary/80"
+                            onClick={(e) => toggleExpanded(activity.id, e)}
+                            className="h-6 w-6 p-0 text-xs text-muted-foreground hover:text-foreground"
                           >
-                            <Link href={`/transactions/${activity.id}`}>
-                              View transaction details →
-                            </Link>
+                            <ChevronDown className={`h-3 w-3 transition-transform ${expandedId === activity.id ? 'rotate-180' : ''}`} />
                           </Button>
                         </div>
                       </div>
-                    )}
-                  </div>
-                ))
+                      {expandedId === activity.id && (
+                        <div className="text-xs text-muted-foreground space-y-1 bg-muted/50 px-2 pb-2">
+                          {activity.status && activity.status && (
+                            <p className="flex items-center justify-between">
+                              <span>Fee:</span>
+                              <span>{Number(activity.status).toLocaleString("en-US", { style: "currency", currency: activity.currency })} ({activity.status})</span>
+                            </p>
+                          )}
+                          {activity.paymentMethod && (
+                            <p className="flex items-center justify-between">
+                              <span>Method:</span>
+                              <span>{activity.paymentMethod}</span>
+                            </p>
+                          )}
+                          {activity.status && (
+                            <p className="flex items-center justify-between">
+                              <span>From:</span>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <span
+                                    className="font-mono truncate cursor-pointer"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      copyToClipboard(activity.status!);
+                                    }}
+                                  >
+                                    {truncateAddress(activity.status)}
+                                  </span>
+                                </TooltipTrigger>
+                                <TooltipContent>Click to copy</TooltipContent>
+                              </Tooltip>
+                            </p>
+                          )}
+                          {activity.status && (
+                            <p className="flex items-center justify-between">
+                              <span>To:</span>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <span
+                                    className="font-mono truncate cursor-pointer"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      copyToClipboard(activity.status!);
+                                    }}
+                                  >
+                                    {truncateAddress(activity.status)}
+                                  </span>
+                                </TooltipTrigger>
+                                <TooltipContent>Click to copy</TooltipContent>
+                              </Tooltip>
+                            </p>
+                          )}
+                          {activity.blockchainHash && (
+                            <p className="flex items-center justify-between">
+                              <span>TX ID:</span>
+                              <Link
+                                href={getExplorerUrl(activity.blockchainHash, 'solana')}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1 font-mono truncate hover:underline"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <span className="truncate">{truncateAddress(activity.blockchainHash)}</span>
+                                <ExternalLink className="h-3 w-3" />
+                              </Link>
+                            </p>
+                          )}
+                          {activity.exchangeRate && (
+                            <p className="flex items-center justify-between">
+                              <span>Rate:</span>
+                              <span>{activity.exchangeRate}</span>
+                            </p>
+                          )}
+                          <div className="pt-2 border-t">
+                            <Button
+                              asChild
+                              variant="link"
+                              size="sm"
+                              className="h-auto p-0 text-xs text-primary hover:text-primary/80"
+                            >
+                              <Link href={`/transactions/${activity.id}`}>
+                                View transaction details →
+                              </Link>
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+
+                </>
+
               )}
             </div>
           </div>
@@ -389,6 +412,80 @@ export function ActivityView() {
 
       </Card>
 
+      <div>
+        {totalPages > 1 && (
+          <div className="p-4 rounded-xl bg-sidebar">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p className="text-xs text-muted-foreground">
+                Showing {startIndex + 1} to{" "}
+                {Math.min(endIndex, filteredActivities.length)} of{" "}
+                {filteredActivities.length} transactions
+              </p>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
+                  disabled={currentPage === 1}
+                  className="rounded-xl h-8 w-8 p-0"
+                  aria-label="Previous page"
+                >
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <div className="flex items-center gap-1">
+                  {Array.from(
+                    { length: Math.min(5, totalPages) },
+                    (_, i) => {
+                      let pageNum;
+                      if (totalPages <= 5) {
+                        pageNum = i + 1;
+                      } else if (currentPage <= 3) {
+                        pageNum = i + 1;
+                      } else if (currentPage >= totalPages - 2) {
+                        pageNum = totalPages - 4 + i;
+                      } else {
+                        pageNum = currentPage - 2 + i;
+                      }
+                      return (
+                        <Button
+                          key={pageNum}
+                          variant={
+                            currentPage === pageNum
+                              ? "default"
+                              : "outline"
+                          }
+                          size="sm"
+                          onClick={() => setCurrentPage(pageNum)}
+                          className="rounded-xl h-8 w-8 p-0 text-xs"
+                          aria-label={`Go to page ${pageNum}`}
+                        >
+                          {pageNum}
+                        </Button>
+                      );
+                    }
+                  )}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      Math.min(prev + 1, totalPages)
+                    )
+                  }
+                  disabled={currentPage === totalPages}
+                  className="rounded-xl h-8 w-8 p-0"
+                  aria-label="Next page"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
