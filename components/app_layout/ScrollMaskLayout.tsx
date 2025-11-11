@@ -12,7 +12,7 @@ export default function ScrollMaskLayout({
   topMaskHeight = 56,
 }: ScrollMaskLayoutProps) {
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full with-bg-img">
       {/* Scrollable area */}
       <div
         className="overflow-y-auto w-full h-full"
