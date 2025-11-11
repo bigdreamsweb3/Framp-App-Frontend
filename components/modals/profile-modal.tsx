@@ -111,8 +111,7 @@ export function Profile({ onQuickAction }: ProfileProps) {
             </button>
           </div>
         </div>
-    </div>
-        </div>
+    
 
         {/* Profile Card */}
         <Card className="mb-6 items-center md:items-start text-center md:text-start flex-col gap-3">
