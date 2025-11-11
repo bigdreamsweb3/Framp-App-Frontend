@@ -718,7 +718,7 @@ export function RampInterface({
 
         {/* Powered by Solana Badge */}
         <div className="relative w-full mx-auto max-w-md flex justify-end mt-[-12px] z-10">
-          <div className="flex items-center gap-2 text-foreground/90 dark:text-foreground text-[11px] font-medium px-3 py-1.5 mr-3 rounded-lg rounded-t-none">
+          <div className="flex items-center gap-2 text-foreground/90 dark:text-foreground text-[11px] font-medium px-3 py-1.5 mr-3 rounded-lg rounded-t-none backdrop-blur-sm">
             <img src={solana_logo} alt="Solana" className="w-3.5 h-3.5" />
             <span className="tracking-wide">Powered by Solana</span>
           </div>
