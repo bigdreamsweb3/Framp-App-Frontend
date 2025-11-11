@@ -105,9 +105,9 @@ export function Profile({ onQuickAction }: ProfileProps) {
             {/* Close Button - Separated with clear gap */}
             <button
               onClick={handleBack}
-              className="relative inline-flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300 ease-out transform hover:scale-105 active:scale-95 bg-gradient-to-br from-primary to-primary/80 shadow-md ring-2 ring-primary/30 hover:ring-primary/50"
+              className="relative inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ease-out transform hover:scale-105 active:scale-95 bg-gradient-to-br from-primary to-primary/80 shadow-md ring-2 ring-primary/30 hover:ring-primary/50"
             >
-              <X className="size-5 text-primary-foreground" />
+              <X className="size-4 text-primary-foreground" />
             </button>
           </div>
         </div>
