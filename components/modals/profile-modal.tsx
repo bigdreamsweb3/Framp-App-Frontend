@@ -91,7 +91,7 @@ export function Profile({ onQuickAction }: ProfileProps) {
               >
                 <div className="flex-1 pl-3 text-left">
                   {wallet ? (
-                    <p className="text-muted-foreground text-xs truncate mt-1">
+                    <p className="text-muted-foreground text-xs truncate mt-1 text-nowrap">
                       <span className="text-md font-semibold"><Wallet2Icon /></span> {wallet}
                     </p>
                   ) : (
