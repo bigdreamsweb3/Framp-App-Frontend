@@ -163,12 +163,16 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-image: url("/img/IMG_3234.webp");
+    /* background-image: url("/img/IMG_3234.webp"); */
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     z-index: -1;
     transform: translateZ(0);
+  }
+
+  body::before {
+    background-image: url("/img/IMG_3234.webp"); /* mobile portrait */
   }
 
   /* 🖥️ LIGHT MODE: larger screens use a wider image */
@@ -197,16 +201,7 @@
     content: "";
     position: fixed;
     inset: 0;
-    background: linear-gradient(
-        to bottom,
-        color-mix(in oklch, var(--background) 55%, transparent),
-        color-mix(in oklch, var(--background) 70%, transparent)
-      ),
-      radial-gradient(
-        circle at 30% 20%,
-        color-mix(in oklch, var(--primary) 6%, transparent) 0%,
-        transparent 55%
-      );
+    background: linear-gradient(to bottom, var(--background) 0%, transparent 56px);
     backdrop-filter: saturate(95%) blur(0.5px);
     -webkit-backdrop-filter: saturate(95%) blur(0.5px);
     mix-blend-mode: soft-light;
@@ -215,7 +210,7 @@
     z-index: -1;
     transition: all 0.4s ease-in-out;
   }
-  
+
   button:hover,
   [role="button"]:hover,
   a:hover {

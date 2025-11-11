@@ -1,3 +1,5 @@
+// File: components\ui\tabs.tsx
+
 'use client'
 
 import * as React from 'react'
@@ -26,7 +28,7 @@ function TabsList({
     <TabsPrimitive.List
       data-slot="tabs-list"
       className={cn(
-        'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]',
+        'bg-card/50 backdrop-blur-sm border-border/50 text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]',
         className,
       )}
       {...props}

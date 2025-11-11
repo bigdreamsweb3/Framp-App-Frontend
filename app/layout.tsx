@@ -29,20 +29,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </head>
-      <body className="antialiased bg-background text-foreground font-sans min-h-[100dvh]">
-        <DynamicWrapper>
-          <UIProvider>
-            <AuthProvider>
-              <Suspense fallback={null}>
-                <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-                  <RootShell>
-                    {children}
-                  </RootShell>
-                </ThemeProvider>
-              </Suspense>
-            </AuthProvider>
-          </UIProvider>
-        </DynamicWrapper>
+      <body className="antialiased bg-background text-foreground font-sans min-h-[100dvh] ">
+        <div className="gradient-container">
+          <DynamicWrapper>
+            <UIProvider>
+              <AuthProvider>
+                <Suspense fallback={null}>
+                  <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                    <RootShell>
+                      {children}
+                    </RootShell>
+                  </ThemeProvider>
+                </Suspense>
+              </AuthProvider>
+            </UIProvider>
+          </DynamicWrapper>
+        </div>
       </body>
     </html>
   )

@@ -101,17 +101,20 @@ export function Profile({ onQuickAction }: ProfileProps) {
   return (
     <div className="fixed inset-0 z-[999] flex items-center justify-center md:justify-end">
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-10" onClick={handleBack} />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm z-10" onClick={handleBack} />
 
       {/* Modal */}
-      <div className="mx-auto md:mx-0 w-full md:w-[40%] h-full md:min-h-screen bg-background p-4 md:p-8 md:pl-8 relative z-20 overflow-auto">
+      <div className="mx-auto md:mx-0 w-full md:w-[520px] h-full md:min-h-screen bg-background p-4 relative z-20 overflow-auto border-l md:border-l-0 border-border/50">
         {/* Header */}
-        <div className="mb-6 flex items-center justify-between">
-          
-          <h1 className="text-lg font-semibold">My Profile</h1>
-          <Button variant="ghost" size="icon" onClick={handleBack} className="rounded-full">
-            <X className="size-5" />
-          </Button>
+        <div className="mb-8 flex items-center justify-between">
+          <h1 className="text-xl font-semibold text-foreground">My Profile</h1>
+      
+          <button
+            onClick={handleBack}
+            className="transition text-muted-foreground dark:text-foreground flex size-8 items-center justify-center rounded-lg hover:text-primary focus:outline-primary"
+          >
+            <X className="w-6 h-6" />
+          </button>
         </div>
 
         {/* Profile Card */}
@@ -142,7 +145,7 @@ export function Profile({ onQuickAction }: ProfileProps) {
               <div className="my-1 text-start">
                 <h2 className="text-md font-semibold">
                   <span className="lowercase">{App_Name}-
-                    {user.name || "User" }</span>
+                    {user.name || "User"}</span>
                   {user.id && (
                     <span className="text-sm text-muted-foreground capitalize">-ID: {user.id.slice(0, 8)}</span>
                   )}

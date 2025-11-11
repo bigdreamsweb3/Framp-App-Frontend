@@ -8,16 +8,12 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  AlertCircle,
   Search,
   RefreshCw,
-  ChevronLeft,
-  ChevronRight,
-  History,
   ExternalLink,
   Copy,
-  CheckCheck,
-  Building2,
+  ChevronDown,
+  Receipt,
 } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import {
@@ -25,32 +21,22 @@ import {
   type ActivityTransaction,
 } from "@/lib/api/auth/user/activities";
 import { useAuth } from "@/context/AuthContext";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { toast } from "sonner"; // Assuming you have a toast library for copy feedback
 import Link from "next/link";
-
-const ITEMS_PER_PAGE = 10;
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export function ActivityView() {
-  const { user, loading: authLoading } = useAuth()
-  const [activities, setActivities] = useState<ActivityTransaction[]>([])
-  const [selectedActivity, setSelectedActivity] = useState<ActivityTransaction | null>(null)
+  const { user, loading: authLoading } = useAuth();
+  const [activities, setActivities] = useState<ActivityTransaction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
   const [typeFilter, setTypeFilter] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const loadActivities = useCallback(async () => {
     if (!user) {
@@ -64,7 +50,6 @@ export function ActivityView() {
       const response = await fetchAllUserActivities();
       setActivities(response);
     } catch (err) {
-      setError("Failed to load activities");
       console.error("Error loading activities:", err);
     } finally {
       setLoading(false);
@@ -75,444 +60,373 @@ export function ActivityView() {
     loadActivities();
   }, [loadActivities]);
 
+  useEffect(() => {
+    setExpandedId(null); // Close expanded on filter change
+  }, [typeFilter, searchTerm]);
+
+  const onrampActivities = activities.filter((a) => a.type === "onramp");
+  const offrampActivities = activities.filter((a) => a.type === "offramp");
+  const billActivities = activities.filter((a) => a.type === "bill");
+
   const filteredActivities = activities.filter((activity) => {
     const matchesSearch =
       activity.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
       activity.status.toLowerCase().includes(searchTerm.toLowerCase()) ||
       activity.currency.toLowerCase().includes(searchTerm.toLowerCase()) ||
       activity.tokenSymbol?.toLowerCase().includes(searchTerm.toLowerCase());
+    // ||
+    // activity.fromAddress?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    // activity.toAddress?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesStatus =
-      statusFilter === "all" ||
-      activity.status.toLowerCase() === statusFilter.toLowerCase();
     const matchesType = typeFilter === "all" || activity.type === typeFilter;
 
-    return matchesSearch && matchesStatus && matchesType;
+    return matchesSearch && matchesType;
   });
 
-  const totalPages = Math.ceil(filteredActivities.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedActivities = filteredActivities.slice(startIndex, endIndex);
-
-  // Reset to first page when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, statusFilter, typeFilter]);
-
-  const handleRefresh = async () => {
-    await loadActivities();
+  const getTitle = () => {
+    switch (typeFilter) {
+      case "onramp": return "Onramp Activities";
+      case "offramp": return "Offramp Activities";
+      case "bill": return "Bill Activities";
+      default: return "All Activities";
+    }
   };
 
-  // Show loading state
+  const getEmptyStateText = () => {
+    switch (typeFilter) {
+      case "onramp":
+        return "No onramp activities yet. Start buying crypto to see your purchases here!";
+      case "offramp":
+        return "No offramp activities yet. Sell some crypto to see your sales here!";
+      case "bill":
+        return "No bills yet. Pay your first bill to see it here!";
+      default:
+        return "No activities found. Get started by making your first transaction!";
+    }
+  };
+
+  const toggleExpanded = (id: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setExpandedId(expandedId === id ? null : id);
+  };
+
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case "onramp":
+        return <ArrowUpCircle className="h-4 w-4 text-green-600" />;
+      case "offramp":
+        return <ArrowDownCircle className="h-4 w-4 text-blue-600" />;
+      case "bill":
+        return <Receipt className="h-4 w-4 text-purple-600" />;
+      default:
+        return <Activity className="h-4 w-4 text-muted-foreground" />;
+    }
+  };
+
+  const getActivityBg = (type: string) => {
+    switch (type) {
+      case "onramp": return "bg-green-50";
+      case "offramp": return "bg-blue-50";
+      case "bill": return "bg-purple-50";
+      default: return "bg-muted";
+    }
+  };
+
+  const getActivityLabel = (type: string) => {
+    switch (type) {
+      case "onramp": return "Onramp";
+      case "offramp": return "Offramp";
+      case "bill": return "Bill";
+      default: return type;
+    }
+  };
+
   if (authLoading || loading) {
     return (
-      <Card className="w-full max-w-4xl mx-auto bg-card/50 backdrop-blur-sm border-border/50">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <Activity className="w-5 h-5 text-primary" />
-              <h2 className="text-lg font-semibold">Transaction History</h2>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              className="rounded-xl h-8 w-8 p-0 sm:h-9 sm:w-auto sm:px-3"
-              aria-label="Refresh activities"
-            >
-              <RefreshCw className="h-4 w-4 sm:mr-2" />
-              <span className="hidden sm:inline">Refresh</span>
-            </Button>
+      <Card className="w-full max-w-md mx-auto sm:max-w-2xl">
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <CardTitle className="text-base flex items-center gap-2">
+            <Activity className="w-4 h-4" />
+            Activity
           </CardTitle>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={loadActivities}
+            className="h-6 w-6 p-0"
+          >
+            <RefreshCw className="h-3 w-3" />
+          </Button>
         </CardHeader>
-        <CardContent className="p-0">
-          <div className="p-4 space-y-4">
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="p-4 bg-muted/30 rounded-xl border border-border/50"
-              >
-                <div className="flex items-center space-x-3">
-                  <Skeleton className="h-10 w-10 rounded-xl" />
-                  <div className="space-y-2 flex-1">
-                    <Skeleton className="h-4 w-[200px]" />
-                    <Skeleton className="h-3 w-[150px]" />
-                  </div>
-                  <div className="space-y-1">
-                    <Skeleton className="h-5 w-[100px]" />
-                    <Skeleton className="h-4 w-[60px]" />
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+        <CardContent className="space-y-2 p-2">
+          {[...Array(3)].map((_, i) => (
+            <Skeleton key={i} className="h-12 w-full rounded-md" />
+          ))}
         </CardContent>
       </Card>
     );
   }
 
-  // Show login prompt
   if (!user) {
     return (
-      <Card className="w-full max-w-4xl mx-auto bg-card/50 backdrop-blur-sm border-border/50">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Activity className="w-5 h-5 text-primary" />
-            <h2 className="text-lg font-semibold">Transaction History</h2>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="p-4 text-center">
-            <Activity className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2 text-foreground">
-              Please log in to view your transaction history
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-              You need to be logged in to see your transaction history and activities.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  if (error) {
-    return (
-      <Card className="w-full max-w-4xl mx-auto bg-card/50 backdrop-blur-sm border-border/50">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <Activity className="w-5 h-5 text-primary" />
-              <h2 className="text-lg font-semibold">Transaction History</h2>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              className="rounded-xl h-8 w-8 p-0 sm:h-9 sm:w-auto sm:px-3"
-              aria-label="Refresh activities"
-            >
-              <RefreshCw className="h-4 w-4 sm:mr-2" />
-              <span className="hidden sm:inline">Refresh</span>
-            </Button>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          <div className="p-4 text-center">
-            <XCircle className="h-12 w-12 text-destructive mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2 text-foreground">
-              Error Loading Transactions
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-              {error}
-            </p>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleRefresh}
-              className="rounded-xl bg-transparent sm:h-9 sm:px-3"
-              aria-label="Try again to load activities"
-            >
-              <RefreshCw className="h-4 w-4 sm:mr-2" />
-              <span className="hidden sm:inline">Try Again</span>
-            </Button>
-          </div>
+      <Card className="w-full max-w-md mx-auto sm:max-w-2xl">
+        <CardContent className="p-6 text-center">
+          <Activity className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+          <p className="text-sm text-muted-foreground">Log in to view activity.</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <>
-      <Card className="w-full max-w-4xl mx-auto bg-card/50 backdrop-blur-sm border-border/50">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <Activity className="w-5 h-5 text-primary" />
-              <h2 className="text-lg font-semibold">Transaction History</h2>
-            </div>
+    <div className="grid gap-5 w-full max-w-md mx-auto sm:max-w-2xl">
+      <Tabs value={typeFilter} onValueChange={setTypeFilter}>
+        <TabsContent value={typeFilter} className="mt-0">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="all" className="data-[state=active]:rounded-t-lg">
+              All 
+              {/* <Badge variant="secondary" className="text-xs">{activities.length}</Badge> */}
+            </TabsTrigger>
+            <TabsTrigger value="onramp" className="data-[state=active]:rounded-t-lg">
+              Onramp 
+              {/* <Badge variant="secondary" className="text-xs">{onrampActivities.length}</Badge> */}
+            </TabsTrigger>
+            <TabsTrigger value="offramp" className="data-[state=active]:rounded-t-lg">
+              Offramp 
+              {/* <Badge variant="secondary" className="text-xs">{offrampActivities.length}</Badge> */}
+            </TabsTrigger>
+            <TabsTrigger value="bill" className="data-[state=active]:rounded-t-lg">
+              Bill 
+              {/* <Badge variant="secondary" className="text-xs">{billActivities.length}</Badge> */}
+            </TabsTrigger>
+          </TabsList>
+        </TabsContent>
+      </Tabs>
+
+      <Card className="w-full max-w-md mx-auto sm:max-w-2xl">
+        <CardHeader className="space-y-2">
+
+          <div className="flex flex-row items-center justify-between">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Activity className="w-4 h-4" />
+              {getTitle()}
+            </CardTitle>
             <Button
-              variant="outline"
+              variant="ghost"
               size="sm"
-              onClick={handleRefresh}
-              className="rounded-xl h-8 w-8 p-0 sm:h-9 sm:w-auto sm:px-3"
-              aria-label="Refresh activities"
+              onClick={loadActivities}
+              className="h-6 w-6 p-0"
             >
-              <RefreshCw className="h-4 w-4 sm:mr-2" />
-              <span className="hidden sm:inline">Refresh</span>
+              <RefreshCw className="h-3 w-3" />
             </Button>
-          </CardTitle>
+          </div>
         </CardHeader>
+
         <CardContent className="p-0">
-          <div className="p-4 space-y-4">
-            <div className="flex flex-col gap-3">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search by token, status, or ID..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 rounded-xl text-sm"
-                  aria-label="Search transactions"
-                />
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-full sm:w-[180px] rounded-xl">
-                    <SelectValue placeholder="Filter by status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Status</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="processing">Processing</SelectItem>
-                    <SelectItem value="failed">Failed</SelectItem>
-                    <SelectItem value="cancelled">Cancelled</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+          <div className="p-2 space-y-2">
+            <div className="relative">
+              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+              <Input
+                placeholder="Search activity..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-7 h-8 text-xs"
+              />
             </div>
-
-            {filteredActivities.length === 0 ? (
-              <div className="p-4 text-center bg-muted/30 rounded-xl border border-border/50">
-                <Activity className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2 text-foreground">
-                  No transactions found
-                </h3>
-                <p className="text-sm text-muted-foreground max-w-md mx-auto">
-                  {activities.length === 0
-                    ? "You haven't made any transactions yet."
-                    : "No transactions match your current filters."}
-                </p>
-              </div>
-            ) : (
-              <>
-                <div className="w-full">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {paginatedActivities.map((activity) => (
-                      <TransactionCard
-                        key={activity.id}
-                        activity={activity}
-                        onClick={setSelectedActivity}
-                      />
-                    ))}
-                  </div>
+            <div className="space-y-2 max-h-96 overflow-y-auto">
+              {filteredActivities.length === 0 ? (
+                <div className="p-4 text-center text-sm text-muted-foreground">
+                  <Activity className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p>{getEmptyStateText()}</p>
                 </div>
-
-                {totalPages > 1 && (
-                  <div className="p-4 bg-muted/30 rounded-xl border border-border/50">
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                      <p className="text-xs text-muted-foreground">
-                        Showing {startIndex + 1} to{" "}
-                        {Math.min(endIndex, filteredActivities.length)} of{" "}
-                        {filteredActivities.length} transactions
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() =>
-                            setCurrentPage((prev) => Math.max(prev - 1, 1))
-                          }
-                          disabled={currentPage === 1}
-                          className="rounded-xl h-8 w-8 p-0"
-                          aria-label="Previous page"
-                        >
-                          <ChevronLeft className="h-4 w-4" />
-                        </Button>
-                        <div className="flex items-center gap-1">
-                          {Array.from(
-                            { length: Math.min(5, totalPages) },
-                            (_, i) => {
-                              let pageNum;
-                              if (totalPages <= 5) {
-                                pageNum = i + 1;
-                              } else if (currentPage <= 3) {
-                                pageNum = i + 1;
-                              } else if (currentPage >= totalPages - 2) {
-                                pageNum = totalPages - 4 + i;
-                              } else {
-                                pageNum = currentPage - 2 + i;
-                              }
-                              return (
-                                <Button
-                                  key={pageNum}
-                                  variant={
-                                    currentPage === pageNum
-                                      ? "default"
-                                      : "outline"
-                                  }
-                                  size="sm"
-                                  onClick={() => setCurrentPage(pageNum)}
-                                  className="rounded-xl h-8 w-8 p-0 text-xs"
-                                  aria-label={`Go to page ${pageNum}`}
-                                >
-                                  {pageNum}
-                                </Button>
-                              );
-                            }
-                          )}
+              ) : (
+                filteredActivities.map((activity) => (
+                  <div key={activity.id} className="space-y-1 border rounded-md overflow-hidden">
+                    <div
+                      className="flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors"
+                      onClick={() => toggleExpanded(activity.id)}
+                    >
+                      <div className="flex items-center gap-3 flex-1">
+                        <div className="flex-shrink-0">
+                          <div className={`w-8 h-8 rounded flex items-center justify-center ${getActivityBg(activity.type)}`}>
+                            {getActivityIcon(activity.type)}
+                          </div>
                         </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1 mb-1">
+                            <span className="text-xs font-medium truncate">
+                              {getActivityLabel(activity.type)}
+                              {activity.tokenSymbol && ` (${activity.tokenSymbol})`}
+                            </span>
+                            {getStatusIcon(activity.status)}
+                          </div>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {new Date(activity.createdAt).toLocaleString()}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-end gap-3">
+                        <div className="flex flex-col items-end flex-shrink-0 text-xs space-y-1">
+                          <span className="font-medium">
+                            {Number(activity.amount).toLocaleString("en-US", {
+                              style: "currency",
+                              currency: activity.currency,
+                            })}
+                          </span>
+                          <Badge
+                            variant="outline"
+                            className={`text-xs capitalize ${getStatusColor(activity.status)}`}
+                          >
+                            {activity.status}
+                            {/* {activity.confirmations ? ` (${activity.confirmations} conf.)` : ""} */}
+                          </Badge>
+                        </div>
+
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="sm"
-                          onClick={() =>
-                            setCurrentPage((prev) =>
-                              Math.min(prev + 1, totalPages)
-                            )
-                          }
-                          disabled={currentPage === totalPages}
-                          className="rounded-xl h-8 w-8 p-0"
-                          aria-label="Next page"
+                          onClick={(e) => toggleExpanded(activity.id, e)}
+                          className="h-6 w-6 p-0 text-xs text-muted-foreground hover:text-foreground"
                         >
-                          <ChevronRight className="h-4 w-4" />
+                          <ChevronDown className={`h-3 w-3 transition-transform ${expandedId === activity.id ? 'rotate-180' : ''}`} />
                         </Button>
                       </div>
                     </div>
+                    {expandedId === activity.id && (
+                      <div className="text-xs text-muted-foreground space-y-1 bg-muted/50 px-2 pb-2">
+                        {activity.status && activity.status && (
+                          <p className="flex items-center justify-between">
+                            <span>Fee:</span>
+                            <span>{Number(activity.status).toLocaleString("en-US", { style: "currency", currency: activity.currency })} ({activity.status})</span>
+                          </p>
+                        )}
+                        {activity.paymentMethod && (
+                          <p className="flex items-center justify-between">
+                            <span>Method:</span>
+                            <span>{activity.paymentMethod}</span>
+                          </p>
+                        )}
+                        {activity.status && (
+                          <p className="flex items-center justify-between">
+                            <span>From:</span>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span
+                                  className="font-mono truncate cursor-pointer"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    copyToClipboard(activity.status!);
+                                  }}
+                                >
+                                  {truncateAddress(activity.status)}
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent>Click to copy</TooltipContent>
+                            </Tooltip>
+                          </p>
+                        )}
+                        {activity.status && (
+                          <p className="flex items-center justify-between">
+                            <span>To:</span>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span
+                                  className="font-mono truncate cursor-pointer"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    copyToClipboard(activity.status!);
+                                  }}
+                                >
+                                  {truncateAddress(activity.status)}
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent>Click to copy</TooltipContent>
+                            </Tooltip>
+                          </p>
+                        )}
+                        {activity.blockchainHash && (
+                          <p className="flex items-center justify-between">
+                            <span>TX ID:</span>
+                            <Link
+                              href={getExplorerUrl(activity.blockchainHash, 'solana')}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 font-mono truncate hover:underline"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <span className="truncate">{truncateAddress(activity.blockchainHash)}</span>
+                              <ExternalLink className="h-3 w-3" />
+                            </Link>
+                          </p>
+                        )}
+                        {activity.exchangeRate && (
+                          <p className="flex items-center justify-between">
+                            <span>Rate:</span>
+                            <span>{activity.exchangeRate}</span>
+                          </p>
+                        )}
+                        <div className="pt-2 border-t">
+                          <Button
+                            asChild
+                            variant="link"
+                            size="sm"
+                            className="h-auto p-0 text-xs text-primary hover:text-primary/80"
+                          >
+                            <Link href={`/transactions/${activity.id}`}>
+                              View transaction details →
+                            </Link>
+                          </Button>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-              </>
-            )}
-
+                ))
+              )}
+            </div>
           </div>
         </CardContent>
+
       </Card>
-    </>
+
+    </div>
   );
 }
 
-function TransactionCard({
-  activity,
-  onClick,
-}: {
-  activity: ActivityTransaction
-  onClick: (activity: ActivityTransaction) => void
-}) {
-  const getStatusIcon = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "completed":
-        return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case "failed":
-      case "cancelled":
-        return <XCircle className="h-4 w-4 text-destructive" />;
-      case "pending":
-      case "processing":
-        return <Clock className="h-4 w-4 text-yellow-600" />;
-      default:
-        return <AlertCircle className="h-4 w-4 text-muted-foreground" />;
-    }
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "completed":
-        return "bg-green-50 text-green-700 border-green-200";
-      case "failed":
-      case "cancelled":
-        return "bg-red-50 text-red-700 border-red-200";
-      case "pending":
-      case "processing":
-        return "bg-yellow-50 text-yellow-700 border-yellow-200";
-      default:
-        return "bg-gray-50 text-gray-700 border-gray-200";
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const formatAmount = (amount: string, currency: string) => {
-    const numAmount = Number.parseFloat(amount);
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: currency,
-      minimumFractionDigits: 2,
-    }).format(numAmount);
-  };
-
-  return (
-
-    <Link href={`/transactions/${activity.id}`}>
-      <div className="p-4 bg-muted/30 rounded-xl border border-border/50 hover:bg-muted/50 transition-all cursor-pointer hover:border-primary/30">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center space-x-3 flex-1 min-w-0">
-            <div className="flex-shrink-0">
-              <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${activity.type === "onramp"
-                  ? "bg-green-50 hover:bg-green-100"
-                  : "bg-blue-50 hover:bg-blue-100"
-                  }`}
-              >
-                {activity.type === "onramp" ? (
-                  <ArrowUpCircle className="h-5 w-5 text-green-600" />
-                ) : (
-                  <ArrowDownCircle className="h-5 w-5 text-blue-600" />
-                )}
-              </div>
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-sm font-semibold text-foreground truncate">
-                  {activity.type === "onramp" ? "Onramp" : "Offramp"}
-                  {activity.tokenSymbol && (
-                    <span className="text-muted-foreground font-normal">
-                      {" "}
-                      ({activity.tokenSymbol})
-                    </span>
-                  )}
-                </h3>
-                {getStatusIcon(activity.status)}
-              </div>
-              <p className="text-xs text-muted-foreground mb-1">
-                {formatDate(activity.createdAt)}
-              </p>
-              <p className="text-xs text-muted-foreground font-mono">
-                ID: #{activity.id?.slice(0, 8)}...
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-col items-end space-y-1 flex-shrink-0">
-            <p className="text-sm font-bold text-foreground">
-              {formatAmount(activity.amount, activity.currency)}
-            </p>
-            <Badge
-              variant="outline"
-              className={`text-xs font-medium ${getStatusColor(activity.status)}`}
-            >
-              {activity.status}
-            </Badge>
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
+function getStatusIcon(status: string) {
+  switch (status.toLowerCase()) {
+    case "completed": return <CheckCircle className="h-3 w-3 text-green-600" />;
+    case "failed": return <XCircle className="h-3 w-3 text-red-600" />;
+    case "pending": return <Clock className="h-3 w-3 text-yellow-600" />;
+    default: return <Clock className="h-3 w-3 text-muted-foreground" />;
+  }
 }
 
+function getStatusColor(status: string) {
+  switch (status.toLowerCase()) {
+    case "completed": return "text-green-600 border-green-600";
+    case "failed": return "text-red-600 border-red-600";
+    case "pending": return "text-yellow-600 border-yellow-600";
+    default: return "text-muted-foreground border-muted-foreground";
+  }
+}
 
+function truncateAddress(address: string, start = 6, end = 4): string {
+  return `${address.slice(0, start)}...${address.slice(-end)}`;
+}
 
-// Simple receipt icon component
-function ReceiptIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      className={className}
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-      />
-    </svg>
-  );
+function copyToClipboard(text: string) {
+  navigator.clipboard.writeText(text).then(() => {
+    toast.success("Copied to clipboard");
+  });
+}
+
+function getExplorerUrl(txId: string, network: string): string {
+  const explorers: Record<string, string> = {
+    ethereum: `https://etherscan.io/tx/${txId}`,
+    bitcoin: `https://blockchair.com/bitcoin/transaction/${txId}`,
+    solana: `https://solscan.io/tx/${txId}`,
+    // Add more as needed
+  };
+  return explorers[network.toLowerCase()] || `https://etherscan.io/tx/${txId}`;
 }

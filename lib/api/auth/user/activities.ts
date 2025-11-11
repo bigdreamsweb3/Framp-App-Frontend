@@ -59,7 +59,7 @@ export interface OffRampTransaction {
 
 export interface ActivityTransaction {
   id: string;
-  type: "onramp" | "offramp";
+  type: "onramp" | "offramp" | "bill";
   amount: string;
   currency: string;
   tokenAmount: string;
