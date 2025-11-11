@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
+import { Wallet2Icon, X } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { Card } from "../ui/card";
 import { useRouter } from "next/navigation";
@@ -92,7 +92,7 @@ export function Profile({ onQuickAction }: ProfileProps) {
                 <div className="flex-1 pl-3 text-left">
                   {wallet ? (
                     <p className="text-muted-foreground text-xs truncate mt-1">
-                      <span className="text-md font-semibold">Connected ✅:</span> {wallet}
+                      <span className="text-md font-semibold"><Wallet2Icon /></span> {wallet}
                     </p>
                   ) : (
                     "Connect Wallet")}
