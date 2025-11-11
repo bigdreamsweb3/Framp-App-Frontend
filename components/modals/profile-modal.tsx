@@ -77,12 +77,42 @@ export function Profile({ onQuickAction }: ProfileProps) {
       <div className="mx-auto md:mx-0 w-full md:w-[520px] h-full md:min-h-screen bg-background p-4 relative z-20 overflow-auto border-l md:border-l-0 border-border/50">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-foreground">My Profile</h1>
+          <h1 className="text-xl font-semibold text-foreground">Control Deck</h1>
           <div className="flex items-center gap-2">
-            <Button
+
+            <div className="flex items-center justify-end">
+              <Button
+                onClick={handleConnectWallet}
+                variant="outline_soft_gradient"
+                size="sm"
+                className={`flex items-center gap-2 px-0 md:px-0 lg:px-0 rounded-xl border border-border overflow-hidden transition-all duration-300 ease-out $ ring-1 ring-primary/20"
+                  `}
+               
+              >
+                <div className="flex-1 pl-3 text-left">
+                  {wallet ? (
+                    <p className="text-muted-foreground text-xs truncate mt-1">
+                      <span className="text-md font-semibold">Connected ✅:</span> {wallet}
+                    </p>
+                  ) : (
+                    "Connect Wallet")}
+                </div>
+
+                <div
+                  onClick={handleBack}
+                  className={`relative inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ease-out transform hover:scale-105 bg-gradient-to-br from-primary to-primary/80 shadow-md ring-2 ring-primary/30
+                      `}
+                >
+                  <X
+                    className={`size-4 "text-primary-foreground`}
+                  />
+                </div>
+              </Button>
+            </div>
+            {/* <Button
               size="sm"
               variant="outline_soft_gradient"
-              className="mt-2"
+              className=""
               onClick={handleConnectWallet}
             > {wallet ? (
               <p className="text-muted-foreground text-xs truncate mt-1">
@@ -96,7 +126,7 @@ export function Profile({ onQuickAction }: ProfileProps) {
               className="transition text-muted-foreground dark:text-foreground flex size-8 items-center justify-center rounded-lg hover:text-primary focus:outline-primary"
             >
               <X className="w-6 h-6" />
-            </button>
+            </button> */}
 
           </div>
         </div>
