@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { SideHeader } from "./side-header"
-import { BottomNav} from "./bottom-nav"
+import { BottomNav } from "./bottom-nav"
 import { Button } from "@/components/ui/button"
 import {
     ArrowUpCircle,
@@ -288,15 +288,16 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                         onProfileToggle={() => setShowProfile((p) => !p)}
                     />
                     <ScrollMaskLayout topMaskHeight={56}>
-                    <div className="container mx-auto px-6 py-6 mt-[35px] max-w-7xl">
-                        {children}
-                    </div>
+                        <div className="container mx-auto px-6 py-6 mt-[35px] max-w-7xl">
+                            {children}
+                        </div>
                     </ScrollMaskLayout>
                 </div>
             </div>
 
             {/* Mobile Layout */}
-            <div className="md:hidden flex flex-col h-screen max-h-screen">
+            {/* ✅ Mobile Layout Fixed */}
+            <div className="md:hidden h-screen overflow-hidden flex flex-col">
                 <AppHeader
                     onAuthClick={handleShowAuth}
                     chatActive={false}
@@ -304,76 +305,17 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                     profileActive={showProfile}
                     onProfileToggle={() => setShowProfile((p) => !p)}
                 />
-                <ScrollMaskLayout topMaskHeight={56}>
 
-                <div className="flex-1 overflow-auto container mx-auto px-4 py-6 pb-28">
-                    {/* <div className="flex flex-row items-center gap-2 h-fit mb-6">
-                         <Tabs
-                            value={activeView}
-                            onValueChange={handleTabChange}
-                            className="w-full flex flex-row"
-                        >
-                            <TabsList className="grid w-full grid-cols-4">
-                                <TabsTrigger
-                                    value="onramp"
-                                    className={activeView === "onramp" ? "text-primary" : "text-muted-foreground text-xs"}
-                                >
-                                    <ArrowUpCircle className="h-4 w-4" />
-                                    Gate
-                                </TabsTrigger>
-                                <TabsTrigger
-                                    value="bills"
-                                    className={activeView === "bills" ? "text-primary" : "text-muted-foreground text-xs"}
-                                >
-                                    <QrCode className="h-4 w-4" />
-                                    Bills
-                                </TabsTrigger>
-                                <TabsTrigger
-                                    value="save"
-                                    className={activeView === "save" ? "text-primary" : "text-muted-foreground text-xs"}
-                                >
-                                    <PiggyBank className="h-4 w-4" />
-                                    Save
-                                </TabsTrigger>
-
-                                <TabsTrigger
-                                    value="wallets"
-                                    className={activeView === "wallets" ? "text-primary" : "text-muted-foreground text-xs"}
-                                >
-                                    <WalletIcon className="h-4 w-4" />
-                                    Wallets
-                                </TabsTrigger>
-                            </TabsList>
-
-
-                            <TabsList>
-                                <TabsTrigger
-                                    value="activity"
-                                    className={activeView === "activity" ? "text-primary" : "text-muted-foreground text-xs"}
-                                >
-                                    <ActivityIcon className="h-4 w-4 font-bold" />
-                                </TabsTrigger>
-                            </TabsList>
-                        </Tabs>
-
-                        
-                        <Link
-                            href="/activity"
-                            onClick={() => setActiveView("activity")}
-                            className={`flex flex-col items-center text-xs p-2 hover:bg-muted/20 justify-center rounded-full bg-muted w-7 ${activeView === "activity" ? "text-primary" : "text-muted-foreground text-xs"
-                                }`}
-                        >
-                            <ActivityIcon className="w-4 h-4" />
-                        </Link>
-
-
-                    </div> */}
-                    {children}
+                {/* The ScrollMaskLayout now handles inner scrolling only */}
+                <div className="flex-1 overflow-hidden">
+                    <ScrollMaskLayout topMaskHeight={56}>
+                        <div className="container mx-auto px-4 py-6 pb-28">
+                            {children}
+                        </div>
+                    </ScrollMaskLayout>
                 </div>
-            </ScrollMaskLayout>
+            </div>
 
-
-            </div >
 
             {/* Mobile Bottom Navigation */}
             <BottomNav />

@@ -1,5 +1,7 @@
 // File: lib/api/auth/user/activities.ts
 
+import { getAuthToken } from "@dynamic-labs/sdk-react-core";
+
 export interface OnRampTransaction {
   id: string;
   amount: string;
@@ -112,23 +114,20 @@ export interface PaginatedResponse<T> {
   };
 }
 
-const authToken =
-  typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
-
+// Helper function to get headers with authorization
 const getHeaders = (): HeadersInit => {
-  const accessToken = authToken;
+  // Use Dynamic Labs token instead of localStorage
+  const accessToken = getAuthToken();
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
     "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
-
-    Authorization: `Bearer ${accessToken}`,
   };
 
   // Add authorization header if accessToken exists
-  // if (accessToken) {
-  //   headers['Authorization'] = `Bearer ${accessToken}`;
-  // }
+  if (accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`;
+  }
 
   return headers;
 };

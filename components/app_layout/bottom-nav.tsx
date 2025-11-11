@@ -13,11 +13,14 @@ const navItems = [
 
 export function BottomNav() {
   const pathname = usePathname()
+  const activeIndex = navItems.findIndex((item) => pathname === item.href)
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-30 bg-sidebar/95 backdrop-blur-lg shadow sm:hidden">
-      <div className="mb-[env(safe-area-inset-bottom)] flex h-14 items-center text-sm">
-        <div className="grid size-full grid-cols-4">
+    <nav className="fixed bottom-0 left-0 right-0 z-30 bg-sidebar/85 backdrop-blur-lg border-t border-border/50 shadow-[0_-3px_9px_rgba(0,0,0,0.06)] sm:hidden">
+      <div className="relative mb-[env(safe-area-inset-bottom)] flex h-14 items-center justify-center text-sm mt-1">
+
+        {/* === Navigation links === */}
+        <div className="grid w-full grid-cols-4 relative z-10">
           {navItems.map((item) => {
             const Icon = item.icon
             const isActive = pathname === item.href
@@ -26,13 +29,26 @@ export function BottomNav() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 duration-100 transition ${isActive
-                  ? "text-primary dark:text-foreground font-bold text-base"
-                  : "text-muted-foreground font-medium text-sm hover:text-primary"
-                  }`}
+                className={`flex h-full flex-col items-center justify-center gap-0.5 select-none transition-all duration-200 
+                  ${isActive ? "text-foreground font-semibold" : "text-muted-foreground hover:text-primary"}`}
               >
-                <Icon className={`h-5 w-5 ${isActive ? "text-primary dark:text-foreground" : ""}`} />
-                <span className="w-full text-center">{item.label}</span>
+                {/* === Icon wrapper with background only on active icon === */}
+                <div
+                  className={`w-3/5 flex items-center justify-center py-1 rounded-lg transition-all duration-200 ${isActive
+                    ? "bg-gradient-to-r from-primary/15 to-primary/10 text-foreground/90 dark:text-foreground"
+                    : "text-muted-foreground"
+                    }`}
+                >
+                  <Icon className="h-5 w-5" />
+                </div>
+
+                {/* === Label text === */}
+                <span
+                  className={`text-sm font-medium ${isActive ? "text-foreground" : "text-muted-foreground"
+                    }`}
+                >
+                  {item.label}
+                </span>
               </Link>
             )
           })}
