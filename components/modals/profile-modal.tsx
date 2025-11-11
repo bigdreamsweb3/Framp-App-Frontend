@@ -76,59 +76,41 @@ export function Profile({ onQuickAction }: ProfileProps) {
       {/* Modal */}
       <div className="mx-auto md:mx-0 w-full md:w-[520px] h-full md:min-h-screen bg-background p-4 relative z-20 overflow-auto border-l md:border-l-0 border-border/50">
         {/* Header */}
+{/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <h1 className="text-xl font-semibold text-foreground">Control Deck</h1>
-          <div className="flex items-center gap-2">
-
-            <div className="flex items-center justify-end">
-              <Button
-                onClick={handleConnectWallet}
-                variant="outline_soft_gradient"
-                size="sm"
-                className={`flex items-center gap-2 px-0 md:px-0 lg:px-0 rounded-xl border border-border overflow-hidden transition-all duration-300 ease-out $ ring-1 ring-primary/20"
-                  `}
-
-              >
-                <div className="flex-1 pl-3 text-left">
-                  {wallet ? (
-                    <p className="text-muted-foreground text-xs truncate mt-1 text-nowrap">
-                      <Wallet2Icon /> {wallet}
-                    </p>
-                  ) : (
-                    "Connect Wallet")}
-                </div>
-
-                <div
-                  onClick={handleBack}
-                  className={`relative inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ease-out transform hover:scale-105 bg-gradient-to-br from-primary to-primary/80 shadow-md ring-2 ring-primary/30
-                      `}
-                >
-                  <X
-                    className={`size-4 "text-primary-foreground`}
-                  />
-                </div>
-              </Button>
-            </div>
-            {/* <Button
-              size="sm"
-              variant="outline_soft_gradient"
-              className=""
+          <div className="flex items-center gap-3">
+            {/* Connect Wallet Button */}
+            <Button
               onClick={handleConnectWallet}
-            > {wallet ? (
-              <p className="text-muted-foreground text-xs truncate mt-1">
-                <span className="text-md font-semibold">Connected ✅:</span> {wallet}
-              </p>
-            ) : (
-              "Connect Wallet")}
+              variant="outline_soft_gradient"
+              size="sm"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border transition-all duration-300 ease-out ring-1 ring-primary/20 hover:ring-primary/40"
+            >
+              {wallet ? (
+                <div className="flex items-center gap-2">
+                  <Wallet2Icon className="size-4 text-primary" />
+                  <p className="text-muted-foreground text-xs whitespace-nowrap">
+                    {wallet}
+                  </p>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Wallet2Icon className="size-4" />
+                  <span className="text-sm">Connect Wallet</span>
+                </div>
+              )}
             </Button>
+
+            {/* Close Button - Separated with clear gap */}
             <button
               onClick={handleBack}
-              className="transition text-muted-foreground dark:text-foreground flex size-8 items-center justify-center rounded-lg hover:text-primary focus:outline-primary"
+              className="relative inline-flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300 ease-out transform hover:scale-105 active:scale-95 bg-gradient-to-br from-primary to-primary/80 shadow-md ring-2 ring-primary/30 hover:ring-primary/50"
             >
-              <X className="w-6 h-6" />
-            </button> */}
-
+              <X className="size-5 text-primary-foreground" />
+            </button>
           </div>
+        </div>
         </div>
 
         {/* Profile Card */}
