@@ -41,7 +41,7 @@ export function ActivityView() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const ITEMS_PER_PAGE = 10;
-  const [currentPage, setCurrentPage] = useState(1);
+  const [displayCount, setDisplayCount] = useState(10);
 
   const loadActivities = useCallback(async () => {
     if (!user) {
@@ -67,6 +67,7 @@ export function ActivityView() {
 
   useEffect(() => {
     setExpandedId(null); // Close expanded on filter change
+    setDisplayCount(10); // Reset display count on filter change
   }, [typeFilter, searchTerm]);
 
   const onrampActivities = activities.filter((a) => a.type === "onramp");
@@ -89,9 +90,11 @@ export function ActivityView() {
   });
 
   const totalPages = Math.ceil(filteredActivities.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedActivities = filteredActivities.slice(startIndex, endIndex);
+  const paginatedActivities = filteredActivities.slice(0, displayCount);
+
+  const loadMore = () => {
+    setDisplayCount(prev => prev + ITEMS_PER_PAGE);
+  };
 
   const getTitle = () => {
     switch (typeFilter) {
@@ -408,84 +411,29 @@ export function ActivityView() {
               )}
             </div>
           </div>
-        </CardContent>
 
-      </Card>
-
-      <div>
-        {totalPages > 1 && (
+          <div>
+        {displayCount < filteredActivities.length && (
           <div className="p-4 rounded-xl bg-sidebar">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex flex-col items-center gap-2">
               <p className="text-xs text-muted-foreground">
-                Showing {startIndex + 1} to{" "}
-                {Math.min(endIndex, filteredActivities.length)} of{" "}
-                {filteredActivities.length} transactions
+                Showing {displayCount} of {filteredActivities.length} activities
               </p>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                  className="rounded-xl h-8 w-8 p-0"
-                  aria-label="Previous page"
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <div className="flex items-center gap-1">
-                  {Array.from(
-                    { length: Math.min(5, totalPages) },
-                    (_, i) => {
-                      let pageNum;
-                      if (totalPages <= 5) {
-                        pageNum = i + 1;
-                      } else if (currentPage <= 3) {
-                        pageNum = i + 1;
-                      } else if (currentPage >= totalPages - 2) {
-                        pageNum = totalPages - 4 + i;
-                      } else {
-                        pageNum = currentPage - 2 + i;
-                      }
-                      return (
-                        <Button
-                          key={pageNum}
-                          variant={
-                            currentPage === pageNum
-                              ? "default"
-                              : "outline"
-                          }
-                          size="sm"
-                          onClick={() => setCurrentPage(pageNum)}
-                          className="rounded-xl h-8 w-8 p-0 text-xs"
-                          aria-label={`Go to page ${pageNum}`}
-                        >
-                          {pageNum}
-                        </Button>
-                      );
-                    }
-                  )}
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() =>
-                    setCurrentPage((prev) =>
-                      Math.min(prev + 1, totalPages)
-                    )
-                  }
-                  disabled={currentPage === totalPages}
-                  className="rounded-xl h-8 w-8 p-0"
-                  aria-label="Next page"
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={loadMore}
+                className="rounded-xl"
+              >
+                Load More ({Math.min(ITEMS_PER_PAGE, filteredActivities.length - displayCount)})
+              </Button>
             </div>
           </div>
         )}
       </div>
+        </CardContent>
+
+      </Card>
     </div>
   );
 }
@@ -526,4 +474,4 @@ function getExplorerUrl(txId: string, network: string): string {
     // Add more as needed
   };
   return explorers[network.toLowerCase()] || `https://etherscan.io/tx/${txId}`;
-}
+            }
