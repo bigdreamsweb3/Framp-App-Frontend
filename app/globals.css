@@ -171,7 +171,22 @@
     transform: translateZ(0);
   }
 
-  body::before {
+  .with-bg-img::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    /* background-image: url("/img/IMG_3234.webp"); */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: -1;
+    transform: translateZ(0);
+  }
+  
+  .with-bg-img::before {
     background-image: url("/img/IMG_3234.webp"); /* mobile portrait */
   }
 
@@ -184,13 +199,13 @@
   }
 
   /* 🌑 DARK MODE (mobile) */
-  .dark body::before {
+  .dark .with-bg-img::before {
     background-image: url("/img/IMG_3235.webp"); /* dark mobile portrait */
   }
 
   /* 🌑 DARK MODE (desktop) */
   @media (min-width: 768px) {
-    .dark body::before {
+    .dark .with-bg-img::before {
       background-image: url("/img/IMG_3235-desktop.webp");
       /* dark desktop landscape */
     }
@@ -211,6 +226,20 @@
     transition: all 0.4s ease-in-out;
   }
 
+  .with-bg-img::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(to bottom, var(--background) 0%, transparent 56px);
+    backdrop-filter: saturate(95%) blur(0.5px);
+    -webkit-backdrop-filter: saturate(95%) blur(0.5px);
+    mix-blend-mode: soft-light;
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: -1;
+    transition: all 0.4s ease-in-out;
+  }
+  
   button:hover,
   [role="button"]:hover,
   a:hover {
