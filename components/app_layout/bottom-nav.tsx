@@ -16,7 +16,7 @@ export function BottomNav() {
   const activeIndex = navItems.findIndex((item) => pathname === item.href)
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-30 bg-sidebar/85 backdrop-blur-lg border-t border-border/50 shadow-[0_-3px_9px_rgba(0,0,0,0.03)] sm:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-30 bg-sidebar border-t border-border/50 shadow-[0_-3px_9px_rgba(0,0,0,0.03)] sm:hidden">
       <div className="relative mb-[env(safe-area-inset-bottom)] flex h-14 items-center justify-center text-sm mt-1">
 
         {/* === Navigation links === */}
