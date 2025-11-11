@@ -254,7 +254,7 @@ export function ActivityView() {
                 className="pl-7 h-8 text-xs"
               />
             </div>
-            <div className="space-y-2 max-h-96 overflow-y-auto">
+            <div className="space-y-2 max-h-fit overflow-y-auto">
 
               {filteredActivities.length === 0 ? (
                 <div className="p-4 text-center text-sm text-muted-foreground">
