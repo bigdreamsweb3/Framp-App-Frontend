@@ -411,11 +411,12 @@ export function ActivityView() {
               )}
             </div>
           </div>
+        </CardContent>
 
-          <div>
+        <div>
         {displayCount < filteredActivities.length && (
-          <div className="p-4 rounded-xl bg-sidebar">
-            <div className="flex flex-col items-center gap-2">
+          <div className="p-4">
+            <div className="flex flex-row items-center justify-between gap-2">
               <p className="text-xs text-muted-foreground">
                 Showing {displayCount} of {filteredActivities.length} activities
               </p>
@@ -431,8 +432,7 @@ export function ActivityView() {
           </div>
         )}
       </div>
-        </CardContent>
-
+        
       </Card>
     </div>
   );
