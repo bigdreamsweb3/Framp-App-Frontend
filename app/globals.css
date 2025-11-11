@@ -174,7 +174,7 @@
   .with-bg-img::before {
     content: "";
     position: fixed;
-    top: 0;
+    top: 56px;
     left: 0;
     width: 100vw;
     height: 100vh;
