@@ -108,7 +108,7 @@ export function ActivityView() {
         return "No onramp activities yet. Start buying crypto to see your purchases here!";
       case "offramp":
         return "No offramp activities yet. Sell some crypto to see your sales here!";
-      case "bill":
+      case "bills":
         return "No bills yet. Pay your first bill to see it here!";
       default:
         return "No activities found. Get started by making your first transaction!";
@@ -126,7 +126,7 @@ export function ActivityView() {
         return <ArrowUpCircle className="h-4 w-4 text-green-600" />;
       case "offramp":
         return <ArrowDownCircle className="h-4 w-4 text-blue-600" />;
-      case "bill":
+      case "bills":
         return <Receipt className="h-4 w-4 text-purple-600" />;
       default:
         return <Activity className="h-4 w-4 text-muted-foreground" />;
@@ -139,7 +139,7 @@ export function ActivityView() {
         return "bg-green-50 dark:bg-green-900/30";
       case "offramp":
         return "bg-blue-50 dark:bg-blue-900/30";
-      case "bill":
+      case "bills":
         return "bg-purple-50 dark:bg-purple-900/30";
       default:
         return "bg-muted dark:bg-muted/40";
@@ -151,7 +151,7 @@ export function ActivityView() {
     switch (type) {
       case "onramp": return "Onramp";
       case "offramp": return "Offramp";
-      case "bill": return "Bill";
+      case "bills": return "Bill";
       default: return type;
     }
   };
@@ -251,7 +251,7 @@ export function ActivityView() {
                 className="pl-7 h-8 text-xs"
               />
             </div>
-            <div className="space-y-2 md:max-h-96 overflow-y-auto">
+            <div className="space-y-2 max-h-96 overflow-y-auto">
 
               {filteredActivities.length === 0 ? (
                 <div className="p-4 text-center text-sm text-muted-foreground">
