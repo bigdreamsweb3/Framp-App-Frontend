@@ -21,7 +21,7 @@ import { motion } from "framer-motion"
 import { MessageCircle, X } from "lucide-react"
 import { AIChat } from "@/components/ai-chat"
 import { AuthPage } from "@/components/auth-page"
-import { Profile } from "@/components/modals/profile-modal"
+import { ProfileModal } from "@/components/modals/profile-modal"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useUI } from "@/context/UIContext"
 import { useAuth } from "@/context/AuthContext"
@@ -288,7 +288,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                         onProfileToggle={() => setShowProfile((p) => !p)}
                     />
                     <ScrollMaskLayout topMaskHeight={56}>
-                        <div className="container mx-auto px-6 py-6 mt-[35px] max-w-7xl">
+                        <div className="container mx-auto px-6 py-6 pb-28 max-w-7xl">
                             {children}
                         </div>
                     </ScrollMaskLayout>
@@ -309,7 +309,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                 {/* The ScrollMaskLayout now handles inner scrolling only */}
                 <div className="flex-1 overflow-hidden">
                     <ScrollMaskLayout topMaskHeight={56}>
-                        <div className="container mx-auto px-4 py-6 pb-28">
+                        <div className="container mx-auto px-2 sm:px-4 py-6 pb-28">
                             {children}
                         </div>
                     </ScrollMaskLayout>
@@ -419,7 +419,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                             aria-hidden
                         />
                         <div className="relative z-10 w-full">
-                            <Profile onQuickAction={() => setShowProfile(false)} />
+                            <ProfileModal onQuickAction={() => setShowProfile(false)} />
                         </div>
                     </div>
                 )

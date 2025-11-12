@@ -5,10 +5,10 @@
 
 :root {
   /* --- LIGHT MODE --- */
-  --background: oklch(0.985 0.006 280); /* Gentle neutral canvas */
+  --background: oklch(0.98 0.01 280); /* Gentle neutral canvas */
   --foreground: oklch(0.22 0.03 270); /* Crisp dark gray-blue text */
 
-  --card: oklch(0.98 0.01 280); /* Slight contrast for depth */
+  --card: oklch(0.985 0.006 280); /* Slight contrast for depth */
   --card-foreground: oklch(0.22 0.03 270);
 
   --popover: oklch(1 0.01 280);
@@ -55,10 +55,10 @@
 
 /* --- DARK MODE --- */
 .dark {
-  --background: oklch(0.17 0.03 280); /* Deep muted violet-gray */
+  --background: oklch(0.19 0.035 280); /* Deep muted violet-gray */
   --foreground: oklch(0.96 0.015 270); /* Soft white for eyes */
 
-  --card: oklch(0.19 0.035 280);
+  --card: oklch(0.17 0.03 280);
   --card-foreground: oklch(0.96 0.015 270);
 
   --popover: oklch(0.18 0.035 280);
@@ -185,9 +185,9 @@
     z-index: -1;
     transform: translateZ(0);
   }
-  
+
   .with-bg-img::before {
-   /* background-image: url("/img/IMG_3234.webp"); /* mobile portrait */
+    /* background-image: url("/img/IMG_3234.webp"); /* mobile portrait */
   }
 
   /* 🖥️ LIGHT MODE: larger screens use a wider image */
@@ -200,13 +200,13 @@
 
   /* 🌑 DARK MODE (mobile) */
   .dark .with-bg-img::before {
-   /* background-image: url("/img/IMG_3235.webp"); /* dark mobile portrait */
+    /* background-image: url("/img/IMG_3235.webp"); /* dark mobile portrait */
   }
 
   /* 🌑 DARK MODE (desktop) */
   @media (min-width: 768px) {
     .dark .with-bg-img::before {
-    /*  background-image: url("/img/IMG_3235-desktop.webp");
+      /*  background-image: url("/img/IMG_3235-desktop.webp");
       /* dark desktop landscape */
     }
   }
@@ -215,7 +215,7 @@
     content: "";
     position: fixed;
     inset: 0;
-    
+
     backdrop-filter: saturate(95%) blur(0.5px);
     -webkit-backdrop-filter: saturate(95%) blur(0.5px);
     mix-blend-mode: soft-light;
@@ -224,7 +224,7 @@
     z-index: -1;
     transition: all 0.4s ease-in-out;
   }
-  
+
   button:hover,
   [role="button"]:hover,
   a:hover {

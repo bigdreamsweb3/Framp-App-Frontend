@@ -167,14 +167,14 @@ export function ActivityView() {
             <Activity className="w-4 h-4" />
             Activity
           </CardTitle>
-          <Button
+          {/* <Button
             variant="ghost"
             size="sm"
             onClick={loadActivities}
             className="h-6 w-6 p-0"
           >
             <RefreshCw className="h-3 w-3" />
-          </Button>
+          </Button> */}
         </CardHeader>
         <CardContent className="space-y-2 p-2">
           {[...Array(3)].map((_, i) => (
@@ -225,37 +225,40 @@ export function ActivityView() {
           </TabsContent>
         </Tabs>
 
-        <CardHeader className="space-y-2">
 
-          <div className="flex flex-row items-center justify-between">
-            <CardTitle className="text-base flex items-center gap-2">
-              <Activity className="w-4 h-4" />
-              {getTitle()}
-            </CardTitle>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={loadActivities}
-              className="h-6 w-6 p-0"
-            >
-              <RefreshCw className="h-3 w-3" />
-            </Button>
+
+        <div className="flex flex-row items-center justify-between px-2">
+          <CardTitle className="text-base flex items-center gap-2">
+            {/* <Activity className="w-4 h-4" /> */}
+            {getTitle()}
+          </CardTitle>
+
+          <div className="relative">
+            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+            <Input
+              placeholder="Search activity..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-7 h-8 text-xs"
+            />
           </div>
-        </CardHeader>
+
+          {/* <Button
+            variant="ghost"
+            size="sm"
+            onClick={loadActivities}
+            className="h-6 w-6 p-0"
+          >
+            <RefreshCw className="h-3 w-3" />
+          </Button> */}
+
+        </div>
+
 
         <CardContent className="p-0">
           <div className="p-2 space-y-2">
-            <div className="relative">
-              <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
-              <Input
-                placeholder="Search activity..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-7 h-8 text-xs"
-              />
-            </div>
-            <div className="space-y-2 max-h-fit overflow-y-auto">
 
+            <div className="space-y-2 max-h-fit overflow-y-auto">
               {filteredActivities.length === 0 ? (
                 <div className="p-4 text-center text-sm text-muted-foreground">
                   <Activity className="h-8 w-8 mx-auto mb-2 opacity-50" />
@@ -414,25 +417,27 @@ export function ActivityView() {
         </CardContent>
 
         <div>
-        {displayCount < filteredActivities.length && (
-          <div className="p-4">
-            <div className="flex flex-row items-center justify-between gap-2">
-              <p className="text-xs text-muted-foreground">
-                Showing {displayCount} of {filteredActivities.length} activities
-              </p>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={loadMore}
-                className="rounded-xl"
-              >
-                Load More ({Math.min(ITEMS_PER_PAGE, filteredActivities.length - displayCount)})
-              </Button>
+          {displayCount < filteredActivities.length && (
+            <div className="px-2">
+              <div className="flex flex-row items-center justify-between gap-2">
+                <p className="text-xs text-muted-foreground">
+                  Showing {displayCount} of {filteredActivities.length} activities
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={loadMore}
+                  className="rounded-xl"
+                >
+                  Load More
+
+                  {/* ({Math.min(ITEMS_PER_PAGE, filteredActivities.length - displayCount)}) */}
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-        
+          )}
+        </div>
+
       </Card>
     </div>
   );
@@ -474,4 +479,4 @@ function getExplorerUrl(txId: string, network: string): string {
     // Add more as needed
   };
   return explorers[network.toLowerCase()] || `https://etherscan.io/tx/${txId}`;
-            }
+}

@@ -1,84 +1,92 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Wallet2Icon, X } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
-import { Card } from "../ui/card";
-import { useRouter } from "next/navigation";
-import { Avatar } from "@/components/ui/avatar";
-import { App_Name } from "@/app/appConfig";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Check, Copy, LayoutDashboard, User, Wallet, X } from "lucide-react"
+import { useAuth } from "@/context/AuthContext"
+import { useRouter } from "next/navigation"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { App_Name } from "@/app/appConfig"
 
-interface ProfileProps {
-  onQuickAction?: (action: string) => void;
+interface ProfileModalProps {
+  onQuickAction?: (action: string) => void
 }
 
-export function Profile({ onQuickAction }: ProfileProps) {
-  const router = useRouter();
-  const [wallet, setWallet] = useState<string | null>(null);
-  const { user, logout } = useAuth();
+export function ProfileModal({ onQuickAction }: ProfileModalProps) {
+  const router = useRouter()
+  const [wallet, setWallet] = useState<string | null>(null)
+  const [copiedId, setCopiedId] = useState(false)
+  const { user, logout } = useAuth()
 
-  // 🔹 Dummy connect wallet function
   const handleConnectWallet = () => {
-    // Generate a fake wallet address like "7xGf...JkPz"
-    const dummyWallet = "7xGf" + Math.random().toString(36).substring(2, 6) + "...JkPz";
-    setWallet(dummyWallet);
-  };
+    const dummyWallet = "7xGf" + Math.random().toString(36).substring(2, 6) + "...JkPz"
+    setWallet(dummyWallet)
+  }
+
+  const handleCopyId = async () => {
+    if (user?.id) {
+      await navigator.clipboard.writeText(user.id)
+      setCopiedId(true)
+      setTimeout(() => setCopiedId(false), 2000)
+    }
+  }
 
   const handleLogin = () => {
     try {
-      router.push("/login");
+      router.push("/login")
     } catch (e) {
-      window.location.href = "/login";
+      window.location.href = "/login"
     }
-  };
+  }
 
   const handleBack = () => {
     if (typeof onQuickAction === "function") {
-      onQuickAction("close");
+      onQuickAction("close")
       try {
-        window.dispatchEvent(new CustomEvent("framp:closeProfile"));
+        window.dispatchEvent(new CustomEvent("framp:closeProfile"))
       } catch (e) { }
-      return;
+      return
     }
 
     if (typeof window !== "undefined") {
       try {
         if (window.history.length > 1) {
-          router.back();
-          return;
+          router.back()
+          return
         }
       } catch (e) { }
 
-      const prev = sessionStorage.getItem("framp.prevPath");
+      const prev = sessionStorage.getItem("framp.prevPath")
       if (prev) {
-        router.push(prev);
-        return;
+        router.push(prev)
+        return
       }
 
       if (document.referrer) {
-        window.location.href = document.referrer;
-        return;
+        window.location.href = document.referrer
+        return
       }
     }
 
-    router.push("/");
-  };
+    router.push("/")
+  }
 
   return (
     <div className="fixed inset-0 z-[999] flex items-center justify-center md:justify-end">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/40 backdrop-blur-sm z-10"
-        onClick={handleBack}
-      />
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-10" onClick={handleBack} />
 
       {/* Modal */}
-      <div className="mx-auto md:mx-0 w-full md:w-[520px] h-full md:min-h-screen bg-background p-4 relative z-20 overflow-auto border-l md:border-l-0 border-border/50">
+      <div className="mx-auto md:mx-0 w-full md:w-[520px] h-full md:min-h-screen bg-background py-3 relative z-20 overflow-auto border-l md:border-l-0 border-border/50">
         {/* Header */}
-{/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-foreground">Control Deck</h1>
+        <div className="mb-4 flex items-center justify-between px-2 sm:px-4 pb-3 border-b border-border">
+          <div className="flex items-center gap-2">
+            <span className="inline-flex items-center justify-center w-8 h-8 rounded-xl">
+              <LayoutDashboard className="w-8 h-8 text-primary" />
+            </span>
+            {/* <h2 className="text-lg font-medium text-foreground">Control Deck</h2> */}
+          </div>
+
           <div className="flex items-center gap-3">
             {/* Connect Wallet Button */}
             <Button
@@ -89,130 +97,102 @@ export function Profile({ onQuickAction }: ProfileProps) {
             >
               {wallet ? (
                 <div className="flex items-center gap-2">
-                  <Wallet2Icon className="size-4 text-primary" />
-                  <p className="text-muted-foreground text-xs whitespace-nowrap">
-                    {wallet}
-                  </p>
+                  <Wallet className="size-4 text-primary" />
+                  <p className="text-muted-foreground text-xs whitespace-nowrap">{wallet}</p>
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <Wallet2Icon className="size-4" />
+                  <Wallet className="size-4" />
                   <span className="text-sm">Connect Wallet</span>
                 </div>
               )}
             </Button>
 
-            {/* Close Button - Separated with clear gap */}
+            {/* Close Button */}
             <button
               onClick={handleBack}
-              className="relative inline-flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 ease-out transform hover:scale-105 active:scale-95 bg-gradient-to-br from-primary to-primary/80 shadow-md ring-2 ring-primary/30 hover:ring-primary/50"
+              className="transition text-muted-foreground dark:text-foreground flex size-8 items-center justify-center rounded-lg hover:text-primary focus:outline-primary"
             >
-              <X className="size-4 text-primary-foreground" />
+              <X className="w-6 h-6" />
             </button>
           </div>
         </div>
-    
 
-        {/* Profile Card */}
-        <Card className="mb-6 items-center md:items-start text-center md:text-start flex-col gap-3">
+
+        {/* Profile Section */}
+        <div className="space-y-6 px-2 sm:px-4">
           {user?.id ? (
-            <>
-              <div className="w-full flex items-center md:items-start text-center md:text-start flex-row gap-3">
-                <Avatar className="ml-3 size-14">
-                  <Button
-                    variant="ghost"
-                    className={`relative inline-flex items-center justify-center w-8 h-8 md:w-9 md:h-9 overflow-hidden rounded-full transition-all duration-300 ease-out transform hover:scale-105 active:scale-95 bg-gradient-to-br shadow-lg ring-2 ring-primary/30`}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300" />
-                    <svg
-                      className={`relative w-6 h-6 md:w-8 md:h-8 transition-colors duration-300 text-primary hover:text-primary/80`}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </Button>
-                </Avatar>
+            <div className="space-y-4">
+              {/* Profile */}
+              <div className="flex flex-col gap-3 p-3 bg-muted/50 rounded-xl border border-border/50">
 
-                {/* <div className="my-1 text-start"> */}
-                <div className="text-start">
-                  <h2 className="text-md font-semibold">
-                    <span className="lowercase">
-                      {App_Name}-{user.name || "User"}
-                    </span>{" "}
-                    {user.id && (
-                      <span className="text-sm text-muted-foreground capitalize">
-                        -ID: {user.id.slice(0, 8)}
-                      </span>
+                <div className="flex items-center gap-3 border-b pb-2">
+                  <Avatar className="w-12 h-12">
+                    <AvatarImage src="" />
+                    <AvatarFallback className="bg-muted text-muted-foreground">
+                      <User className="h-6 w-6" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-foreground truncate">
+                      {user.name || `${App_Name}-User`}
+                    </p>
+                    <p className="text-xs text-muted-foreground truncate">{user.email || "user@email.com"}</p>
+                  </div>
+                </div>
+
+                {/* User ID */}
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide flex-shrink-0">User ID</span>
+                  <button
+                    onClick={handleCopyId}
+                    className="flex items-center gap-2 bg-background rounded-lg px-2 py-1 hover:bg-muted transition-colors"
+                  >
+                    <code className="text-xs font-mono text-foreground/80">{user.id.slice(0, 8)}...</code>
+                    {copiedId ? (
+                      <Check className="h-3 w-3 text-green-500" />
+                    ) : (
+                      <Copy className="h-3 w-3 text-muted-foreground hover:text-foreground" />
                     )}
-                  </h2>
-                  <p className="text-muted-foreground text-sm">
-                    {user.email || "user@email.com"}
-                  </p>
+                  </button>
                 </div>
               </div>
 
-              {/* Wallet Display */}
-              <div className="w-full flex items-center justify-end px-3">
+              {/* Logout Button fixed at bottom */}
+              {user?.id && (
+                <div className="absolute bottom-0 left-0 w-full bg-background/90 backdrop-blur-sm border-t border-border p-4">
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => {
+                      logout?.()
+                      handleBack()
+                    }}
+                    className="rounded-xl"
+                  >
+                    Log Out
+                  </Button>
+                </div>
+              )}
 
-                <Button
-                  size="sm"
-                  variant="outline_soft_gradient"
-                  className="mt-2"
-                  onClick={handleConnectWallet}
-                > {wallet ? (
-                  <p className="text-muted-foreground text-xs truncate mt-1">
-                    <span className="text-md font-semibold">Connected ✅:</span> {wallet}
-                  </p>
-                ) : (
-                  "Connect Wallet")}
-                </Button>
-
-              </div>
-              {/* </div> */}
-            </>
+            </div>
           ) : (
-            <div className="w-full p-6 text-center">
-              <p className="text-sm text-muted-foreground mb-3">No user is logged in.</p>
-              <Button onClick={handleLogin} className="mx-auto">Log In</Button>
+            <div className="text-center space-y-4 p-4">
+              <Avatar className="w-20 h-20 mx-auto">
+                <AvatarFallback className="bg-muted text-muted-foreground">
+                  <User className="h-10 w-10" />
+                </AvatarFallback>
+              </Avatar>
+              <div className="space-y-2">
+                <p className="text-sm text-muted-foreground">Please log in to access your profile.</p>
+                <Button onClick={handleLogin} size="sm" className="w-full rounded-xl">
+                  Log In
+                </Button>
+              </div>
             </div>
           )}
-        </Card>
-
-        {/* My Account Section */}
-        <div>
-          <h3 className="text-muted-foreground mb-3 text-sm font-medium">
-            My Account
-          </h3>
-          <div className="space-y-2">
-            {/* <Button
-              onClick={handleConnectWallet}
-              className="w-full"
-              variant="outline"
-            >
-              {wallet ? "Wallet Connected ✅" : "Connect Wallet"}
-            </Button> */}
-
-            <button
-              onClick={() => {
-                logout?.();
-                if (typeof onQuickAction === "function") onQuickAction("close");
-                try {
-                  window.dispatchEvent(new CustomEvent("framp:closeProfile"));
-                } catch (e) { }
-              }}
-              className="block font-medium text-red-500 hover:underline w-full text-left"
-            >
-              Log Out
-            </button>
-          </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

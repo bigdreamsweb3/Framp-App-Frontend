@@ -81,7 +81,7 @@ export function AppHeader({
           ${scrolled || mobileOpen ? "" : "bg-transparent"}
           ${scrolled ? "" : ""}`}
       >
-        <div className="w-full h-full px-4 flex items-center justify-between">
+        <div className="w-full h-full px-2 sm:px-4 flex items-center justify-between">
           {/* Left side - Logo + Mobile Menu */}
           <div className="flex items-center gap-2">
             <Link href="/">
