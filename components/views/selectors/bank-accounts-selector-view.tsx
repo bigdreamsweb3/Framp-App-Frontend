@@ -4,8 +4,12 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Building, Plus, Copy, Check, X, Loader2, Banknote } from "lucide-react";
+import { Building, Plus, Copy, Check, X, Loader2, Banknote, Search, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { toast } from "sonner"; // Assuming you have a toast library for copy feedback
 
 type Account = {
   id: string;
@@ -44,6 +48,11 @@ export const BankAccountsView: React.FC<BankAccountsViewProps> = ({
 
   // Mock accounts - replace with real API calls
   const [accounts, setAccounts] = useState<Account[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const ITEMS_PER_PAGE = 10;
+  const [displayCount, setDisplayCount] = useState(10);
 
   useEffect(() => {
     // Simulate API loading
@@ -76,6 +85,28 @@ export const BankAccountsView: React.FC<BankAccountsViewProps> = ({
 
     return () => clearTimeout(timer);
   }, []);
+
+  // Reset on search change
+  useEffect(() => {
+    setExpandedId(null);
+    setDisplayCount(10);
+  }, [searchTerm]);
+
+  const filteredAccounts = accounts.filter((account) => {
+    const matchesSearch =
+      account.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      account.accountNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      account.accountName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      account.details.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return matchesSearch;
+  });
+
+  const paginatedAccounts = filteredAccounts.slice(0, displayCount);
+
+  const loadMore = () => {
+    setDisplayCount(prev => prev + ITEMS_PER_PAGE);
+  };
 
   const handleAddAccount = async () => {
     if (!newAccount.bankName || !newAccount.accountNumber || !newAccount.accountName) {
@@ -116,6 +147,7 @@ export const BankAccountsView: React.FC<BankAccountsViewProps> = ({
     try {
       await navigator.clipboard.writeText(text);
       setCopiedId(id);
+      toast.success("Copied to clipboard");
       setTimeout(() => setCopiedId(null), 2000);
     } catch (err) {
       console.error("Failed to copy:", err);
@@ -128,26 +160,22 @@ export const BankAccountsView: React.FC<BankAccountsViewProps> = ({
     onClose();
   };
 
-  // Loading Skeleton Component
-  const AccountSkeleton = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-      {[...Array(4)].map((_, index) => (
-        <div
-          key={index}
-          className="p-4 rounded-xl border border-border/50 bg-muted/20 animate-pulse"
-        >
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-2 h-2 rounded-full bg-muted-foreground/30" />
-            <div className="h-4 bg-muted-foreground/20 rounded w-3/4" />
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-3 bg-muted-foreground/20 rounded w-1/2" />
-            <div className="w-6 h-6 rounded-lg bg-muted-foreground/20 ml-auto" />
-          </div>
-        </div>
-      ))}
-    </div>
+  const toggleExpanded = (id: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setExpandedId(expandedId === id ? null : id);
+  };
+
+  const getBankIcon = () => (
+    <Building className="h-4 w-4 text-green-600" />
   );
+
+  const getBankBg = () => "bg-green-50 dark:bg-green-900/30";
+
+  const getBankLabel = (account: Account) => account.type === "bank" ? "Bank" : "Wallet";
+
+  const truncateAccountNumber = (number: string, start = 4, end = 4): string => {
+    return `${number.slice(0, start)}...${number.slice(-end)}`;
+  };
 
   return (
     <div className="fixed inset-0 z-999 flex items-center justify-center">
@@ -276,20 +304,12 @@ export const BankAccountsView: React.FC<BankAccountsViewProps> = ({
               </div>
             </div>
           ) : isLoading ? (
-            <div className="space-y-6">
-              {/* Loading State */}
-              <div className="flex items-center justify-center py-8">
-                <div className="text-center">
-                  <div className="relative mb-4">
-                    <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2 text-foreground">Loading Accounts</h3>
-                  <p className="text-sm text-muted-foreground">Fetching your bank accounts...</p>
-                </div>
-              </div>
-              <AccountSkeleton />
+            <div className="space-y-2 p-2">
+              {[...Array(5)].map((_, i) => (
+                <Skeleton key={i} className="h-12 w-full rounded-md" />
+              ))}
             </div>
-          ) : accounts.length === 0 ? (
+          ) : filteredAccounts.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full py-8">
               <Banknote className="h-16 w-16 text-muted-foreground mb-4 opacity-50" />
               <h3 className="text-lg font-semibold mb-2 text-foreground">
@@ -307,79 +327,137 @@ export const BankAccountsView: React.FC<BankAccountsViewProps> = ({
               </Button>
             </div>
           ) : (
-            <div className="space-y-6">
-              {/* Accounts Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {accounts.map((account) => (
-                  <div
-                    key={account.id}
-                    onClick={() => handleSelect(account)}
-                    className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                      selectedAccount?.id === account.id 
-                        ? "border-primary bg-primary/5 ring-2 ring-primary/20" 
-                        : "border-border/50 hover:border-border hover:bg-muted/50"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <div className={`w-2 h-2 rounded-full ${
-                            selectedAccount?.id === account.id ? "bg-primary" : "bg-muted-foreground/50"
-                          }`} />
-                          <span className="font-medium text-sm truncate">{account.name}</span>
-                          {account.isDefault && (
-                            <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
-                              Default
+            <div className="space-y-2">
+              {/* Search */}
+              <div className="relative">
+                <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                <Input
+                  placeholder="Search accounts..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-7 h-8 text-xs focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none rounded-md"
+                />
+              </div>
+
+              {/* Accounts List */}
+              <div className="space-y-2 max-h-fit overflow-y-auto">
+                {paginatedAccounts.map((account) => (
+                  <div key={account.id} className="space-y-1 border rounded-md overflow-hidden bg-card">
+                    <div
+                      className={`flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors ${
+                        selectedAccount?.id === account.id ? "bg-primary/5" : ""
+                      }`}
+                      onClick={() => handleSelect(account)}
+                    >
+                      <div className="flex items-center gap-3 flex-1">
+                        <div className="flex-shrink-0">
+                          <div className={`w-8 h-8 rounded flex items-center justify-center ${getBankBg()}`}>
+                            {getBankIcon()}
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1 mb-1">
+                            <span className="text-xs font-medium truncate">
+                              {getBankLabel(account)}
+                              {account.name && ` (${account.name})`}
                             </span>
-                          )}
-                        </div>
-                        <div className="text-xs text-muted-foreground mb-1">
-                          {account.accountName}
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-muted-foreground font-mono">
-                            {account.accountNumber}
-                          </span>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-6 w-6 rounded-lg hover:bg-muted"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleCopy(account.accountNumber || "", account.id);
-                            }}
-                          >
-                            {copiedId === account.id ? (
-                              <Check className="w-3 h-3 text-green-600" />
-                            ) : (
-                              <Copy className="w-3 h-3" />
-                            )}
-                          </Button>
+                            {account.isDefault && <Badge variant="secondary" className="text-xs">Default</Badge>}
+                          </div>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {account.accountName}
+                          </p>
                         </div>
                       </div>
-                    </div>
-                    
-                    <AnimatePresence>
-                      {copiedId === account.id && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-foreground text-background text-xs px-2 py-1 rounded-lg"
+
+                      <div className="flex items-center justify-end gap-3">
+                        <div className="flex flex-col items-end flex-shrink-0 text-xs space-y-1">
+                          <span className="font-medium text-xs">{account.details}</span>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span
+                                  className="font-mono truncate cursor-pointer text-xs text-muted-foreground"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleCopy(account.accountNumber || "", account.id);
+                                  }}
+                                >
+                                  {truncateAccountNumber(account.accountNumber || "")}
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent>Click to copy</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                          <AnimatePresence>
+                            {copiedId === account.id && (
+                              <motion.span
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="text-xs text-green-600"
+                              >
+                                Copied!
+                              </motion.span>
+                            )}
+                          </AnimatePresence>
+                        </div>
+
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => toggleExpanded(account.id, e)}
+                          className="h-6 w-6 p-0 text-xs text-muted-foreground hover:text-foreground"
                         >
-                          Copied!
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                          <ChevronDown className={`h-3 w-3 transition-transform ${expandedId === account.id ? 'rotate-180' : ''}`} />
+                        </Button>
+                      </div>
+                    </div>
+                    {expandedId === account.id && (
+                      <div className="text-xs text-muted-foreground space-y-1 bg-muted/50 px-2 pb-2">
+                        <p className="flex items-center justify-between">
+                          <span>Full Account Number:</span>
+                          <span className="font-mono truncate">{account.accountNumber}</span>
+                        </p>
+                        {account.bankCode && (
+                          <p className="flex items-center justify-between">
+                            <span>Bank Code:</span>
+                            <span>{account.bankCode}</span>
+                          </p>
+                        )}
+                        {!account.isDefault && (
+                          <p className="flex items-center justify-between">
+                            <span>Set as Default:</span>
+                            <span>Mock: Set Default</span>
+                          </p>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
+
+              {/* Load More */}
+              {displayCount < filteredAccounts.length && (
+                <div className="flex flex-row items-center justify-between gap-2 pt-2">
+                  <p className="text-xs text-muted-foreground">
+                    Showing {displayCount} of {filteredAccounts.length} accounts
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={loadMore}
+                    className="rounded-md h-8"
+                  >
+                    Load More
+                  </Button>
+                </div>
+              )}
 
               {/* Add Account Button */}
               <Button
                 onClick={() => setShowAddAccount(true)}
                 variant="outline"
-                className="w-full rounded-lg border-border/50 hover:bg-muted/50 py-3"
+                className="w-full rounded-md border-border/50 hover:bg-muted/50 py-3 mt-4"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Add New Bank Account

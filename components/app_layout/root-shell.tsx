@@ -27,7 +27,6 @@ import { useUI } from "@/context/UIContext"
 import { useAuth } from "@/context/AuthContext"
 import { ThemeToggle } from "../theme-toggle"
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
-import ScrollMaskLayout from "@/components/app_layout/ScrollMaskLayout"
 
 export default function RootShell({ children }: { children: React.ReactNode }) {
     const [showAuth, setShowAuth] = useState(false)
@@ -279,7 +278,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 max-h-screen">
+                <div className="flex-1 overflow-y-auto">
                     <AppHeader
                         onAuthClick={handleShowAuth}
                         chatActive={showChat}
@@ -287,17 +286,14 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                         profileActive={showProfile}
                         onProfileToggle={() => setShowProfile((p) => !p)}
                     />
-                    <ScrollMaskLayout topMaskHeight={56}>
-                        <div className="container mx-auto px-6 py-6 pb-28 max-w-7xl">
-                            {children}
-                        </div>
-                    </ScrollMaskLayout>
+                    <div className="container mx-auto px-6 py-6 mt-[35px] max-w-7xl">
+                        {children}
+                    </div>
                 </div>
             </div>
 
             {/* Mobile Layout */}
-            {/* ✅ Mobile Layout Fixed */}
-            <div className="md:hidden h-screen overflow-hidden flex flex-col">
+            <div className="md:hidden min-h-screen ">
                 <AppHeader
                     onAuthClick={handleShowAuth}
                     chatActive={false}
@@ -306,16 +302,74 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                     onProfileToggle={() => setShowProfile((p) => !p)}
                 />
 
-                {/* The ScrollMaskLayout now handles inner scrolling only */}
-                <div className="flex-1 overflow-hidden">
-                    <ScrollMaskLayout topMaskHeight={56}>
-                        <div className="container mx-auto px-2 sm:px-4 py-6 pb-28">
-                            {children}
-                        </div>
-                    </ScrollMaskLayout>
-                </div>
-            </div>
+                <main className="container mx-auto px-4 py-6 max-w-md pb-28 mt-[6px]">
+                    {/* <div className="flex flex-row items-center gap-2 h-fit mb-6">
+                         <Tabs
+                            value={activeView}
+                            onValueChange={handleTabChange}
+                            className="w-full flex flex-row"
+                        >
+                            <TabsList className="grid w-full grid-cols-4">
+                                <TabsTrigger
+                                    value="onramp"
+                                    className={activeView === "onramp" ? "text-primary" : "text-muted-foreground text-xs"}
+                                >
+                                    <ArrowUpCircle className="h-4 w-4" />
+                                    Gate
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="bills"
+                                    className={activeView === "bills" ? "text-primary" : "text-muted-foreground text-xs"}
+                                >
+                                    <QrCode className="h-4 w-4" />
+                                    Bills
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    value="save"
+                                    className={activeView === "save" ? "text-primary" : "text-muted-foreground text-xs"}
+                                >
+                                    <PiggyBank className="h-4 w-4" />
+                                    Save
+                                </TabsTrigger>
 
+                                <TabsTrigger
+                                    value="wallets"
+                                    className={activeView === "wallets" ? "text-primary" : "text-muted-foreground text-xs"}
+                                >
+                                    <WalletIcon className="h-4 w-4" />
+                                    Wallets
+                                </TabsTrigger>
+                            </TabsList>
+
+
+                            <TabsList>
+                                <TabsTrigger
+                                    value="activity"
+                                    className={activeView === "activity" ? "text-primary" : "text-muted-foreground text-xs"}
+                                >
+                                    <ActivityIcon className="h-4 w-4 font-bold" />
+                                </TabsTrigger>
+                            </TabsList>
+                        </Tabs>
+
+                        
+                        <Link
+                            href="/activity"
+                            onClick={() => setActiveView("activity")}
+                            className={`flex flex-col items-center text-xs p-2 hover:bg-muted/20 justify-center rounded-full bg-muted w-7 ${activeView === "activity" ? "text-primary" : "text-muted-foreground text-xs"
+                                }`}
+                        >
+                            <ActivityIcon className="w-4 h-4" />
+                        </Link>
+
+
+                    </div> */}
+                    {children}
+                </main>
+
+
+
+            </div >
 
             {/* Mobile Bottom Navigation */}
             <BottomNav />

@@ -5,11 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Wallet, Plus, Copy, Check, X, Loader2 } from "lucide-react";
+import { Wallet, Plus, Copy, Check, X, Loader2, Search, ChevronDown } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { useUI } from "@/context/UIContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { WalletAPI } from "@/lib/api/wallets";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { toast } from "sonner"; // Assuming you have a toast library for copy feedback
+
 import type { WalletMethod } from "@/types/wallet";
 
 interface WalletViewProps {
@@ -32,6 +37,11 @@ export function WalletView({
   const [newWallet, setNewWallet] = useState({ walletAddress: "", walletName: "" });
   const [error, setError] = useState<string | null>(null);
   const [addingWallet, setAddingWallet] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  const ITEMS_PER_PAGE = 10;
+  const [displayCount, setDisplayCount] = useState(10);
 
   useEffect(() => {
     if (authLoading) {
@@ -68,6 +78,27 @@ export function WalletView({
     fetchWallets();
   }, [user, authLoading]);
 
+  // Reset on search change
+  useEffect(() => {
+    setExpandedId(null);
+    setDisplayCount(10);
+  }, [searchTerm]);
+
+  const filteredWallets = wallets.filter((wallet) => {
+    const matchesSearch =
+      wallet.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      wallet.walletAddress.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      wallet.details?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    return matchesSearch;
+  });
+
+  const paginatedWallets = filteredWallets.slice(0, displayCount);
+
+  const loadMore = () => {
+    setDisplayCount(prev => prev + ITEMS_PER_PAGE);
+  };
+
   const handleAddWallet = async () => {
     if (!newWallet.walletAddress || !newWallet.walletName) {
       setError("Wallet address and name are required");
@@ -98,6 +129,7 @@ export function WalletView({
     try {
       await navigator.clipboard.writeText(text);
       setCopiedId(id);
+      toast.success("Copied to clipboard");
       setTimeout(() => setCopiedId(null), 2000);
     } catch (err) {
       console.error("Failed to copy:", err);
@@ -110,26 +142,22 @@ export function WalletView({
     onClose?.();
   };
 
-  // Loading Skeleton Component
-  const WalletSkeleton = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-      {[...Array(6)].map((_, index) => (
-        <div
-          key={index}
-          className="p-4 rounded-xl border border-border/50 bg-muted/20 animate-pulse"
-        >
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-2 h-2 rounded-full bg-muted-foreground/30" />
-            <div className="h-4 bg-muted-foreground/20 rounded w-3/4" />
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="h-3 bg-muted-foreground/20 rounded w-1/2" />
-            <div className="w-6 h-6 rounded-lg bg-muted-foreground/20 ml-auto" />
-          </div>
-        </div>
-      ))}
-    </div>
+  const toggleExpanded = (id: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setExpandedId(expandedId === id ? null : id);
+  };
+
+  const getWalletIcon = () => (
+    <Wallet className="h-4 w-4 text-blue-600" />
   );
+
+  const getWalletBg = () => "bg-blue-50 dark:bg-blue-900/30";
+
+  const getWalletLabel = (wallet: WalletMethod) => wallet.network || "Wallet";
+
+  const truncateAddress = (address: string, start = 6, end = 4): string => {
+    return `${address.slice(0, start)}...${address.slice(-end)}`;
+  };
 
   return (
     <div className="fixed inset-0 z-999 flex items-center justify-center">
@@ -246,20 +274,12 @@ export function WalletView({
               </div>
             </div>
           ) : isLoading ? (
-            <div className="space-y-6">
-              {/* Loading State */}
-              <div className="flex items-center justify-center py-8">
-                <div className="text-center">
-                  <div className="relative mb-4">
-                    <Loader2 className="w-8 h-8 text-primary animate-spin mx-auto" />
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2 text-foreground">Loading Wallets</h3>
-                  <p className="text-sm text-muted-foreground">Fetching your wallet information...</p>
-                </div>
-              </div>
-              <WalletSkeleton />
+            <div className="space-y-2 p-2">
+              {[...Array(5)].map((_, i) => (
+                <Skeleton key={i} className="h-12 w-full rounded-md" />
+              ))}
             </div>
-          ) : wallets.length === 0 ? (
+          ) : filteredWallets.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full py-8">
               <Wallet className="h-16 w-16 text-muted-foreground mb-4 opacity-50" />
               <h3 className="text-lg font-semibold mb-2 text-foreground">
@@ -277,71 +297,140 @@ export function WalletView({
               </Button>
             </div>
           ) : (
-            <div className="space-y-6">
-              {/* Wallets Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {wallets.map((wallet) => (
-                  <div
-                    key={wallet.id}
-                    onClick={() => handleSelect(wallet)}
-                    className={`p-4 rounded-xl border cursor-pointer transition-all ${
-                      selectedWallet?.id === wallet.id 
-                        ? "border-primary bg-primary/5 ring-2 ring-primary/20" 
-                        : "border-border/50 hover:border-border hover:bg-muted/50"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <div className={`w-2 h-2 rounded-full ${
-                            selectedWallet?.id === wallet.id ? "bg-primary" : "bg-muted-foreground/50"
-                          }`} />
-                          <span className="font-medium text-sm truncate">{wallet.name}</span>
+            <div className="space-y-2">
+              {/* Search */}
+              <div className="relative">
+                <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-3 w-3 text-muted-foreground" />
+                <Input
+                  placeholder="Search wallets..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-7 h-8 text-xs focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none rounded-md"
+                />
+              </div>
+
+              {/* Wallets List */}
+              <div className="space-y-2 max-h-fit overflow-y-auto">
+                {paginatedWallets.map((wallet) => (
+                  <div key={wallet.id} className="space-y-1 border rounded-md overflow-hidden bg-card">
+                    <div
+                      className={`flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors ${
+                        selectedWallet?.id === wallet.id ? "bg-primary/5" : ""
+                      }`}
+                      onClick={() => handleSelect(wallet)}
+                    >
+                      <div className="flex items-center gap-3 flex-1">
+                        <div className="flex-shrink-0">
+                          <div className={`w-8 h-8 rounded flex items-center justify-center ${getWalletBg()}`}>
+                            {getWalletIcon()}
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-muted-foreground font-mono truncate">
-                            {wallet.walletAddress.slice(0, 8)}...{wallet.walletAddress.slice(-8)}
-                          </span>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-6 w-6 rounded-lg hover:bg-muted"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleCopy(wallet.walletAddress, wallet.id);
-                            }}
-                          >
-                            {copiedId === wallet.id ? (
-                              <Check className="w-3 h-3 text-green-600" />
-                            ) : (
-                              <Copy className="w-3 h-3" />
-                            )}
-                          </Button>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1 mb-1">
+                            <span className="text-xs font-medium truncate">
+                              {getWalletLabel(wallet)}
+                              {wallet.network && ` (${wallet.network})`}
+                            </span>
+                            {wallet.isDefault && <Badge variant="secondary" className="text-xs">Default</Badge>}
+                          </div>
+                          <p className="text-xs text-muted-foreground truncate">
+                            {wallet.name}
+                          </p>
                         </div>
                       </div>
-                    </div>
-                    
-                    <AnimatePresence>
-                      {copiedId === wallet.id && (
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-foreground text-background text-xs px-2 py-1 rounded-lg"
+
+                      <div className="flex items-center justify-end gap-3">
+                        <div className="flex flex-col items-end flex-shrink-0 text-xs space-y-1">
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <span
+                                  className="font-mono truncate cursor-pointer text-xs text-muted-foreground"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleCopy(wallet.walletAddress, wallet.id);
+                                  }}
+                                >
+                                  {truncateAddress(wallet.walletAddress)}
+                                </span>
+                              </TooltipTrigger>
+                              <TooltipContent>Click to copy</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                          <AnimatePresence>
+                            {copiedId === wallet.id && (
+                              <motion.span
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="text-xs text-green-600"
+                              >
+                                Copied!
+                              </motion.span>
+                            )}
+                          </AnimatePresence>
+                        </div>
+
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => toggleExpanded(wallet.id, e)}
+                          className="h-6 w-6 p-0 text-xs text-muted-foreground hover:text-foreground"
                         >
-                          Copied!
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                          <ChevronDown className={`h-3 w-3 transition-transform ${expandedId === wallet.id ? 'rotate-180' : ''}`} />
+                        </Button>
+                      </div>
+                    </div>
+                    {expandedId === wallet.id && (
+                      <div className="text-xs text-muted-foreground space-y-1 bg-muted/50 px-2 pb-2">
+                        <p className="flex items-center justify-between">
+                          <span>Full Address:</span>
+                          <span className="font-mono truncate">{wallet.walletAddress}</span>
+                        </p>
+                        {!wallet.isDefault && (
+                          <p className="flex items-center justify-between">
+                            <span>Set as Default:</span>
+                            <Button
+                              variant="link"
+                              size="sm"
+                              className="h-auto p-0 text-xs"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                // handleSetDefault(wallet.id); // If needed
+                              }}
+                            >
+                              Set Default
+                            </Button>
+                          </p>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
+
+              {/* Load More */}
+              {displayCount < filteredWallets.length && (
+                <div className="flex flex-row items-center justify-between gap-2 pt-2">
+                  <p className="text-xs text-muted-foreground">
+                    Showing {displayCount} of {filteredWallets.length} wallets
+                  </p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={loadMore}
+                    className="rounded-md h-8"
+                  >
+                    Load More
+                  </Button>
+                </div>
+              )}
 
               {/* Add Wallet Button */}
               <Button
                 onClick={() => setShowAddWallet(true)}
                 variant="outline"
-                className="w-full rounded-lg border-border/50 hover:bg-muted/50 py-3"
+                className="w-full rounded-md border-border/50 hover:bg-muted/50 py-3 mt-4"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Add New Wallet

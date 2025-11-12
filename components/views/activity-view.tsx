@@ -164,7 +164,7 @@ export function ActivityView() {
       <Card className="w-full max-w-md mx-auto sm:max-w-2xl">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <CardTitle className="text-base flex items-center gap-2">
-            <Activity className="w-4 h-4" />
+            <Activity className="w-3 h-3" />
             Activity
           </CardTitle>
           {/* <Button
@@ -229,8 +229,8 @@ export function ActivityView() {
 
         <div className="flex flex-row items-center justify-between px-2">
           <CardTitle className="text-base flex items-center gap-2">
-            {/* <Activity className="w-4 h-4" /> */}
-            {getTitle()}
+            <Activity className="w-3 h-3" />
+            Activities
           </CardTitle>
 
           <div className="relative">
@@ -239,9 +239,10 @@ export function ActivityView() {
               placeholder="Search activity..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-7 h-8 text-xs"
+              className="pl-7 h-8 text-xs focus-visible:ring-0 focus-visible:ring-offset-0 focus:outline-none"
             />
           </div>
+
 
           {/* <Button
             variant="ghost"

@@ -2,9 +2,13 @@
 
 import { useState, useEffect } from "react"
 import QRCode from "react-qr-code"
-import { Copy, CheckCircle2, AlertCircle, Zap, Shield, X, ArrowLeft } from "lucide-react"
+import { Copy, CheckCircle2, AlertCircle, Zap, Shield, X, ArrowLeft,  ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { Badge } from "@/components/ui/badge"
+import { toast } from "sonner"
 
 type Props = {
   requestId: string
@@ -31,6 +35,7 @@ export default function OnRampPaymentDetails({
   const [timeLeft, setTimeLeft] = useState("")
   const [copied, setCopied] = useState(false)
   const [isExpired, setIsExpired] = useState(false)
+  const [expandedId, setExpandedId] = useState<string | null>(null)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -52,158 +57,251 @@ export default function OnRampPaymentDetails({
   const copyToClipboard = () => {
     navigator.clipboard.writeText(walletAddress)
     setCopied(true)
+    toast.success("Copied to clipboard")
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  const toggleExpanded = (id: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation()
+    setExpandedId(expandedId === id ? null : id)
+  }
+
+  const getPaymentIcon = () => (
+    <Zap className="h-4 w-4 text-green-600" />
+  )
+
+  const getPaymentBg = () => "bg-green-50 dark:bg-green-900/30"
+
+  const truncateAddress = (address: string, start = 6, end = 4): string => {
+    return `${address.slice(0, start)}...${address.slice(-end)}`
   }
 
   return (
     <div className="fixed inset-0 min-h-screen md:min-h-fit grid items-center justify-center z-999 overflow-scroll">
       {/* Overlay */}
       <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-0" />
-      <div className="bg-background z-10 ">
-        {/* Header - Fixed on mobile, normal flow on desktop */}
-        <div className="sticky top-0 bg-background z-10 lg:static lg:border-none">
-          <div className="container max-w-7xl mx-auto px-4 py-4 lg:px-8 lg:py-8">
-            <div className="flex items-center justify-between">
-              {/* Title Section */}
-              <div className="flex flex-col">
-                <div className="flex items-center gap-2 mb-1">
-                  <Zap className="w-4 h-4 lg:w-5 lg:h-5 text-primary" />
-                  <span className="text-xs lg:text-sm font-medium text-primary">Payment Details</span>
-                </div>
-                <h2 className="text-xl lg:text-3xl font-semibold text-foreground">Complete Payment</h2>
-              </div>
-
-              <button
-                onClick={() => onClose ? onClose() : router.back()}
-                className="p-2 rounded-lg hover:bg-card text-foreground transition-colors z-10"
-                title="Close"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-          </div>
-        </div>
+      <div className="bg-background z-10 w-full max-w-md mx-auto sm:max-w-2xl">
+        {/* Header */}
+        <Card className="border-0 shadow-none">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              {getPaymentIcon()}
+              Payment Details
+            </CardTitle>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onClose ? onClose() : router.back()}
+              className="h-6 w-6 p-0"
+            >
+              <X className="h-3 w-3" />
+            </Button>
+          </CardHeader>
+        </Card>
 
         {/* Main Content */}
-        <div className="flex-1 container max-w-7xl mx-auto px-4 py-6 lg:px-8 lg:py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 lg:mt-4">
-            {/* Left Column */}
-            <div className="space-y-4 lg:space-y-6">
-              {/* QR Code */}
-              <div className="rounded-xl p-4 lg:p-6 bg-card border border-border">
-                <div className="text-xs lg:text-sm text-muted-foreground mb-3 lg:mb-4 font-medium text-center">
-                  Scan QR Code
+        <div className="space-y-4 p-2">
+          {/* QR Code Card */}
+          <Card className="border rounded-md overflow-hidden bg-card">
+            <div
+              className="flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors"
+              onClick={() => toggleExpanded('qr')}
+            >
+              <div className="flex items-center gap-3 flex-1">
+                <div className="flex-shrink-0">
+                  <div className={`w-8 h-8 rounded flex items-center justify-center ${getPaymentBg()}`}>
+                    <QRCode
+                      value={walletAddress}
+                      size={32}
+                      level="H"
+                    />
+                  </div>
                 </div>
-                <div className="flex justify-center">
-                  <div className="p-3 bg-white rounded-lg shadow-sm">
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1 mb-1">
+                    <span className="text-xs font-medium truncate">Scan QR Code</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground truncate">
+                    Generate QR for wallet address
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={(e) => toggleExpanded('qr', e)}
+                className="h-6 w-6 p-0 text-xs text-muted-foreground hover:text-foreground"
+              >
+                <ChevronDown className={`h-3 w-3 transition-transform ${expandedId === 'qr' ? 'rotate-180' : ''}`} />
+              </Button>
+            </div>
+            {expandedId === 'qr' && (
+              <div className="text-xs text-muted-foreground space-y-1 bg-muted/50 px-2 pb-2">
+                <div className="flex justify-center p-2">
+                  <div className="p-2 bg-white rounded shadow-sm">
                     <QRCode
                       value={walletAddress}
                       size={140}
-                      className="lg:w-52 lg:h-52"
                       level="H"
                     />
                   </div>
                 </div>
               </div>
+            )}
+          </Card>
 
-              {/* Wallet Address */}
-              <div className="bg-muted rounded-xl p-4 lg:p-5 border border-border">
-                <div className="text-xs lg:text-sm text-muted-foreground mb-3 font-medium">Wallet Address</div>
-                <div className="flex items-center gap-2">
-                  <code className="flex-1 font-mono text-xs lg:text-sm text-foreground break-all">
-                    {walletAddress}
-                  </code>
-                  <button
-                    onClick={copyToClipboard}
-                    className="flex-shrink-0 p-2 rounded-lg bg-primary/20 hover:bg-primary/30 text-primary transition-colors"
-                    title="Copy address"
-                  >
-                    {copied ? (
-                      <CheckCircle2 className="w-4 h-4 lg:w-5 lg:h-5" />
-                    ) : (
-                      <Copy className="w-4 h-4 lg:w-5 lg:h-5" />
-                    )}
-                  </button>
+          {/* Wallet Address Card */}
+          <Card className="border rounded-md overflow-hidden bg-card">
+            <div
+              className="flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors"
+              onClick={() => toggleExpanded('address')}
+            >
+              <div className="flex items-center gap-3 flex-1">
+                <div className="flex-shrink-0">
+                  <div className={`w-8 h-8 rounded flex items-center justify-center ${getPaymentBg()}`}>
+                    {getPaymentIcon()}
+                  </div>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1 mb-1">
+                    <span className="text-xs font-medium truncate">Wallet Address</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {truncateAddress(walletAddress)}
+                  </p>
                 </div>
               </div>
-
-              {/* Warning */}
-              <div className="bg-destructive/10 rounded-xl p-4 border border-destructive/30 flex gap-3">
-                <AlertCircle className="w-4 h-4 lg:w-5 lg:h-5 text-destructive flex-shrink-0 mt-0.5" />
-                <p className="text-xs lg:text-sm text-destructive font-medium flex-1">
-                  Send only {asset} on {network}. Other assets will be lost.
+              <div className="flex items-center justify-end gap-3">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        copyToClipboard()
+                      }}
+                      className="h-6 w-6 p-0"
+                    >
+                      {copied ? (
+                        <CheckCircle2 className="h-3 w-3 text-green-600" />
+                      ) : (
+                        <Copy className="h-3 w-3" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Copy address</TooltipContent>
+                </Tooltip>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => toggleExpanded('address', e)}
+                  className="h-6 w-6 p-0 text-xs text-muted-foreground hover:text-foreground"
+                >
+                  <ChevronDown className={`h-3 w-3 transition-transform ${expandedId === 'address' ? 'rotate-180' : ''}`} />
+                </Button>
+              </div>
+            </div>
+            {expandedId === 'address' && (
+              <div className="text-xs text-muted-foreground space-y-1 bg-muted/50 px-2 pb-2">
+                <p className="flex items-center justify-between">
+                  <span>Full Address:</span>
+                  <code className="font-mono break-all">{walletAddress}</code>
                 </p>
               </div>
+            )}
+          </Card>
+
+          {/* Warning Card */}
+          <Card className="border rounded-md overflow-hidden bg-destructive/10 border-destructive/30">
+            <div className="p-2">
+              <div className="flex items-center gap-2 text-xs text-destructive font-medium">
+                <AlertCircle className="h-3 w-3 flex-shrink-0" />
+                <span>Send only {asset} on {network}. Other assets will be lost.</span>
+              </div>
             </div>
+          </Card>
 
-            {/* Right Column */}
-            <div className="space-y-4 lg:space-y-6">
-              {/* Amount Section */}
-              <div className="bg-muted rounded-xl p-4 lg:p-6 border border-border">
-                <div className="text-xs lg:text-sm text-muted-foreground mb-2 font-medium">Amount to Send</div>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl lg:text-4xl font-semibold text-foreground">
-                    {amountCrypto}
-                  </span>
-                  <span className="text-lg lg:text-2xl font-medium text-primary">
-                    {asset}
-                  </span>
-                </div>
+          {/* Amount Card */}
+          <Card className="border rounded-md overflow-hidden bg-card">
+            <div className="p-2 text-center">
+              <div className="text-xs text-muted-foreground mb-1 font-medium">Amount to Send</div>
+              <div className="flex items-baseline justify-center gap-1">
+                <span className="text-lg font-semibold text-foreground">
+                  {amountCrypto}
+                </span>
+                <Badge variant="secondary" className="text-xs">{asset}</Badge>
               </div>
-
-              {/* Network & Request ID */}
-              <div className="grid grid-cols-2 gap-3 lg:gap-4">
-                <div className="bg-muted rounded-xl p-4 border border-border">
-                  <div className="text-xs lg:text-sm text-muted-foreground mb-2 font-medium">Network</div>
-                  <div className="text-sm lg:text-base font-medium text-foreground">
-                    {network}
-                  </div>
-                </div>
-                <div className="bg-muted rounded-xl p-4 border border-border">
-                  <div className="text-xs lg:text-sm text-muted-foreground mb-2 font-medium">Request ID</div>
-                  <div className="text-xs lg:text-sm font-mono text-foreground truncate">
-                    {requestId.slice(0, 8)}...
-                  </div>
-                </div>
-              </div>
-
-              {/* Timer */}
-              <div className="bg-muted rounded-xl p-4 lg:p-6 border border-border text-center">
-                <div className="text-xs lg:text-sm text-muted-foreground mb-2 lg:mb-3 font-medium">
-                  Time Remaining
-                </div>
-                <div className={`text-2xl lg:text-4xl font-bold font-mono ${isExpired ? "text-destructive" : "text-primary"
-                  }`}>
-                  {timeLeft}
-                </div>
-              </div>
-
-              {/* Confirm Button */}
-              <button
-                onClick={onConfirm}
-                disabled={isExpired}
-                className="w-full h-12 lg:h-14 rounded-xl text-base lg:text-lg font-semibold bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary/20 transition-all duration-200"
-              >
-                {isExpired ? "Payment Expired" : "I've Sent the Money ✅"}
-              </button>
             </div>
+          </Card>
+
+          {/* Network & Request ID Cards */}
+          <div className="grid grid-cols-2 gap-2">
+            <Card className="border rounded-md overflow-hidden bg-card col-span-2 sm:col-span-1">
+              <div className="p-2">
+                <div className="text-xs text-muted-foreground mb-1 font-medium">Network</div>
+                <div className="text-xs font-medium text-foreground">
+                  {network}
+                </div>
+              </div>
+            </Card>
+            <Card className="border rounded-md overflow-hidden bg-card col-span-2 sm:col-span-1">
+              <div className="p-2">
+                <div className="text-xs text-muted-foreground mb-1 font-medium">Request ID</div>
+                <div className="text-xs font-mono text-foreground truncate">
+                  {requestId.slice(0, 8)}...
+                </div>
+              </div>
+            </Card>
           </div>
 
+          {/* Timer Card */}
+          <Card className="border rounded-md overflow-hidden bg-card">
+            <div
+              className={`p-2 text-center cursor-pointer hover:bg-muted transition-colors ${isExpired ? "bg-destructive/10 border-destructive/30" : ""}`}
+              onClick={() => toggleExpanded('timer')}
+            >
+              <div className="text-xs text-muted-foreground mb-1 font-medium">Time Remaining</div>
+              <div className={`text-lg font-bold font-mono ${isExpired ? "text-destructive" : "text-primary"}`}>
+                {timeLeft}
+              </div>
+            </div>
+            {expandedId === 'timer' && (
+              <div className="text-xs text-muted-foreground space-y-1 bg-muted/50 px-2 pb-2">
+                <p className="flex items-center justify-between">
+                  <span>Expires At:</span>
+                  <span>{new Date(expiresAt).toLocaleString()}</span>
+                </p>
+              </div>
+            )}
+          </Card>
+
+          {/* Confirm Button */}
+          <Button
+            onClick={onConfirm}
+            disabled={isExpired}
+            className="w-full rounded-md text-sm font-medium bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-primary/20 transition-all"
+            size="lg"
+          >
+            {isExpired ? "Payment Expired" : "I've Sent the Money ✅"}
+          </Button>
+
           {/* Security Badge */}
-          <div className="mt-8 lg:mt-12 flex items-center justify-center gap-2 text-xs lg:text-sm text-muted-foreground">
-            <Shield className="w-4 h-4 text-primary" />
+          <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground pt-2">
+            <Shield className="h-3 w-3 text-primary" />
             <span>Secure blockchain transaction</span>
           </div>
         </div>
 
         {/* Close Button for Mobile Overlay */}
-        <button
+        <Button
+          variant="ghost"
+          size="sm"
           onClick={() => onClose ? onClose() : router.back()}
-          className="lg:hidden fixed top-4 right-4 p-2 rounded-lg bg-background/80 backdrop-blur-sm border border-border text-foreground transition-colors z-20"
-          title="Close"
+          className="lg:hidden fixed top-4 right-4 h-8 w-8 p-0 rounded-md bg-background/80 backdrop-blur-sm border"
         >
-          <X className="w-5 h-5" />
-        </button>
+          <X className="h-4 w-4" />
+        </Button>
       </div>
     </div>
   )
