@@ -339,15 +339,47 @@ export function RampInterface({
     onTransferMethodSelect?.(m)
   }
 
+  const getRampIcon = (mode: string) => {
+    switch (mode) {
+      case "onramp":
+        return <ArrowUpCircle className="h-4 w-4 text-green-600" />;
+      case "offramp":
+        return <ArrowDownCircle className="h-4 w-4 text-blue-600" />;
+      default:
+        return <ArrowUpCircle className="h-4 w-4 text-muted-foreground" />;
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col justify-center items-center gap-3 w-full">
-        <Card className="w-full mx-auto max-w-md gap-3" data-tour="onramp-card">
-          <CardHeader className="flex items-center justify-between">
+        <Card className="w-full mx-auto max-w-md gap-3 dark:bg-muted" data-tour="onramp-card">
+          <CardHeader className="flex items-center justify-between px-2">
+            {/* <CardDescription className="text-xs text-muted-foreground mt-2">
+                  {rampMode === "onramp"
+                    ? selectedWallet
+                      ? `Convert NGN to ${tokenSymbol} and deposit to: ${selectedWallet.name} (${selectedWallet.details})`
+                      : "Convert NGN to crypto and deposit to your chosen wallet"
+                    : selectedWallet
+                      ? `Convert ${tokenSymbol} to NGN and withdraw to: ${selectedWallet.name} (${selectedWallet.details})`
+                      : "Convert crypto to NGN and withdraw to your chosen account"}
+                </CardDescription> */}
+
+            <div className="flex flex-row items-center justify-between">
+              <CardTitle className="text-base flex items-center gap-2 px-2">
+                {/* {getRampIcon(rampMode)} */}
+                Ramp
+              </CardTitle>
+
+              <div className="relative">
+              </div>
+            </div>
+
+
             {/* Mode Switcher */}
-            <div className="relative w-full">
+            <div className="relative">
               <div className="flex justify-start">
-                <div className="flex bg-muted rounded-xl overflow-hidden backdrop-blur-sm relative w-[200px]">
+                <div className="flex bg-muted dark:bg-card rounded-xl overflow-hidden backdrop-blur-sm relative w-[200px]">
                   {/* Animated highlight background */}
                   <div
                     className={`absolute top-0 left-0 h-full w-1/2 rounded-xl bg-gradient-to-r from-primary/15 to-primary/10 transition-transform duration-300 ease-in-out ${rampMode === "offramp" ? "translate-x-full" : "translate-x-0"
@@ -377,24 +409,14 @@ export function RampInterface({
               </div>
             </div>
 
-
-
-
-            {/* <CardDescription className="text-xs text-muted-foreground mt-2">
-                  {rampMode === "onramp"
-                    ? selectedWallet
-                      ? `Convert NGN to ${tokenSymbol} and deposit to: ${selectedWallet.name} (${selectedWallet.details})`
-                      : "Convert NGN to crypto and deposit to your chosen wallet"
-                    : selectedWallet
-                      ? `Convert ${tokenSymbol} to NGN and withdraw to: ${selectedWallet.name} (${selectedWallet.details})`
-                      : "Convert crypto to NGN and withdraw to your chosen account"}
-                </CardDescription> */}
           </CardHeader>
-          <CardContent className="">
+          <CardContent className="px-2">
+
+
             <div className="space-y-3">
               {rampMode === "onramp" ? (
                 <>
-                  <div className="bg-muted rounded-xl p-2">
+                  <div className="bg-muted dark:bg-card rounded-md p-2">
                     <div className="text-xs md:text-sm font-medium text-muted-foreground mb-1">You pay</div>
                     <div className="flex items-center justify-between gap-1.5">
                       <input
@@ -418,7 +440,7 @@ export function RampInterface({
                     </div>
                   </div>
 
-                  <div className="bg-muted rounded-xl p-2">
+                  <div className="bg-muted dark:bg-card rounded-md p-2">
                     <div className="text-xs md:text-sm font-medium text-muted-foreground mb-1">You receive</div>
                     <div className="flex items-center justify-between gap-1.5">
                       <div className="text-2xl font-semibold text-foreground">
@@ -447,7 +469,7 @@ export function RampInterface({
                 </>
               ) : (
                 <>
-                  <div className="bg-muted rounded-xl p-2">
+                  <div className="bg-muted dark:bg-card rounded-md p-2">
                     <div className="text-xs md:text-sm font-medium text-muted-foreground mb-1">You pay</div>
                     <div className="flex items-center justify-between gap-1.5">
                       <input
@@ -477,7 +499,7 @@ export function RampInterface({
                     </div>
                   </div>
 
-                  <div className="bg-muted rounded-xl p-2">
+                  <div className="bg-muted dark:bg-card rounded-md p-2">
                     <div className="text-xs md:text-sm font-medium text-muted-foreground mb-1">You receive</div>
                     <div className="flex items-center justify-between gap-1.5">
                       <div className="text-2xl font-semibold text-foreground">
@@ -536,7 +558,7 @@ export function RampInterface({
               </div>
 
               {fromAmount && Number(fromAmount) > 0 && (
-                <div className="bg-muted rounded-xl p-4">
+                <div className="bg-muted dark:bg-card rounded-xl p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="text-xs text-muted-foreground">{rampMode === "onramp" ? "To:" : "To:"}</div>
@@ -605,7 +627,7 @@ export function RampInterface({
               )}
 
               {rampMode === "onramp" && fromAmount && Number(fromAmount) > 0 && selectedWallet && (
-                <div className="bg-muted rounded-xl p-4 no-scrollbar">
+                <div className="bg-muted dark:bg-card rounded-xl p-4 no-scrollbar">
                   <style jsx>{`
                     .no-scrollbar::-webkit-scrollbar {
                       display: none;
@@ -628,7 +650,7 @@ export function RampInterface({
               )}
 
               {rampMode === "offramp" && fromAmount && Number(fromAmount) > 0 && selectedWallet && (
-                <div className="bg-muted rounded-xl p-4">
+                <div className="bg-muted dark:bg-card rounded-xl p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="text-xs text-muted-foreground">Transfer Method</div>
                     {!effectiveTransferMethod && <AlertCircle className="h-4 w-4 text-orange-600" />}
@@ -717,7 +739,7 @@ export function RampInterface({
         </Card >
 
         {/* Powered by Solana Badge */}
-        <div className="relative w-full mx-auto max-w-md flex justify-end mt-[-10px] z-10">
+        <div className="relative w-full mx-auto max-w-md flex justify-end mt-[-6px] z-10">
           <div className="flex items-center gap-2 text-foreground/90 dark:text-foreground text-[11px] font-medium px-3 py-1.5 mr-3 rounded-lg backdrop-blur-sm">
             <img src={solana_logo} alt="Solana" className="w-3.5 h-3.5" />
             <span className="tracking-wide">Powered by Solana</span>

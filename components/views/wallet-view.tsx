@@ -242,11 +242,20 @@ export function WalletView({
 
   return (
     <div className="grid gap-5 w-full max-w-md mx-auto sm:max-w-2xl">
-      <Card className="w-full max-w-md mx-auto sm:max-w-2xl pt-0">
+      <Card className="w-full max-w-md mx-auto sm:max-w-2xl">
         <div className="flex flex-row items-center justify-between px-2">
-          <CardTitle className="text-base flex items-center gap-2">
+          <CardTitle className="text-base flex items-center gap-2 px-2">
             <Wallet className="w-3 h-3" />
             Wallets
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowAddWallet(true)}
+              className="h-6 w-6 p-0 rounded-xl bg-primary/10 hover:bg-primary/20"
+            >
+              <Plus className="h-3 w-3" />
+            </Button>
           </CardTitle>
 
           <div className="relative">
@@ -259,14 +268,7 @@ export function WalletView({
             />
           </div>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowAddWallet(true)}
-            className="h-6 w-6 p-0 rounded-xl bg-primary/10 hover:bg-primary/20"
-          >
-            <Plus className="h-3 w-3" />
-          </Button>
+
         </div>
 
         <CardContent className="p-0">
@@ -281,14 +283,6 @@ export function WalletView({
               <div className="space-y-3 bg-muted/50 rounded-md p-3">
                 <div className="flex items-center justify-between">
                   <h4 className="text-sm font-semibold">Add Wallet</h4>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setShowAddWallet(false)}
-                    className="h-6 w-6 p-0"
-                  >
-                    ×
-                  </Button>
                 </div>
 
                 <div className="grid grid-cols-1 gap-3">
@@ -341,11 +335,10 @@ export function WalletView({
             ) : (
               <div className="space-y-2 max-h-fit overflow-y-auto">
                 {paginatedWallets.map((wallet) => (
-                  <div key={wallet.id} className="space-y-1 border rounded-md overflow-hidden bg-card">
+                  <div key={wallet.id} className="space-y-1 rounded-md overflow-hidden bg-card">
                     <div
-                      className={`flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors ${
-                        selectedWallet?.id === wallet.id ? "bg-primary/5" : ""
-                      }`}
+                      className={`flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors ${selectedWallet?.id === wallet.id ? "bg-primary/5" : ""
+                        }`}
                       onClick={() => handleSelect(wallet)}
                     >
                       <div className="flex items-center gap-3 flex-1">

@@ -7,6 +7,14 @@ import { useAuth } from "@/context/AuthContext"
 import { useRouter } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { App_Name } from "@/app/appConfig"
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
+import { isSolanaWallet } from "@dynamic-labs/solana"
+
+
+import { useConnectedWallet } from "@/hooks/useConnectedWallet";
+
+
+
 
 interface ProfileModalProps {
   onQuickAction?: (action: string) => void
@@ -17,11 +25,8 @@ export function ProfileModal({ onQuickAction }: ProfileModalProps) {
   const [wallet, setWallet] = useState<string | null>(null)
   const [copiedId, setCopiedId] = useState(false)
   const { user, logout } = useAuth()
+  const { solanaAddress, connectWallet, formatAddress } = useConnectedWallet();
 
-  const handleConnectWallet = () => {
-    const dummyWallet = "7xGf" + Math.random().toString(36).substring(2, 6) + "...JkPz"
-    setWallet(dummyWallet)
-  }
 
   const handleCopyId = async () => {
     if (user?.id) {
@@ -79,52 +84,45 @@ export function ProfileModal({ onQuickAction }: ProfileModalProps) {
       {/* Modal */}
       <div className="mx-auto md:mx-0 w-full md:w-[520px] h-full md:min-h-screen bg-background py-3 relative z-20 overflow-auto border-l md:border-l-0 border-border/50">
         {/* Header */}
-        <div className="mb-4 flex items-center justify-between px-2 sm:px-4 pb-3 border-b border-border">
+        <div className="mb-4 flex items-center justify-between px-4 pb-3 border-b border-border">
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center justify-center w-8 h-8 rounded-xl">
               <LayoutDashboard className="w-8 h-8 text-primary" />
             </span>
-            {/* <h2 className="text-lg font-medium text-foreground">Control Deck</h2> */}
+            <h2 className="text-lg font-medium text-foreground">Hub</h2>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Connect Wallet Button */}
             <Button
-              onClick={handleConnectWallet}
+              onClick={connectWallet}
               variant="outline_soft_gradient"
               size="sm"
-              className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border transition-all duration-300 ease-out ring-1 ring-primary/20 hover:ring-primary/40"
+              className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border transition-all"
             >
-              {wallet ? (
-                <div className="flex items-center gap-2">
-                  <Wallet className="size-4 text-primary" />
-                  <p className="text-muted-foreground text-xs whitespace-nowrap">{wallet}</p>
-                </div>
-              ) : (
-                <div className="flex items-center gap-2">
-                  <Wallet className="size-4" />
-                  <span className="text-sm">Connect Wallet</span>
-                </div>
-              )}
+              <Wallet className="size-4" />
+              <span className="text-sm">
+                {solanaAddress ? formatAddress(solanaAddress) : "Connect Wallet"}
+              </span>
             </Button>
 
             {/* Close Button */}
             <button
               onClick={handleBack}
-              className="transition text-muted-foreground dark:text-foreground flex size-8 items-center justify-center rounded-lg hover:text-primary focus:outline-primary"
+              className="transition text-muted-foreground dark:text-foreground flex size-8 items-center justify-center rounded-lg hover:text-primary focus:outline-primary opacity-50"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5" />
             </button>
           </div>
         </div>
 
 
         {/* Profile Section */}
-        <div className="space-y-6 px-2 sm:px-4">
+        <div className="space-y-6 px-4">
           {user?.id ? (
             <div className="space-y-4">
               {/* Profile */}
-              <div className="flex flex-col gap-3 p-3 bg-muted/50 rounded-xl border border-border/50">
+              <div className="flex flex-col gap-3 p-3 bg-muted rounded-xl border border-border">
 
                 <div className="flex items-center gap-3 border-b pb-2">
                   <Avatar className="w-12 h-12">

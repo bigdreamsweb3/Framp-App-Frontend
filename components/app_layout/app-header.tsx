@@ -23,6 +23,7 @@ import {
   ChevronUpCircle,
 } from "lucide-react"
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
+import { useConnectedWallet } from "@/hooks/useConnectedWallet"
 
 
 
@@ -54,6 +55,8 @@ export function AppHeader({
 
   const { setShowAuthFlow, handleLogOut } = useDynamicContext();
 
+  const { solanaAddress, connectWallet, formatAddress } = useConnectedWallet();
+
 
 
   useEffect(() => {
@@ -77,13 +80,13 @@ export function AppHeader({
       {/* MAIN HEADER */}
       <header
         ref={headerRef}
-        className={`sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out
-          ${scrolled || mobileOpen ? "" : "bg-transparent"}
+        className={`sticky top-0 z-[100] w-full h-14 transition-all duration-500 ease-out border-b
+          ${scrolled || mobileOpen ? "" : "bg-background"}
           ${scrolled ? "bg-background" : ""}`}
       >
-        <div className="w-full h-full px-2 sm:px-4 flex items-center justify-between">
+        <div className="w-full h-full px-4 flex items-center justify-between">
           {/* Left side - Logo + Mobile Menu */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <Link href="/">
               <div className="flex items-center md:hidden w-fit h-9 flex-shrink-0 relative">
                 <div className="relative flex items-center h-9 w-9">
@@ -101,15 +104,46 @@ export function AppHeader({
             </Link>
 
 
-
-            <button
-              className="md:hidden flex items-center justify-center h-9 w-9 rounded-lg text-muted-foreground dark:text-foreground transition hover:text-primary focus:outline-none"
+            {/* 
+            <Button
+              className="md:hidden flex items-center gap-2 px-0 md:px-0 lg:px-0 rounded-xl border border-border overflow-hidden transition-all duration-300 ease-out"
+              variant={"outline_soft_gradient"}
               aria-label="Toggle navigation"
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen((prev) => !prev)}
             >
-              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+              {mobileOpen ? <X className="w-6 h-6" /> : <div
+                className={`relative inline-flex items-center justify-center w-8 h-8 rounded-full rounded-r-xl transition-all duration-300 ease-out transform hover:scale-105 bg-gradient-to-br from-primary/20 to-primary/10
+                      }`}
+              >
+                <Menu
+                  className={`size-4 text-foreground`}
+                />
+              </div>}
+            </Button> */}
+
+            <Button
+              variant="no_bg"
+              size="sm"
+              className="rounded-md overflow-hidden transition-all duration-300 ease-out px-0 border-0 bg-transparent"
+              aria-label="Toggle navigation"
+              aria-expanded={mobileOpen}
+              onClick={() => setMobileOpen((prev) => !prev)}
+            >
+              <div className="hidden md:block px-0 md:px-3 ">
+                <p className="text-muted-foreground dark:text-foreground font-bold truncate">
+                  Framp
+                </p>
+              </div>
+
+              {/* Mobile Menu Icon */}
+              <div
+                className="md:hidden relative rounded-md transition-all duration-300 ease-out hover:scale-105 p-2 w-full"
+              >
+                <Menu className="size-6 text-foreground" />
+              </div>
+            </Button>
+
           </div>
 
 
@@ -205,13 +239,15 @@ export function AppHeader({
                 >
                   <div className="flex-1 pl-3 text-left">
                     <p className="text-muted-foreground dark:text-foreground font-bold truncate max-w-[90px]">
-                      {(() => {
+
+                      {solanaAddress ? formatAddress(solanaAddress) : (() => {
                         const [local, domain] = user.email.split("@")
                         const maskedLocal =
                           local.length > 3 ? `${local.slice(0, 3)}***` : `${local}***`
                         const maskedDomain = domain ? `***` : ""
                         return `${maskedLocal}@${maskedDomain}`
                       })()}
+
                     </p>
                   </div>
 
@@ -222,8 +258,7 @@ export function AppHeader({
                       }`}
                   >
                     <ChevronUpCircle
-                      className={`size-4 ${profileActive ? "text-primary-foreground" : "text-primary"
-                        }`}
+                      className={`size-4 text-foreground`}
                     />
                   </div>
                 </Button>

@@ -228,7 +228,7 @@ export function ActivityView() {
 
 
         <div className="flex flex-row items-center justify-between px-2">
-          <CardTitle className="text-base flex items-center gap-2">
+          <CardTitle className="text-base flex items-center gap-2 px-2">
             <Activity className="w-3 h-3" />
             Activities
           </CardTitle>
@@ -268,7 +268,7 @@ export function ActivityView() {
               ) : (
                 <>
                   {paginatedActivities.map((activity) => (
-                    <div key={activity.id} className="space-y-1 border rounded-md overflow-hidden bg-card">
+                    <div key={activity.id} className="space-y-1 rounded-md overflow-hidden bg-card">
                       <div
                         className="flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors"
                         onClick={() => toggleExpanded(activity.id)}

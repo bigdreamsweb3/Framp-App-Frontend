@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation"; // Correct import for App Router
-import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
+import { DynamicContextProvider, DynamicUserProfile } from "@dynamic-labs/sdk-react-core";
 import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 
 export default function DynamicWrapper({ children }: { children: React.ReactNode }) {
@@ -19,6 +19,8 @@ export default function DynamicWrapper({ children }: { children: React.ReactNode
             }}
         >
             {children}
+
+             <DynamicUserProfile />
         </DynamicContextProvider>
     );
 }
