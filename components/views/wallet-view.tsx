@@ -189,10 +189,10 @@ export function WalletView({
   };
 
   const getWalletIcon = () => (
-    <Wallet className="h-4 w-4 text-blue-600" />
+    <Wallet className="h-4 w-4 text-muted-foreground" />
   );
 
-  const getWalletBg = () => "bg-blue-50 dark:bg-blue-900/30";
+  const getWalletBg = () => "bg-muted";
 
   const getWalletLabel = (wallet: WalletMethod) => wallet.network || "Wallet";
 
@@ -335,10 +335,10 @@ export function WalletView({
             ) : (
               <div className="space-y-2 max-h-fit overflow-y-auto">
                 {paginatedWallets.map((wallet) => (
-                  <div key={wallet.id} className="space-y-1 rounded-md overflow-hidden bg-card">
+                  <div key={wallet.id} className="rounded-md overflow-hidden bg-card">
                     <div
                       className={`flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors ${selectedWallet?.id === wallet.id ? "bg-primary/5" : ""
-                        }`}
+                        } ${expandedId === wallet.id ? 'bg-muted' : ''}`}
                       onClick={() => handleSelect(wallet)}
                     >
                       <div className="flex items-center gap-3 flex-1">
@@ -348,22 +348,13 @@ export function WalletView({
                           </div>
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1 mb-1">
+                          <div className="flex items-center gap-1">
                             <span className="text-xs font-medium truncate">
-                              {getWalletLabel(wallet)}
-                              {wallet.network && ` (${wallet.network})`}
+                              {wallet.name}
+
                             </span>
                             {wallet.isDefault && <Badge variant="secondary" className="text-xs">Default</Badge>}
                           </div>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {wallet.details || "Solana Wallet"}
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-end gap-3">
-                        <div className="flex flex-col items-end flex-shrink-0 text-xs space-y-1">
-                          <span className="font-medium text-xs">{wallet.name}</span>
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger asChild>
@@ -381,7 +372,9 @@ export function WalletView({
                             </Tooltip>
                           </TooltipProvider>
                         </div>
+                      </div>
 
+                      <div className="flex items-center justify-end gap-3">
                         <Button
                           variant="ghost"
                           size="sm"
@@ -393,14 +386,17 @@ export function WalletView({
                       </div>
                     </div>
                     {expandedId === wallet.id && (
-                      <div className="text-xs text-muted-foreground space-y-1 bg-muted/50 px-2 pb-2">
+                      <div className="text-xs text-muted-foreground space-y-1 bg-muted/50 px-2 py-2">
                         <p className="flex items-center justify-between">
-                          <span>Full Address:</span>
                           <span className="font-mono truncate">{wallet.walletAddress}</span>
                         </p>
-                        {!wallet.isDefault && (
+
+                        <div className="pt-2 border-t flex gap-2 justify-end">
                           <p className="flex items-center justify-between">
                             <span>Actions:</span>
+                          </p>
+
+                          {!wallet.isDefault && (
                             <Button
                               variant="link"
                               size="sm"
@@ -412,9 +408,7 @@ export function WalletView({
                             >
                               Set as Default
                             </Button>
-                          </p>
-                        )}
-                        <div className="pt-2 border-t flex gap-2 justify-end">
+                          )}
                           <Button
                             variant="destructive"
                             size="sm"

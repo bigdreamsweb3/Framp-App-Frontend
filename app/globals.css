@@ -55,16 +55,16 @@
 
 /* --- DARK MODE --- */
 .dark {
-  --background: oklch(0.17 0.015 280); /* Professional near-black with subtle gray-blue tint for depth */
-  --foreground: oklch(0.96 0.015 270); 
+  --background: oklch(0.16 0.015 270);
+  --foreground: oklch(0.96 0.015 270);
 
-  --card: oklch(0.16 0.015 270); /* Slightly elevated from background for clean card separation */
+  --card: oklch(0.17 0.015 280);
   --card-foreground: oklch(0.96 0.015 270);
 
   --popover: oklch(0.18 0.035 280);
   --popover-foreground: oklch(0.96 0.015 270);
 
-  --primary: oklch(0.63 0.23 280); 
+  --primary: oklch(0.63 0.23 280);
   --primary-foreground: oklch(0.99 0 0);
 
   --secondary: oklch(0.26 0.05 280);
@@ -89,7 +89,9 @@
   --chart-4: oklch(0.7 0.22 320);
   --chart-5: oklch(0.68 0.25 30);
 
-  --sidebar: oklch(0.14 0.015 270); /* Matches card lightness for consistent professional layering */
+  --sidebar: oklch(
+    0.14 0.015 270
+  ); /* Matches card lightness for consistent professional layering */
   --sidebar-foreground: oklch(0.95 0.015 270);
   --sidebar-primary: oklch(0.68 0.25 280);
   --sidebar-primary-foreground: oklch(0.99 0 0);

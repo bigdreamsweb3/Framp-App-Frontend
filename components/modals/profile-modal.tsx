@@ -2,16 +2,16 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Check, Copy, LayoutDashboard, User, Wallet, X } from "lucide-react"
+import { Check, Copy, LayoutDashboard, Settings, User, Wallet, X } from "lucide-react"
 import { useAuth } from "@/context/AuthContext"
 import { useRouter } from "next/navigation"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { App_Name } from "@/app/appConfig"
-import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
-import { isSolanaWallet } from "@dynamic-labs/solana"
+// import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
+// import { isSolanaWallet } from "@dynamic-labs/solana"
 
 
-import { useConnectedWallet } from "@/hooks/useConnectedWallet";
+import { useConnectedWallet } from "@/lib/hooks/useConnectedWallet";
 
 
 
@@ -87,7 +87,7 @@ export function ProfileModal({ onQuickAction }: ProfileModalProps) {
         <div className="mb-4 flex items-center justify-between px-4 pb-3 border-b border-border">
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center justify-center w-8 h-8 rounded-xl">
-              <LayoutDashboard className="w-8 h-8 text-primary" />
+              <Settings className="w-8 h-8 text-primary" />
             </span>
             <h2 className="text-lg font-medium text-foreground">Hub</h2>
           </div>
@@ -109,7 +109,7 @@ export function ProfileModal({ onQuickAction }: ProfileModalProps) {
             {/* Close Button */}
             <button
               onClick={handleBack}
-              className="transition text-muted-foreground dark:text-foreground flex size-8 items-center justify-center rounded-lg hover:text-primary focus:outline-primary opacity-50"
+              className="transition text-muted-foreground dark:text-foreground flex size-8 items-center justify-center rounded-lg hover:text-primary focus:outline-primary"
             >
               <X className="w-5 h-5" />
             </button>

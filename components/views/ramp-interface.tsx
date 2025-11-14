@@ -353,7 +353,7 @@ export function RampInterface({
   return (
     <>
       <div className="flex flex-col justify-center items-center gap-3 w-full">
-        <Card className="w-full mx-auto max-w-md gap-3 dark:bg-muted" data-tour="onramp-card">
+        <Card className="w-full mx-auto max-w-md gap-3 dark:bg-muted/50" data-tour="onramp-card">
           <CardHeader className="flex items-center justify-between px-2">
             {/* <CardDescription className="text-xs text-muted-foreground mt-2">
                   {rampMode === "onramp"
@@ -390,7 +390,7 @@ export function RampInterface({
                     <button
                       key={mode}
                       onClick={() => handleRampModeChange(mode)}
-                      className={`flex-1 flex items-center justify-center gap-1.5 py-2 text-sm md:text-[15px] font-medium transition-all duration-300 relative z-10
+                      className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 text-sm md:text-[15px] font-medium transition-all duration-300 relative z-10
             ${rampMode === mode
                           ? "text-foreground font-semibold"
                           : "text-muted-foreground hover:text-foreground"
@@ -558,7 +558,7 @@ export function RampInterface({
               </div>
 
               {fromAmount && Number(fromAmount) > 0 && (
-                <div className="bg-muted dark:bg-card rounded-xl p-4">
+                <div className="bg-muted dark:bg-card rounded-md p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="text-xs text-muted-foreground">{rampMode === "onramp" ? "To:" : "To:"}</div>
@@ -627,7 +627,7 @@ export function RampInterface({
               )}
 
               {rampMode === "onramp" && fromAmount && Number(fromAmount) > 0 && selectedWallet && (
-                <div className="bg-muted dark:bg-card rounded-xl p-4 no-scrollbar">
+                <div className="bg-muted dark:bg-card rounded-md p-4 no-scrollbar">
                   <style jsx>{`
                     .no-scrollbar::-webkit-scrollbar {
                       display: none;
@@ -650,7 +650,7 @@ export function RampInterface({
               )}
 
               {rampMode === "offramp" && fromAmount && Number(fromAmount) > 0 && selectedWallet && (
-                <div className="bg-muted dark:bg-card rounded-xl p-4">
+                <div className="bg-muted dark:bg-card rounded-md p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="text-xs text-muted-foreground">Transfer Method</div>
                     {!effectiveTransferMethod && <AlertCircle className="h-4 w-4 text-orange-600" />}
@@ -706,7 +706,7 @@ export function RampInterface({
 
                 return (
                   <Button
-                    className="w-full rounded-xl text-base font-semibold mt-0 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg shadow-primary/20"
+                    className="w-full rounded-xl text-base font-semibold mt-0 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow shadow-primary/20"
                     size="lg"
                     disabled={
                       !fromAmount ||

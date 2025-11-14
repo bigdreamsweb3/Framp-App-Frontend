@@ -21,9 +21,10 @@ import {
   Wallet2Icon,
   Wallet,
   ChevronUpCircle,
+  Settings,
 } from "lucide-react"
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
-import { useConnectedWallet } from "@/hooks/useConnectedWallet"
+import { useConnectedWallet } from "@/lib/hooks/useConnectedWallet"
 
 
 
@@ -122,9 +123,9 @@ export function AppHeader({
               </div>}
             </Button> */}
 
-            <Button
-              variant="no_bg"
-              size="sm"
+            <button
+              // variant="no_bg"
+              // size="sm"
               className="rounded-md overflow-hidden transition-all duration-300 ease-out px-0 border-0 bg-transparent"
               aria-label="Toggle navigation"
               aria-expanded={mobileOpen}
@@ -142,7 +143,7 @@ export function AppHeader({
               >
                 <Menu className="size-6 text-foreground" />
               </div>
-            </Button>
+            </button>
 
           </div>
 
@@ -257,7 +258,7 @@ export function AppHeader({
                       : "bg-gradient-to-br from-primary/20 to-primary/10"
                       }`}
                   >
-                    <ChevronUpCircle
+                    <Settings
                       className={`size-4 text-foreground`}
                     />
                   </div>

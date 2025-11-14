@@ -270,7 +270,7 @@ export function ActivityView() {
                   {paginatedActivities.map((activity) => (
                     <div key={activity.id} className="space-y-1 rounded-md overflow-hidden bg-card">
                       <div
-                        className="flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors"
+                        className={`flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors ${expandedId === activity.id ? 'bg-muted' : ''}`}
                         onClick={() => toggleExpanded(activity.id)}
                       >
                         <div className="flex items-center gap-3 flex-1">
