@@ -54,9 +54,11 @@ export default function AdminPage() {
 
     try {
       const headers: Record<string, string> = {
+        "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
         "Content-Type": "application/json",
+
       };
-      
+
       // Use authToken from context or getAuthToken()
       const token = authToken || accessToken;
       if (token) {
@@ -99,7 +101,7 @@ export default function AdminPage() {
 
       const data = JSON.parse(responseText);
       console.log("Generated codes:", data);
-      
+
       if (data.codes && Array.isArray(data.codes)) {
         setGeneratedCodes(data.codes);
       } else {
