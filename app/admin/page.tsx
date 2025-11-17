@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Copy, Download, Shield, Users, Key } from "lucide-react";
+import { Copy, Download, Shield, Users, Key, Check } from "lucide-react";
 import { getAuthToken } from "@dynamic-labs/sdk-react-core";
 
 export default function AdminPage() {
@@ -18,6 +18,7 @@ export default function AdminPage() {
   const [generatedCodes, setGeneratedCodes] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [userRole, setUserRole] = useState<string | null>(null);
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   // Safely extract user role from the user object
   useEffect(() => {
@@ -37,12 +38,10 @@ export default function AdminPage() {
   // Check if user has admin or team-access role
   const isAuthorized = userRole === "admin" || userRole === "team-access";
 
-
   const API_BASE =
     process.env.NEXT_PUBLIC_API_URL || "https://framp-backend.vercel.app";
 
   const accessToken = getAuthToken();
-
 
   const generateAccessCodes = async () => {
     if (count < 1 || count > 100) {
@@ -55,35 +54,81 @@ export default function AdminPage() {
 
     try {
       const headers: Record<string, string> = {
-        "x-api-key": process.env.NEXT_PUBLIC_ADMIN_KEY as string,
-        "Content-Type": "application/json", // Added Content-Type for POST
+        "Content-Type": "application/json",
       };
-      if (accessToken) headers["Authorization"] = `Bearer ${accessToken}`;
+      
+      // Use authToken from context or getAuthToken()
+      const token = authToken || accessToken;
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
 
-      // Fixed: Using POST method and consistent variable name
+      console.log("Sending request to generate codes...", { count, headers });
+
       const response = await fetch(`${API_BASE}/api/admin/generate-access-code`, {
-        method: "POST", // Changed from GET to POST
+        method: "POST",
         headers,
         credentials: "include",
         body: JSON.stringify({ count }),
       });
 
+      console.log("Response status:", response.status);
+
+      // Check if response has content before trying to parse JSON
+      const responseText = await response.text();
+      console.log("Response text:", responseText);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to generate access codes");
+        // Try to parse error message, but handle empty responses
+        let errorMessage = "Failed to generate access codes";
+        if (responseText) {
+          try {
+            const errorData = JSON.parse(responseText);
+            errorMessage = errorData.error || errorMessage;
+          } catch {
+            errorMessage = responseText || errorMessage;
+          }
+        }
+        throw new Error(errorMessage);
       }
 
-      const data = await response.json();
-      setGeneratedCodes(data.codes);
+      // Parse response only if there's content
+      if (!responseText) {
+        throw new Error("Empty response from server");
+      }
+
+      const data = JSON.parse(responseText);
+      console.log("Generated codes:", data);
+      
+      if (data.codes && Array.isArray(data.codes)) {
+        setGeneratedCodes(data.codes);
+      } else {
+        throw new Error("Invalid response format: codes array not found");
+      }
     } catch (err: any) {
-      setError(err.message);
+      console.error("Error generating codes:", err);
+      setError(err.message || "An unexpected error occurred");
     } finally {
       setGenerating(false);
     }
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedCode(text);
+      setTimeout(() => setCopiedCode(null), 2000); // Reset after 2 seconds
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setCopiedCode(text);
+      setTimeout(() => setCopiedCode(null), 2000);
+    }
   };
 
   const downloadCodes = () => {
@@ -102,34 +147,34 @@ export default function AdminPage() {
   // If not authorized, show access denied
   if (!isAuthorized) {
     return (
-
-      <Card className="border-red-200 bg-red-50 dark:bg-red-950/20 dark:border-red-800">
-        <CardHeader>
-          <CardTitle className="text-red-600 dark:text-red-400 flex items-center gap-2">
-            <Shield className="h-5 w-5" />
-            Access Denied
-          </CardTitle>
-          <CardDescription className="text-red-600 dark:text-red-400">
-            You do not have permission to access this page.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p className="text-red-600 dark:text-red-400">
-            This page is only accessible to users with admin or team-access roles.
-          </p>
-          {userRole && (
-            <p className="text-red-600 dark:text-red-400 mt-2">
-              Your current role: {userRole}
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <Card className="border-red-200 bg-red-50 dark:bg-red-950/20 dark:border-red-800">
+          <CardHeader>
+            <CardTitle className="text-red-600 dark:text-red-400 flex items-center gap-2">
+              <Shield className="h-5 w-5" />
+              Access Denied
+            </CardTitle>
+            <CardDescription className="text-red-600 dark:text-red-400">
+              You do not have permission to access this page.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-red-600 dark:text-red-400">
+              This page is only accessible to users with admin or team-access roles.
             </p>
-          )}
-        </CardContent>
-      </Card>
-
+            {userRole && (
+              <p className="text-red-600 dark:text-red-400 mt-2">
+                Your current role: {userRole}
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
   return (
-    <>
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
           <Key className="h-8 w-8" />
@@ -178,7 +223,8 @@ export default function AdminPage() {
 
           {error && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 dark:bg-red-950/20 dark:border-red-800 dark:text-red-400">
-              {error}
+              <p className="font-medium">Error</p>
+              <p>{error}</p>
             </div>
           )}
 
@@ -218,50 +264,60 @@ export default function AdminPage() {
                 className="flex items-center gap-2"
               >
                 <Download className="h-4 w-4" />
-                Download
+                Download All
               </Button>
             </CardTitle>
             <CardDescription>
-              These codes can be shared with users for platform access
+              These codes can be shared with users for platform access. Click the copy button to copy individual codes.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            <div className="space-y-3 max-h-96 overflow-y-auto">
               {generatedCodes.map((code, index) => (
                 <div
                   key={code}
-                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border"
+                  className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border hover:bg-muted/70 transition-colors"
                 >
-                  <div className="flex items-center gap-3">
-                    <Badge variant="outline" className="font-mono">
+                  <div className="flex items-center gap-3 flex-1">
+                    <Badge variant="outline" className="font-mono shrink-0">
                       {index + 1}
                     </Badge>
-                    <code className="font-mono text-sm bg-background px-2 py-1 rounded border">
+                    <code className="font-mono text-sm bg-background px-3 py-2 rounded border flex-1 text-center">
                       {code}
                     </code>
                   </div>
                   <Button
-                    variant="ghost"
+                    variant={copiedCode === code ? "default" : "outline"}
                     size="sm"
                     onClick={() => copyToClipboard(code)}
-                    className="flex items-center gap-1"
+                    className="flex items-center gap-1 shrink-0 ml-2"
                   >
-                    <Copy className="h-3 w-3" />
-                    Copy
+                    {copiedCode === code ? (
+                      <>
+                        <Check className="h-3 w-3" />
+                        Copied!
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="h-3 w-3" />
+                        Copy
+                      </>
+                    )}
                   </Button>
                 </div>
               ))}
             </div>
 
-            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-md dark:bg-blue-950/20 dark:border-blue-800">
-              <h4 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">
+            <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-md dark:bg-blue-950/20 dark:border-blue-800">
+              <h4 className="font-semibold text-blue-800 dark:text-blue-300 mb-2 flex items-center gap-2">
+                <Key className="h-4 w-4" />
                 Usage Instructions
               </h4>
               <ul className="text-sm text-blue-700 dark:text-blue-400 space-y-1">
-                <li>• Share these codes with users who need platform access</li>
-                <li>• Each code can be used by one user during registration</li>
-                <li>• Codes are automatically validated when users sign up</li>
-                <li>• Keep these codes secure and distribute them carefully</li>
+                <li>• <strong>Share codes securely</strong> with users who need platform access</li>
+                <li>• <strong>Each code is single-use</strong> - can only be used by one user during registration</li>
+                <li>• <strong>Automatic validation</strong> - codes are validated when users sign up</li>
+                <li>• <strong>Keep codes secure</strong> - distribute them carefully to authorized users only</li>
               </ul>
             </div>
           </CardContent>
@@ -272,7 +328,10 @@ export default function AdminPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Your Role</CardTitle>
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              Your Role
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold capitalize">{userRole}</div>
@@ -282,7 +341,10 @@ export default function AdminPage() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Generated Today</CardTitle>
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Generated Today
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{generatedCodes.length}</div>
@@ -292,7 +354,10 @@ export default function AdminPage() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">Max Batch Size</CardTitle>
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Key className="h-4 w-4" />
+              Max Batch Size
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">100</div>
@@ -300,6 +365,6 @@ export default function AdminPage() {
           </CardContent>
         </Card>
       </div>
-    </>
+    </div>
   );
 }
