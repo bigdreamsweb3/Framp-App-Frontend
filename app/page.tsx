@@ -17,7 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/context/AuthContext";
 import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate";
 import { BillsView } from "@/components/views/bills-view";
-import { Profile } from "@/components/modals/profile-modal";
+// import { Profile } from "@/components/modals/profile-modal";
 import { WalletMethod } from "@/types/wallet";
 import { SideHeader } from "@/components/app_layout/side-header";
 

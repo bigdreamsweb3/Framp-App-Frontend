@@ -1,3 +1,4 @@
+// File: app/layout.tsx (updated with debugging)
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"

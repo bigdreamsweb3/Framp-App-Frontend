@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useEffect, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { ArrowUpCircle, ArrowDownCircle, ChevronDown, Wallet, Building2, RefreshCw, AlertCircle } from "lucide-react"
+import { ArrowUpCircle, ArrowDownCircle, ChevronDown, Wallet, Building2, RefreshCw, AlertCircle, Currency } from "lucide-react"
 import { OnrampSettings } from "@/components/onramp-settings"
 import { logoNGN, solana_logo } from "@/asssets/image"
 import { createOnramp } from "@/lib/api/payments/onramp"
@@ -340,13 +340,14 @@ export function RampInterface({
   }
 
   const getRampIcon = (mode: string) => {
+    const baseIcon = <Currency className="h-4 w-4" />;
     switch (mode) {
       case "onramp":
-        return <ArrowUpCircle className="h-4 w-4 text-green-600" />;
+        return <span className="text-green-500">{baseIcon}</span>;  // Or use primary green
       case "offramp":
-        return <ArrowDownCircle className="h-4 w-4 text-blue-600" />;
+        return <span className="text-red-500">{baseIcon}</span>;  // Or use warning red
       default:
-        return <ArrowUpCircle className="h-4 w-4 text-muted-foreground" />;
+        return <span className="text-muted-foreground">{baseIcon}</span>;
     }
   };
 
@@ -367,7 +368,7 @@ export function RampInterface({
 
             <div className="flex flex-row items-center justify-between">
               <CardTitle className="text-base flex items-center gap-2 px-2">
-                {/* {getRampIcon(rampMode)} */}
+                {getRampIcon(rampMode)}
                 Ramp
               </CardTitle>
 

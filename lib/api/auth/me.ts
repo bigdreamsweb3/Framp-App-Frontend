@@ -1,12 +1,8 @@
-// File: lib\api\auth\me.ts
-
-// const API_BASE =
-//   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+// File: lib/api/auth/me.ts
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "https://framp-backend.vercel.app";
 
-// File: lib/api/auth/me.ts
 export async function getCurrentUser(accessToken?: string) {
   console.log("📡 Calling /api/auth/me...");
   const headers: Record<string, string> = {
@@ -24,14 +20,22 @@ export async function getCurrentUser(accessToken?: string) {
 
   if (!res.ok) {
     let errorMessage = "Unauthorized";
+    let errorData: any = {};
+    
     try {
-      const errorData = await res.json();
+      errorData = await res.json();
       errorMessage = errorData.error || errorMessage;
     } catch {
       // If JSON parsing fails, use status text or default message
       errorMessage = res.statusText || errorMessage;
     }
-    throw new Error(errorMessage);
+
+    // 👇 Create a custom error object that includes status and error message
+    const error = new Error(errorMessage) as any;
+    error.status = res.status;
+    error.error = errorMessage;
+    
+    throw error;
   }
 
   const data = await res.json();

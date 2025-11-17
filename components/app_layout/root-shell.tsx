@@ -27,6 +27,8 @@ import { useUI } from "@/context/UIContext"
 import { useAuth } from "@/context/AuthContext"
 import { ThemeToggle } from "../theme-toggle"
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
+import AccessCodeModal from "../AccessCodeModal"
+import { Card } from "../ui/card"
 
 export default function RootShell({ children }: { children: React.ReactNode }) {
     const [showAuth, setShowAuth] = useState(false)
@@ -38,7 +40,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
     const router = useRouter()
     const pathname = usePathname() || "/"
-    const { user, loading } = useAuth()
+    const { user, loading, showAccessCodeModal } = useAuth()
 
     // Keep active tab synced with current route
     useEffect(() => {
@@ -77,14 +79,14 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
         }
     }
 
-    const handleShowAuth = () => setShowAuth(true)
+    const handleShowAuth = () => setShowAuthFlow(true)
     const handleHideAuth = () => setShowAuth(false)
     const handleChatQuickAction = (action: string) => {
         // close chat and navigate based on intent if obvious
         setShowChat(false)
         const a = action?.toLowerCase?.() || ""
         if (a.includes("wallet") || a.includes("bank") || a.includes("payment")) {
-            router.push("/wallets") // Fixed: changed from "/wallet" to "/wallets"
+            router.push("/wallets")
         } else if (a.includes("activity") || a.includes("history")) {
             router.push("/activity")
         } else if (a.includes("buy") || a.includes("ramp") || a.includes("purchase")) {
@@ -115,6 +117,18 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             } catch (e) { }
         };
     }, []);
+
+    // Show loading state
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+                    <p className="text-foreground">Loading...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-transparent text-foreground">
@@ -165,24 +179,13 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                         </Button>
                                     </Link>
                                 </div>
-                                {/* <div>
-                                    <Link href="/save">
-                                        <Button
-                                            className="w-full justify-start gap-2 rounded-md"
-                                            variant={pathname === "/save" ? "default" : "ghost"}
-                                        >
-                                            <PiggyBank className="h-4 w-4" />
-                                            Save
-                                        </Button>
-                                    </Link>
-                                </div> */}
 
                                 <div>
                                     <Link href="/wallets" className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap transition duration-100 ${pathname === "/wallets" ? "text-primary font-bold text-md" : "text-muted-foreground font-medium text-sm"
                                         } hover:text-primary transition`}>
                                         <Button
                                             className="w-full justify-start gap-2 rounded-md"
-                                            variant={pathname?.startsWith("/wallets") ? "soft_gradient" : "ghost"} // Fixed: changed from "/wallet" to "/wallets"
+                                            variant={pathname?.startsWith("/wallets") ? "soft_gradient" : "ghost"}
                                         >
                                             <WalletIcon className="h-4 w-4" />
                                             Wallets
@@ -207,11 +210,6 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
                         {/* Sidebar Footer */}
                         <div className="hidden md:flex flex-col fixed bottom-0 w-80">
-                            {/* <div className="flex items-center justify-between px-4 py-3 border-t border-border/30 h-12">
-                                <div className="">
-                                    <ThemeToggle />
-                                </div>
-                            </div> */}
                             <nav className="flex items-center justify-between px-4 py-5 border-t border-border/30">
                                 <div className="flex items-center gap-4">
                                     <Link
@@ -303,125 +301,42 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                 />
 
                 <main className="container mx-auto px-4 py-6 max-w-md pb-28 mt-[6px]">
-                    {/* <div className="flex flex-row items-center gap-2 h-fit mb-6">
-                         <Tabs
-                            value={activeView}
-                            onValueChange={handleTabChange}
-                            className="w-full flex flex-row"
-                        >
-                            <TabsList className="grid w-full grid-cols-4">
-                                <TabsTrigger
-                                    value="onramp"
-                                    className={activeView === "onramp" ? "text-primary" : "text-muted-foreground text-xs"}
-                                >
-                                    <ArrowUpCircle className="h-4 w-4" />
-                                    Gate
-                                </TabsTrigger>
-                                <TabsTrigger
-                                    value="bills"
-                                    className={activeView === "bills" ? "text-primary" : "text-muted-foreground text-xs"}
-                                >
-                                    <QrCode className="h-4 w-4" />
-                                    Bills
-                                </TabsTrigger>
-                                <TabsTrigger
-                                    value="save"
-                                    className={activeView === "save" ? "text-primary" : "text-muted-foreground text-xs"}
-                                >
-                                    <PiggyBank className="h-4 w-4" />
-                                    Save
-                                </TabsTrigger>
-
-                                <TabsTrigger
-                                    value="wallets"
-                                    className={activeView === "wallets" ? "text-primary" : "text-muted-foreground text-xs"}
-                                >
-                                    <WalletIcon className="h-4 w-4" />
-                                    Wallets
-                                </TabsTrigger>
-                            </TabsList>
-
-
-                            <TabsList>
-                                <TabsTrigger
-                                    value="activity"
-                                    className={activeView === "activity" ? "text-primary" : "text-muted-foreground text-xs"}
-                                >
-                                    <ActivityIcon className="h-4 w-4 font-bold" />
-                                </TabsTrigger>
-                            </TabsList>
-                        </Tabs>
-
-                        
-                        <Link
-                            href="/activity"
-                            onClick={() => setActiveView("activity")}
-                            className={`flex flex-col items-center text-xs p-2 hover:bg-muted/20 justify-center rounded-full bg-muted w-7 ${activeView === "activity" ? "text-primary" : "text-muted-foreground text-xs"
-                                }`}
-                        >
-                            <ActivityIcon className="w-4 h-4" />
-                        </Link>
-
-
-                    </div> */}
                     {children}
                 </main>
-
-
-
             </div >
 
             {/* Mobile Bottom Navigation */}
             <BottomNav />
 
-            {/*
+            {/* Access Code Modal - will show automatically when needed */}
+            <AccessCodeModal />
 
-            <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-sidebar sm:hidden">
-                <div className="mb-[env(safe-area-inset-bottom)] flex h-14 items-center text-sm">
-                    <div className="grid size-full grid-cols-4">
-                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 duration-100 ${pathname === "/" ? "text-primary dark:text-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
-                            } hover:text-primary transition`} href="/">
-                            <ArrowUpCircle className="h-4 w-4" />
-                            <span className="w-full text-center">Gate</span>
-                        </Link>
+            {/* Login Overlay - Shows on top of main app when user is not authorized */}
+            {!user && !showAccessCodeModal && (
+                <div className="fixed inset-0 z-[999] flex items-center justify-center p-2">
+                    {/* Backdrop */}
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
+                    {/* Modal */}
+                    <div className="relative w-full max-w-md mx-auto">
 
-                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 duration-100 ${pathname === "/bills" ? "text-primary dark:text-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
-                            } hover:text-primary transition`} href="/bills">
-                            <QrCode className="h-4 w-4" />
-                            <span className="w-full text-center">Bills</span>
-                        </Link>
+                        <div className="text-center max-w-md mx-auto">
+                            <div className="space-y-4">
+                                <Button
+                                    onClick={handleShowAuth}
+                                    variant="default"
+                                    size="sm"
+                                    className="rounded-xl"
+                                    aria-label="Sign in or sign up"
+                                >
+                                    Get Started
+                                </Button>
 
-
-                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 duration-100 ${pathname === "/wallets" ? "text-primary dark:text-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
-                            } hover:text-primary transition`} href="/wallets">
-                            <WalletIcon className="h-4 w-4" />
-                            <span className="w-full text-center">Wallets</span>
-                        </Link>
-
-                        <Link className={`relative flex h-full select-none flex-col items-center justify-center gap-0.5 whitespace-nowrap px-1 duration-100 ${pathname === "/activity" ? "text-primary dark:text-foreground font-bold text-md" : "text-muted-foreground font-medium text-sm"
-                            } hover:text-primary transition`} href="/activity">
-                            <ActivityIcon className="h-4 w-4" />
-                            <span className="w-full text-center">Activity</span>
-                        </Link>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </nav> */}
-
-
-            {/* Floating AI Chat Button */}
-            {/* <motion.button
-                className="fixed bottom-4 right-4 bg-primary text-primary-foreground rounded-full h-10 w-10 flex items-center justify-center shadow-lg hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:border-ring outline-none transition-all lg:bottom-6 lg:right-6"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                onClick={() => setShowChat((s) => !s)}
-                aria-label="Toggle AI Assistant"
-                data-tour="chat-button"
-            >
-                <MessageCircle className="h-5 w-5" />
-            </motion.button> */}
+            )}
 
             {/* Chat overlay */}
             {showChat && (
@@ -450,12 +365,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             {/* Auth Modal */}
             {
                 showAuth && (
-                    <div className="fixed inset-0 z-999 flex items-center justify-center p-4">
-                        <div
-                            className="absolute inset-0 bg-black/40"
-                            onClick={handleHideAuth}
-                            aria-hidden
-                        />
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/80">
                         <div className="relative z-10 w-full max-w-md">
                             <AuthPage onBack={handleHideAuth} />
                         </div>
@@ -466,12 +376,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             {/* Profile Modal */}
             {
                 showProfile && (
-                    <div className="fixed inset-0 z-999 flex items-center justify-center md:justify-end">
-                        <div
-                            className="absolute inset-0 bg-black/40"
-                            onClick={() => setShowProfile(false)}
-                            aria-hidden
-                        />
+                    <div className="fixed inset-0 z-[110] flex items-center justify-center md:justify-end bg-black/80">
                         <div className="relative z-10 w-full">
                             <ProfileModal onQuickAction={() => setShowProfile(false)} />
                         </div>

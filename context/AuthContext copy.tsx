@@ -15,20 +15,11 @@ type User = {
   accountNumber?: string;
   tier?: string;
   created_at?: string;
-  role?: string; // Add role property
-  profile?: {   // Add profile property
-    role: string;
-    access_code?: string;
-  };
   stats?: {
     total_transactions: number;
     total_volume_usd: number;
     portfolio_value: number;
   };
-  // Add other properties that might come from your backend
-  recent_offramps?: any[];
-  recent_onramps?: any[];
-  user?: any;
 };
 
 type AuthContextType = {
@@ -37,9 +28,6 @@ type AuthContextType = {
   loading: boolean;
   logout: () => Promise<void>;
   refetchUser: () => Promise<void>;
-  showAccessCodeModal: boolean;
-  setShowAccessCodeModal: (show: boolean) => void;
-  accessCodeError: string | null;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -48,8 +36,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showAccessCodeModal, setShowAccessCodeModal] = useState(false);
-  const [accessCodeError, setAccessCodeError] = useState<string | null>(null);
 
   // Safe access to Dynamic context with fallback
   let setShowAuthFlow: ((show: boolean) => void) | undefined;
@@ -61,30 +47,33 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     handleLogOut = dynamicContext.handleLogOut;
     dynamicUser = dynamicContext.user;
   } catch {
+    // Dynamic context not available yet
     setShowAuthFlow = () => { };
     handleLogOut = async () => { };
     dynamicUser = null;
   }
 
-  // Listen to Dynamic user changes and fetch user data
+  // 👈 Listen to Dynamic user changes and fetch user data
   useEffect(() => {
     if (dynamicUser) {
+      // User connected wallet - fetch user data
       fetchUser().then(() => {
+        // Notify other components that user data has been updated
         if (typeof window !== 'undefined') {
           window.dispatchEvent(new CustomEvent('userDataUpdated'));
         }
       });
     } else {
+      // User disconnected - clear user state
       setUser(null);
       setAuthToken(null);
-      setShowAccessCodeModal(false);
-      setAccessCodeError(null);
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('userDataUpdated'));
       }
     }
   }, [dynamicUser]);
 
+  // 👈 Helper to get token from Dynamic Labs
   const fetchAuthToken = () => {
     if (typeof window === 'undefined') return null;
 
@@ -103,51 +92,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const token = fetchAuthToken();
       const res = await getCurrentUser(token || undefined);
       console.log("🔍 Current user from API:", res);
-
       if (res && res.user) {
         setUser(res.user);
-        setAccessCodeError(null);
-        setShowAccessCodeModal(false);
       } else {
         setUser(null);
       }
     } catch (err: any) {
-      console.error("AuthContext: Error fetching user", err);
-
-      // 👇 Check if it's an access code error (403 status with specific message)
-      if (err?.status === 403 && err?.message?.includes('Access code required')) {
-        console.log("🔐 Access code required - showing modal");
-        setAccessCodeError(err.message);
-        setShowAccessCodeModal(true);
-        // Keep the user as null since they don't have full access
-        setUser(null);
-      }
-      // Handle other 403 errors or unauthorized
-      else if (err?.status === 403 || err?.status === 401) {
-        console.log("🔐 Authentication error:", err.message);
-        setUser(null);
-        setAccessCodeError(null);
-        setShowAccessCodeModal(false);
-      }
-      // Handle other errors
-      else {
-        setUser(null);
-        setAccessCodeError(null);
-        setShowAccessCodeModal(false);
-      }
-
+      console.error("AuthContext: no valid session", err);
+      setUser(null);
+      // 👈 Clear token for other errors
       setAuthToken(null);
     } finally {
       setLoading(false);
     }
   };
 
+  // 👈 Refetch user
   const refetchUser = async () => {
     await fetchUser();
   };
 
+  // 👈 Client-side init: Fetch on mount (after hydration)
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
     fetchUser();
   }, []);
 
@@ -159,10 +127,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
+      // 👈 Clear token from state on logout
       setAuthToken(null);
-      setUser(null);
-      setShowAccessCodeModal(false);
-      setAccessCodeError(null);
+      // Refresh user state (will set null)
       try {
         await fetchUser();
       } catch (e) {
@@ -179,9 +146,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         loading,
         logout: handleLogout,
         refetchUser,
-        showAccessCodeModal,
-        setShowAccessCodeModal,
-        accessCodeError,
       }}
     >
       {children}

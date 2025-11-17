@@ -2,6 +2,8 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { login } from "@/lib/api/auth/login";
+import { signup } from "@/lib/api/auth/signup";
 import { logout } from "@/lib/api/auth/logout";
 import { getCurrentUser } from "@/lib/api/auth/me";
 import { getAuthToken } from "@dynamic-labs/sdk-react-core";
@@ -15,41 +17,28 @@ type User = {
   accountNumber?: string;
   tier?: string;
   created_at?: string;
-  role?: string; // Add role property
-  profile?: {   // Add profile property
-    role: string;
-    access_code?: string;
-  };
   stats?: {
     total_transactions: number;
     total_volume_usd: number;
     portfolio_value: number;
   };
-  // Add other properties that might come from your backend
-  recent_offramps?: any[];
-  recent_onramps?: any[];
-  user?: any;
 };
 
 type AuthContextType = {
   user: User | null;
-  authToken: string | null;
+  authToken: string | null; // 👈 Added: Expose token for global access
   loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string, name?: string, wallet?: string) => Promise<void>;
   logout: () => Promise<void>;
-  refetchUser: () => Promise<void>;
-  showAccessCodeModal: boolean;
-  setShowAccessCodeModal: (show: boolean) => void;
-  accessCodeError: string | null;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [authToken, setAuthToken] = useState<string | null>(null);
+  const [authToken, setAuthToken] = useState<string | null>(null); // 👈 Added: Manage token in state
   const [loading, setLoading] = useState(true);
-  const [showAccessCodeModal, setShowAccessCodeModal] = useState(false);
-  const [accessCodeError, setAccessCodeError] = useState<string | null>(null);
 
   // Safe access to Dynamic context with fallback
   let setShowAuthFlow: ((show: boolean) => void) | undefined;
@@ -61,37 +50,44 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     handleLogOut = dynamicContext.handleLogOut;
     dynamicUser = dynamicContext.user;
   } catch {
-    setShowAuthFlow = () => { };
-    handleLogOut = async () => { };
+    // Dynamic context not available yet
+    setShowAuthFlow = () => {};
+    handleLogOut = async () => {};
     dynamicUser = null;
   }
 
-  // Listen to Dynamic user changes and fetch user data
+  // 👈 Listen to Dynamic user changes and fetch user data
   useEffect(() => {
     if (dynamicUser) {
+      // User connected wallet - fetch user data
       fetchUser().then(() => {
+        // Notify other components that user data has been updated
         if (typeof window !== 'undefined') {
           window.dispatchEvent(new CustomEvent('userDataUpdated'));
         }
       });
     } else {
+      // User disconnected - clear user state
       setUser(null);
       setAuthToken(null);
-      setShowAccessCodeModal(false);
-      setAccessCodeError(null);
       if (typeof window !== 'undefined') {
+        localStorage.removeItem('authToken');
         window.dispatchEvent(new CustomEvent('userDataUpdated'));
       }
     }
   }, [dynamicUser]);
 
-  const fetchAuthToken = () => {
+  // 👈 Added: Helper to get token and persist it
+  const fetchAndStoreToken = () => {
     if (typeof window === 'undefined') return null;
-
+    
     const token = getAuthToken();
     if (token) {
+      localStorage.setItem('authToken', token); // Store in localStorage
       setAuthToken(token);
     } else {
+      // If no token, clear localStorage (e.g., on app init if expired)
+      localStorage.removeItem('authToken');
       setAuthToken(null);
     }
     return token;
@@ -100,56 +96,76 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const fetchUser = async () => {
     try {
       setLoading(true);
-      const token = fetchAuthToken();
+      const token = fetchAndStoreToken(); // 👈 Use helper to ensure token is stored
       const res = await getCurrentUser(token || undefined);
       console.log("🔍 Current user from API:", res);
-
       if (res && res.user) {
         setUser(res.user);
-        setAccessCodeError(null);
-        setShowAccessCodeModal(false);
       } else {
         setUser(null);
       }
-    } catch (err: any) {
-      console.error("AuthContext: Error fetching user", err);
-
-      // 👇 Check if it's an access code error (403 status with specific message)
-      if (err?.status === 403 && err?.message?.includes('Access code required')) {
-        console.log("🔐 Access code required - showing modal");
-        setAccessCodeError(err.message);
-        setShowAccessCodeModal(true);
-        // Keep the user as null since they don't have full access
-        setUser(null);
+    } catch (err) {
+      console.error("AuthContext: no valid session", err);
+      setUser(null);
+      // 👈 Clear invalid token
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('authToken');
       }
-      // Handle other 403 errors or unauthorized
-      else if (err?.status === 403 || err?.status === 401) {
-        console.log("🔐 Authentication error:", err.message);
-        setUser(null);
-        setAccessCodeError(null);
-        setShowAccessCodeModal(false);
-      }
-      // Handle other errors
-      else {
-        setUser(null);
-        setAccessCodeError(null);
-        setShowAccessCodeModal(false);
-      }
-
       setAuthToken(null);
     } finally {
       setLoading(false);
     }
   };
 
-  const refetchUser = async () => {
-    await fetchUser();
-  };
-
+  // 👈 Updated: Init effect - load token from localStorage first, then fetch user
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    
+    // Restore token from localStorage on mount (e.g., page refresh)
+    const storedToken = localStorage.getItem('authToken');
+    if (storedToken) {
+      setAuthToken(storedToken);
+    }
     fetchUser();
   }, []);
+
+  async function handleLogin(email: string, password: string) {
+    try {
+      setLoading(true);
+      const res = await login(email, password);
+      if (res.user) {
+        setUser(res.user);
+        // 👈 Fetch and store token post-login (Dynamic Labs may set it internally)
+        fetchAndStoreToken();
+        // 👈 Refetch user data to ensure we have the latest state
+        await fetchUser();
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSignup(email: string, password: string, name?: string, wallet?: string) {
+    try {
+      setLoading(true);
+      const res = await signup(email, password, name, wallet);
+      if (res.user) {
+        setUser(res.user);
+        // 👈 Fetch and store token post-signup
+        fetchAndStoreToken();
+        // 👈 Refetch user data to ensure we have the latest state
+        await fetchUser();
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  }
 
   async function handleLogout() {
     try {
@@ -159,10 +175,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error("Logout error:", error);
     } finally {
+      // 👈 Clear token from state and localStorage on logout
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('authToken');
+      }
       setAuthToken(null);
-      setUser(null);
-      setShowAccessCodeModal(false);
-      setAccessCodeError(null);
+      // Refresh user state (will set null)
       try {
         await fetchUser();
       } catch (e) {
@@ -173,16 +191,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{
-        user,
-        authToken,
-        loading,
-        logout: handleLogout,
-        refetchUser,
-        showAccessCodeModal,
-        setShowAccessCodeModal,
-        accessCodeError,
-      }}
+      value={{ user, authToken, loading, login: handleLogin, signup: handleSignup, logout: handleLogout }} // 👈 Added authToken to value
     >
       {children}
     </AuthContext.Provider>
