@@ -90,7 +90,7 @@ export default function AccessCodeModal() {
                         </div>
                     </div>
 
-                    <CardTitle className="text-3xl font-black tracking-tighter bg-gradient-to-r from-muted-foreground via-primary to-foreground/70 bg-clip-text text-transparent">
+                    <CardTitle className="text-3xl font-black tracking-tighter bg-gradient-to-r from-primary via-primary to-primary/70 bg-clip-text text-transparent">
                         Enter Gate Key
                     </CardTitle>
 

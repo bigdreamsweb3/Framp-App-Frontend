@@ -375,7 +375,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                     </div>
 
                                     {/* Crypto-first headline */}
-                                    <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter bg-gradient-to-r from-primary via-primary to-foreground/70 bg-clip-text text-transparent">
+                                    <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter bg-gradient-to-r from-primary via-primary to-primary/70 bg-clip-text text-transparent">
                                         FRAMP
                                     </h1>
                                 </div>

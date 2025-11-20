@@ -367,7 +367,7 @@ export function RampInterface({
                 </CardDescription> */}
 
             <div className="flex flex-row items-center justify-between">
-              <CardTitle className="text-base flex items-center gap-2 px-2">
+              <CardTitle className="text-base flex items-center gap-2">
                 {getRampIcon(rampMode)}
                 Ramp
               </CardTitle>

@@ -199,36 +199,10 @@ export function ActivityView() {
   return (
     <div className="grid gap-5 w-full max-w-md mx-auto sm:max-w-2xl">
 
-
-
-      <Card className="w-full max-w-md mx-auto sm:max-w-2xl pt-0">
-        <Tabs value={typeFilter} onValueChange={setTypeFilter}>
-          <TabsContent value={typeFilter} className="mt-0">
-            <TabsList className="grid w-full grid-cols-4 border-b border-primary/15">
-              <TabsTrigger value="all" className="data-[state=active]:rounded-t-lg">
-                All
-                {/* <Badge variant="secondary" className="text-xs">{activities.length}</Badge> */}
-              </TabsTrigger>
-              <TabsTrigger value="onramp" className="data-[state=active]:rounded-t-lg">
-                Onramp
-                {/* <Badge variant="secondary" className="text-xs">{onrampActivities.length}</Badge> */}
-              </TabsTrigger>
-              <TabsTrigger value="offramp" className="data-[state=active]:rounded-t-lg">
-                Offramp
-                {/* <Badge variant="secondary" className="text-xs">{offrampActivities.length}</Badge> */}
-              </TabsTrigger>
-              <TabsTrigger value="bills" className="data-[state=active]:rounded-t-lg">
-                Bills
-                {/* <Badge variant="secondary" className="text-xs">{billActivities.length}</Badge> */}
-              </TabsTrigger>
-            </TabsList>
-          </TabsContent>
-        </Tabs>
-
-
+      <Card className="w-full max-w-md mx-auto sm:max-w-2xl">
 
         <div className="flex flex-row items-center justify-between px-2">
-          <CardTitle className="text-base flex items-center gap-2 px-2">
+          <CardTitle className="text-base flex items-center gap-2">
             <Activity className="w-3 h-3" />
             Activities
           </CardTitle>
@@ -254,6 +228,29 @@ export function ActivityView() {
           </Button> */}
 
         </div>
+
+        <Tabs value={typeFilter} onValueChange={setTypeFilter}>
+          <TabsContent value={typeFilter} className="mt-0">
+            <TabsList className="grid w-full grid-cols-4 border-b border-primary/15">
+              <TabsTrigger value="all" className="data-[state=active]:rounded-t-lg">
+                All
+                {/* <Badge variant="secondary" className="text-xs">{activities.length}</Badge> */}
+              </TabsTrigger>
+              <TabsTrigger value="onramp" className="data-[state=active]:rounded-t-lg">
+                Onramp
+                {/* <Badge variant="secondary" className="text-xs">{onrampActivities.length}</Badge> */}
+              </TabsTrigger>
+              <TabsTrigger value="offramp" className="data-[state=active]:rounded-t-lg">
+                Offramp
+                {/* <Badge variant="secondary" className="text-xs">{offrampActivities.length}</Badge> */}
+              </TabsTrigger>
+              <TabsTrigger value="bills" className="data-[state=active]:rounded-t-lg">
+                Bills
+                {/* <Badge variant="secondary" className="text-xs">{billActivities.length}</Badge> */}
+              </TabsTrigger>
+            </TabsList>
+          </TabsContent>
+        </Tabs>
 
 
         <CardContent className="p-0">
