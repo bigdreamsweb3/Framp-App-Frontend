@@ -32,7 +32,7 @@ export async function createOfframp({
   exchangeRate: number;
   fiatAmount: number;
 
-  feeAmount?: number;
+  feeAmount?: string;
   feePercentage?: number;
 
   bankName?: string | null;

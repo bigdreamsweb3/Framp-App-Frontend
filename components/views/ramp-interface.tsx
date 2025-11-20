@@ -261,7 +261,7 @@ export function RampInterface({
         walletInfo: selectedWallet,
         paymentMethods: selectedPaymentMethod ? [selectedPaymentMethod] : ["CARD"],
 
-        feeAmount: fees.serviceFee ?? 0,        // ← This is the actual fee in NGN/crypto
+        feeAmount: fees.serviceFee.toFixed(6) ?? 0,        // ← This is the actual fee in NGN/crypto
         feePercentage: Number(fees.percentage.replace("%", "")) ?? 0,
       } as any
 
@@ -290,7 +290,7 @@ export function RampInterface({
           exchangeRate: Number(exchangeRate?.rate),
           fiatAmount: Number(computedReceiving),
 
-          feeAmount: fees.serviceFee ?? 0,        // ← This is the actual fee in NGN/crypto
+          feeAmount: fees.serviceFee.toFixed(6) ?? 0,        // ← This is the actual fee in NGN/crypto
           feePercentage: Number(fees.percentage.replace("%", "")) ?? 0,
 
           bankName: selectedWallet?.name || null,

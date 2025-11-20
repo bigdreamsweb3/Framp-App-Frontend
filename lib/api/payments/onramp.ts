@@ -39,7 +39,7 @@ export async function createOnramp({
   } | null;
   paymentMethods?: string[];
 
-  feeAmount?: number;
+  feeAmount?: string;
   feePercentage?: number;
 }) {
   const res = await fetch(`${API_BASE}/api/payments/onramp`, {

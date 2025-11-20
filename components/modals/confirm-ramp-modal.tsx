@@ -212,7 +212,7 @@ export function ConfirmRampModal({
             :
             <InfoRow
               label="Service fee"
-              value={`${fees.percentage} (${fees.serviceFee.toFixed(6)} ${tokenSymbol})`}
+              value={`${fees.percentage} ${formatCurrency(fees.serviceFee.toFixed(6))} ${tokenSymbol})`}
               className="text-sm"
               noBorder
             />
