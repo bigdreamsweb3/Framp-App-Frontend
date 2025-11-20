@@ -16,6 +16,7 @@ export async function createOfframp({
 
   feeAmount,
   feePercentage,
+  
   bankName,
   bankAccountNumber,
   bankAccountName,
