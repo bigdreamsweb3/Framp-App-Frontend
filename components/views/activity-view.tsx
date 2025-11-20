@@ -323,10 +323,15 @@ export function ActivityView() {
                       </div>
                       {expandedId === activity.id && (
                         <div className="text-xs text-muted-foreground space-y-1 bg-muted/50 px-2 py-2">
-                          {activity.status && activity.status && (
+                          {activity.feeAmount !== undefined && activity.feeAmount !== null && (
                             <p className="flex items-center justify-between">
                               <span>Fee:</span>
-                              <span>{Number(activity.status).toLocaleString("en-US", { style: "currency", currency: activity.currency })} ({activity.status})</span>
+                              <span>
+                                {Number(activity.feeAmount).toLocaleString("en-US", {
+                                  style: "currency",
+                                  currency: activity.type === "offramp" ? activity.tokenSymbol : activity.currency,
+                                })}
+                              </span>
                             </p>
                           )}
                           {activity.paymentMethod && (
