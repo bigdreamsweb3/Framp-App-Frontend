@@ -4,10 +4,10 @@
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { getAuthToken, useDynamicContext } from '@dynamic-labs/sdk-react-core';
-import { Button } from './ui/button';
+import { Button } from '../components/ui/button';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Input } from './ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
+import { Input } from '../components/ui/input';
 
 export default function AccessCodeModal() {
     const {
@@ -32,7 +32,7 @@ export default function AccessCodeModal() {
         e.preventDefault();
 
         if (!accessCode.trim()) {
-            setSubmitError('Please enter an access code');
+            setSubmitError('Please enter an Gate Key');
             return;
         }
 
@@ -56,16 +56,16 @@ export default function AccessCodeModal() {
 
             // Fixed: Using 'response' variable (was 'res' in declaration but 'response' in usage)
             if (response.ok) {
-                // Refresh user data - this should now work since access code is set
+                // Refresh user data - this should now work since Gate Key is set
                 await refetchUser();
                 setAccessCode('');
                 setShowAccessCodeModal(false);
             } else {
                 const data = await response.json();
-                setSubmitError(data.error || 'Failed to save access code');
+                setSubmitError(data.error || 'Failed to save Gate Key');
             }
         } catch (error) {
-            console.error('Error submitting access code:', error);
+            console.error('Error submitting Gate Key:', error);
             setSubmitError('Network error. Please try again.');
         } finally {
             setSubmitting(false);
@@ -83,30 +83,30 @@ export default function AccessCodeModal() {
     if (!showAccessCodeModal) return null;
 
     return (
-        <div className="fixed inset-0 bg-background bg-opacity-50 flex items-center justify-center p-4 z-999">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm bg-opacity-50 flex items-center justify-center p-4 z-999">
             <Card className="max-w-md w-full">
                 <CardHeader className="">
                     <CardTitle className="text-base flex items-center gap-2 px-0">
                         {/* <Wallet className="w-3 h-3" /> */}
-                        Access Code Required
+                        Gate Key Required
                     </CardTitle>
                     <CardDescription className="relative">
-                        You need to add an access code to continue using the application.
+                        You need to add an Gate Key to continue using the application.
                     </CardDescription>
                 </CardHeader>
 
               
                 <CardContent>
-                    {accessCodeError && (
+                    {/* {accessCodeError && (
                         <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded mb-4">
                             {accessCodeError}
                         </div>
-                    )}
+                    )} */}
 
                     <form onSubmit={handleSubmit}>
                         <div className="mb-4">
                             <label htmlFor="accessCode" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                Access Code
+                                Gate Key
                             </label>
                             <Input
                                 type="text"
@@ -114,7 +114,7 @@ export default function AccessCodeModal() {
                                 value={accessCode}
                                 onChange={(e) => setAccessCode(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
-                                placeholder="Enter your access code"
+                                placeholder="Enter your Gate Key"
                                 disabled={submitting}
                                 autoFocus
                             />
@@ -126,7 +126,7 @@ export default function AccessCodeModal() {
 
                         <div className="flex items-center justify-end space-x-3">
                             <Button
-                                variant="destructive"
+                                variant="outline"
                                 size="sm"
                                 onClick={() => {
                                     logout?.()
@@ -134,7 +134,7 @@ export default function AccessCodeModal() {
                                 }}
                                 className="rounded-xl"
                             >
-                                Log Out
+                               Cancel
                             </Button>
                             <Button
                                 variant="default"
@@ -143,7 +143,7 @@ export default function AccessCodeModal() {
                                 disabled={submitting || !accessCode.trim()}
                                 className=""
                             >
-                                {submitting ? 'Saving...' : 'Save Access Code'}
+                                {submitting ? 'Saving...' : 'Continue'}
                             </Button>
                         </div>
                     </form>

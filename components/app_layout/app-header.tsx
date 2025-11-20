@@ -462,7 +462,7 @@ export function AppHeader({
                   {/* 🔸 Social Media Links (Compact Icons Only) */}
                   <div className="flex justify-end items-center gap-4 mt-1">
                     <Link
-                      href="https://x.com/yourhandle"
+                      href="https://x.com/FrampFi"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-foreground hover:text-primary transition"
@@ -478,7 +478,7 @@ export function AppHeader({
                     </Link>
 
                     <Link
-                      href="https://t.me/yourhandle"
+                      href="https://t.me/Framp_HQ"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-foreground hover:text-primary transition"

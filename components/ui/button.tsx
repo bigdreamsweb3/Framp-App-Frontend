@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-[max(0.25rem,0.5vw)] md:gap-2 whitespace-nowrap text-sm md:text-[15px] font-medium transition-all duration-300 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[max(0.9rem,1.8vw)] [&_svg:not([class*='size-'])]:md:size-4 shrink-0 [&_svg]:shrink-0 outline-none rounded-xl backdrop-blur-sm relative overflow-hidden",
+  "inline-flex items-center justify-center gap-[max(0.25rem,0.5vw)] md:gap-2 whitespace-nowrap text-sm md:text-[15px] font-medium transition-all duration-300 hover:scale-101 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-[max(0.9rem,1.8vw)] [&_svg:not([class*='size-'])]:md:size-4 shrink-0 [&_svg]:shrink-0 outline-none rounded-xl backdrop-blur-sm relative overflow-hidden",
   {
     variants: {
       variant: {
@@ -30,8 +30,8 @@ const buttonVariants = cva(
       size: {
         default:
           "h-[max(2rem,4vh)] px-[max(0.75rem,1.5vw)] py-[max(0.5rem,1vh)]",
-        sm: "h-[max(1.75rem,3.5vh)] px-[max(0.6rem,1.2vw)] rounded-lg",
-        lg: "h-[max(2.25rem,4.5vh)] px-[max(1rem,2vw)] rounded-xl",
+        sm: "h-[max(2rem,3.5vh)] px-[max(0.6rem,1.2vw)] rounded-lg",
+        lg: "h-[max(2.5rem,4.5vh)] px-[max(1rem,2vw)] rounded-xl",
         icon: "size-[max(2rem,4vh)] md:size-9 rounded-xl",
       },
     },

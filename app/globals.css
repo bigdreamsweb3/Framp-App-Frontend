@@ -5,8 +5,8 @@
 
 :root {
   /* --- LIGHT MODE --- */
-  --background: oklch(0.985 0.006 280); 
-  --foreground: oklch(0.22 0.03 270); 
+  --background: oklch(0.985 0.006 280);
+  --foreground: oklch(0.22 0.03 270);
 
   --card: oklch(0.98 0.01 280);
   --card-foreground: oklch(0.22 0.03 270);
@@ -231,5 +231,18 @@
   [role="button"]:hover,
   a:hover {
     cursor: pointer;
+  }
+
+  @keyframes shine {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-shine {
+    animation: shine 2.5s ease-in-out infinite;
   }
 }

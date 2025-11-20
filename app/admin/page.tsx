@@ -14,6 +14,8 @@ import { getAuthToken } from "@dynamic-labs/sdk-react-core";
 export default function AdminPage() {
   const { user, authToken } = useAuth();
   const [count, setCount] = useState(1);
+  const [prefix, setPrefix] = useState("");
+
   const [generating, setGenerating] = useState(false);
   const [generatedCodes, setGeneratedCodes] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -65,20 +67,21 @@ export default function AdminPage() {
         headers["Authorization"] = `Bearer ${token}`;
       }
 
-      console.log("Sending request to generate codes...", { count, headers });
+      console.log("Sending request to generate codes...", { count });
 
       const response = await fetch(`${API_BASE}/api/admin/generate-access-code`, {
         method: "POST",
         headers,
         credentials: "include",
-        body: JSON.stringify({ count }),
+        body: JSON.stringify({ count, prefix }),
       });
+
 
       console.log("Response status:", response.status);
 
       // Check if response has content before trying to parse JSON
       const responseText = await response.text();
-      console.log("Response text:", responseText);
+      console.log("Response text: success");
 
       if (!response.ok) {
         // Try to parse error message, but handle empty responses
@@ -176,7 +179,49 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto max-w-4xl">
+      {/* Stats Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              Your Role
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold capitalize">{userRole}</div>
+            <p className="text-xs text-muted-foreground">Current access level</p>
+          </CardContent>
+        </Card>
+
+        {/* <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Users className="h-4 w-4" />
+              Generated Today
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{generatedCodes.length}</div>
+            <p className="text-xs text-muted-foreground">Codes in this session</p>
+          </CardContent>
+        </Card> */}
+
+        {/* <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              <Key className="h-4 w-4" />
+              Max Batch Size
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">100</div>
+            <p className="text-xs text-muted-foreground">Codes per generation</p>
+          </CardContent>
+        </Card> */}
+      </div>
+
       <div className="mb-8">
         <h1 className="text-3xl font-bold mb-2 flex items-center gap-2">
           <Key className="h-8 w-8" />
@@ -222,6 +267,20 @@ export default function AdminPage() {
               You can generate between 1 and 100 codes at a time
             </p>
           </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="prefix">Access Code Prefix (optional)</Label>
+            <Input
+              id="prefix"
+              value={prefix}
+              onChange={(e) => setPrefix(e.target.value.toUpperCase())}
+              placeholder="e.g., STAN"
+            />
+            <p className="text-sm text-muted-foreground">
+              Optional: Codes will look like <strong>STAN-AD91-F2</strong>
+            </p>
+          </div>
+
 
           {error && (
             <div className="p-3 bg-red-50 border border-red-200 rounded-md text-red-700 dark:bg-red-950/20 dark:border-red-800 dark:text-red-400">
@@ -326,47 +385,7 @@ export default function AdminPage() {
         </Card>
       )}
 
-      {/* Stats Section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Shield className="h-4 w-4" />
-              Your Role
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold capitalize">{userRole}</div>
-            <p className="text-xs text-muted-foreground">Current access level</p>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Users className="h-4 w-4" />
-              Generated Today
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{generatedCodes.length}</div>
-            <p className="text-xs text-muted-foreground">Codes in this session</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Key className="h-4 w-4" />
-              Max Batch Size
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">100</div>
-            <p className="text-xs text-muted-foreground">Codes per generation</p>
-          </CardContent>
-        </Card>
-      </div>
     </div>
   );
 }

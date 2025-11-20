@@ -27,8 +27,11 @@ import { useUI } from "@/context/UIContext"
 import { useAuth } from "@/context/AuthContext"
 import { ThemeToggle } from "../theme-toggle"
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
-import AccessCodeModal from "../AccessCodeModal"
-import { Card } from "../ui/card"
+import AccessCodeModal from "../modals/AccessCodeModal"
+import { Card, CardContent } from "../ui/card"
+
+import Image from "next/image"
+import useAppLogo from "@/asssets/image"
 
 export default function RootShell({ children }: { children: React.ReactNode }) {
     const [showAuth, setShowAuth] = useState(false)
@@ -41,6 +44,8 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
     const router = useRouter()
     const pathname = usePathname() || "/"
     const { user, loading, showAccessCodeModal } = useAuth()
+
+    const app_logo = useAppLogo()
 
     // Keep active tab synced with current route
     useEffect(() => {
@@ -118,13 +123,46 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
         };
     }, []);
 
-    // Show loading state
     if (loading) {
         return (
-            <div className="min-h-screen bg-background flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                    <p className="text-foreground">Loading...</p>
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+                <div className="flex flex-col items-center gap-8">
+                    {/* Logo with shine effect */}
+                    <div className="relative">
+                        <Image
+                            src={app_logo}
+                            alt="App Logo"
+                            width={64}
+                            height={64}
+                            className="w-16 h-16 object-contain rounded-md drop-shadow-2xl"
+                            priority
+                        />
+                        <span className="absolute -top-1 -right-1 text-[0.55rem] font-bold px-1.5 py-0.5 bg-primary text-white rounded-sm rotate-12 shadow-lg">
+                            BETA
+                        </span>
+
+                        {/* Shining sweep */}
+                        <div className="absolute inset-0 overflow-hidden rounded-md">
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-shine" />
+                        </div>
+                    </div>
+
+                    {/* AI Thinking Dots - ChatGPT style */}
+                    <div className="flex items-center gap-2">
+                        {[0, 1, 2].map((i) => (
+                            <div
+                                key={i}
+                                className="w-3 h-3 bg-primary/80 rounded-full animate-bounce"
+                                style={{
+                                    animationDelay: `${i * 0.15}s`,
+                                    animationDuration: '1.4s',
+                                }}
+                            />
+                        ))}
+                    </div>
+
+                    {/* Optional text (uncomment if you want) */}
+                    {/* <p className="text-sm text-muted-foreground tracking-wider">Thinking<span className="animate-pulse">...</span></p> */}
                 </div>
             </div>
         );
@@ -311,30 +349,58 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             {/* Access Code Modal - will show automatically when needed */}
             <AccessCodeModal />
 
-            {/* Login Overlay - Shows on top of main app when user is not authorized */}
             {!user && !showAccessCodeModal && (
-                <div className="fixed inset-0 z-[999] flex items-center justify-center p-2">
+                <div className="fixed inset-0 z-[999] flex items-center justify-center p-6">
                     {/* Backdrop */}
-                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
 
-                    {/* Modal */}
-                    <div className="relative w-full max-w-md mx-auto">
+                    {/* Modal Card */}
+                    <Card className="relative z-10 w-full max-w-md bg-background border border-border/10 shadow-2xl">
+                        <CardContent className="p-8 md:p-12 text-center">
+                            {/* Logo + BETA */}
+                            <div className="flex flex-col items-center mb-10">
+                                <div className="flex items-center gap-3">
+                                    <div className="relative">
+                                        <Image
+                                            src={app_logo}
+                                            alt="FRAMP Logo"
+                                            width={46}
+                                            height={46}
+                                            className="w-12 h-12 object-contain rounded-xl drop-shadow-xl"
+                                            priority
+                                        />
+                                        <span className="absolute -top-1 -right-1 text-[0.55rem] font-bold px-1.5 py-0.5 bg-primary text-white rounded-sm rotate-12 shadow-lg">
+                                            BETA
+                                        </span>
+                                    </div>
 
-                        <div className="text-center max-w-md mx-auto">
-                            <div className="space-y-4">
+                                    {/* Crypto-first headline */}
+                                    <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tighter bg-gradient-to-r from-primary via-primary to-foreground/70 bg-clip-text text-transparent">
+                                        FRAMP
+                                    </h1>
+                                </div>
+                                <p className="text-muted-foreground mt-4 max-w-xs leading-relaxed">
+                                    On/Off-Ramp • Pay Bills • Earn Yields and Explore Solana — all in one place
+                                </p>
+                            </div>
+
+                            {/* Button – big, bold, crypto energy */}
+                            <div className="flex justify-center">
                                 <Button
                                     onClick={handleShowAuth}
-                                    variant="default"
-                                    size="sm"
-                                    className="rounded-xl"
-                                    aria-label="Sign in or sign up"
+                                    size="lg"
+                                    className="w-full max-w-sm shadow-md"
                                 >
                                     Get Started
                                 </Button>
-
                             </div>
-                        </div>
-                    </div>
+
+                            {/* Subtle footer */}
+                            <p className="text-center text-xs text-muted-foreground/70 mt-8">
+                                Powered by Solana • Built for speed
+                            </p>
+                        </CardContent>
+                    </Card>
                 </div>
             )}
 
