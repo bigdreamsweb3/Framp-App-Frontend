@@ -43,6 +43,8 @@ export interface OffRampTransaction {
   amount: string;
   fiat_amount: string;
   exchange_rate: string;
+  fee_amount: string;
+  fee_percentage: string;
   bank_name: string;
   bank_account_number: string;
   bank_code: string;
@@ -197,6 +199,8 @@ export async function fetchAllUserActivities(
           completedAt: tx.disbursed_at || tx.updated_at,
           walletAddress: tx.wallet,
           exchangeRate: tx.exchange_rate,
+          feeAmount: tx.fee_amount,
+          feePercentage: tx.fee_percentage,
           blockchainHash: tx.blockchain_tx_hash,
           bankName: tx.bank_name,
           bankAccountNumber: tx.bank_account_number,

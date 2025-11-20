@@ -16,6 +16,8 @@ export async function createOnramp({
   walletAddress,
   walletInfo,
   paymentMethods = ["CARD"],
+  feeAmount,
+  feePercentage,
 }: {
   fiatAmount: number;
   fiatCurrency: string;
@@ -36,6 +38,9 @@ export async function createOnramp({
     accountNumber?: string;
   } | null;
   paymentMethods?: string[];
+
+  feeAmount?: number;
+  feePercentage?: number;
 }) {
   const res = await fetch(`${API_BASE}/api/payments/onramp`, {
     method: "POST", // ✅ FIXED
@@ -51,6 +56,9 @@ export async function createOnramp({
       walletAddress,
       walletInfo,
       paymentMethods,
+
+      feeAmount,
+      feePercentage,
     }),
   });
 

@@ -265,7 +265,7 @@ export function ActivityView() {
               ) : (
                 <>
                   {paginatedActivities.map((activity) => (
-                    <div key={activity.id} className="space-y-1 rounded-md overflow-hidden bg-card">
+                    <div key={activity.id} className="rounded-md overflow-hidden bg-card">
                       <div
                         className={`flex items-center justify-between p-2 cursor-pointer hover:bg-muted transition-colors ${expandedId === activity.id ? 'bg-muted' : ''}`}
                         onClick={() => toggleExpanded(activity.id)}
@@ -295,7 +295,11 @@ export function ActivityView() {
                             <span className="font-medium">
                               {Number(activity.amount).toLocaleString("en-US", {
                                 style: "currency",
-                                currency: activity.currency,
+                                // Choose the correct currency code dynamically
+                                currency:
+                                  activity.type === "offramp"
+                                    ? activity.tokenSymbol ?? "TOKEN"   // fallback if tokenSymbol is missing
+                                    : activity.currency ?? "FIAT",     // fallback for regular fiat
                               })}
                             </span>
                             <Badge
@@ -318,7 +322,7 @@ export function ActivityView() {
                         </div>
                       </div>
                       {expandedId === activity.id && (
-                        <div className="text-xs text-muted-foreground space-y-1 bg-muted/50 px-2 pb-2">
+                        <div className="text-xs text-muted-foreground space-y-1 bg-muted/50 px-2 py-2">
                           {activity.status && activity.status && (
                             <p className="flex items-center justify-between">
                               <span>Fee:</span>

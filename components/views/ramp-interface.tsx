@@ -17,7 +17,7 @@ import { PaymentMethodSelector } from "../payment-method-selector"
 import { useExchangeRateWithFallback } from "@/lib/hooks/useExchangeRate"
 import { ExchangeRateSkeleton } from "../ui/exchange-rate-skeleton"
 import { formatCurrency, parseNairaAmount } from "@/lib/utils/formatter"
-import { useFees } from "@/lib/hooks/useFees"
+import { getFeePercentage, useFees } from "@/lib/hooks/useFees"
 import { useRouter } from 'next/navigation';
 
 type TokenStats = {
@@ -260,6 +260,9 @@ export function RampInterface({
         walletAddress,
         walletInfo: selectedWallet,
         paymentMethods: selectedPaymentMethod ? [selectedPaymentMethod] : ["CARD"],
+
+        feeAmount: fees,
+        feePercentage: fees.percentage
       } as any
 
       if (rampMode === "onramp") {

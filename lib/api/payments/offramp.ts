@@ -13,6 +13,9 @@ export async function createOfframp({
   amount,
   exchangeRate,
   fiatAmount,
+
+  feeAmount,
+  feePercentage,
   bankName,
   bankAccountNumber,
   bankAccountName,
@@ -27,6 +30,10 @@ export async function createOfframp({
   amount: number;
   exchangeRate: number;
   fiatAmount: number;
+
+  feeAmount?: number;
+  feePercentage?: number;
+
   bankName?: string | null;
   bankAccountNumber: string;
   bankAccountName: string;
@@ -46,6 +53,12 @@ export async function createOfframp({
       amount,
       exchange_rate: exchangeRate,
       fiat_amount: fiatAmount,
+
+      // Fee
+      fee_amount: feeAmount,
+      fee_percentage: feePercentage,
+
+      // Bank
       bank_name: bankName,
       bank_account_number: bankAccountNumber,
       bank_account_name: bankAccountName,
