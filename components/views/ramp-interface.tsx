@@ -289,6 +289,10 @@ export function RampInterface({
           amount: Number(fromAmount),
           exchangeRate: Number(exchangeRate?.rate),
           fiatAmount: Number(computedReceiving),
+
+          feeAmount: Number(fees),
+          feePercentage: Number(fees.percentage),
+
           bankName: selectedWallet?.name || null,
           bankAccountNumber: selectedWallet?.accountNumber ?? "",
           bankAccountName: selectedWallet?.accountName ?? "",
