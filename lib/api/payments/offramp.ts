@@ -1,14 +1,9 @@
 // File: lib/api/payments/offramp.ts
+
+import { getHeaders } from "@/lib/helpers/api-headers";
+
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "https://framp-backend.vercel.app";
-
-// ✅ Always fetch fresh token
-function getAccessToken() {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("authToken");
-  }
-  return null;
-}
 
 export async function createOfframp({
   userWallet,
@@ -39,15 +34,9 @@ export async function createOfframp({
   currency: string;
   signedTransaction?: string | null;
 }) {
-  const accessToken = getAccessToken();
-
   const res = await fetch(`${API_BASE}/api/payments/offramp`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-    },
+    headers: getHeaders(),
     credentials: "include",
     body: JSON.stringify({
       user_wallet: userWallet,
@@ -77,15 +66,9 @@ export async function createOfframp({
 }
 
 export async function getOfframp(id: string) {
-  const accessToken = getAccessToken();
-
   const res = await fetch(`${API_BASE}/api/payments/offramp/${id}`, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-    },
+    headers: getHeaders(),
   });
 
   const data = await res.json();

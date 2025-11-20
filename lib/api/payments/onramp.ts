@@ -1,16 +1,10 @@
 // File: lib/api/payments/onramp.ts
 // const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
+import { getHeaders } from "@/lib/helpers/api-headers";
+
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "https://framp-backend.vercel.app";
-
-// ✅ Always get the latest token when needed (not on load)
-function getAccessToken() {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("authToken");
-  }
-  return null;
-}
 
 export async function createOnramp({
   fiatAmount,
@@ -43,15 +37,9 @@ export async function createOnramp({
   } | null;
   paymentMethods?: string[];
 }) {
-  const accessToken = getAccessToken();
-
   const res = await fetch(`${API_BASE}/api/payments/onramp`, {
     method: "POST", // ✅ FIXED
-    headers: {
-      "Content-Type": "application/json",
-      "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-    },
+    headers: getHeaders(),
     credentials: "include",
     body: JSON.stringify({
       fiatAmount,
@@ -85,8 +73,6 @@ export async function getOnramps({
   limit?: number;
   offset?: number;
 } = {}) {
-  const accessToken = getAccessToken();
-
   const url = new URL(`${API_BASE}/api/payments/onramp`);
   if (status) url.searchParams.set("status", status);
   url.searchParams.set("limit", String(limit));
@@ -94,11 +80,7 @@ export async function getOnramps({
 
   const res = await fetch(url.href, {
     method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "x-frontend-key": process.env.NEXT_PUBLIC_FRONTEND_KEY as string,
-      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-    },
+    headers: getHeaders(),
     credentials: "include",
   });
 
