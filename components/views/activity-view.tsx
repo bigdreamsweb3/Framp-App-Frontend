@@ -31,6 +31,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { toast } from "sonner"; // Assuming you have a toast library for copy feedback
 import Link from "next/link";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { formatCurrency } from "@/lib/utils/formatter";
 
 export function ActivityView() {
   const { user, loading: authLoading } = useAuth();
@@ -293,18 +294,15 @@ export function ActivityView() {
                         <div className="flex items-center justify-end gap-3">
                           <div className="flex flex-col items-end flex-shrink-0 text-xs space-y-1">
                             <span className="font-medium">
-                              {Number(activity.amount).toLocaleString("en-US", {
-                                style: "currency",
-                                // Choose the correct currency code dynamically
-                                currency:
-                                  activity.type === "offramp"
-                                    ? activity.tokenSymbol ?? "NGN"   // fallback if tokenSymbol is missing
-                                    : activity.currency ?? "NGN",     // fallback for regular fiat
-                              })}
+                              {formatCurrency(Number(activity.amount))}&nbsp;
+                              {activity.type === "offramp"
+                                ? activity.tokenSymbol
+                                : activity.currency}
+
                             </span>
                             <Badge
                               variant="outline"
-                              className={`text-xs capitalize ${getStatusColor(activity.status)}`}
+                              className={`text-xs capitalize border-0 ${getStatusColor(activity.status)}`}
                             >
                               {activity.status}
                               {/* {activity.confirmations ? ` (${activity.confirmations} conf.)` : ""} */}
@@ -327,10 +325,10 @@ export function ActivityView() {
                             <p className="flex items-center justify-between">
                               <span>Fee:</span>
                               <span>
-                                {Number(activity.feeAmount).toLocaleString("en-US", {
-                                  style: "currency",
-                                  currency: activity.type === "offramp" ? activity.tokenSymbol : activity.currency,
-                                })}
+                                {formatCurrency(Number(activity.feeAmount))}&nbsp;
+                                {activity.type === "offramp"
+                                  ? activity.tokenSymbol
+                                  : activity.currency}
                               </span>
                             </p>
                           )}
@@ -352,7 +350,8 @@ export function ActivityView() {
                                       copyToClipboard(activity.status!);
                                     }}
                                   >
-                                    {truncateAddress(activity.status)}
+                                    {truncateAddress(activity.fromWalletAddress ?? "")}
+
                                   </span>
                                 </TooltipTrigger>
                                 <TooltipContent>Click to copy</TooltipContent>
@@ -396,7 +395,7 @@ export function ActivityView() {
                           {activity.exchangeRate && (
                             <p className="flex items-center justify-between">
                               <span>Rate:</span>
-                              <span>{activity.exchangeRate}</span>
+                              <span> 1 {activity.tokenSymbol} ≈ {formatCurrency(activity.exchangeRate)}</span>
                             </p>
                           )}
                           <div className="pt-2 border-t">
@@ -426,7 +425,7 @@ export function ActivityView() {
         <div>
           {displayCount < filteredActivities.length && (
             <div className="px-2">
-              <div className="flex flex-row items-center justify-between gap-2">
+              <div className="flex flex-col items-center gap-2">
                 <p className="text-xs text-muted-foreground">
                   Showing {displayCount} of {filteredActivities.length} activities
                 </p>
@@ -461,10 +460,10 @@ function getStatusIcon(status: string) {
 
 function getStatusColor(status: string) {
   switch (status.toLowerCase()) {
-    case "completed": return "text-green-600 border-green-600";
-    case "failed": return "text-red-600 border-red-600";
-    case "pending": return "text-yellow-600 border-yellow-600";
-    default: return "text-muted-foreground border-muted-foreground";
+    case "completed": return "text-green-600 bg-green-600/5";
+    case "failed": return "text-red-600 bg-red-600/5";
+    case "pending": return "text-yellow-600 bg-yellow-600/5";
+    default: return "text-muted-foreground bg-muted-foreground/5";
   }
 }
 

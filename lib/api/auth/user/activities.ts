@@ -42,6 +42,7 @@ export interface OffRampTransaction {
   token_mint_address: string;
   amount: string;
   fiat_amount: string;
+  expected_wallet_address: string;
   exchange_rate: string;
   fee_amount: string;
   fee_percentage: string;
@@ -71,6 +72,7 @@ export interface ActivityTransaction {
   completedAt?: string | null;
   paymentMethod?: string;
   walletAddress?: string;
+  fromWalletAddress?: string;
   bankDetails?: any;
 
   // Extended fields for detailed view
@@ -198,6 +200,7 @@ export async function fetchAllUserActivities(
           createdAt: tx.created_at,
           completedAt: tx.disbursed_at || tx.updated_at,
           walletAddress: tx.wallet,
+          fromWalletAddress: tx.expected_wallet_address,
           exchangeRate: tx.exchange_rate,
           feeAmount: tx.fee_amount,
           feePercentage: tx.fee_percentage,
