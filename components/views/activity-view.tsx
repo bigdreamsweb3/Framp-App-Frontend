@@ -43,27 +43,27 @@ export function ActivityView() {
   const ITEMS_PER_PAGE = 10;
   const [displayCount, setDisplayCount] = useState(10);
 
-  // const loadActivities = useCallback(async () => {
-  //   if (!user) {
-  //     setActivities([]);
-  //     setLoading(false);
-  //     return;
-  //   }
+  const loadActivities = useCallback(async () => {
+    if (!user) {
+      setActivities([]);
+      setLoading(false);
+      return;
+    }
 
-  //   try {
-  //     setLoading(true);
-  //     const response = await fetchAllUserActivities();
-  //     setActivities(response);
-  //   } catch (err) {
-  //     console.error("Error loading activities:", err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, [user]);
+    try {
+      setLoading(true);
+      const response = await fetchAllUserActivities();
+      setActivities(response);
+    } catch (err) {
+      console.error("Error loading activities:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
 
-  // useEffect(() => {
-  //   loadActivities();
-  // }, [loadActivities]);
+  useEffect(() => {
+    loadActivities();
+  }, [loadActivities]);
 
   useEffect(() => {
     setExpandedId(null); // Close expanded on filter change
@@ -298,8 +298,8 @@ export function ActivityView() {
                                 // Choose the correct currency code dynamically
                                 currency:
                                   activity.type === "offramp"
-                                    ? activity.tokenSymbol ?? "TOKEN"   // fallback if tokenSymbol is missing
-                                    : activity.currency ?? "FIAT",     // fallback for regular fiat
+                                    ? activity.tokenSymbol ?? "NGN"   // fallback if tokenSymbol is missing
+                                    : activity.currency ?? "NGN",     // fallback for regular fiat
                               })}
                             </span>
                             <Badge
