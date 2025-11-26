@@ -1,5 +1,4 @@
 "use client";
-// import { useRouter } from "next/navigation";
 import { DynamicContextProvider, DynamicUserProfile, SortWallets } from "@dynamic-labs/sdk-react-core";
 import { SolanaWalletConnectors } from "@dynamic-labs/solana";
 
@@ -15,7 +14,8 @@ export default function DynamicWrapper({ children }: { children: React.ReactNode
             settings={{
                 environmentId,
                 walletConnectors: [SolanaWalletConnectors],
-                walletsFilter: SortWallets(['phantom', 'solflare', 'okxsolana', 'backpacksol'])
+                walletsFilter: SortWallets(['phantom', 'solflare', 'okxsolana', 'backpacksol']),
+                initialAuthenticationMode: 'connect-and-sign',
             }}
         >
             {children}
