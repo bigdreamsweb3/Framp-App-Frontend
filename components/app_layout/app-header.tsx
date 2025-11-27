@@ -233,7 +233,7 @@ export function AppHeader({
                   onClick={onProfileToggle}
                   variant="outline_soft_gradient"
                   size="sm"
-                  className={`flex items-center gap-2 px-0 md:px-0 lg:px-0 rounded-xl border border-border overflow-hidden transition-all duration-300 ease-out ${profileActive
+                  className={`flex pl-3 items-center gap-0.5 px-0 md:px-0 lg:px-0 rounded-xl border border-border overflow-hidden transition-all duration-300 ease-out ${profileActive
                     ? " ring-1 ring-primary/20"
                     : ""
                     }`}
