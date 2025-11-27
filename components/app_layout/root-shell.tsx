@@ -128,7 +128,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
                 <div className="flex flex-col items-center gap-8">
                     {/* Logo with shine effect */}
-                    <div className="relative">
+                   {/*  <div className="relative">
                         <Image
                             src={app_logo}
                             alt="App Logo"
@@ -141,11 +141,11 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                             BETA
                         </span>
 
-                        {/* Shining sweep */}
+                        {/* Shining sweep 
                         <div className="absolute inset-0 overflow-hidden rounded-md">
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-shine" />
                         </div>
-                    </div>
+                    </div> */}
 
                     {/* AI Thinking Dots - ChatGPT style */}
                     <div className="flex items-center gap-2">
