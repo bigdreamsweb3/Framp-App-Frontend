@@ -373,7 +373,7 @@ export function RampInterface({
                       : "Convert crypto to NGN and withdraw to your chosen account"}
                 </CardDescription> */}
 
-            <div className="flex flex-row items-center justify-between">
+          {/*  <div className="flex flex-row items-center justify-between">
               <CardTitle className="text-base flex items-center gap-2">
                 {getRampIcon(rampMode)}
                 Ramp
@@ -381,7 +381,7 @@ export function RampInterface({
 
               <div className="relative">
               </div>
-            </div>
+            </div> */}
 
 
             {/* Mode Switcher */}
