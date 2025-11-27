@@ -27,7 +27,7 @@ export function useConnectedWallet() {
   // ----------------------------
   // VALIDATE WALLET CONNECTION
   // ----------------------------
-  const validateWalletConnection = useCallback(async () => {
+  {/* const validateWalletConnection = useCallback(async () => {
     if (!primaryWallet) {
       setWalletValid(false);
       return false;
@@ -58,13 +58,13 @@ export function useConnectedWallet() {
     if (primaryWallet) {
       validateWalletConnection();
     }
-  }, [primaryWallet, validateWalletConnection]);
+  }, [primaryWallet, validateWalletConnection]); */}
 
   // ----------------------------
   // IS WALLET CONNECTED
   // ----------------------------
-  const isWalletConnected = useMemo(() => walletValid, [walletValid]);
-
+ //  const isWalletConnected = useMemo(() => walletValid, [walletValid]);
+const isWalletConnected = !!primaryWallet
   // ----------------------------
   // FETCH CONNECTED ADDRESSES
   // ----------------------------
@@ -116,7 +116,7 @@ export function useConnectedWallet() {
         // }
         setShowAuthFlow(true);
       }
-    }, [isWalletConnected, user, setAuthMode, setShowAuthFlow]);
+    }, [isWalletConnected, user, setShowAuthFlow]);
   // ----------------------------
   // MANUAL WALLET REMOVER
   // ----------------------------
