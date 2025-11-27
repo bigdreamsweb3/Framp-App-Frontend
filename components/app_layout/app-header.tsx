@@ -21,6 +21,7 @@ import {
   Wallet2Icon,
   Wallet,
   ChevronUpCircle,
+  ChevronDown,
   Settings,
 } from "lucide-react"
 import { useDynamicContext } from "@dynamic-labs/sdk-react-core"
@@ -254,11 +255,11 @@ export function AppHeader({
 
                   <div
                     className={`relative inline-flex items-center justify-center w-8 h-8 rounded-full rounded-r-xl transition-all duration-300 ease-out transform hover:scale-105 ${profileActive
-                      ? "bg-gradient-to-br from-primary to-primary/80 shadow-md ring-2 ring-primary/30"
-                      : "bg-gradient-to-br from-primary/20 to-primary/10"
+                      ? ""
+                      : ""
                       }`}
                   >
-                    <Settings
+                    <ChevronDown
                       className={`size-4 text-foreground`}
                     />
                   </div>
