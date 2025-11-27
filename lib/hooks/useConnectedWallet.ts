@@ -1,4 +1,4 @@
-  "use client";
+"use client";
 
 import {
   useDynamicContext,
@@ -22,9 +22,7 @@ export function useConnectedWallet() {
 
   const isWalletConnected = !!primaryWallet;
 
-  const getConnectedAddressesForWalletProvider = useCallback(async (): Promise
-    string[] | null
-  > => {
+  const getConnectedAddressesForWalletProvider = useCallback(async (): Promise<string[] | null> => {
     if (!walletProviderKey) return null;
 
     try {
@@ -77,4 +75,4 @@ export function useConnectedWallet() {
     userWallets,
     disconnectWallet,
   };
-}
+              }
