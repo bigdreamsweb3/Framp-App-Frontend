@@ -1,4 +1,4 @@
-                    "use client"
+"use client"
 
 import { useState, useEffect } from "react"
 import QRCode from "react-qr-code"
@@ -67,7 +67,7 @@ export default function OnRampPaymentDetails({
   )
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-999 overflow-y-auto bg-black/50 backdrop-blur-sm">
       <div className="min-h-screen px-4 py-6 flex items-center justify-center">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow-2xl w-full max-w-md relative">
           
