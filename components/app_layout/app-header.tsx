@@ -233,13 +233,13 @@ export function AppHeader({
                   onClick={onProfileToggle}
                   variant="outline_soft_gradient"
                   size="sm"
-                  className={`flex pl-3 items-center gap-0.5 px-0 md:px-0 lg:px-0 rounded-xl border border-border overflow-hidden transition-all duration-300 ease-out ${profileActive
+                  className={`flex items-center gap-0.5 px-0 md:px-0 lg:px-0 rounded-xl border border-border overflow-hidden transition-all duration-300 ease-out ${profileActive
                     ? " ring-1 ring-primary/20"
                     : ""
                     }`}
                   aria-pressed={profileActive}
                 >
-                  <div className="flex-1 text-left">
+                  <div className="flex-1 pl-3 text-left">
                     <p className="text-muted-foreground dark:text-foreground font-bold truncate max-w-[90px]">
 
                       {solanaAddress ? formatAddress(solanaAddress) : (() => {
