@@ -239,7 +239,7 @@ export function AppHeader({
                     }`}
                   aria-pressed={profileActive}
                 >
-                  <div className="flex-1 pl-3 text-left">
+                  <div className="flex-1 text-left">
                     <p className="text-muted-foreground dark:text-foreground font-bold truncate max-w-[90px]">
 
                       {solanaAddress ? formatAddress(solanaAddress) : (() => {
