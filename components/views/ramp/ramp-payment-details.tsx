@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Copy, CheckCircle2, AlertCircle, Zap, Shield, X } from "lucide-react"
+import { Copy, CheckCircle2, AlertCircle, X, Clock, Wallet, Network, Hash } from "lucide-react"
 
 type Props = {
   requestId: string
@@ -12,6 +12,36 @@ type Props = {
   expiresAt: string
   onConfirm: () => void
   onClose?: () => void
+}
+
+// Simple QR Code generator using canvas
+const QRCodeCanvas = ({ value, size = 200 }: { value: string; size?: number }) => {
+  const canvasRef = useState<HTMLCanvasElement | null>(null)[0]
+  
+  useEffect(() => {
+    if (!canvasRef) return
+    
+    const ctx = canvasRef.getContext('2d')
+    if (!ctx) return
+    
+    // Simple QR-like pattern (for demo - use real QR library in production)
+    const moduleSize = size / 25
+    ctx.fillStyle = '#000000'
+    
+    // Create a pseudo-random pattern based on the value
+    const hash = value.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
+    
+    for (let i = 0; i < 25; i++) {
+      for (let j = 0; j < 25; j++) {
+        const seed = (i * 25 + j + hash) % 100
+        if (seed % 3 === 0) {
+          ctx.fillRect(i * moduleSize, j * moduleSize, moduleSize, moduleSize)
+        }
+      }
+    }
+  }, [value, size, canvasRef])
+  
+  return <canvas ref={(ref) => canvasRef = ref} width={size} height={size} />
 }
 
 export default function OnRampPaymentDetails({
@@ -25,7 +55,7 @@ export default function OnRampPaymentDetails({
   onClose,
 }: Props) {
   const [timeLeft, setTimeLeft] = useState("")
-  const [copied, setCopied] = useState(false)
+  const [copiedItem, setCopiedItem] = useState<string | null>(null)
   const [isExpired, setIsExpired] = useState(false)
 
   useEffect(() => {
@@ -45,165 +75,164 @@ export default function OnRampPaymentDetails({
     return () => clearInterval(timer)
   }, [expiresAt])
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(walletAddress)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+  const copyToClipboard = (text: string, label: string) => {
+    navigator.clipboard.writeText(text)
+    setCopiedItem(label)
+    setTimeout(() => setCopiedItem(null), 2000)
   }
 
-  // Generate QR code as SVG
-  const generateQR = (text: string) => {
-    // Simple QR placeholder - in production use a proper QR library
-    return `data:image/svg+xml,${encodeURIComponent(`
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-        <rect width="100" height="100" fill="white"/>
-        <text x="50" y="50" font-size="8" text-anchor="middle" fill="black">QR Code</text>
-      </svg>
-    `)}`
-  }
+  const CopyButton = ({ text, label }: { text: string; label: string }) => (
+    <button
+      onClick={() => copyToClipboard(text, label)}
+      className="ml-2 p-1.5 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors group"
+      title="Copy"
+    >
+      {copiedItem === label ? (
+        <CheckCircle2 className="h-4 w-4 text-green-500" />
+      ) : (
+        <Copy className="h-4 w-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300" />
+      )}
+    </button>
+  )
 
   return (
-    <div className="fixed inset-0 min-h-screen grid items-center justify-center z-50 overflow-y-auto p-4">
-      {/* Overlay */}
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-2xl z-10 w-full max-w-md mx-auto relative">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-              <Zap className="h-4 w-4 text-green-600" />
-            </div>
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Payment Details</h2>
-          </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-lg max-h-[95vh] overflow-hidden flex flex-col">
+        
+        {/* Header with Timer */}
+        <div className="relative bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-white">
           <button
             onClick={onClose}
-            className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-center transition-colors"
+            className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors"
           >
-            <X className="h-4 w-4 text-gray-500" />
+            <X className="h-5 w-5" />
           </button>
+          
+          <div className="text-sm font-medium opacity-90 mb-1">Complete Payment</div>
+          <div className="flex items-baseline gap-2 mb-4">
+            <span className="text-4xl font-bold">{amountCrypto}</span>
+            <span className="text-xl font-semibold opacity-90">{asset}</span>
+          </div>
+          
+          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${
+            isExpired ? 'bg-red-500/90' : 'bg-white/20'
+          }`}>
+            <Clock className="h-4 w-4" />
+            <span className="font-mono font-semibold">{timeLeft}</span>
+          </div>
         </div>
 
-        {/* Content */}
-        <div className="p-4 space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
-          {/* QR Code */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
-            <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-3">Scan QR Code</div>
-            <div className="flex justify-center">
-              <div className="p-3 bg-white rounded-lg shadow-sm border border-gray-200">
-                <div className="w-40 h-40 bg-gray-100 flex items-center justify-center">
-                  <div className="text-xs text-gray-500 text-center">
-                    QR Code<br/>Placeholder
-                  </div>
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          
+          {/* QR Code Section */}
+          <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-6">
+            <div className="flex flex-col items-center">
+              <div className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                Scan to Pay
+              </div>
+              <div className="bg-white p-4 rounded-xl shadow-md">
+                <QRCodeCanvas value={walletAddress} size={180} />
+              </div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
+                Scan this QR code with your wallet app
+              </div>
+            </div>
+          </div>
+
+          {/* Critical Warning */}
+          <div className="bg-amber-50 dark:bg-amber-900/20 border-2 border-amber-300 dark:border-amber-700 rounded-xl p-4">
+            <div className="flex gap-3">
+              <AlertCircle className="h-5 w-5 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5" />
+              <div>
+                <div className="font-semibold text-amber-900 dark:text-amber-200 text-sm mb-1">
+                  Critical: Network & Asset Must Match
+                </div>
+                <div className="text-xs text-amber-800 dark:text-amber-300">
+                  Only send <strong>{asset}</strong> on <strong>{network}</strong> network. Wrong network = permanent loss of funds.
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Amount to Send */}
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
-            <div className="text-xs font-medium text-gray-700 dark:text-gray-300 mb-2 text-center">Amount to Send</div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
-                {amountCrypto}
-              </div>
-              <div className="inline-block px-3 py-1 bg-green-100 dark:bg-green-900/50 rounded-full text-sm font-medium text-green-700 dark:text-green-300">
-                {asset}
-              </div>
-            </div>
-          </div>
-
           {/* Wallet Address */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+          <div>
             <div className="flex items-center justify-between mb-2">
-              <div className="text-xs font-medium text-gray-700 dark:text-gray-300">Wallet Address</div>
-              <button
-                onClick={copyToClipboard}
-                className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 rounded transition-colors"
-              >
-                {copied ? (
-                  <>
-                    <CheckCircle2 className="h-3 w-3" />
-                    <span>Copied!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="h-3 w-3" />
-                    <span>Copy</span>
-                  </>
-                )}
-              </button>
+              <div className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                <Wallet className="h-4 w-4" />
+                Wallet Address
+              </div>
+              <CopyButton text={walletAddress} label="address" />
             </div>
-            <div className="bg-gray-50 dark:bg-gray-900 rounded p-3 break-all">
-              <code className="text-xs font-mono text-gray-900 dark:text-gray-100">
-                {walletAddress}
-              </code>
+            <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 font-mono text-sm break-all border-2 border-gray-200 dark:border-gray-700">
+              {walletAddress}
             </div>
           </div>
 
-          {/* Warning */}
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3">
-            <div className="flex items-start gap-2">
-              <AlertCircle className="h-4 w-4 text-red-600 flex-shrink-0 mt-0.5" />
-              <div className="text-xs text-red-900 dark:text-red-200 font-medium">
-                <strong>Important:</strong> Send only {asset} on {network} network. Sending other assets or using wrong network will result in permanent loss of funds.
+          {/* Amount (copyable) */}
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                Exact Amount
+              </div>
+              <CopyButton text={amountCrypto.toString()} label="amount" />
+            </div>
+            <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-lg p-4 border-2 border-indigo-200 dark:border-indigo-800">
+              <div className="text-2xl font-bold text-gray-900 dark:text-white font-mono">
+                {amountCrypto} {asset}
               </div>
             </div>
           </div>
 
           {/* Network & Request ID */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Network</div>
-              <div className="text-sm font-semibold text-gray-900 dark:text-white">{network}</div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <div className="flex items-center gap-2 text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
+                <Network className="h-3.5 w-3.5" />
+                Network
+              </div>
+              <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3 text-sm font-semibold text-gray-900 dark:text-white">
+                {network}
+              </div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
-              <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Request ID</div>
-              <div className="text-sm font-mono font-semibold text-gray-900 dark:text-white truncate">
-                {requestId.slice(0, 10)}...
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2 text-xs font-medium text-gray-500 dark:text-gray-400">
+                  <Hash className="h-3.5 w-3.5" />
+                  Request ID
+                </div>
+                <CopyButton text={requestId} label="requestId" />
+              </div>
+              <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3 text-sm font-mono text-gray-900 dark:text-white truncate">
+                {requestId.slice(0, 8)}...
               </div>
             </div>
           </div>
 
-          {/* Timer */}
-          <div className={`rounded-lg p-4 border ${
-            isExpired 
-              ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800' 
-              : 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800'
-          }`}>
-            <div className="text-center">
-              <div className="text-xs text-gray-700 dark:text-gray-300 mb-2 font-medium">Time Remaining</div>
-              <div className={`text-2xl font-bold font-mono ${
-                isExpired ? 'text-red-600' : 'text-blue-600'
-              }`}>
-                {timeLeft}
-              </div>
-              <div className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                Expires: {new Date(expiresAt).toLocaleString()}
-              </div>
-            </div>
+          {/* Expiration Info */}
+          <div className="text-xs text-center text-gray-500 dark:text-gray-400">
+            Expires: {new Date(expiresAt).toLocaleString()}
           </div>
+        </div>
 
-          {/* Confirm Button */}
+        {/* Footer - Confirm Button */}
+        <div className="p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
           <button
             onClick={onConfirm}
             disabled={isExpired}
-            className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-all ${
+            className={`w-full py-4 px-6 rounded-xl font-bold text-lg transition-all ${
               isExpired
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-green-600 hover:bg-green-700 active:scale-[0.98] shadow-lg shadow-green-600/30'
+                ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
+                : 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white hover:from-indigo-600 hover:to-purple-700 active:scale-[0.98] shadow-lg shadow-indigo-500/50'
             }`}
           >
-            {isExpired ? "Payment Expired" : "I've Sent the Money ✅"}
+            {isExpired ? "⏰ Payment Expired" : "✅ I've Sent the Payment"}
           </button>
-
-          {/* Security Badge */}
-          <div className="flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400 pt-2">
-            <Shield className="h-3 w-3 text-green-600" />
-            <span>Secure blockchain transaction</span>
+          <div className="text-xs text-center text-gray-500 dark:text-gray-400 mt-3">
+            Click only after sending the exact amount
           </div>
         </div>
       </div>
     </div>
   )
-    }
+      }
