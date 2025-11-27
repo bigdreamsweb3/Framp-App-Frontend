@@ -55,7 +55,7 @@
 
 /* --- DARK MODE --- */
 .dark {
-  --background: oklch(0.16 0.015 270);
+  --background: oklch(0.14 0.015 270);
   --foreground: oklch(0.96 0.015 270);
 
   --card: oklch(0.23 0.04 280 );
@@ -91,7 +91,7 @@
   --chart-5: oklch(0.68 0.25 30);
 
   --sidebar: oklch(
-    0.14 0.015 270
+    0.16 0.015 270
   ); /* Matches card lightness for consistent professional layering */
   --sidebar-foreground: oklch(0.95 0.015 270);
   --sidebar-primary: oklch(0.68 0.25 280);
