@@ -15,7 +15,6 @@ export default function DynamicWrapper({ children }: { children: React.ReactNode
                 environmentId,
                 walletConnectors: [SolanaWalletConnectors],
                 walletsFilter: SortWallets(['phantom', 'solflare', 'okxsolana', 'backpacksol']),
-                initialAuthenticationMode: 'connect-and-sign',
             }}
         >
             {children}

@@ -87,7 +87,7 @@ export function ConfirmRampModal({
 
   return (
     <div
-      className="fixed inset-0 z-[9999] bg-background/80 backdrop-blur-sm flex items-center justify-center"
+      className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex items-center justify-center"
       onClick={!isProcessing ? onClose : undefined}
     >
       <div

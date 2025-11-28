@@ -81,7 +81,7 @@ export function TokenListModal({ tokens, selected, onSelect, onClose, isOpen }: 
     return (
         <div className="fixed inset-0 z-[999] flex items-center justify-center p-2">
             {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
 
             {/* Modal */}
             <div className="relative w-full max-w-md mx-auto">

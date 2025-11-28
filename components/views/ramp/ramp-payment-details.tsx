@@ -70,7 +70,7 @@ export default function OnRampPaymentDetails({
     <div className="fixed inset-0 z-999 overflow-y-auto bg-black/50 backdrop-blur-sm">
       <div className="min-h-screen px-4 py-6 flex items-center justify-center">
         <div className="bg-white dark:bg-gray-900 rounded-lg shadow-2xl w-full max-w-md relative">
-          
+
           {/* Close Button */}
           <button
             onClick={onClose}
@@ -87,20 +87,18 @@ export default function OnRampPaymentDetails({
 
           {/* Content */}
           <div className="p-6 space-y-5">
-            
+
             {/* Timer */}
-            <div className={`text-center p-4 rounded-lg border-2 ${
-              isExpired 
-                ? 'bg-red-50 dark:bg-red-900/10 border-red-300 dark:border-red-800' 
-                : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'
-            }`}>
+            <div className={`text-center p-4 rounded-lg border-2 ${isExpired
+              ? 'bg-red-50 dark:bg-red-900/10 border-red-300 dark:border-red-800'
+              : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+              }`}>
               <div className="flex items-center justify-center gap-2 mb-1">
                 <Clock className="h-4 w-4 text-gray-600 dark:text-gray-400" />
                 <span className="text-xs font-medium text-gray-600 dark:text-gray-400">Time Remaining</span>
               </div>
-              <div className={`text-3xl font-bold font-mono ${
-                isExpired ? 'text-red-600' : 'text-gray-900 dark:text-white'
-              }`}>
+              <div className={`text-3xl font-bold font-mono ${isExpired ? 'text-red-600' : 'text-gray-900 dark:text-white'
+                }`}>
                 {timeLeft}
               </div>
             </div>
@@ -200,11 +198,10 @@ export default function OnRampPaymentDetails({
             <button
               onClick={onConfirm}
               disabled={isExpired}
-              className={`w-full py-3.5 px-6 rounded-lg font-semibold text-base transition-all ${
-                isExpired
-                  ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
-                  : 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 active:scale-[0.98]'
-              }`}
+              className={`w-full py-3.5 px-6 rounded-lg font-semibold text-base transition-all ${isExpired
+                ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 cursor-not-allowed'
+                : 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 active:scale-[0.98]'
+                }`}
             >
               {isExpired ? "⏰ Payment Expired" : "✅ I've Sent the Payment"}
             </button>
@@ -216,4 +213,4 @@ export default function OnRampPaymentDetails({
       </div>
     </div>
   )
-      }
+}

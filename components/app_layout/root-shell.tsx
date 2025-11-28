@@ -149,7 +149,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
                     {/* AI Thinking Dots - ChatGPT style */}
                     <div className="flex items-center gap-2">
-                        {[0, 1, 2].map((i) => (
+                        {[0, 1, 2, 3, 4].map((i) => (
                             <div
                                 key={i}
                                 className="w-3 h-3 bg-primary/80 rounded-full animate-bounce"
@@ -352,10 +352,10 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
             {!user && !showAccessCodeModal && (
                 <div className="fixed inset-0 z-[999] flex items-center justify-center p-6">
                     {/* Backdrop */}
-                    <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
+                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
 
                     {/* Modal Card */}
-                    <Card className="relative z-10 w-full max-w-md bg-background border border-border/10 shadow-2xl">
+                    <Card className="relative z-10 w-full max-w-md bg-background border border-border/10 shadow">
                         <CardContent className="p-8 md:p-12 text-center">
                             {/* Logo + BETA */}
                             <div className="flex flex-col items-center mb-10">
@@ -366,7 +366,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
                                             alt="FRAMP Logo"
                                             width={46}
                                             height={46}
-                                            className="w-12 h-12 object-contain rounded-xl drop-shadow-xl"
+                                            className="w-12 h-12 object-contain rounded-md drop-shadow-md"
                                             priority
                                         />
                                         <span className="absolute -top-1 -right-1 text-[0.55rem] font-bold px-1.5 py-0.5 bg-primary text-white rounded-sm rotate-12 shadow-lg">
@@ -397,7 +397,7 @@ export default function RootShell({ children }: { children: React.ReactNode }) {
 
                             {/* Subtle footer */}
                             <p className="text-center text-xs text-muted-foreground/70 mt-8">
-                                Powered by Solana • Built for speed
+                                Powered by Solana • Built for ease
                             </p>
                         </CardContent>
                     </Card>

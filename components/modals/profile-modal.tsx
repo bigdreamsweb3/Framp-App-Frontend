@@ -91,7 +91,7 @@ export function ProfileModal({ onQuickAction }: ProfileModalProps) {
       >
 
         {/* Backdrop */}
-        <div className="absolute inset-0 backdrop-blur-sm z-10" onClick={handleBack} />
+        {/* <div className="absolute inset-0 backdrop-blur-sm z-10" onClick={handleBack} /> */}
 
         {/* Modal */}
         <div className="mx-auto md:mx-0 w-full md:w-[520px] h-full md:min-h-screen bg-background py-3 relative z-20 overflow-auto border-l md:border-l-0 border-border/50">
@@ -101,7 +101,7 @@ export function ProfileModal({ onQuickAction }: ProfileModalProps) {
               <span className="inline-flex items-center justify-center w-8 h-8 rounded-xl">
                 <Settings className="w-8 h-8 text-primary" />
               </span>
-              <h2 className="text-lg font-medium text-foreground">Hub</h2>
+              {/* <h2 className="text-lg font-medium text-foreground">Hub</h2> */}
             </div>
 
             <div className="flex items-center gap-3">
